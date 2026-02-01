@@ -2,7 +2,8 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Predictor Pro v16 - Confidence Intervals Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictor Pro v17 - Stability & Flow Engine</title>
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
@@ -10,46 +11,53 @@
         h2 { text-align: center; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
         select, button { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border); background: #0d1117; color: white; margin-top: 5px; }
-        button { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; margin-top: 25px; font-size: 1rem; }
+        button { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; margin-top: 25px; font-size: 1rem; transition: 0.3s; }
+        button:hover { filter: brightness(1.2); }
         #result { margin-top: 30px; display: none; }
         .stat-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #0d1117; border-radius: 8px; overflow: hidden; }
-        .stat-table th, .stat-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .stat-table th, .stat-table td { padding: 12px; text-align: center; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
         .stat-table th { background: #21262d; color: var(--primary); text-transform: uppercase; font-size: 0.75rem; }
-        .val-main { color: var(--primary); font-weight: bold; }
-        .val-range { color: #8b949e; font-size: 0.8rem; }
-        .score-hero { font-size: 2.5rem; text-align: center; color: var(--primary); margin: 20px 0; font-weight: 900; letter-spacing: 5px; }
+        .val-main { color: var(--primary); font-weight: bold; font-size: 1.1rem; }
+        .val-range { color: #8b949e; font-size: 0.85rem; }
+        .score-hero { font-size: 3rem; text-align: center; color: var(--primary); margin: 20px 0; font-weight: 900; letter-spacing: 8px; }
+        .stability-badge { display: block; text-align: center; padding: 10px; border-radius: 8px; margin-top: 20px; font-weight: bold; font-size: 0.9rem; }
+        .high-stability { background: rgba(0, 255, 136, 0.1); color: var(--primary); border: 1px solid var(--primary); }
+        .low-stability { background: rgba(255, 69, 0, 0.1); color: #ff4500; border: 1px solid #ff4500; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>ENGINE v16: 95% CONFIDENCE INTERVALS</h2>
+    <h2>PREDICTOR ENGINE v17</h2>
     
-    <label style="font-size: 0.7rem; color: #8b949e;">ΔΙΟΡΓΑΝΩΣΗ</label>
+    <label style="font-size: 0.7rem; color: #8b949e; text-transform: uppercase;">Επιλογή Διοργάνωσης</label>
     <select id="league" onchange="loadTeams()">
         <option value="39">Premier League</option>
         <option value="140">La Liga</option>
         <option value="135">Serie A</option>
         <option value="78">Bundesliga</option>
+        <option value="61">Ligue 1</option>
         <option value="2">Champions League</option>
     </select>
 
     <div class="grid">
-        <div><label>ΓΗΠΕΔΟΥΧΟΣ</label><select id="hTeam"></select></div>
-        <div><label>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label><select id="aTeam"></select></div>
+        <div><label style="font-size: 0.7rem; color: #8b949e;">ΓΗΠΕΔΟΥΧΟΣ</label><select id="hTeam"></select></div>
+        <div><label style="font-size: 0.7rem; color: #8b949e;">ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label><select id="aTeam"></select></div>
     </div>
 
-    <button onclick="runEngine()">EXECUTE STATISTICAL MODELS</button>
+    <button id="calcBtn" onclick="runEngine()">EXECUTE PREDICTION MODEL</button>
 
     <div id="result">
         <div class="score-hero" id="xScore">0 - 0</div>
         
+        <div id="stabilityBox" class="stability-badge"></div>
+
         <table class="stat-table">
             <thead>
                 <tr>
                     <th>Δείκτης (CI 95%)</th>
                     <th>Min</th>
-                    <th>Μέσος Όρος (Mean)</th>
+                    <th>Mean (Πρόβλεψη)</th>
                     <th>Max</th>
                 </tr>
             </thead>
@@ -81,7 +89,7 @@ async function loadTeams() {
 }
 
 function calcCI(mean) {
-    // 95% Confidence Interval for Poisson: mean +/- 1.96 * sqrt(mean)
+    // 95% Confidence Interval: λ +/- 1.96 * sqrt(λ)
     const sd = Math.sqrt(mean);
     return {
         min: Math.max(0, (mean - 1.96 * sd)).toFixed(1),
@@ -94,47 +102,74 @@ async function runEngine() {
     const lid = document.getElementById('league').value;
     const hId = document.getElementById('hTeam').value;
     const aId = document.getElementById('aTeam').value;
+    const btn = document.getElementById('calcBtn');
 
-    const [hR, aR] = await Promise.all([
-        api(`teams/statistics?league=${lid}&season=${SEASON}&team=${hId}`),
-        api(`teams/statistics?league=${lid}&season=${SEASON}&team=${aId}`)
-    ]);
+    btn.disabled = true;
+    btn.innerText = "ANALYZING FLOW...";
 
-    const sH = hR.response; const sA = aR.response;
+    try {
+        const [hR, aR] = await Promise.all([
+            api(`teams/statistics?league=${lid}&season=${SEASON}&team=${hId}`),
+            api(`teams/statistics?league=${lid}&season=${SEASON}&team=${aId}`)
+        ]);
 
-    // --- Metrics Extraction ---
-    const xgH = (parseFloat(sH.goals.for.average.home) + parseFloat(sA.goals.against.average.away)) / 2;
-    const xgA = (parseFloat(sA.goals.for.average.away) + parseFloat(sH.goals.against.average.home)) / 2;
-    
-    // Cards & Corners (Estimated from available stats)
-    const xcH = (xgH * 1.5) + 3.2; 
-    const xcA = (xgA * 1.3) + 2.8;
-    const xCardsH = (parseFloat(sH.cards.yellow['0-15']?.total || 1) / 10) + 1.5;
-    const xCardsA = (parseFloat(sA.cards.yellow['0-15']?.total || 1) / 10) + 1.8;
+        const sH = hR.response; const sA = aR.response;
 
-    const metrics = [
-        { name: "xGoals Home", data: calcCI(xgH) },
-        { name: "xGoals Away", data: calcCI(xgA) },
-        { name: "xCorners Home", data: calcCI(xcH) },
-        { name: "xCorners Away", data: calcCI(xcA) },
-        { name: "Total xCorners", data: calcCI(xcH + xcA) },
-        { name: "xCards Home", data: calcCI(xCardsH) },
-        { name: "xCards Away", data: calcCI(xCardsA) }
-    ];
+        // xGoals Calculation
+        const xgH = (parseFloat(sH.goals.for.average.home) + parseFloat(sA.goals.against.average.away)) / 2;
+        const xgA = (parseFloat(sA.goals.for.average.away) + parseFloat(sH.goals.against.average.home)) / 2;
+        
+        // xCorners Calculation (Based on offensive weight)
+        const xcH = (xgH * 1.6) + 3.0; 
+        const xcA = (xgA * 1.4) + 2.5;
 
-    let html = "";
-    metrics.forEach(m => {
-        html += `<tr>
-            <td>${m.name}</td>
-            <td class="val-range">${m.data.min}</td>
-            <td class="val-main">${m.data.avg}</td>
-            <td class="val-range">${m.data.max}</td>
-        </tr>`;
-    });
+        // xCards (Discipline Index)
+        const xCardsH = (parseFloat(sH.cards.yellow['0-15']?.total || 2) / 12) + 1.6;
+        const xCardsA = (parseFloat(sA.cards.yellow['0-15']?.total || 2) / 12) + 1.9;
 
-    document.getElementById('statBody').innerHTML = html;
-    document.getElementById('xScore').innerText = `${Math.round(xgH)} - ${Math.round(xgA)}`;
-    document.getElementById('result').style.display = 'block';
+        const metrics = [
+            { name: "xGoals Home", data: calcCI(xgH) },
+            { name: "xGoals Away", data: calcCI(xgA) },
+            { name: "xCorners Home", data: calcCI(xcH) },
+            { name: "xCorners Away", data: calcCI(xcA) },
+            { name: "Total xCorners", data: calcCI(xcH + xcA) },
+            { name: "xCards Home", data: calcCI(xCardsH) },
+            { name: "xCards Away", data: calcCI(xCardsA) }
+        ];
+
+        // Stability Score Calculation for Total Corners
+        const corners = metrics[4].data;
+        const range = corners.max - corners.min;
+        const stability = (1 - (range / (corners.avg * 2))) * 100;
+        
+        const sBox = document.getElementById('stabilityBox');
+        if (stability > 65) {
+            sBox.className = "stability-badge high-stability";
+            sBox.innerText = `STABILITY SCORE: ${stability.toFixed(1)}% - ΥΨΗΛΗ ΠΙΣΤΗ ΣΤΗ ΡΟΗ`;
+        } else {
+            sBox.className = "stability-badge low-stability";
+            sBox.innerText = `STABILITY SCORE: ${stability.toFixed(1)}% - ΥΨΗΛΗ ΜΕΤΑΒΛΗΤΟΤΗΤΑ (ΡΙΣΚΟ)`;
+        }
+
+        let html = "";
+        metrics.forEach(m => {
+            html += `<tr>
+                <td>${m.name}</td>
+                <td class="val-range">${m.data.min}</td>
+                <td class="val-main">${m.data.avg}</td>
+                <td class="val-range">${m.data.max}</td>
+            </tr>`;
+        });
+
+        document.getElementById('statBody').innerHTML = html;
+        document.getElementById('xScore').innerText = `${Math.round(xgH)} - ${Math.round(xgA)}`;
+        document.getElementById('result').style.display = 'block';
+    } catch (e) {
+        alert("Σφάλμα στην ανάκτηση στατιστικών. Δοκιμάστε άλλη ομάδα.");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "EXECUTE PREDICTION MODEL";
+    }
 }
 
 loadTeams();
