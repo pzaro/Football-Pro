@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictor Pro v5 - Netlify Ready</title>
+    <style>
+        :root { --primary: #e94560; --bg: #1a1a2e; --card: #16213e; --text: #e0e0e0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px; }
+        .card { background: var(--card); padding: 30px; border-radius: 15px; width: 100%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #252545; }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 20px; text-transform: uppercase; }
+        label { font-size: 0.85em; color: #888; margin-top: 15px; display: block; }
+        select, button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 16px; margin-top: 5px; outline: none; }
+        select { background: #0f3460; color: white; border: 1px solid #1a1a2e; cursor: pointer; }
+        button { background: var(--primary); color: white; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 25px; }
+        button:hover { background: #ff4d6d; }
+        button:disabled { background: #555; cursor: not-allowed; }
+        #result { margin-top: 25px; padding: 20px; background: #0f3460; border-radius: 10px; display: none; animation: fadeIn 0.5s; }
+        .stat { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #16213e; }
+        .val { color: #4ee44e; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loader { text-align: center; color: #f1c40f; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>⚽ Predictor Pro v5</h2>
+    <div id="status" class="loader">Σύνδεση με τα δεδομένα του 2026...</div>
+    
+    <div id="ui" style="display:none;">
+        <label>ΓΗΠΕΔΟΥΧΟΣ</label>
+        <select id="homeTeam"></select>
+        <label>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label>
+        <select id="awayTeam"></select>
+        <button id="calcBtn" onclick="analyzeMatch()">ΑΝΑΛΥΣΗ ΑΓΩΝΑ</button>
+    </div>
+
+    <div id="result">
+        <div class="stat"><span>Πιθανότητα Άσσου:</span> <span id="resWin" class="val"></span></div>
+        <div class="stat"><span>Προβλεπόμενα Γκολ:</span> <span id="resGoals" class="val"></span></div>
+        <div class="stat"><span>Over / Under 2.5:</span> <span id="resOU" class="val"></span></div>
+        <div class="stat"><span>Goal / Goal:</span> <span id="resGG" class="val"></span></div>
+        <div class="stat"><span>Πιθανά Κόρνερ:</span> <span id="resCorners" class="val"></span></div>
+    </div>
+</div>
+
+<script>
+const CONFIG = {
+    key: "956cbd05f9e9bf934df78d9b72d9a3a0",
+    host: "v3.football.api-sports.io",
+    league: 39, // Premier League (για σιγουριά), άλλαξε σε 197 για Ελλάδα
+    season: 2025
+};
+
+async function apiFetch(endpoint) {
+    const res = await fetch(`https://${CONFIG.host}/${endpoint}`, {
+        headers: { "x-rapidapi-key": CONFIG.key, "x-rapidapi-host": CONFIG.host }
+    });
+    return res.json();
+}
+
+async function init() {
+    try {
+        let data = await apiFetch(`teams?league=${CONFIG.league}&season=${CONFIG.season}`);
+        
+        // Αν το 2025 είναι κενό, δοκίμασε το 2024
+        if (!data.response || data.response.length === 0) {
+            console.warn("No 2025 data, falling back to 2024");
+            CONFIG.season = 2024;
+            data = await apiFetch(`teams?league=${CONFIG.league}&season=${CONFIG.season}`);
+        }
+
+        const homeS = document.getElementById('homeTeam');
+        const awayS = document.getElementById('awayTeam');
+        
+        data.response.sort((a,b) => a.team.name.localeCompare(b.team.name)).forEach(item => {
+            const opt = `<option value="${item.team.id}">${item.team.name}</option>`;
+            homeS.innerHTML += opt;
+            awayS.innerHTML += opt;
+        });
+
+        document.getElementById('status').style.display = 'none';
+        document.getElementById('ui').style.display = 'block';
+    } catch (e) {
+        document.getElementById('status').innerText = "Αποτυχία σύνδεσης στο API.";
+    }
+}
+
+async function analyzeMatch() {
+    const hId = document.getElementById('homeTeam').value;
+    const aId = document.getElementById('awayTeam').value;
+    const btn = document.getElementById('calcBtn');
+    
+    btn.disabled = true;
+    btn.innerText = "ΥΠΟΛΟΓΙΣΜΟΣ...";
+
+    try {
+        const [hData, aData] = await Promise.all([
+            apiFetch(`teams/statistics?league=${CONFIG.league}&season=${CONFIG.season}&team=${hId}`),
+            apiFetch(`teams/statistics?league=${CONFIG.league}&season=${CONFIG.season}&team=${aId}`)
+        ]);
+
+        const sH = hData.response;
+        const sA = aData.response;
+
+        // Βασική Λογική Poisson
+        const hAtk = parseFloat(sH.goals.for.average.home || 1.2);
+        const aDef = parseFloat(sA.goals.against.average.away || 1.2);
+        const aAtk = parseFloat(sA.goals.for.average.away || 1.0);
+        const hDef = parseFloat(sH.goals.against.average.home || 1.0);
+
+        const expH = (hAtk + aDef) / 2;
+        const expA = (aAtk + hDef) / 2;
+        const total = expH + expA;
+
+        // Εμφάνιση
+        document.getElementById('resWin').innerText = ((expH / (expH + expA)) * 100).toFixed(1) + "%";
+        document.getElementById('resGoals').innerText = total.toFixed(2);
+        document.getElementById('resOU').innerText = total > 2.4 ? "OVER 2.5" : "UNDER 2.5";
+        document.getElementById('resGG').innerText = (expH > 0.9 && expA > 0.9) ? "NAI" : "OXI";
+        document.getElementById('resCorners').innerText = Math.round(8.5 + (total * 0.4));
+
+        document.getElementById('result').style.display = 'block';
+    } catch (e) {
+        alert("Σφάλμα κατά την ανάλυση.");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "ΑΝΑΛΥΣΗ ΑΓΩΝΑ";
+    }
+}
+
+init();
+</script>
+
+</body>
+</html>
