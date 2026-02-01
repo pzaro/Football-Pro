@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v21</title>
+    <title>Predictor Pro v22</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/10061/10061734.png">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/10061/10061734.png">
@@ -14,21 +14,16 @@
         :root { --primary: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; }
         .card { background: var(--card); padding: 20px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid var(--border); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
-        
         .app-header { text-align: center; margin-bottom: 20px; }
         .app-logo { width: 50px; height: 50px; filter: drop-shadow(0 0 8px var(--primary)); }
         h2 { margin: 5px 0; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.2rem; }
-        
         label { font-size: 0.65rem; color: #8b949e; text-transform: uppercase; font-weight: bold; margin-top: 10px; display: block; }
         select, input, button { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; font-size: 16px; margin-top: 5px; box-sizing: border-box; }
         button { background: var(--primary); color: #000; font-weight: 800; border: none; margin-top: 20px; cursor: pointer; }
-
         #result { margin-top: 25px; display: none; }
         .score-hero { font-size: 3rem; text-align: center; color: var(--primary); font-weight: 900; margin-bottom: 15px; letter-spacing: 5px; }
-        
         .prob-box { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--primary); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
         .prob-val { font-size: 2rem; font-weight: 900; color: var(--primary); }
-
         .stat-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 10px; }
         .stat-table th { color: #8b949e; text-transform: uppercase; padding: 8px; border-bottom: 1px solid var(--border); }
         .stat-table td { padding: 10px 5px; border-bottom: 1px solid var(--border); text-align: center; }
@@ -42,26 +37,34 @@
 <div class="card">
     <div class="app-header">
         <img src="https://cdn-icons-png.flaticon.com/512/10061/10061734.png" class="app-logo">
-        <h2>PREDICTOR PRO v21</h2>
+        <h2>PREDICTOR PRO v22</h2>
     </div>
     
     <label>ΔΙΟΡΓΑΝΩΣΗ</label>
     <select id="league" onchange="loadTeams()">
         <optgroup label="Top Europe">
-            <option value="39">Premier League</option>
-            <option value="140">La Liga</option>
-            <option value="135">Serie A</option>
-            <option value="78">Bundesliga</option>
-            <option value="61">Ligue 1</option>
-            <option value="2">Champions League</option>
+            <option value="39">Premier League (England)</option>
+            <option value="140">La Liga (Spain)</option>
+            <option value="135">Serie A (Italy)</option>
+            <option value="78">Bundesliga (Germany)</option>
+            <option value="61">Ligue 1 (France)</option>
         </optgroup>
-        <optgroup label="Other Leagues">
-            <option value="88">Eredivisie</option>
-            <option value="94">Primeira Liga</option>
-            <option value="71">Serie A (Brazil)</option>
-            <option value="253">MLS</option>
+        <optgroup label="Other Europe">
+            <option value="88">Eredivisie (Netherlands)</option>
+            <option value="94">Primeira Liga (Portugal)</option>
+            <option value="144">Jupiler Pro League (Belgium)</option>
+            <option value="40">Championship (England)</option>
+        </optgroup>
+        <optgroup label="International / Cups">
+            <option value="2">Champions League</option>
             <option value="3">Europa League</option>
             <option value="848">Conference League</option>
+        </optgroup>
+        <optgroup label="Americas">
+            <option value="71">Serie A (Brazil)</option>
+            <option value="253">MLS (USA)</option>
+            <option value="262">Liga MX (Mexico)</option>
+            <option value="13">Copa Libertadores</option>
         </optgroup>
     </select>
 
@@ -70,7 +73,7 @@
         <div><label>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label><select id="aTeam"></select></div>
     </div>
 
-    <label>ΣΤΟΧΟΣ OVER (ΠΙΘΑΝΟΤΗΤΑ)</label>
+    <label>ΣΤΟΧΟΣ OVER (ΠΙΘΑΝΟΤΗΤΑ ΚΟΡΝΕΡ)</label>
     <input type="number" id="targetVal" step="0.5" value="8.5">
 
     <button onclick="runEngine()">ΑΝΑΛΥΣΗ & ΠΡΟΒΛΕΨΗ</button>
@@ -79,14 +82,14 @@
         <div class="score-hero" id="xScore">0 - 0</div>
         
         <div class="prob-box">
-            <span style="font-size: 0.7rem; font-weight: bold;">ΠΙΘΑΝΟΤΗΤΑ OVER <span id="displayTarget"></span></span>
+            <span style="font-size: 0.7rem; font-weight: bold;">ΠΙΘΑΝΟΤΗΤΑ OVER <span id="displayTarget"></span> ΚΟΡΝΕΡ</span>
             <div class="prob-val" id="probResult">0%</div>
         </div>
 
         <table class="stat-table">
             <thead>
                 <tr>
-                    <th style="text-align:left">ΔΕΙΚΤΗΣ</th>
+                    <th style="text-align:left">ΔΕΙΚΤΗΣ (CI 95%)</th>
                     <th>MIN</th>
                     <th>MEAN</th>
                     <th>MAX</th>
@@ -130,11 +133,7 @@ function getOverProbability(target, lambda) {
 
 function calcCI(mean) {
     const sd = Math.sqrt(mean);
-    return { 
-        min: Math.max(0, mean - 1.96*sd).toFixed(1), 
-        max: (mean + 1.96*sd).toFixed(1), 
-        avg: mean.toFixed(1) 
-    };
+    return { min: Math.max(0, mean - 1.96*sd).toFixed(1), max: (mean + 1.96*sd).toFixed(1), avg: mean.toFixed(1) };
 }
 
 async function runEngine() {
@@ -152,32 +151,25 @@ async function runEngine() {
 
     const xgH = (parseFloat(sH.goals.for.average.home) + parseFloat(sA.goals.against.average.away)) / 2;
     const xgA = (parseFloat(sA.goals.for.average.away) + parseFloat(sH.goals.against.average.home)) / 2;
-    const xcH = (xgH * 1.6) + 3.2; 
-    const xcA = (xgA * 1.4) + 2.8;
+    const xTotalCorners = (xgH * 1.6 + 3.2) + (xgA * 1.4 + 2.8);
+    
     const xCardsH = (parseFloat(sH.cards.yellow['0-15']?.total || 1) / 10) + 1.5;
     const xCardsA = (parseFloat(sA.cards.yellow['0-15']?.total || 1) / 10) + 1.8;
 
+    document.getElementById('displayTarget').innerText = target;
+    document.getElementById('probResult').innerText = getOverProbability(target, xTotalCorners).toFixed(1) + "%";
+    
     const metrics = [
+        { name: "Total xCorners", data: calcCI(xTotalCorners) },
         { name: "xGoals Home", data: calcCI(xgH) },
         { name: "xGoals Away", data: calcCI(xgA) },
-        { name: "xCorners Home", data: calcCI(xcH) },
-        { name: "xCorners Away", data: calcCI(xcA) },
-        { name: "Total xCorners", data: calcCI(xcH + xcA) },
         { name: "xCards Home", data: calcCI(xCardsH) },
         { name: "xCards Away", data: calcCI(xCardsA) }
     ];
 
-    document.getElementById('displayTarget').innerText = target;
-    document.getElementById('probResult').innerText = getOverProbability(target, xcH + xcA).toFixed(1) + "%";
-    
     let html = "";
     metrics.forEach(m => {
-        html += `<tr>
-            <td class="row-label">${m.name}</td>
-            <td class="val-range">${m.data.min}</td>
-            <td class="val-main">${m.data.avg}</td>
-            <td class="val-range">${m.data.max}</td>
-        </tr>`;
+        html += `<tr><td class="row-label">${m.name}</td><td class="val-range">${m.data.min}</td><td class="val-main">${m.data.avg}</td><td class="val-range">${m.data.max}</td></tr>`;
     });
 
     document.getElementById('statBody').innerHTML = html;
