@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predictor Pro - Fixed Auto</title>
+    <title>Predictor Pro v12 - Advanced Stats</title>
     <style>
         :root { --primary: #00ff88; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px; margin: 0; }
         .card { background: var(--card); padding: 25px; border-radius: 20px; width: 100%; max-width: 500px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid #334155; }
-        h2 { text-align: center; color: var(--primary); margin-bottom: 20px; }
-        .info-badge { background: #334155; padding: 5px 10px; border-radius: 15px; font-size: 12px; text-align: center; margin-bottom: 15px; color: #fbbf24; }
-        label { font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 15px; }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; }
+        .badge { background: #334155; padding: 5px 12px; border-radius: 15px; font-size: 11px; text-align: center; margin-bottom: 20px; color: #fbbf24; display: block; }
+        label { font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 15px; text-transform: uppercase; }
         select, button { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: white; margin-top: 5px; }
-        button { background: var(--primary); color: #002d1a; font-weight: bold; cursor: pointer; border: none; margin-top: 25px; }
+        button { background: var(--primary); color: #002d1a; font-weight: bold; cursor: pointer; border: none; margin-top: 25px; font-size: 16px; }
         .team-row { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
         .team-logo { width: 35px; height: 35px; object-fit: contain; background: #fff1; border-radius: 50%; padding: 5px; }
-        #result { margin-top: 25px; padding: 15px; background: #0d1117; border-radius: 12px; display: none; }
-        .stat { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e293b; }
+        #result { margin-top: 25px; padding: 20px; background: #0d1117; border-radius: 15px; display: none; border-top: 3px solid var(--primary); }
+        .stat-group { margin-bottom: 15px; border-bottom: 1px solid #1e293b; padding-bottom: 10px; }
+        .stat-group:last-child { border: none; }
+        .stat-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.95rem; }
         .val { color: var(--primary); font-weight: bold; }
+        .score-box { font-size: 1.5rem; text-align: center; color: var(--primary); font-weight: 800; letter-spacing: 5px; margin: 10px 0; background: #1e293b; border-radius: 10px; padding: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>PREDICTOR PRO v11</h2>
-    <div id="seasonBadge" class="info-badge">Αναζήτηση δεδομένων...</div>
+    <h2>PREDICTOR PRO v12</h2>
+    <span id="seasonBadge" class="badge">Αναμονή...</span>
     
     <label>ΔΙΟΡΓΑΝΩΣΗ</label>
     <select id="leagueSelect" onchange="loadTeams()">
@@ -33,33 +36,41 @@
         <option value="135">Serie A (Italy)</option>
         <option value="78">Bundesliga (Germany)</option>
         <option value="61">Ligue 1 (France)</option>
-        <option value="88">Eredivisie (Netherlands)</option>
-        <option value="94">Primeira Liga (Portugal)</option>
-        <option value="71">Série A (Brazil)</option>
-        <option value="262">Liga MX (Mexico)</option>
-        <option value="253">MLS (USA)</option>
         <option value="2">Champions League</option>
     </select>
 
-    <div id="ui">
-        <label>ΓΗΠΕΔΟΥΧΟΣ</label>
-        <div class="team-row">
-            <img id="hLogo" class="team-logo" src="">
-            <select id="hTeam" onchange="updLogo('h')"></select>
-        </div>
-        <label>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label>
-        <div class="team-row">
-            <img id="aLogo" class="team-logo" src="">
-            <select id="aTeam" onchange="updLogo('a')"></select>
-        </div>
-        <button id="calcBtn" onclick="analyze()">ΑΝΑΛΥΣΗ</button>
+    <label>ΓΗΠΕΔΟΥΧΟΣ</label>
+    <div class="team-row">
+        <img id="hLogo" class="team-logo" src="">
+        <select id="hTeam" onchange="updLogo('h')"></select>
     </div>
 
+    <label>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label>
+    <div class="team-row">
+        <img id="aLogo" class="team-logo" src="">
+        <select id="aTeam" onchange="updLogo('a')"></select>
+    </div>
+
+    <button id="calcBtn" onclick="analyze()">ΑΝΑΛΥΣΗ ΑΓΩΝΑ</button>
+
     <div id="result">
-        <div class="stat"><span>Πιθανότητα Άσσου:</span> <span id="rWin" class="val"></span></div>
-        <div class="stat"><span>Προβλεπόμενα Γκολ:</span> <span id="rGoals" class="val"></span></div>
-        <div class="stat"><span>Over / Under 2.5:</span> <span id="rOU" class="val"></span></div>
-        <div class="stat"><span>Goal / Goal:</span> <span id="rGG" class="val"></span></div>
+        <div class="stat-group">
+            <label style="text-align: center; margin-top: 0;">ΠΙΘΑΝΟΤΕΡΟ ΣΚΟΡ</label>
+            <div class="score-box" id="resScore">0 - 0</div>
+        </div>
+
+        <div class="stat-group">
+            <div class="stat-row"><span>Κόρνερ Γηπεδούχου:</span> <span id="cornH" class="val"></span></div>
+            <div class="stat-row"><span>Κόρνερ Φιλοξενούμενου:</span> <span id="cornA" class="val"></span></div>
+            <div class="stat-row" style="border-top: 1px dashed #334155; margin-top: 5px; padding-top: 8px;">
+                <span>Συνολικά Κόρνερ:</span> <span id="cornTotal" class="val"></span>
+            </div>
+        </div>
+
+        <div class="stat-group">
+            <div class="stat-row"><span>Πιθανότητα Άσσου:</span> <span id="resWin" class="val"></span></div>
+            <div class="stat-row"><span>Over / Under 2.5:</span> <span id="resOU" class="val"></span></div>
+        </div>
     </div>
 </div>
 
@@ -78,31 +89,23 @@ async function api(path) {
 async function loadTeams() {
     const lid = document.getElementById('leagueSelect').value;
     const badge = document.getElementById('seasonBadge');
-    badge.innerText = `Φόρτωση ${activeSeason}...`;
-    
     try {
         let res = await api(`teams?league=${lid}&season=${activeSeason}`);
-        
-        // Αν το 2025 είναι άδειο, δοκίμασε το 2024
         if (!res.response || res.response.length === 0) {
             activeSeason = 2024;
             res = await api(`teams?league=${lid}&season=${activeSeason}`);
         }
-
         teams = res.response;
-        badge.innerText = `Δεδομένα Σεζόν: ${activeSeason}/${activeSeason+1}`;
-        
+        badge.innerText = `ΕΝΕΡΓΗ ΣΕΖΟΝ: ${activeSeason}`;
         const hS = document.getElementById('hTeam');
         const aS = document.getElementById('aTeam');
         hS.innerHTML = ""; aS.innerHTML = "";
-
         teams.sort((a,b) => a.team.name.localeCompare(b.team.name)).forEach(i => {
             const opt = `<option value="${i.team.id}">${i.team.name}</option>`;
             hS.innerHTML += opt; aS.innerHTML += opt;
         });
-
         updLogo('h'); updLogo('a');
-    } catch (e) { badge.innerText = "Σφάλμα API."; }
+    } catch (e) { badge.innerText = "Σφάλμα!"; }
 }
 
 function updLogo(s) {
@@ -124,16 +127,32 @@ async function analyze() {
             api(`teams/statistics?league=${lid}&season=${activeSeason}&team=${aId}`)
         ]);
 
-        const h = hR.response.goals.for.average.home || 1.2;
-        const a = aR.response.goals.for.average.away || 1.0;
-        const tot = parseFloat(h) + parseFloat(a);
+        const sH = hR.response;
+        const sA = aR.response;
 
-        document.getElementById('rWin').innerText = ((parseFloat(h)/tot)*100).toFixed(1) + "%";
-        document.getElementById('rGoals').innerText = tot.toFixed(2);
-        document.getElementById('rOU').innerText = tot > 2.4 ? "OVER" : "UNDER";
-        document.getElementById('rGG').innerText = (tot > 2) ? "ΝΑΙ" : "ΟΧΙ";
+        // Υπολογισμός Γκολ
+        const expH = parseFloat(sH.goals.for.average.home || 1.4);
+        const expA = parseFloat(sA.goals.for.average.away || 1.1);
+
+        // Ακριβές Σκορ (στρογγυλοποίηση των προσδοκώμενων γκολ)
+        document.getElementById('resScore').innerText = `${Math.round(expH)} - ${Math.round(expA)}`;
+
+        // Κόρνερ ανά ομάδα (Βάσει επιθετικής ισχύος)
+        const cH = Math.round(4.5 + (expH * 0.8));
+        const cA = Math.round(3.8 + (expA * 0.7));
+
+        document.getElementById('cornH').innerText = cH;
+        document.getElementById('cornA').innerText = cA;
+        document.getElementById('cornTotal').innerText = cH + cA;
+
+        // Λοιπά Στατιστικά
+        const total = expH + expA;
+        document.getElementById('resWin').innerText = ((expH/total)*100).toFixed(1) + "%";
+        document.getElementById('resOU').innerText = total > 2.5 ? "OVER 2.5" : "UNDER 2.5";
+        document.getElementById('resGG').innerText = (expH > 0.9 && expA > 0.9) ? "ΝΑΙ" : "ΟΧΙ";
+
         document.getElementById('result').style.display = 'block';
-    } catch (e) { alert("Σφάλμα ανάλυσης."); }
+    } catch (e) { alert("Σφάλμα στατιστικών."); }
     finally { btn.disabled = false; }
 }
 
