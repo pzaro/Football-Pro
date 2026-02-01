@@ -2,59 +2,78 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Predictor Pro v18 - Risk & Probability Engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Predictor Pro App</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://media.api-sports.io/football/leagues/2.png">
+
     <style>
         :root { --primary: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
-        .card { background: var(--card); padding: 25px; border-radius: 12px; width: 100%; max-width: 650px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: var(--primary); text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        select, input, button { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border); background: #0d1117; color: white; margin-top: 5px; box-sizing: border-box; }
-        button { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; margin-top: 25px; }
-        #result { margin-top: 30px; display: none; }
-        .prob-box { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; }
-        .prob-val { font-size: 2rem; font-weight: 900; color: var(--primary); }
-        .stat-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .stat-table th, .stat-table td { padding: 10px; border-bottom: 1px solid var(--border); text-align: center; font-size: 0.85rem; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; width: 100%; max-width: 500px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { text-align: center; color: var(--primary); text-transform: uppercase; font-size: 1.2rem; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        label { font-size: 0.7rem; color: #8b949e; text-transform: uppercase; display: block; margin-top: 10px; }
+        select, input, button { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; font-size: 16px; margin-top: 5px; -webkit-appearance: none; }
+        button { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; margin-top: 20px; }
+        #result { margin-top: 25px; display: none; }
+        .prob-box { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--primary); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 15px; }
+        .prob-val { font-size: 2.2rem; font-weight: 900; color: var(--primary); }
+        .stat-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .stat-table td { padding: 8px; border-bottom: 1px solid var(--border); font-size: 0.85rem; text-align: center; }
         .val-main { color: var(--primary); font-weight: bold; }
+        .score-hero { font-size: 2.5rem; text-align: center; color: var(--primary); font-weight: 900; margin: 10px 0; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>PREDICTOR ENGINE v18</h2>
+    <h2>PREDICTOR PRO MOBILE</h2>
     
-    <div class="grid">
-        <div><label>Διοργάνωση</label><select id="league" onchange="loadTeams()">
+    <label>Διοργάνωση</label>
+    <select id="league" onchange="loadTeams()">
+        <optgroup label="Top Leagues">
             <option value="39">Premier League</option>
             <option value="140">La Liga</option>
             <option value="135">Serie A</option>
-        </select></div>
-        <div><label>Στόχος (π.χ. 8.5)</label><input type="number" id="targetVal" step="0.5" value="8.5"></div>
-    </div>
+            <option value="78">Bundesliga</option>
+            <option value="61">Ligue 1</option>
+            <option value="88">Eredivisie</option>
+            <option value="94">Primeira Liga</option>
+        </optgroup>
+        <optgroup label="Americas">
+            <option value="71">Série A (Brazil)</option>
+            <option value="262">Liga MX</option>
+            <option value="253">MLS</option>
+        </optgroup>
+        <optgroup label="International">
+            <option value="2">Champions League</option>
+            <option value="3">Europa League</option>
+            <option value="848">Conference League</option>
+        </optgroup>
+    </select>
 
     <div class="grid">
         <div><label>Γηπεδούχος</label><select id="hTeam"></select></div>
         <div><label>Φιλοξενούμενη</label><select id="aTeam"></select></div>
     </div>
 
-    <button onclick="runEngine()">ΑΝΑΛΥΣΗ & ΠΙΘΑΝΟΤΗΤΑ</button>
+    <label>Στόχος (Over)</label>
+    <input type="number" id="targetVal" step="0.5" value="8.5">
+
+    <button onclick="runEngine()">RUN ANALYSIS</button>
 
     <div id="result">
+        <div class="score-hero" id="xScore">0 - 0</div>
+        
         <div class="prob-box">
-            <span style="font-size: 0.8rem; text-transform: uppercase;">Πιθανότητα Επαλήθευσης για Over <span id="displayTarget"></span> Κόρνερ</span>
+            <span style="font-size: 0.7rem;">ΠΙΘΑΝΟΤΗΤΑ OVER <span id="displayTarget"></span></span>
             <div class="prob-val" id="probResult">0%</div>
         </div>
 
         <table class="stat-table">
-            <thead>
-                <tr>
-                    <th>Δείκτης</th>
-                    <th>Min (95% CI)</th>
-                    <th>Mean</th>
-                    <th>Max (95% CI)</th>
-                </tr>
-            </thead>
             <tbody id="statBody"></tbody>
         </table>
     </div>
@@ -82,18 +101,12 @@ async function loadTeams() {
     });
 }
 
-function factorial(n) { return n <= 1 ? 1 : n * factorial(n - 1); }
-
-function poissonProb(k, lambda) {
-    return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
-}
-
 function getOverProbability(target, lambda) {
     let probUnderOrEqual = 0;
     for (let i = 0; i <= Math.floor(target); i++) {
-        // Χρήση προσέγγισης για μεγάλα n για αποφυγή stack overflow
-        let p = (Math.pow(lambda, i) * Math.exp(-lambda)) / Array.from({length: i}, (_, idx) => idx + 1).reduce((a, b) => a * b, 1);
-        probUnderOrEqual += p;
+        let factorial = 1;
+        for (let j = 1; j <= i; j++) factorial *= j;
+        probUnderOrEqual += (Math.pow(lambda, i) * Math.exp(-lambda)) / factorial;
     }
     return (1 - probUnderOrEqual) * 100;
 }
@@ -118,14 +131,11 @@ async function runEngine() {
     const xgA = (parseFloat(aR.response.goals.for.average.away) + parseFloat(hR.response.goals.against.average.home)) / 2;
     const xTotalCorners = (xgH * 1.6 + 3.0) + (xgA * 1.4 + 2.5);
 
-    const prob = getOverProbability(target, xTotalCorners);
-    
     document.getElementById('displayTarget').innerText = target;
-    document.getElementById('probResult').innerText = prob.toFixed(1) + "%";
+    document.getElementById('probResult').innerText = getOverProbability(target, xTotalCorners).toFixed(1) + "%";
     
-    // Πίνακας CI
     const metrics = [
-        { name: "Total xCorners", data: calcCI(xTotalCorners) },
+        { name: "xCorners Total", data: calcCI(xTotalCorners) },
         { name: "xGoals Home", data: calcCI(xgH) },
         { name: "xGoals Away", data: calcCI(xgA) }
     ];
@@ -136,6 +146,7 @@ async function runEngine() {
     });
 
     document.getElementById('statBody').innerHTML = html;
+    document.getElementById('xScore').innerText = `${Math.round(xgH)} - ${Math.round(xgA)}`;
     document.getElementById('result').style.display = 'block';
 }
 
