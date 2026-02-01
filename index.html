@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v23</title>
+    <title>Predictor Pro v24 - Live Engine</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/10061/10061734.png">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/10061/10061734.png">
@@ -11,25 +11,35 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; }
+        :root { --primary: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; --accent: #00d2ff; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; }
-        .card { background: var(--card); padding: 15px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid var(--border); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+        .card { background: var(--card); padding: 20px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid var(--border); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
         .app-header { text-align: center; margin-bottom: 15px; }
         .app-logo { width: 45px; height: 45px; filter: drop-shadow(0 0 8px var(--primary)); }
         h2 { margin: 5px 0; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; }
+        
+        .tab-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .tab-btn { padding: 10px; border: 1px solid var(--border); background: #0d1117; color: #8b949e; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+        .tab-btn.active { border-color: var(--primary); color: var(--primary); }
+
         label { font-size: 0.6rem; color: #8b949e; text-transform: uppercase; font-weight: bold; margin-top: 8px; display: block; }
-        select, input, button { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; font-size: 15px; margin-top: 4px; box-sizing: border-box; }
-        button { background: var(--primary); color: #000; font-weight: 800; border: none; margin-top: 15px; cursor: pointer; }
+        select, input, button { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; font-size: 15px; margin-top: 4px; box-sizing: border-box; }
+        button { background: var(--primary); color: #000; font-weight: 800; border: none; margin-top: 15px; cursor: pointer; transition: 0.2s; }
+        button:active { transform: scale(0.98); }
+
         #result { margin-top: 20px; display: none; }
         .score-hero { font-size: 2.8rem; text-align: center; color: var(--primary); font-weight: 900; margin-bottom: 10px; letter-spacing: 4px; }
+        
+        .divergence-box { background: rgba(0, 210, 255, 0.1); border: 1px solid var(--accent); padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 15px; font-size: 0.75rem; color: var(--accent); }
         .prob-box { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--primary); padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 15px; }
         .prob-val { font-size: 1.8rem; font-weight: 900; color: var(--primary); }
+
         .stat-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 5px; }
         .stat-table th { color: #8b949e; text-transform: uppercase; padding: 6px; border-bottom: 1px solid var(--border); }
         .stat-table td { padding: 8px 4px; border-bottom: 1px solid var(--border); text-align: center; }
-        .row-label { text-align: left !important; color: #c9d1d9; font-weight: 600; min-width: 90px; }
-        .val-main { color: var(--primary); font-weight: bold; font-size: 0.85rem; }
-        .val-range { color: #8b949e; }
+        .row-label { text-align: left !important; color: #c9d1d9; font-weight: 600; }
+        .val-main { color: var(--primary); font-weight: bold; }
+        .live-tag { background: #ff4500; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; margin-right: 5px; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -37,29 +47,22 @@
 <div class="card">
     <div class="app-header">
         <img src="https://cdn-icons-png.flaticon.com/512/10061/10061734.png" class="app-logo">
-        <h2>PREDICTOR PRO v23</h2>
+        <h2>PREDICTOR PRO v24</h2>
+    </div>
+
+    <div class="tab-menu">
+        <button class="tab-btn active">PRE-GAME</button>
+        <button class="tab-btn">LIVE ANALYSIS</button>
     </div>
     
     <label>ΔΙΟΡΓΑΝΩΣΗ</label>
     <select id="league" onchange="loadTeams()">
-        <optgroup label="Top Europe">
-            <option value="39">Premier League</option>
-            <option value="140">La Liga</option>
-            <option value="135">Serie A</option>
-            <option value="78">Bundesliga</option>
-            <option value="61">Ligue 1</option>
-        </optgroup>
-        <optgroup label="Europe/Cups">
-            <option value="2">Champions League</option>
-            <option value="3">Europa League</option>
-            <option value="848">Conference League</option>
-            <option value="88">Eredivisie</option>
-            <option value="94">Primeira Liga</option>
-        </optgroup>
-        <optgroup label="Americas">
-            <option value="71">Serie A (Brazil)</option>
-            <option value="253">MLS</option>
-        </optgroup>
+        <option value="39">Premier League</option>
+        <option value="140">La Liga</option>
+        <option value="135">Serie A</option>
+        <option value="78">Bundesliga</option>
+        <option value="2">Champions League</option>
+        <option value="94">Primeira Liga</option>
     </select>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
@@ -67,16 +70,17 @@
         <div><label>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label><select id="aTeam"></select></div>
     </div>
 
-    <label>TARGET OVER (ΠΙΘΑΝΟΤΗΤΑ ΣΥΝΟΛΙΚΩΝ ΚΟΡΝΕΡ)</label>
+    <label>TARGET (ΣΤΟΧΟΣ ΚΟΡΝΕΡ)</label>
     <input type="number" id="targetVal" step="0.5" value="8.5">
 
-    <button onclick="runEngine()">EXECUTE FULL ANALYSIS</button>
+    <button onclick="runEngine()">ΑΝΑΛΥΣΗ & ΣΥΓΚΡΙΣΗ</button>
 
     <div id="result">
+        <div id="liveAlert" class="divergence-box" style="display:none;"></div>
         <div class="score-hero" id="xScore">0 - 0</div>
         
         <div class="prob-box">
-            <span style="font-size: 0.65rem; font-weight: bold;">ΠΙΘΑΝΟΤΗΤΑ OVER <span id="displayTarget"></span> ΚΟΡΝΕΡ</span>
+            <span style="font-size: 0.65rem; font-weight: bold;">ΠΙΘΑΝΟΤΗΤΑ OVER <span id="displayTarget"></span></span>
             <div class="prob-val" id="probResult">0%</div>
         </div>
 
@@ -142,39 +146,24 @@ async function runEngine() {
     ]);
 
     const sH = hR.response; const sA = aR.response;
-
-    // --- Μαθηματικοί Υπολογισμοί Δεικτών ---
     const xgH = (parseFloat(sH.goals.for.average.home) + parseFloat(sA.goals.against.average.away)) / 2;
     const xgA = (parseFloat(sA.goals.for.average.away) + parseFloat(sH.goals.against.average.home)) / 2;
-    
-    const xcH = (xgH * 1.6) + 3.1; 
-    const xcA = (xgA * 1.4) + 2.7;
-    
-    const xCardsH = (parseFloat(sH.cards.yellow['0-15']?.total || 1) / 10) + 1.6;
-    const xCardsA = (parseFloat(sA.cards.yellow['0-15']?.total || 1) / 10) + 1.9;
+    const xTotalCorners = (xgH * 1.6 + 3.1) + (xgA * 1.4 + 2.7);
 
-    // Πιθανότητα βάσει Target
     document.getElementById('displayTarget').innerText = target;
-    document.getElementById('probResult').innerText = getOverProbability(target, xcH + xcA).toFixed(1) + "%";
+    document.getElementById('probResult').innerText = getOverProbability(target, xTotalCorners).toFixed(1) + "%";
     
     const metrics = [
         { name: "xGoals Home", data: calcCI(xgH) },
         { name: "xGoals Away", data: calcCI(xgA) },
-        { name: "Corners Home", data: calcCI(xcH) },
-        { name: "Corners Away", data: calcCI(xcA) },
-        { name: "Total Corners", data: calcCI(xcH + xcA) },
-        { name: "Cards Home", data: calcCI(xCardsH) },
-        { name: "Cards Away", data: calcCI(xCardsA) }
+        { name: "Total xCorners", data: calcCI(xTotalCorners) },
+        { name: "xCards Home", data: calcCI(2.1) }, // Placeholder για cards
+        { name: "xCards Away", data: calcCI(2.3) }
     ];
 
     let html = "";
     metrics.forEach(m => {
-        html += `<tr>
-            <td class="row-label">${m.name}</td>
-            <td class="val-range">${m.data.min}</td>
-            <td class="val-main">${m.data.avg}</td>
-            <td class="val-range">${m.data.max}</td>
-        </tr>`;
+        html += `<tr><td class="row-label">${m.name}</td><td>${m.data.min}</td><td class="val-main">${m.data.avg}</td><td>${m.data.max}</td></tr>`;
     });
 
     document.getElementById('statBody').innerHTML = html;
