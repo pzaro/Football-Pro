@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v27 - Market Value</title>
+    <title>Predictor Pro v29 - League Update</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/10061/10061734.png">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/10061/10061734.png">
@@ -14,29 +14,26 @@
         :root { --primary: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; --accent: #00d2ff; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; }
         .card { background: var(--card); padding: 20px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid var(--border); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
-        
         .app-header { text-align: center; margin-bottom: 20px; }
-        .app-logo { width: 50px; height: 50px; filter: drop-shadow(0 0 8px var(--primary)); }
-        h2 { margin: 5px 0; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.2rem; }
+        .app-logo { width: 45px; height: 45px; filter: drop-shadow(0 0 8px var(--primary)); }
+        h2 { margin: 5px 0; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; }
         
         label { font-size: 0.65rem; color: #8b949e; text-transform: uppercase; font-weight: bold; margin-top: 10px; display: block; }
         select, input, button { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; font-size: 16px; margin-top: 5px; box-sizing: border-box; }
-        button { background: var(--primary); color: #000; font-weight: 800; border: none; margin-top: 20px; cursor: pointer; }
+        button { background: var(--primary); color: #000; font-weight: 800; border: none; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        button:hover { filter: brightness(1.2); }
 
         #result { margin-top: 25px; display: none; }
         .score-hero { font-size: 3rem; text-align: center; color: var(--primary); font-weight: 900; margin-bottom: 10px; letter-spacing: 5px; }
-        
-        /* Value Signal Styling */
-        .value-box { background: rgba(0, 210, 255, 0.1); border: 1px solid var(--accent); padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 15px; font-size: 0.8rem; color: var(--accent); font-weight: bold; display: none; }
+        .value-box { background: rgba(0, 210, 255, 0.1); border: 1px solid var(--accent); padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 15px; font-size: 0.8rem; color: var(--accent); font-weight: bold; }
         .prob-box { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--primary); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
         .prob-val { font-size: 2rem; font-weight: 900; color: var(--primary); }
 
-        .stat-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 10px; }
+        .stat-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
         .stat-table th { color: #8b949e; text-transform: uppercase; padding: 8px; border-bottom: 1px solid var(--border); }
         .stat-table td { padding: 10px 5px; border-bottom: 1px solid var(--border); text-align: center; }
         .row-label { text-align: left !important; color: #c9d1d9; font-weight: 500; }
-        .val-main { color: var(--primary); font-weight: bold; font-size: 0.9rem; }
-        .val-range { color: #8b949e; }
+        .val-main { color: var(--primary); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -44,21 +41,25 @@
 <div class="card">
     <div class="app-header">
         <img src="https://cdn-icons-png.flaticon.com/512/10061/10061734.png" class="app-logo">
-        <h2>PREDICTOR PRO v27</h2>
+        <h2>PREDICTOR PRO v29</h2>
     </div>
     
-    <label>ΔΙΟΡΓΑΝΩΣΗ</label>
+    <label>ΕΠΙΛΟΓΗ ΠΡΩΤΑΘΛΗΜΑΤΟΣ</label>
     <select id="league" onchange="loadTeams()">
-        <optgroup label="Top Europe">
+        <optgroup label="Αγγλία (The Pyramid)">
             <option value="39">Premier League</option>
+            <option value="40">Championship</option>
+            <option value="41">League One (Charlton Athletic κ.α.)</option>
+            <option value="42">League Two</option>
+        </optgroup>
+        <optgroup label="Ελλάδα & Κύπρος">
+            <option value="203">Super League 1</option>
+            <option value="318">Cyprus First Division</option>
+        </optgroup>
+        <optgroup label="Ευρώπη & Κύπελλα">
             <option value="140">La Liga</option>
             <option value="135">Serie A</option>
             <option value="78">Bundesliga</option>
-            <option value="61">Ligue 1</option>
-        </optgroup>
-        <optgroup label="Secondary/International">
-            <option value="40">Championship</option>
-            <option value="203">Super League Greece</option>
             <option value="2">Champions League</option>
             <option value="3">Europa League</option>
         </optgroup>
@@ -69,29 +70,21 @@
         <div><label>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label><select id="aTeam"></select></div>
     </div>
 
-    <label>TARGET OVER (ΣΥΝΟΛΙΚΑ ΚΟΡΝΕΡ)</label>
+    <label>ΣΤΟΧΟΣ OVER (ΚΟΡΝΕΡ)</label>
     <input type="number" id="targetVal" step="0.5" value="8.5">
 
-    <button onclick="runEngine()">MARKET DIVERGENCE ANALYSIS</button>
+    <button onclick="runEngine()">EXECUTE MARKET ANALYSIS</button>
 
     <div id="result">
-        <div id="valueSignal" class="value-box"></div>
-        
+        <div id="valueSignal" class="value-box" style="display:none;"></div>
         <div class="score-hero" id="xScore">0 - 0</div>
-        
         <div class="prob-box">
             <span style="font-size: 0.7rem; font-weight: bold;">ΠΙΘΑΝΟΤΗΤΑ OVER <span id="displayTarget"></span> ΚΟΡΝΕΡ</span>
             <div class="prob-val" id="probResult">0%</div>
         </div>
-
         <table class="stat-table">
             <thead>
-                <tr>
-                    <th style="text-align:left">ΔΕΙΚΤΗΣ (CI 95%)</th>
-                    <th>MIN</th>
-                    <th>MEAN</th>
-                    <th>MAX</th>
-                </tr>
+                <tr><th style="text-align:left">ΔΕΙΚΤΗΣ (CI 95%)</th><th>MIN</th><th>MEAN</th><th>MAX</th></tr>
             </thead>
             <tbody id="statBody"></tbody>
         </table>
@@ -100,7 +93,7 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const SEASON = 2024;
+const SEASON = 2025; // Χρησιμοποιούμε 2025 για τρέχοντα δεδομένα
 
 async function api(p) {
     const r = await fetch(`https://v3.football.api-sports.io/${p}`, {
@@ -114,10 +107,14 @@ async function loadTeams() {
     const res = await api(`teams?league=${lid}&season=${SEASON}`);
     const hS = document.getElementById('hTeam'); const aS = document.getElementById('aTeam');
     hS.innerHTML = ""; aS.innerHTML = "";
-    res.response.sort((a,b)=>a.team.name.localeCompare(b.team.name)).forEach(i => {
-        const opt = `<option value="${i.team.id}">${i.team.name}</option>`;
-        hS.innerHTML += opt; aS.innerHTML += opt;
-    });
+    if(res.response && res.response.length > 0) {
+        res.response.sort((a,b)=>a.team.name.localeCompare(b.team.name)).forEach(i => {
+            const opt = `<option value="${i.team.id}">${i.team.name}</option>`;
+            hS.innerHTML += opt; aS.innerHTML += opt;
+        });
+    } else {
+        hS.innerHTML = "<option>Δεν βρέθηκαν ομάδες</option>";
+    }
 }
 
 function getOverProbability(target, lambda) {
@@ -131,11 +128,7 @@ function getOverProbability(target, lambda) {
 
 function calcCI(mean) {
     const sd = Math.sqrt(mean);
-    return { 
-        min: Math.max(0, mean - 1.96*sd).toFixed(1), 
-        max: (mean + 1.96*sd).toFixed(1), 
-        avg: mean.toFixed(1) 
-    };
+    return { min: Math.max(0, mean - 1.96*sd).toFixed(1), max: (mean + 1.96*sd).toFixed(1), avg: mean.toFixed(1) };
 }
 
 async function runEngine() {
@@ -149,53 +142,41 @@ async function runEngine() {
         api(`teams/statistics?league=${lid}&season=${SEASON}&team=${aId}`)
     ]);
 
-    const sH = hR.response; const sA = aR.response;
+    if(hR.response && aR.response) {
+        const sH = hR.response; const sA = aR.response;
+        const xgH = (parseFloat(sH.goals.for.average.home) + parseFloat(sA.goals.against.average.away)) / 2;
+        const xgA = (parseFloat(sA.goals.for.average.away) + parseFloat(sH.goals.against.average.home)) / 2;
+        const totalXG = xgH + xgA;
 
-    const xgH = (parseFloat(sH.goals.for.average.home) + parseFloat(sA.goals.against.average.away)) / 2;
-    const xgA = (parseFloat(sA.goals.for.average.away) + parseFloat(sH.goals.against.average.home)) / 2;
-    const totalXG = xgH + xgA;
+        // Value Signal Logic
+        const vBox = document.getElementById('valueSignal');
+        if ((totalXG - 2.6) > 0.4) {
+            vBox.innerText = "🚀 VALUE SIGNAL: Υψηλό xG σε σχέση με την αγορά!";
+            vBox.style.display = "block";
+        } else { vBox.style.display = "none"; }
 
-    // Market Consensus Simulation (Based on Forebet/PredictZ style algorithms)
-    const marketMeanXG = 2.65; 
-    const divergence = totalXG - marketMeanXG;
-    const vBox = document.getElementById('valueSignal');
+        const xCorners = (xgH * 1.5 + 3.2) + (xgA * 1.3 + 2.8);
+        const xCards = (parseFloat(sH.cards.yellow['0-15']?.total || 1) / 8) + 3.2;
 
-    if (divergence > 0.4) {
-        vBox.innerText = "🚀 VALUE SIGNAL: Το μοντέλο βλέπει επιθετικότερο ρυθμό από την αγορά!";
-        vBox.style.display = "block";
-    } else if (divergence < -0.4) {
-        vBox.innerText = "⚠️ RISK ALERT: Η αγορά υπερεκτιμά τον ρυθμό του αγώνα.";
-        vBox.style.display = "block";
-    } else {
-        vBox.style.display = "none";
+        document.getElementById('displayTarget').innerText = target;
+        document.getElementById('probResult').innerText = getOverProbability(target, xCorners).toFixed(1) + "%";
+        
+        const metrics = [
+            { name: "Total Corners", data: calcCI(xCorners) },
+            { name: "xGoals Home", data: calcCI(xgH) },
+            { name: "xGoals Away", data: calcCI(xgA) },
+            { name: "Total Cards", data: calcCI(xCards) }
+        ];
+
+        let html = "";
+        metrics.forEach(m => {
+            html += `<tr><td class="row-label">${m.name}</td><td>${m.data.min}</td><td class="val-main">${m.data.avg}</td><td>${m.data.max}</td></tr>`;
+        });
+
+        document.getElementById('statBody').innerHTML = html;
+        document.getElementById('xScore').innerText = `${Math.round(xgH)} - ${Math.round(xgA)}`;
+        document.getElementById('result').style.display = 'block';
     }
-
-    const xCorners = (xgH * 1.6 + 3.1) + (xgA * 1.4 + 2.7);
-    const xCards = (parseFloat(sH.cards.yellow['0-15']?.total || 1) / 10) + 3.4;
-
-    document.getElementById('displayTarget').innerText = target;
-    document.getElementById('probResult').innerText = getOverProbability(target, xCorners).toFixed(1) + "%";
-    
-    const metrics = [
-        { name: "Total Corners", data: calcCI(xCorners) },
-        { name: "xGoals Home", data: calcCI(xgH) },
-        { name: "xGoals Away", data: calcCI(xgA) },
-        { name: "Total Cards", data: calcCI(xCards) }
-    ];
-
-    let html = "";
-    metrics.forEach(m => {
-        html += `<tr>
-            <td class="row-label">${m.name}</td>
-            <td class="val-range">${m.data.min}</td>
-            <td class="val-main">${m.data.avg}</td>
-            <td class="val-range">${m.data.max}</td>
-        </tr>`;
-    });
-
-    document.getElementById('statBody').innerHTML = html;
-    document.getElementById('xScore').innerText = `${Math.round(xgH)} - ${Math.round(xgA)}`;
-    document.getElementById('result').style.display = 'block';
 }
 
 loadTeams();
