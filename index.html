@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v116 - Sovereign Prime</title>
+    <title>Predictor Pro v117 - Global Fix</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #c9d1d9; --acc: #00d2ff; --gold: #ffb703; --bomb: #ff4444; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; }
@@ -13,7 +13,6 @@
         select, input, button { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 900; margin-bottom: 8px; box-sizing: border-box; }
         .btn-sync { background: var(--p); color: #000; border: none; font-size: 1rem; }
         .btn-mod { background: var(--gold); color: #000; }
-        .btn-live-acc { background: var(--bomb); color: #fff; grid-column: span 2; }
         .btn-opt { background: transparent; border: 1px solid var(--acc); color: var(--acc); font-size: 0.75rem; }
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
 
@@ -21,7 +20,7 @@
         .stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #222; padding-bottom: 8px; }
         .p-val { font-size: 1.2rem; font-weight: 900; color: var(--p); }
 
-        .match-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; border-left: 5px solid var(--border); position: relative; transition: 0.3s; }
+        .match-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; border-left: 5px solid var(--border); position: relative; }
         .status-tag { position: absolute; top: 10px; right: 10px; padding: 2px 8px; border-radius: 5px; font-size: 0.65rem; font-weight: 900; }
         .ft { background: #1a1a1a; color: #666; border-left-color: #333 !important; opacity: 0.6; }
         .live { background: var(--bomb); color: #fff; }
@@ -33,17 +32,18 @@
 
 <div class="container">
     <div class="card">
-        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin-bottom:15px;">PREDICTOR PRO v116</h1>
+        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin-bottom:15px;">PREDICTOR PRO v117</h1>
 
-        <button class="btn-sync" onclick="globalSync()">🌍 GLOBAL SYNC (ALL LEAGUES)</button>
+        <button class="btn-sync" onclick="globalSync()">🌍 GLOBAL SYNC (GREECE INCLUDED)</button>
         
         <select id="leagueFilter" onchange="renderList()" style="display:none;">
             <option value="ALL">Όλα τα Πρωταθλήματα</option>
-            <option value="203">Ελλάδα (SL1)</option>
-            <option value="79">Γερμανία 2</option>
-            <option value="39">Αγγλία (PL)</option>
-            <option value="78">Γερμανία (BL)</option>
-            <option value="204">Τουρκία (SL)</option>
+            <option value="197">🇬🇷 Ελλάδα (Super League 1)</option>
+            <option value="79">🇩🇪 Γερμανία 2</option>
+            <option value="39">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Αγγλία (Premier League)</option>
+            <option value="78">🇩🇪 Γερμανία (Bundesliga)</option>
+            <option value="204">🇹🇷 Τουρκία (Super Lig)</option>
+            <option value="140">🇪🇸 Ισπανία (La Liga)</option>
         </select>
         
         <input type="text" id="searchBar" placeholder="Αναζήτηση ομάδας..." onkeyup="filterMatches()" style="display:none;">
@@ -62,15 +62,17 @@
 
         <div id="analysisPanel">
             <span style="float:right; color:var(--bomb); cursor:pointer; font-weight:900;" onclick="this.parentElement.style.display='none'">[X]</span>
-            <h3 id="mTitle" style="text-align:center; color:var(--gold); font-size:0.8rem; margin-top:0;">DEEP ANALYSIS</h3>
-            <div class="stat-row">
-                <div id="hXG" class="p-val">0.0</div><div style="color:var(--acc); font-size:0.5rem;">xGOALS</div><div id="aXG" class="p-val">0.0</div>
-            </div>
-            <div class="stat-row">
-                <div id="hXC" class="p-val">0</div><div style="color:var(--acc); font-size:0.5rem;">xCORNERS</div><div id="aXC" class="p-val">0</div>
-            </div>
-            <div class="stat-row">
-                <div id="hXK" class="p-val">0</div><div style="color:var(--acc); font-size:0.5rem;">xCARDS</div><div id="aXK" class="p-val">0</div>
+            <h3 id="panelName" style="text-align:center; color:var(--gold); font-size:0.8rem; margin-top:0;">DEEP ANALYSIS</h3>
+            <div class="stat-grid">
+                <div class="stat-row">
+                    <div id="hXG" class="p-val">0.0</div><div style="color:var(--acc); font-size:0.5rem;">xGOALS</div><div id="aXG" class="p-val">0.0</div>
+                </div>
+                <div class="stat-row">
+                    <div id="hXC" class="p-val">0</div><div style="color:var(--acc); font-size:0.5rem;">xCORNERS</div><div id="aXC" class="p-val">0</div>
+                </div>
+                <div class="stat-row">
+                    <div id="hXK" class="p-val">0</div><div style="color:var(--acc); font-size:0.5rem;">xCARDS</div><div id="aXK" class="p-val">0</div>
+                </div>
             </div>
             <div id="piArea" style="text-align:center; padding:10px; border:1px solid var(--p); border-radius:10px;">
                 <span id="l_pi" style="font-size:1.3rem; font-weight:900; color:var(--p);">0.0</span>
@@ -85,7 +87,7 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [203, 79, 204, 39, 78, 140, 40, 135];
+const LEAGUES = [197, 79, 204, 39, 78, 140, 40, 135]; // 197 is the correct SL1 ID
 let allMatches = [];
 
 async function globalSync() {
@@ -100,8 +102,17 @@ async function globalSync() {
                 headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
             });
             const d = await res.json();
-            if(d.response) allMatches = allMatches.concat(d.response);
-        } catch(e) {}
+            if(d.response && d.response.length > 0) {
+                allMatches = allMatches.concat(d.response);
+            }
+        } catch(e) { console.error("Error syncing league " + id); }
+        await new Promise(r => setTimeout(r, 150)); // Prevent API rate limit
+    }
+
+    if(allMatches.length === 0) {
+        btn.innerText = "No Matches Found Today";
+        btn.disabled = false;
+        return;
     }
 
     document.getElementById('proTools').style.display = "block";
@@ -139,9 +150,11 @@ function filterMatches() {
 
 function engine(mode, count) {
     const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
-    if(upcoming.length < count) { alert("Όχι αρκετά επερχόμενα ματς."); return; }
-    const pool = [...upcoming].sort(() => 0.5 - Math.random());
+    if(upcoming.length < count) { alert("Όχι αρκετά επερχόμενα ματς για " + count + "αδα."); return; }
+    
+    let pool = [...upcoming].sort(() => 0.5 - Math.random());
     let html = `<div class="acc-box"><b style="color:var(--acc); font-size:0.8rem;">GLOBAL ${count}ΑΔΑ: ${mode.toUpperCase()}</b>`;
+    
     pool.slice(0, count).forEach(m => {
         const pick = mode==='pts'?'1':(mode==='o25'?'O 2.5':(mode==='o35'?'O 3.5':'O 9.5 COR'));
         html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:5px 0; border-bottom:1px solid #333;">
@@ -170,7 +183,11 @@ async function getDeepStats(fid, h, a) {
     });
     const d = await res.json();
     const s = d.response;
-    if(!s || s.length < 2) return;
+    if(!s || s.length < 2) {
+        document.getElementById('hXG').innerText = "0.0"; document.getElementById('aXG').innerText = "0.0";
+        document.getElementById('l_pi').innerText = "0.0";
+        return;
+    }
     const gV = (st, t) => { const f = st.find(i => i.type === t); return f ? (parseInt(f.value) || 0) : 0; };
     document.getElementById('hXG').innerText = (gV(s[0].statistics, "Shots on Goal") * 0.3).toFixed(1);
     document.getElementById('aXG').innerText = (gV(s[1].statistics, "Shots on Goal") * 0.3).toFixed(1);
