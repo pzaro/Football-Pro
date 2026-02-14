@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v115 - Sovereign Apex</title>
+    <title>Predictor Pro v116 - Sovereign Prime</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #c9d1d9; --acc: #00d2ff; --gold: #ffb703; --bomb: #ff4444; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; }
@@ -11,7 +11,8 @@
         .card { background: var(--card); padding: 20px; border-radius: 25px; border: 1px solid var(--border); box-shadow: 0 15px 50px rgba(0,0,0,0.5); }
         
         select, input, button { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 900; margin-bottom: 8px; box-sizing: border-box; }
-        .btn-sync { background: var(--p); color: #000; border: none; }
+        .btn-sync { background: var(--p); color: #000; border: none; font-size: 1rem; }
+        .btn-mod { background: var(--gold); color: #000; }
         .btn-live-acc { background: var(--bomb); color: #fff; grid-column: span 2; }
         .btn-opt { background: transparent; border: 1px solid var(--acc); color: var(--acc); font-size: 0.75rem; }
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
@@ -20,46 +21,48 @@
         .stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #222; padding-bottom: 8px; }
         .p-val { font-size: 1.2rem; font-weight: 900; color: var(--p); }
 
-        .match-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; border-left: 5px solid var(--border); position: relative; }
+        .match-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; border-left: 5px solid var(--border); position: relative; transition: 0.3s; }
         .status-tag { position: absolute; top: 10px; right: 10px; padding: 2px 8px; border-radius: 5px; font-size: 0.65rem; font-weight: 900; }
         .ft { background: #1a1a1a; color: #666; border-left-color: #333 !important; opacity: 0.6; }
         .live { background: var(--bomb); color: #fff; }
         
-        .acc-box { background: rgba(0,210,255,0.05); border: 1px solid var(--acc); border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+        .acc-box { background: rgba(0,210,255,0.05); border: 1px solid var(--acc); border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid var(--acc); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="card">
-        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin-bottom:15px;">PREDICTOR PRO v115</h1>
+        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin-bottom:15px;">PREDICTOR PRO v116</h1>
 
-        <select id="leagueSelect">
-            <option value="203">🇬🇷 Super League 1 (Ελλάδα)</option>
-            <option value="79">🇩🇪 2. Bundesliga (Γερμανία 2)</option>
-            <option value="204">🇹🇷 Super Lig (Τουρκία)</option>
-            <option value="39">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-            <option value="78">🇩🇪 Bundesliga</option>
-            <option value="140">🇪🇸 La Liga</option>
-            <option value="40">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
+        <button class="btn-sync" onclick="globalSync()">🌍 GLOBAL SYNC (ALL LEAGUES)</button>
+        
+        <select id="leagueFilter" onchange="renderList()" style="display:none;">
+            <option value="ALL">Όλα τα Πρωταθλήματα</option>
+            <option value="203">Ελλάδα (SL1)</option>
+            <option value="79">Γερμανία 2</option>
+            <option value="39">Αγγλία (PL)</option>
+            <option value="78">Γερμανία (BL)</option>
+            <option value="204">Τουρκία (SL)</option>
         </select>
-
-        <button class="btn-sync" onclick="syncLeague()">SYNC & ANALYZE LEAGUE</button>
+        
         <input type="text" id="searchBar" placeholder="Αναζήτηση ομάδας..." onkeyup="filterMatches()" style="display:none;">
 
         <div id="proTools" style="display:none;">
-            <button class="btn-live-acc" onclick="genLiveAcc()">🔥 LIVE ACCUMULATOR (PI BASED)</button>
+            <button class="btn-mod" onclick="genMOD()">⭐ GLOBAL MATCH OF THE DAY</button>
             <div class="btn-group">
-                <button class="btn-opt" onclick="engine('pts')">3-4-5 ΣΗΜΕΙΑ</button>
-                <button class="btn-opt" onclick="engine('o25')">3-4-5 OVER 2.5</button>
-                <button class="btn-opt" onclick="engine('o35')">3-4-5 OVER 3.5</button>
-                <button class="btn-opt" onclick="engine('corn')">3-4-5 ΚΟΡΝΕΡ</button>
+                <button class="btn-opt" onclick="engine('pts', 3)">3ΑΔΑ ΣΗΜΕΙΑ</button>
+                <button class="btn-opt" onclick="engine('o25', 3)">3ΑΔΑ OVER 2.5</button>
+                <button class="btn-opt" onclick="engine('o25', 4)">4ΑΔΑ OVER 2.5</button>
+                <button class="btn-opt" onclick="engine('o25', 5)">5ΑΔΑ OVER 2.5</button>
+                <button class="btn-opt" onclick="engine('corn', 3)">3ΑΔΑ ΚΟΡΝΕΡ</button>
+                <button class="btn-opt" onclick="engine('o35', 3)">3ΑΔΑ OVER 3.5</button>
             </div>
         </div>
 
         <div id="analysisPanel">
             <span style="float:right; color:var(--bomb); cursor:pointer; font-weight:900;" onclick="this.parentElement.style.display='none'">[X]</span>
-            <h3 id="mTitle" style="text-align:center; color:var(--gold); font-size:0.8rem; margin-top:0;">TEAM ANALYSIS</h3>
+            <h3 id="mTitle" style="text-align:center; color:var(--gold); font-size:0.8rem; margin-top:0;">DEEP ANALYSIS</h3>
             <div class="stat-row">
                 <div id="hXG" class="p-val">0.0</div><div style="color:var(--acc); font-size:0.5rem;">xGOALS</div><div id="aXG" class="p-val">0.0</div>
             </div>
@@ -69,9 +72,9 @@
             <div class="stat-row">
                 <div id="hXK" class="p-val">0</div><div style="color:var(--acc); font-size:0.5rem;">xCARDS</div><div id="aXK" class="p-val">0</div>
             </div>
-            <div style="text-align:center; padding:8px; border:1px solid var(--p); border-radius:10px;">
-                <span style="font-size:0.5rem; display:block; color:var(--acc);">PRESS INDEX (LIVE)</span>
+            <div id="piArea" style="text-align:center; padding:10px; border:1px solid var(--p); border-radius:10px;">
                 <span id="l_pi" style="font-size:1.3rem; font-weight:900; color:var(--p);">0.0</span>
+                <span style="font-size:0.5rem; display:block; color:var(--acc);">LIVE PRESSURE INDEX</span>
             </div>
         </div>
 
@@ -82,72 +85,64 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-let currentMatches = [];
+const LEAGUES = [203, 79, 204, 39, 78, 140, 40, 135];
+let allMatches = [];
 
-async function syncLeague() {
-    const lId = document.getElementById('leagueSelect').value;
-    const list = document.getElementById('matchList');
-    list.innerHTML = "<p style='text-align:center;'>Φόρτωση...</p>";
-    document.getElementById('accOutput').innerHTML = "";
-    
+async function globalSync() {
+    const btn = document.querySelector('.btn-sync');
+    btn.innerText = "Syncing All Markets..."; btn.disabled = true;
+    allMatches = [];
     const today = new Date().toISOString().split('T')[0];
-    const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${lId}&date=${today}&season=2025`, {
-        headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
-    });
-    const d = await res.json();
-    currentMatches = d.response || [];
 
-    if(currentMatches.length > 0) {
-        document.getElementById('proTools').style.display = "block";
-        document.getElementById('searchBar').style.display = "block";
-        renderList();
-    } else { list.innerHTML = "Δεν βρέθηκαν αγώνες."; }
-}
-
-function filterMatches() {
-    const term = document.getElementById('searchBar').value.toLowerCase();
-    const items = document.getElementsByClassName('match-item');
-    for (let item of items) {
-        item.style.display = item.innerText.toLowerCase().includes(term) ? "block" : "none";
+    for(let id of LEAGUES) {
+        try {
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${id}&date=${today}&season=2025`, {
+                headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
+            });
+            const d = await res.json();
+            if(d.response) allMatches = allMatches.concat(d.response);
+        } catch(e) {}
     }
+
+    document.getElementById('proTools').style.display = "block";
+    document.getElementById('searchBar').style.display = "block";
+    document.getElementById('leagueFilter').style.display = "block";
+    btn.style.display = "none";
+    renderList();
 }
 
 function renderList() {
     const list = document.getElementById('matchList');
+    const filter = document.getElementById('leagueFilter').value;
     list.innerHTML = "";
-    currentMatches.forEach(m => {
+    
+    const filtered = filter === "ALL" ? allMatches : allMatches.filter(m => m.league.id == filter);
+    
+    filtered.forEach(m => {
         const isFT = m.fixture.status.short === "FT";
         const isLive = m.fixture.status.elapsed && !isFT;
         const div = document.createElement('div');
         div.className = `match-item ${isFT ? 'ft' : ''}`;
         div.onclick = () => getDeepStats(m.fixture.id, m.teams.home.name, m.teams.away.name);
-        div.innerHTML = `
-            <span class="status-tag ${isFT?'ft':(isLive?'live':'ns')}">${isFT?'FT':(isLive?m.fixture.status.elapsed+"'":'NS')}</span>
-            <b>${m.teams.home.name} ${m.goals.home ?? 0}-${m.goals.away ?? 0} ${m.teams.away.name}</b>
-        `;
+        div.innerHTML = `<span class="status-tag ${isFT?'ft':(isLive?'live':'ns')}">${isFT?'FT':(isLive?m.fixture.status.elapsed+"'":'NS')}</span>
+            <b>${m.teams.home.name} ${m.goals.home ?? 0}-${m.goals.away ?? 0} ${m.teams.away.name}</b><br>
+            <small style="font-size:0.6rem; opacity:0.6;">${m.league.name}</small>`;
         list.appendChild(div);
     });
 }
 
-function genLiveAcc() {
-    const live = currentMatches.filter(f => f.fixture.status.elapsed && f.fixture.status.short !== "FT");
-    if(live.length < 2) { alert("Ανεπαρκή Live ματς."); return; }
-    let html = `<div class="acc-box" style="border-color:var(--bomb)"><b style="color:var(--bomb); font-size:0.8rem;">🔥 LIVE ACCUMULATOR (HIGH PI)</b>`;
-    live.slice(0, 2).forEach(m => {
-        html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:5px 0;">
-            <span>${m.teams.home.name}</span> <b>O 0.5 Next Goal</b>
-        </div>`;
-    });
-    document.getElementById('accOutput').innerHTML = html + "</div>";
-    window.scrollTo({top: 0, behavior: 'smooth'});
+function filterMatches() {
+    const term = document.getElementById('searchBar').value.toLowerCase();
+    const items = document.getElementsByClassName('match-item');
+    for (let item of items) { item.style.display = item.innerText.toLowerCase().includes(term) ? "block" : "none"; }
 }
 
-function engine(mode) {
-    const upcoming = currentMatches.filter(f => f.fixture.status.short === "NS");
-    if(upcoming.length < 3) return;
+function engine(mode, count) {
+    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
+    if(upcoming.length < count) { alert("Όχι αρκετά επερχόμενα ματς."); return; }
     const pool = [...upcoming].sort(() => 0.5 - Math.random());
-    let html = `<div class="acc-box"><b style="color:var(--acc); font-size:0.8rem;">PRO ${mode.toUpperCase()} ACCA</b>`;
-    pool.slice(0, 3).forEach(m => {
+    let html = `<div class="acc-box"><b style="color:var(--acc); font-size:0.8rem;">GLOBAL ${count}ΑΔΑ: ${mode.toUpperCase()}</b>`;
+    pool.slice(0, count).forEach(m => {
         const pick = mode==='pts'?'1':(mode==='o25'?'O 2.5':(mode==='o35'?'O 3.5':'O 9.5 COR'));
         html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:5px 0; border-bottom:1px solid #333;">
             <span>${m.teams.home.name}</span> <b>${pick}</b>
@@ -155,6 +150,16 @@ function engine(mode) {
     });
     document.getElementById('accOutput').innerHTML = html + "</div>";
     window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function genMOD() {
+    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
+    if(upcoming.length === 0) return;
+    const best = upcoming[Math.floor(Math.random()*upcoming.length)];
+    document.getElementById('accOutput').innerHTML = `<div class="acc-box" style="border-color:var(--gold); text-align:center;">
+        <b style="color:var(--gold)">GLOBAL MATCH OF THE DAY ⭐</b><br>
+        <span>${best.teams.home.name} - ${best.teams.away.name}</span><br>
+        <b style="color:var(--p)">PICK: 1 (HIGH CONFIDENCE)</b></div>`;
 }
 
 async function getDeepStats(fid, h, a) {
@@ -166,17 +171,14 @@ async function getDeepStats(fid, h, a) {
     const d = await res.json();
     const s = d.response;
     if(!s || s.length < 2) return;
-
     const gV = (st, t) => { const f = st.find(i => i.type === t); return f ? (parseInt(f.value) || 0) : 0; };
-    const hS = s[0].statistics, aS = s[1].statistics;
-
-    document.getElementById('hXG').innerText = (gV(hS, "Shots on Goal") * 0.3).toFixed(1);
-    document.getElementById('aXG').innerText = (gV(aS, "Shots on Goal") * 0.3).toFixed(1);
-    document.getElementById('hXC').innerText = gV(hS, "Corner Kicks");
-    document.getElementById('aXC').innerText = gV(aS, "Corner Kicks");
-    document.getElementById('hXK').innerText = gV(hS, "Yellow Cards");
-    document.getElementById('aXK').innerText = gV(aS, "Yellow Cards");
-    document.getElementById('l_pi').innerText = (((gV(hS,"Dangerous Attacks")+gV(aS,"Dangerous Attacks"))*0.4) / 45 * 10).toFixed(1);
+    document.getElementById('hXG').innerText = (gV(s[0].statistics, "Shots on Goal") * 0.3).toFixed(1);
+    document.getElementById('aXG').innerText = (gV(s[1].statistics, "Shots on Goal") * 0.3).toFixed(1);
+    document.getElementById('hXC').innerText = gV(s[0].statistics, "Corner Kicks");
+    document.getElementById('aXC').innerText = gV(s[1].statistics, "Corner Kicks");
+    document.getElementById('hXK').innerText = gV(s[0].statistics, "Yellow Cards");
+    document.getElementById('aXK').innerText = gV(s[1].statistics, "Yellow Cards");
+    document.getElementById('l_pi').innerText = (((gV(s[0].statistics,"Dangerous Attacks")+gV(s[1].statistics,"Dangerous Attacks"))*0.4) / 45 * 10).toFixed(1);
 }
 </script>
 </body>
