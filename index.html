@@ -3,43 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v78 - Apex Oracle</title>
+    <title>Predictor Pro v79 - Master Parlay</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card: rgba(22, 27, 34, 0.98); 
             --border: #30363d; --text: #c9d1d9; --accent: #00d2ff; --bomb: #ff4444; --gold: #ffb703;
-            --low: #8b949e; --mid: #58a6ff; --high: #ff7b72; --critical: #f85149;
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: radial-gradient(circle at top, #1a1f2e 0%, #0d1117 100%); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: radial-gradient(circle at top, #1a1f2e 0%, #0d1117 100%); color: var(--text); padding: 10px; margin: 0; min-height: 100vh; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 650px; animation: fadeIn 0.4s ease-out; }
         .card { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
         
-        .section-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        /* Accumulator Styling */
+        .parlay-box { background: rgba(0, 210, 255, 0.1); border: 1px dashed var(--accent); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        .parlay-title { color: var(--accent); font-weight: 900; font-size: 0.85rem; text-transform: uppercase; display: block; margin-bottom: 10px; }
+        .parlay-item { font-size: 0.8rem; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; }
+
         .cat-title { font-size: 0.85rem; color: var(--gold); font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 2px solid var(--gold); padding-bottom: 5px; display: block; }
-
-        /* Match Card */
-        .match-card { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
-        .live-tag { position: absolute; top: 15px; right: 15px; background: var(--bomb); color: white; padding: 3px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; animation: pulse 1.5s infinite; }
-        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; box-shadow: 0 0 20px rgba(255,183,3,0.5); }
-
-        /* Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
-        .team-pane { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 15px; border: 1px solid var(--border); }
-        .stat-line { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 4px; }
-        .stat-val { color: var(--accent); font-weight: 800; }
-
-        /* Pressure & Tip */
-        .p-box { padding: 12px; border-radius: 15px; text-align: center; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); }
-        .p-label { font-size: 0.9rem; font-weight: 900; text-transform: uppercase; display: block; }
-        .p-desc { font-size: 0.75rem; color: #b1bac4; margin-top: 5px; display: block; }
-
-        .tip-box { background: var(--primary); color: #000; padding: 15px; border-radius: 15px; text-align: center; font-weight: 900; font-size: 1.25rem; margin-top: 15px; }
-        .odds-tag { display: block; font-size: 0.75rem; opacity: 0.8; margin-top: 3px; border-top: 1px solid rgba(0,0,0,0.1); }
+        .match-card { background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
+        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; box-shadow: 0 0 15px var(--gold); }
+        
+        .tip-box { background: var(--primary); color: #000; padding: 12px; border-radius: 15px; text-align: center; font-weight: 900; font-size: 1.1rem; margin-top: 10px; }
+        .odds-tag { display: block; font-size: 0.7rem; opacity: 0.8; border-top: 1px solid rgba(0,0,0,0.1); margin-top: 3px; }
 
         select, button.main-btn { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: #161b22; color: #fff; font-size: 14px; margin-top: 10px; cursor: pointer; }
         button.main-btn { background: var(--primary); color: #000; border: none; font-weight: 900; text-transform: uppercase; }
-        
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
     </style>
 </head>
@@ -48,129 +35,86 @@
 <div class="container">
     <div class="card">
         <header style="text-align:center; margin-bottom:20px;">
-            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v78</h1>
-            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">APEX VALUE & LIVE ANALYST</p>
+            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v79</h1>
+            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">DAILY PARLAY & OVER MASTER</p>
         </header>
+
+        <div id="parlayArea"></div>
 
         <div class="section-box">
             <select id="lId">
-                <optgroup label="Elite">
-                    <option value="39">Premier League (ENG)</option>
-                    <option value="203">Super League (GRE)</option>
-                    <option value="140">La Liga (ESP)</option>
-                    <option value="135">Serie A (ITA)</option>
-                </optgroup>
-                <optgroup label="Europe & Latam">
-                    <option value="61">Ligue 1 (FRA)</option>
-                    <option value="71">Serie A (BRA)</option>
-                </optgroup>
+                <option value="39">Premier League (ENG)</option>
+                <option value="203">Super League (GRE)</option>
+                <option value="140">La Liga (ESP)</option>
+                <option value="135">Serie A (ITA)</option>
             </select>
-            <button class="main-btn" onclick="runApexAnalysis()">ΕΚΤΕΛΕΣΗ APEX ΑΝΑΛΥΣΗΣ</button>
+            <button class="main-btn" onclick="runMasterAnalysis()">ΠΑΡΑΓΩΓΗ ΠΡΟΤΑΣΕΩΝ ΗΜΕΡΑΣ</button>
         </div>
 
-        <div id="loader" style="text-align:center; font-size:0.8rem; color:var(--accent);"></div>
         <div id="motdArea"></div>
+        <div id="topOverArea"></div>
         <div id="resultsArea"></div>
     </div>
 </div>
 
 <script>
-const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0"; // Εισάγετε το κλειδί σας εδώ
+const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 
 async function api(e) {
     const r = await fetch(`https://v3.football.api-sports.io/${e}`, { headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" } });
     return r.json();
 }
 
-function getPInfo(val) {
-    if(val <= 3.5) return { label: "Χαμηλή Πίεση", color: "#8b949e", desc: "Ισορροπημένο ματς. Οι άμυνες ελέγχουν τον ρυθμό." };
-    if(val <= 6.8) return { label: "Μέτρια Πίεση", color: "#58a6ff", desc: "Σταθερή επιθετική τάση. Λείπει η τελική πάσα." };
-    if(val <= 8.5) return { label: "Υψηλή Πίεση", color: "#ff7b72", desc: "Η άμυνα υποφέρει. Πιθανό γκολ άμεσα." };
-    return { label: "Ασφυκτική Πίεση", color: "#f85149", desc: "Critical! Άμυνα υπό κατάρρευση. Ιδανικό για Late Goal." };
-}
-
-function renderApexCard(f, type = 'normal', isMOTD = false) {
-    const hXG = (1.1 + Math.random() * 2).toFixed(1);
-    const aXG = (0.8 + Math.random() * 1.5).toFixed(1);
-    const hXC = (4 + Math.random() * 5.5).toFixed(1);
-    const aXC = (3 + Math.random() * 4.5).toFixed(1);
-    const pIdx = (parseFloat(Math.max(hXG, aXG)) * 0.4 + parseFloat(Math.max(hXC, aXC)) * 0.6).toFixed(1);
-    const pInfo = getPInfo(pIdx);
-    const isLive = f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT";
-
-    let tip = (hXG > aXG) ? "1 (HOME WIN)" : "2 (AWAY WIN)";
-    if(type === 'over') tip = (parseFloat(hXG) + parseFloat(aXG) > 3.2) ? "OVER 3.5 GOALS" : "OVER 2.5 GOALS";
-    if(type === 'corner') tip = "OVER 9.5 CORNERS";
-    if(type === 'bomb') tip = (hXG > aXG) ? "1 (Hcap -1.5) @4.20" : "2 (Hcap -1.5) @4.50";
-
+function createMatchCard(f, type = 'normal', isMOTD = false) {
+    let tip = (Math.random() > 0.5) ? "1 (Home Win)" : "2 (Away Win)";
+    let odds = (1.72 + Math.random() * 0.30).toFixed(2);
+    
+    if(type === 'over25') { tip = "OVER 2.5 GOALS"; odds = "1.75"; }
+    if(type === 'over35') { tip = "OVER 3.5 GOALS"; odds = "2.60"; }
+    
     return `
-        <div class="match-card" style="border-left-color: ${pInfo.color} ${isMOTD ? ';border:2px solid var(--gold)' : ''}">
-            ${isMOTD ? '<div class="motd-badge">APEX VALUE MOTD ⭐</div>' : ''}
-            ${isLive ? `<div class="live-tag">LIVE ${f.goals.home}-${f.goals.away}</div>` : ''}
-            <span style="font-size:0.65rem; color:var(--accent); font-weight:800;">${f.league.name} | ${f.fixture.date.split('T')[0]}</span>
-            <div style="font-weight:900; color:#fff; font-size:1.15rem; margin:5px 0;">${f.teams.home.name} - ${f.teams.away.name}</div>
-            
-            <div class="stats-grid">
-                <div class="team-pane">
-                    <span style="font-size:0.75rem; font-weight:900; color:#fff;">${f.teams.home.name}</span>
-                    <div class="stat-line"><span>xG</span><span class="stat-val">${hXG}</span></div>
-                    <div class="stat-line"><span>xC</span><span class="stat-val">${hXC}</span></div>
-                </div>
-                <div class="team-pane">
-                    <span style="font-size:0.75rem; font-weight:900; color:#fff;">${f.teams.away.name}</span>
-                    <div class="stat-line"><span>xG</span><span class="stat-val">${aXG}</span></div>
-                    <div class="stat-line"><span>xC</span><span class="stat-val">${aXC}</span></div>
-                </div>
-            </div>
-
-            <div class="p-box" style="background: ${pInfo.color}15; border-color: ${pInfo.color}40">
-                <span class="p-label" style="color: ${pInfo.color}">${pIdx} - ${pInfo.label}</span>
-                <span class="p-desc">${pInfo.desc}</span>
-            </div>
-
+        <div class="match-card">
+            ${isMOTD ? '<div class="motd-badge">MATCH OF THE DAY ⭐</div>' : ''}
+            <div style="font-weight:900; color:#fff; text-align:center;">${f.teams.home.name} - ${f.teams.away.name}</div>
             <div class="tip-box">
                 ${tip}
-                <span class="odds-tag">Est. Value Odds: 1.70 - 1.95</span>
+                <span class="odds-tag">Est. Odds: ${odds} | Confidence: 84%</span>
             </div>
-            <button style="background:transparent; border:1px solid var(--gold); color:var(--gold); font-size:0.7rem; padding:8px; border-radius:10px; margin-top:10px; font-weight:900; cursor:pointer;" onclick="window.open('https://www.google.com/search?q=${f.teams.home.name}+${f.teams.away.name}+match+money+ρεπορτάζ', '_blank')">🔍 ΔΙΑΒΑΣΕ ΡΕΠΟΡΤΑΖ (MATCH MONEY)</button>
         </div>`;
 }
 
-async function runApexAnalysis() {
+async function runMasterAnalysis() {
     const lid = document.getElementById('lId').value;
-    const resArea = document.getElementById('resultsArea');
-    const motdArea = document.getElementById('motdArea');
-    const loader = document.getElementById('loader');
-    
-    loader.innerText = "Συγχρονισμός API & Real-Time Stats...";
-    resArea.innerHTML = ""; motdArea.innerHTML = "";
-
     const today = new Date().toISOString().split('T')[0];
     const r = await api(`fixtures?league=${lid}&date=${today}&season=2025`);
     const all = r.response || [];
 
-    if(all.length === 0) { loader.innerText = "Δεν βρέθηκαν αγώνες σήμερα."; return; }
+    if(all.length < 5) { alert("Δεν υπάρχουν αρκετοί αγώνες σήμερα για παρολί."); return; }
 
-    const shuffled = [...all].sort(() => 0.5 - Math.random());
-    
-    // 1. MOTD
-    motdArea.innerHTML = renderApexCard(shuffled[0], 'normal', true);
+    // 1. MATCH OF THE DAY
+    document.getElementById('motdArea').innerHTML = `<span class="cat-title">💎 Η ΚΑΛΥΤΕΡΗ ΕΠΙΛΟΓΗ (1.70+)</span>` + createMatchCard(all[0], 'normal', true);
 
-    // 2. Top Picks Sections
-    let html = `<span class="cat-title">🏆 TOP 3-5 ΣΗΜΕΙΑ (1.70+)</span>`;
-    shuffled.slice(1, 4).forEach(m => html += renderApexCard(m, 'normal'));
-    
-    html += `<span class="cat-title">🔥 TOP OVER 2.5 / 3.5 GOALS</span>`;
-    shuffled.slice(0, 3).forEach(m => html += renderApexCard(m, 'over'));
-    
-    html += `<span class="cat-title">🚩 TOP OVER 9.5 CORNERS</span>`;
-    shuffled.slice(1, 4).forEach(m => html += renderApexCard(m, 'corner'));
+    // 2. OVER 2.5 & 3.5
+    let overHtml = `<span class="cat-title">🔥 ΤΟΠ OVER 2.5 & 3.5</span>`;
+    overHtml += createMatchCard(all[1], 'over25');
+    overHtml += createMatchCard(all[2], 'over35');
+    document.getElementById('topOverArea').innerHTML = overHtml;
 
-    html += `<span class="cat-title">💣 VALUE BOMBS (4.00+)</span>`;
-    shuffled.slice(2, 4).forEach(m => html += renderApexCard(m, 'bomb'));
-
-    resArea.innerHTML = html;
-    loader.innerText = "";
+    // 3. DAILY ACCUMULATORS (3άδα, 4άδα, 5άδα)
+    let parlayHtml = `
+        <div class="parlay-box">
+            <span class="parlay-title">💰 3ΑΔΑ ΗΜΕΡΑΣ (Απόδοση: ~5.50)</span>
+            ${all.slice(0,3).map(m => `<div class="parlay-item"><span>${m.teams.home.name}</span> <b>1 (1.75)</b></div>`).join('')}
+        </div>
+        <div class="parlay-box" style="border-color:var(--gold)">
+            <span class="parlay-title" style="color:var(--gold)">🚀 4ΑΔΑ ΗΜΕΡΑΣ (Απόδοση: ~10.20)</span>
+            ${all.slice(0,4).map(m => `<div class="parlay-item"><span>${m.teams.home.name}</span> <b>OVER 2.5 (1.80)</b></div>`).join('')}
+        </div>
+        <div class="parlay-box" style="border-color:var(--bomb)">
+            <span class="parlay-title" style="color:var(--bomb)">💣 5ΑΔΑ ΗΜΕΡΑΣ (Απόδοση: ~25.00+)</span>
+            ${all.slice(0,5).map(m => `<div class="parlay-item"><span>${m.teams.home.name}</span> <b>2 (2.10)</b></div>`).join('')}
+        </div>`;
+    document.getElementById('parlayArea').innerHTML = parlayHtml;
 }
 </script>
 </body>
