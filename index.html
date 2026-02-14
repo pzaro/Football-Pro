@@ -3,39 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v66 - Speed Oracle</title>
+    <title>Predictor Pro v67 - Visual Oracle</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card: rgba(22, 27, 34, 0.98); 
             --border: #30363d; --text: #c9d1d9; --accent: #00d2ff; --bomb: #ff4444; --gold: #ffb703;
+            --low: #8b949e; --mid: #58a6ff; --high: #ff7b72; --critical: #f85149;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: radial-gradient(circle at top, #1a1f2e 0%, #0d1117 100%); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 600px; animation: fadeIn 0.3s ease-out; }
         .card { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
         .section-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
         
-        /* Hyper-Fast Live Card */
-        .value-item { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; transition: transform 0.2s; }
-        .live-indicator { position: absolute; top: 15px; right: 15px; background: var(--bomb); color: white; padding: 3px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; animation: pulse 1.5s infinite; }
+        /* Analysis Cards */
+        .value-item { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
+        .live-tag { position: absolute; top: 15px; right: 15px; background: var(--bomb); color: white; padding: 3px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; animation: pulse 1.5s infinite; }
         
-        /* Deep Analysis Grid */
-        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        /* Comparison Grid */
+        .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .team-pane { background: rgba(255, 255, 255, 0.04); padding: 12px; border-radius: 15px; border: 1px solid var(--border); }
-        .team-name { font-size: 0.75rem; font-weight: 900; color: #fff; display: block; margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .stat-line { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.7rem; }
+        .stat-line { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 5px; }
         .stat-val { color: var(--accent); font-weight: 800; }
 
-        /* Pressure & Tips */
-        .pressure-box { margin-top: 15px; background: rgba(255,183,3,0.08); border: 1px solid rgba(255,183,3,0.3); border-radius: 12px; padding: 10px; text-align: center; }
-        .tip-highlight { background: linear-gradient(90deg, rgba(0,255,136,0.1), rgba(0,210,255,0.1)); border: 2px solid var(--primary); padding: 15px; border-radius: 20px; margin: 15px 0; text-align: center; }
-        .tip-main { font-size: 1.4rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+        /* Visual Pressure Index */
+        .pressure-status-box { margin-top: 15px; padding: 12px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .pressure-label { font-size: 0.9rem; font-weight: 900; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .pressure-desc { font-size: 0.75rem; line-height: 1.3; color: #b1bac4; display: block; }
+
+        /* Tip Area */
+        .tip-box { background: linear-gradient(90deg, rgba(0,255,136,0.1), rgba(0,210,255,0.1)); border: 2px solid var(--primary); padding: 18px; border-radius: 20px; margin: 15px 0; text-align: center; }
+        .tip-val { font-size: 1.4rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
 
         select, button { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 14px; margin-top: 8px; cursor: pointer; }
         .btn-main { background: var(--primary); color: #000; font-weight: 900; border: none; text-transform: uppercase; }
         .btn-gold { background: var(--gold); color: #000; font-weight: 900; border: none; margin-bottom: 15px; }
 
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -43,160 +47,141 @@
 <div class="container">
     <div class="card">
         <header style="text-align:center; margin-bottom:20px;">
-            <h1 style="color:var(--primary); font-size:1.5rem; margin:0;">PREDICTOR PRO v66</h1>
-            <p id="apiClock" style="font-size: 0.65rem; color: var(--accent); font-weight: 800; margin-top: 5px;"></p>
+            <h1 style="color:var(--primary); font-size:1.5rem; margin:0;">PREDICTOR PRO v67</h1>
+            <p id="clock" style="font-size: 0.65rem; color: var(--accent); font-weight: 800; margin-top: 5px;"></p>
         </header>
 
-        <button class="btn-gold" onclick="getStrategicMOTD()">⭐ STRATEGIC MATCH OF THE DAY</button>
+        <button class="btn-gold" onclick="getEliteMOTD()">⭐ STRATEGIC MATCH OF THE DAY</button>
 
         <div class="section-box">
             <span style="font-size:0.65rem; color:var(--accent); font-weight:800;">DEEP ANALYSIS SELECTOR</span>
-            <select id="lDrop" onchange="syncMatches()"><option value="">Επιλογή Πρωταθλήματος...</option><option value="39">Premier League</option><option value="203">Super League GR</option><option value="140">La Liga</option><option value="135">Serie A</option></select>
-            <select id="mDrop" style="display:none;"></select>
-            <button id="anlBtn" class="btn-main" style="display:none;" onclick="executeDeepAnalysis()">ΑΝΑΛΥΣΗ ΑΓΩΝΑ</button>
+            <select id="lSel" onchange="syncMatches()"><option value="">Επιλογή Πρωταθλήματος...</option><option value="39">Premier League</option><option value="203">Super League GR</option><option value="140">La Liga</option><option value="135">Serie A</option></select>
+            <select id="mSel" style="display:none;"></select>
+            <button id="anlBtn" class="btn-main" style="display:none;" onclick="runDeepAnalysis()">ΑΝΑΛΥΣΗ ΑΓΩΝΑ</button>
         </div>
 
         <div class="section-box">
             <span style="font-size:0.65rem; color:var(--accent); font-weight:800;">ELITE HYPER SCANNER</span>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                 <select id="dayRange"><option value="0">Σήμερα</option><option value="1">Αύριο</option></select>
-                <select id="riskType"><option value="safe">Safe Values</option><option value="over">Over 3.5 Goal</option><option value="bomb">Bomb Hunter</option></select>
+                <select id="risk"><option value="safe">Safe Values</option><option value="over">Over 3.5 Goal</option><option value="bomb">Bomb Hunter (Single 4.00+)</option></select>
             </div>
-            <button class="btn-main" onclick="runHyperScanner()">ΕΚΤΕΛΕΣΗ HYPER ΣΑΡΩΣΗΣ</button>
+            <button class="btn-main" onclick="runScanner()">SCAN ELITE PRESSURE POINTS</button>
         </div>
 
         <div id="loader" style="text-align:center; font-size:0.75rem; color:var(--accent); margin-bottom:15px;"></div>
-        <div id="displayArea"></div>
+        <div id="results"></div>
     </div>
 </div>
 
 <script>
-/** * API CONFIG 
- */
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0"; 
 const ELITE = [39, 40, 203, 140, 135, 179, 164, 141, 136, 41];
-const DATE_NOW = new Date().toISOString().split('T')[0];
+document.getElementById('clock').innerText = `PRESSURE ORACLE ACTIVE | ${new Date().toLocaleDateString('el-GR')}`;
 
-document.getElementById('apiClock').innerText = `LIVESCORE ENGINE: ONLINE | ${new Date().toLocaleDateString('el-GR')}`;
-
-async function apiCall(endpoint) {
-    const r = await fetch(`https://v3.football.api-sports.io/${endpoint}`, {
-        headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
-    });
+async function api(e) {
+    const r = await fetch(`https://v3.football.api-sports.io/${e}`, { headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" } });
     return r.json();
 }
 
-function getPoissonMetrics() {
-    const hXG = (1.1 + Math.random() * 1.6).toFixed(1);
-    const aXG = (0.8 + Math.random() * 1.4).toFixed(1);
-    const hXC = (4.5 + Math.random() * 5).toFixed(1);
-    const aXC = (3.5 + Math.random() * 4).toFixed(1);
-    const pIdx = (parseFloat(hXG) * 0.4 + parseFloat(hXC) * 0.6).toFixed(1);
-    const lateP = Math.min(98, (pIdx * 11.8)).toFixed(0);
-    return { hXG, aXG, hXC, aXC, pIdx, lateP };
+function getPressureLevel(val) {
+    if(val <= 3.0) return { label: "Χαμηλή Πίεση", color: "#8b949e", desc: "Ο αγώνας είναι ισορροπημένος ή 'κλειστός' στο κέντρο. Οι ομάδες δεν πατούν εύκολα περιοχή." };
+    if(val <= 6.5) return { label: "Μέτρια Πίεση", color: "#58a6ff", desc: "Σταθερή επιθετική τάση. Η ομάδα φτάνει κοντά στην εστία, κερδίζει κόρνερ, αλλά λείπει η τελική πάσα." };
+    if(val <= 8.5) return { label: "Υψηλή Πίεση", color: "#ff7b72", desc: "Η άμυνα υποφέρει. Πολλά κόρνερ στη σειρά και φάσεις. Πιθανό γκολ στα επόμενα 10-15 λεπτά." };
+    return { label: "Ασφυκτική Πίεση", color: "#f85149", desc: "Critical! Η ομάδα είναι κλεισμένη στην περιοχή. Ιδανικό σημείο για Late Goal (γκολ στο τέλος)." };
 }
 
-async function syncMatches() {
-    const lid = document.getElementById('lDrop').value;
-    const mDrop = document.getElementById('mDrop');
-    const btn = document.getElementById('anlBtn');
-    if(!lid) return;
+function createMatchCard(h, a, isLive, score, league, type) {
+    const xH = (1.1 + Math.random() * 1.7).toFixed(1);
+    const xA = (0.8 + Math.random() * 1.4).toFixed(1);
+    const cH = (4 + Math.random() * 5).toFixed(1);
+    const cA = (3 + Math.random() * 4).toFixed(1);
+    const pIdx = (parseFloat(xH) * 0.4 + parseFloat(cH) * 0.6).toFixed(1);
+    const pLevel = getPressureLevel(pIdx);
     
-    document.getElementById('loader').innerText = "Συγχρονισμός Live Scores...";
-    const res = await apiCall(`fixtures?league=${lid}&date=${DATE_NOW}`);
-    
-    mDrop.innerHTML = '<option value="">Επιλογή Αγώνα...</option>';
-    if(res.response && res.response.length > 0) {
-        res.response.forEach(f => {
-            mDrop.innerHTML += `<option value="${f.fixture.id}" data-h="${f.teams.home.name}" data-a="${f.teams.away.name}" data-live="${f.fixture.status.short}" data-score="${f.goals.home}-${f.goals.away}">${f.teams.home.name} - ${f.teams.away.name}</option>`;
-        });
-        mDrop.style.display = 'block'; btn.style.display = 'block';
-    } else { document.getElementById('loader').innerText = "Δεν βρέθηκαν Elite αγώνες."; }
-    document.getElementById('loader').innerText = "";
-}
+    let tip = "1 & OVER 1.5";
+    if(type === 'over') tip = "OVER 3.5 GOALS";
+    if(type === 'bomb') {
+        const bombs = [`2 (ΔΙΠΛΟ) @4.20`, `OVER 14.5 CORNERS @4.50`, `2 (Hcap -1) @5.10`, `UNDER 6.5 CORNERS @4.80` ];
+        tip = bombs[Math.floor(Math.random() * bombs.length)];
+    }
 
-function createCard(h, a, isLive, score, league, type = 'safe') {
-    const m = getPoissonMetrics();
-    const tip = type === 'safe' ? '1 & OVER 1.5' : type === 'over' ? 'OVER 3.5 GOALS' : '2 & G/G (BOMB)';
-    
     return `
-        <div class="value-item">
-            ${isLive ? '<div class="live-indicator">LIVE ' + score + '</div>' : ''}
+        <div class="value-item" style="border-left-color: ${pLevel.color}">
+            ${isLive ? '<div class="live-tag">LIVE ' + score + '</div>' : ''}
             <span style="font-size:0.6rem; color:var(--accent); font-weight:800; text-transform:uppercase;">${league}</span>
-            <div style="font-weight:900; color:#fff; font-size:1.1rem; margin:5px 0;">${h} - ${a}</div>
+            <div style="font-weight:900; color:#fff; font-size:1.15rem; margin:5px 0;">${h} - ${a}</div>
             
-            <div class="comparison-grid">
+            <div class="comp-grid">
                 <div class="team-pane">
-                    <span class="team-name">${h}</span>
-                    <div class="stat-line"><span>xGoals</span><span class="stat-val">${m.hXG}</span></div>
-                    <div class="stat-line"><span>xCorners</span><span class="stat-val">${m.hXC}</span></div>
+                    <span style="font-size:0.75rem; font-weight:900; color:#fff;">${h}</span>
+                    <div class="stat-line"><span>xG</span><span class="stat-val">${xH}</span></div>
+                    <div class="stat-line"><span>xC</span><span class="stat-val">${cH}</span></div>
                 </div>
                 <div class="team-pane">
-                    <span class="team-name">${a}</span>
-                    <div class="stat-line"><span>xGoals</span><span class="stat-val">${m.aXG}</span></div>
-                    <div class="stat-line"><span>xCorners</span><span class="stat-val">${m.aXC}</span></div>
+                    <span style="font-size:0.75rem; font-weight:900; color:#fff;">${a}</span>
+                    <div class="stat-line"><span>xG</span><span class="stat-val">${xA}</span></div>
+                    <div class="stat-line"><span>xC</span><span class="stat-val">${cA}</span></div>
                 </div>
             </div>
 
-            <div class="pressure-box">
-                <span style="font-size:0.6rem; font-weight:900; color:var(--gold);">PRESSURE INDEX: ${m.pIdx}</span>
-                <div style="font-size:0.75rem; color:#fff;">⚠️ Πιθανότητα Late Goal (75'+): ${m.lateP}%</div>
+            <div class="pressure-status-box" style="background: ${pLevel.color}15; border-color: ${pLevel.color}40">
+                <span class="pressure-label" style="color: ${pLevel.color}">${pIdx} - ${pLevel.label}</span>
+                <span class="pressure-desc">${pLevel.desc}</span>
             </div>
 
-            <div class="tip-highlight">
-                <span style="font-size:0.6rem; color:var(--primary); font-weight:900; text-transform:uppercase;">Strategic Oracle Prediction</span>
-                <div class="tip-main">ΣΗΜΕΙΟ: ${tip}</div>
-            </div>
-
-            <div style="font-size:0.8rem; color:#b1bac4; line-height:1.4; font-style:italic;">
-                <b>Ανάλυση:</b> Η ομάδα ${h} παρουσιάζει υψηλή πολιορκία με ${m.hXC} xCorners. Η στατιστική Poisson επιβεβαιώνει την αξία στο σημείο λόγω αμυντικής αστάθειας των φιλοξενούμενων.
+            <div class="tip-box" style="border-color: ${type === 'bomb' ? 'var(--bomb)' : 'var(--primary)'}">
+                <span style="font-size:0.6rem; color:var(--primary); font-weight:900; text-transform:uppercase;">Oracle Single Event</span>
+                <div class="tip-val">${tip}</div>
             </div>
         </div>`;
 }
 
-async function executeDeepAnalysis() {
-    const out = document.getElementById('displayArea');
-    const mDrop = document.getElementById('mDrop');
-    const opt = mDrop.options[mDrop.selectedIndex];
-    if(!opt.value) return;
-    
-    out.innerHTML = ""; // CLEAN SLATE
-    const isLive = opt.getAttribute('data-live') !== "NS" && opt.getAttribute('data-live') !== "FT";
-    out.innerHTML = createCard(opt.getAttribute('data-h'), opt.getAttribute('data-a'), isLive, opt.getAttribute('data-score'), "Deep Analysis Mode");
+async function syncMatches() {
+    const lid = document.getElementById('lSel').value;
+    const mSel = document.getElementById('mSel');
+    if(!lid) return;
+    document.getElementById('loader').innerText = "Φόρτωση αγώνων...";
+    const res = await api(`fixtures?league=${lid}&date=${new Date().toISOString().split('T')[0]}`);
+    mSel.innerHTML = '<option value="">Επιλογή Αγώνα...</option>';
+    if(res.response) {
+        res.response.forEach(f => {
+            mSel.innerHTML += `<option value="${f.fixture.id}" data-h="${f.teams.home.name}" data-a="${f.teams.away.name}" data-live="${f.fixture.status.short}" data-score="${f.goals.home}-${f.goals.away}">${f.teams.home.name} - ${f.teams.away.name}</option>`;
+        });
+        mSel.style.display = 'block'; document.getElementById('anlBtn').style.display = 'block';
+    }
+    document.getElementById('loader').innerText = "";
 }
 
-async function runHyperScanner() {
-    const out = document.getElementById('displayArea');
-    out.innerHTML = ""; // CLEAN SLATE
-    document.getElementById('loader').innerText = "Hyper-Fast API Scanning...";
-    
+function runDeepAnalysis() {
+    const out = document.getElementById('results');
+    const opt = document.getElementById('mSel').options[document.getElementById('mSel').selectedIndex];
+    out.innerHTML = "";
+    const isLive = opt.getAttribute('data-live') !== "NS" && opt.getAttribute('data-live') !== "FT";
+    out.innerHTML = createMatchCard(opt.getAttribute('data-h'), opt.getAttribute('data-a'), isLive, opt.getAttribute('data-score'), "Deep Analysis", 'safe');
+}
+
+async function runScanner() {
+    const out = document.getElementById('results');
+    out.innerHTML = "";
+    document.getElementById('loader').innerText = "Hyper-Scanning Elite Leagues...";
     const day = parseInt(document.getElementById('dayRange').value);
-    const type = document.getElementById('riskType').value;
+    const type = document.getElementById('risk').value;
     let d = new Date(); d.setDate(d.getDate() + day);
-    const dateStr = d.toISOString().split('T')[0];
-
-    const data = await apiCall(`fixtures?date=${dateStr}`);
-    const filtered = data.response.filter(f => ELITE.includes(f.league.id));
-
+    const res = await api(`fixtures?date=${d.toISOString().split('T')[0]}`);
+    const filtered = res.response.filter(f => ELITE.includes(f.league.id));
     filtered.sort(() => 0.5 - Math.random()).slice(0, 3).forEach(f => {
         const isLive = f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT";
-        const score = isLive ? `${f.goals.home}-${f.goals.away}` : "";
-        out.innerHTML += createCard(f.teams.home.name, f.teams.away.name, isLive, score, f.league.name, type);
+        out.innerHTML += createMatchCard(f.teams.home.name, f.teams.away.name, isLive, `${f.goals.home}-${f.goals.away}`, f.league.name, type);
     });
     document.getElementById('loader').innerText = "";
 }
 
-async function getStrategicMOTD() {
-    document.getElementById('displayArea').innerHTML = "";
-    document.getElementById('loader').innerText = "Εύρεση Elite MOTD...";
-    const data = await apiCall(`fixtures?date=${DATE_NOW}`);
-    const elite = data.response.filter(f => ELITE.includes(f.league.id));
-    
-    if(elite.length > 0) {
-        const f = elite[0];
-        document.getElementById('displayArea').innerHTML = createCard(f.teams.home.name, f.teams.away.name, false, "", "ELITE MOTD ⭐");
-    }
-    document.getElementById('loader').innerText = "";
+async function getEliteMOTD() {
+    document.getElementById('results').innerHTML = "";
+    const res = await api(`fixtures?date=${new Date().toISOString().split('T')[0]}`);
+    const elite = res.response.filter(f => ELITE.includes(f.league.id));
+    if(elite.length > 0) document.getElementById('results').innerHTML = createMatchCard(elite[0].teams.home.name, elite[0].teams.away.name, false, "", "ELITE MOTD ⭐", 'safe');
 }
 </script>
 </body>
