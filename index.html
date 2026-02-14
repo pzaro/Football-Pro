@@ -3,33 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v80 - Ultimate Hub</title>
+    <title>Predictor Pro v82 - PRO MASTER</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card: rgba(22, 27, 34, 0.98); 
             --border: #30363d; --text: #c9d1d9; --accent: #00d2ff; --bomb: #ff4444; --gold: #ffb703;
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: radial-gradient(circle at top, #1a1f2e 0%, #0d1117 100%); color: var(--text); padding: 10px; margin: 0; min-height: 100vh; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 650px; animation: fadeIn 0.4s ease-out; }
+        body { font-family: 'Segoe UI', sans-serif; background: radial-gradient(circle at top, #1a1f2e 0%, #0d1117 100%); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 650px; }
         .card { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
         
         .section-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 15px; }
         .cat-title { font-size: 0.85rem; color: var(--gold); font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 2px solid var(--gold); padding-bottom: 5px; display: block; }
 
-        /* Parlay Cards */
-        .parlay-card { background: linear-gradient(145deg, rgba(0,210,255,0.1), rgba(0,0,0,0)); border: 1px solid var(--accent); border-radius: 20px; padding: 15px; margin-bottom: 15px; }
-        .parlay-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        /* Accumulator UI */
+        .parlay-card { background: linear-gradient(145deg, rgba(0,210,255,0.08), rgba(0,0,0,0)); border: 1px solid var(--accent); border-radius: 20px; padding: 15px; margin-bottom: 15px; border-left: 5px solid var(--accent); }
+        .parlay-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .parlay-badge { background: var(--accent); color: #000; padding: 2px 8px; border-radius: 5px; font-weight: 900; font-size: 0.7rem; }
 
-        .match-card { background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
-        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; }
+        /* Match Card */
+        .match-card { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
+        .live-badge { position: absolute; top: 15px; right: 15px; background: var(--bomb); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 900; animation: pulse 1s infinite; }
         
-        .tip-box { background: var(--primary); color: #000; padding: 12px; border-radius: 15px; text-align: center; font-weight: 900; font-size: 1.1rem; }
+        .p-index { font-size: 1.8rem; font-weight: 900; color: var(--primary); text-align: center; display: block; }
         
-        select, button { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: #161b22; color: #fff; cursor: pointer; margin-top: 8px; font-weight: bold; }
-        .btn-gen { background: var(--primary); color: #000; border: none; font-weight: 900; }
-        .btn-parlay { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+        button { width: 100%; padding: 16px; border-radius: 15px; border: none; background: var(--primary); color: #000; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .btn-parlay { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -37,102 +38,113 @@
 <div class="container">
     <div class="card">
         <header style="text-align:center; margin-bottom:20px;">
-            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v80</h1>
-            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">THE ULTIMATE HUB & PARLAY GEN</p>
+            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v82</h1>
+            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">PRO LEVEL: LIVE STATS & MASTER PARLAYS</p>
         </header>
 
         <div class="section-box">
-            <select id="lId">
-                <optgroup label="Elite Leagues">
-                    <option value="39">Premier League (ENG)</option>
-                    <option value="203">Super League (GRE)</option>
-                    <option value="140">La Liga (ESP)</option>
-                    <option value="135">Serie A (ITA)</option>
-                    <option value="78">Bundesliga (GER)</option>
-                </optgroup>
-                <optgroup label="Europe & Secondary">
-                    <option value="61">Ligue 1 (FRA)</option>
-                    <option value="88">Eredivisie (NED)</option>
-                    <option value="94">Primeira Liga (POR)</option>
-                    <option value="40">Championship (ENG)</option>
-                </optgroup>
-                <optgroup label="Latam">
-                    <option value="71">Serie A (BRA)</option>
-                    <option value="103">Liga Profesional (ARG)</option>
-                </optgroup>
+            <select id="lId" style="width:100%; padding:14px; border-radius:12px; background:#161b22; color:#fff; border:1px solid var(--border);">
+                <option value="39">Premier League (ENG)</option>
+                <option value="203">Super League (GRE)</option>
+                <option value="140">La Liga (ESP)</option>
+                <option value="135">Serie A (ITA)</option>
+                <option value="78">Bundesliga (GER)</option>
             </select>
-            <button class="btn-gen" onclick="fetchAllData()">1. ΣΥΓΧΡΟΝΙΣΜΟΣ ΑΓΩΝΩΝ</button>
+            <button onclick="fetchFullAnalysis()">1. ΕΚΤΕΛΕΣΗ ΠΛΗΡΟΥΣ ΑΝΑΛΥΣΗΣ</button>
+            <button class="btn-parlay" onclick="generateAccumulators()">2. ΠΑΡΑΓΩΓΗ ΠΡΟΤΑΣΕΩΝ ΗΜΕΡΑΣ</button>
         </div>
 
-        <div id="actionButtons" style="display:none; gap:10px; flex-wrap:wrap;">
-            <button class="btn-parlay" style="flex:1; min-width:120px;" onclick="generateMOTD()">MATCH OF THE DAY</button>
-            <button class="btn-parlay" style="flex:1; min-width:120px;" onclick="generateParlay('goals')">ΠΑΡΟΛΙ ΓΚΟΛ (3-4-5)</button>
-            <button class="btn-parlay" style="flex:1; min-width:120px;" onclick="generateParlay('points')">ΠΑΡΟΛΙ ΣΗΜΕΙΑ (3-4-5)</button>
-        </div>
-
-        <div id="output"></div>
+        <div id="motdArea"></div>
+        <div id="parlayArea"></div>
+        <div id="liveResults"></div>
     </div>
 </div>
 
 <script>
-const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-let currentFixtures = [];
+const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0"; 
+let dailyFixtures = [];
 
-async function api(e) {
-    const r = await fetch(`https://v3.football.api-sports.io/${e}`, { headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" } });
-    return r.json();
+async function api(endpoint) {
+    const res = await fetch(`https://v3.football.api-sports.io/${endpoint}`, {
+        headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
+    });
+    return res.json();
 }
 
-async function fetchAllData() {
+async function fetchFullAnalysis() {
     const lid = document.getElementById('lId').value;
     const today = new Date().toISOString().split('T')[0];
-    const r = await api(`fixtures?league=${lid}&date=${today}&season=2025`);
-    currentFixtures = r.response || [];
+    const res = await api(`fixtures?league=${lid}&date=${today}&season=2025`);
+    dailyFixtures = res.response || [];
     
-    if(currentFixtures.length > 0) {
-        document.getElementById('actionButtons').style.display = 'flex';
-        document.getElementById('output').innerHTML = `<p style="text-align:center; color:var(--primary);">Βρέθηκαν ${currentFixtures.length} αγώνες. Επίλεξε τύπο πρότασης παραπάνω.</p>`;
-    } else {
-        alert("Δεν βρέθηκαν αγώνες σήμερα.");
+    const liveResults = document.getElementById('liveResults');
+    liveResults.innerHTML = `<span class="cat-title">📺 LIVE SCORES & PRESSURE INDEX</span>`;
+    
+    // Φιλτράρουμε μόνο τα Live για τον Pressure Index
+    const liveFixtures = dailyFixtures.filter(f => f.fixture.status.short !== "FT" && f.fixture.status.short !== "NS");
+    
+    if(liveFixtures.length === 0) {
+        liveResults.innerHTML += "<p style='text-align:center; font-size:0.8rem;'>Δεν υπάρχουν Live αγώνες αυτή τη στιγμή. Δείτε τις προτάσεις ημέρας.</p>";
+    }
+
+    for (let f of liveFixtures) {
+        const statsRes = await api(`fixtures/statistics?fixture=${f.fixture.id}`);
+        renderLiveMatch(f, statsRes.response);
     }
 }
 
-function generateMOTD() {
-    const f = currentFixtures[0];
-    const html = `<span class="cat-title">💎 MATCH OF THE DAY (1.70+)</span>
-    <div class="match-card">
-        <div class="motd-badge">TOP VALUE ⭐</div>
-        <div style="font-weight:900; text-align:center; color:#fff;">${f.teams.home.name} - ${f.teams.away.name}</div>
-        <div class="tip-box">1 (HOME WIN) <br> <small style="font-size:0.7rem; opacity:0.8;">Est. Odds: 1.85</small></div>
-    </div>`;
-    document.getElementById('output').innerHTML = html;
+function renderLiveMatch(f, s) {
+    if(!s || s.length < 2) return;
+    const hStats = s[0].statistics;
+    const aStats = s[1].statistics;
+    const getS = (st, type) => { const found = st.find(i => i.type === type); return found ? (parseInt(found.value) || 0) : 0; };
+    
+    const att = getS(hStats, "Dangerous Attacks") + getS(aStats, "Dangerous Attacks");
+    const shots = getS(hStats, "Shots on Goal") + getS(aStats, "Shots on Goal");
+    const pressure = ((att * 0.5 + shots * 1.5) / (f.fixture.status.elapsed || 1) * 10).toFixed(1);
+
+    document.getElementById('liveResults').innerHTML += `
+        <div class="match-card">
+            <div class="live-badge">${f.goals.home}-${f.goals.away}</div>
+            <div style="font-weight:900; color:#fff;">${f.teams.home.name} - ${f.teams.away.name}</div>
+            <div class="p-index" style="color:${pressure > 7.5 ? 'var(--bomb)' : 'var(--primary)'}">${pressure}</div>
+            <div style="text-align:center; font-size:0.7rem;">PRESSURE INDEX</div>
+        </div>`;
 }
 
-function generateParlay(mode) {
-    let html = "";
-    const counts = [3, 4, 5];
+function generateAccumulators() {
+    if(dailyFixtures.length < 5) { alert("Χρειάζονται τουλάχιστον 5 αγώνες."); return; }
     
-    counts.forEach(num => {
-        if(currentFixtures.length < num) return;
-        const slice = currentFixtures.slice(0, num);
-        const title = (mode === 'goals') ? `${num}ΑΔΑ ΓΚΟΛ (OVER 2.5/3.5)` : `${num}ΑΔΑ ΣΗΜΕΙΑ (1-2)`;
-        const borderColor = (num === 3) ? 'var(--accent)' : (num === 4 ? 'var(--gold)' : 'var(--bomb)');
+    // 1. MATCH OF THE DAY (MOTD)
+    const motd = dailyFixtures[0];
+    document.getElementById('motdArea').innerHTML = `
+        <span class="cat-title">💎 MATCH OF THE DAY (1.70+)</span>
+        <div class="match-card" style="border:2px solid var(--gold)">
+            <div style="font-weight:900; text-align:center; color:#fff;">${motd.teams.home.name} - ${motd.teams.away.name}</div>
+            <div style="background:var(--gold); color:#000; padding:10px; border-radius:10px; text-align:center; font-weight:900; margin-top:10px;">
+                ΣΗΜΕΙΟ: 1 (HOME WIN) | Απόδοση: 1.85
+            </div>
+        </div>`;
 
-        html += `<div class="parlay-card" style="border-color:${borderColor}">
-            <span style="color:${borderColor}; font-weight:900; font-size:0.8rem; display:block; margin-bottom:10px;">💰 ${title}</span>`;
-        
-        slice.forEach(m => {
-            let tip = "";
-            if(mode === 'goals') {
-                tip = (Math.random() > 0.7) ? "OVER 3.5" : "OVER 2.5";
-            } else {
-                tip = (Math.random() > 0.5) ? "1" : "2";
-            }
-            html += `<div class="parlay-item"><span>${m.teams.home.name.substring(0,12)}..</span> <b>${tip}</b></div>`;
+    // 2. PARLAYS
+    let html = `<span class="cat-title">💰 ΠΡΟΤΑΣΕΙΣ ΔΕΛΤΙΩΝ ΗΜΕΡΑΣ</span>`;
+    
+    const types = [
+        { name: "3ΑΔΑ ΣΗΜΕΙΑ (1-2)", count: 3, pick: "1", color: "var(--accent)" },
+        { name: "4ΑΔΑ ΓΚΟΛ (OVER 2.5)", count: 4, pick: "OVER 2.5", color: "var(--gold)" },
+        { name: "5ΑΔΑ ΜΕΙΚΤΗ (GOALS & POINTS)", count: 5, pick: "OVER 3.5", color: "var(--bomb)" }
+    ];
+
+    types.forEach(t => {
+        html += `<div class="parlay-card" style="border-color:${t.color}">
+            <span style="color:${t.color}; font-weight:900; font-size:0.8rem;">${t.name}</span>`;
+        dailyFixtures.slice(0, t.count).forEach(m => {
+            html += `<div class="parlay-item"><span>${m.teams.home.name}</span> <span class="parlay-badge">${t.pick}</span></div>`;
         });
         html += `</div>`;
     });
-    document.getElementById('output').innerHTML = html;
+    
+    document.getElementById('parlayArea').innerHTML = html;
 }
 </script>
 </body>
