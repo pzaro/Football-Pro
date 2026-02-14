@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v113 - Sovereign Complete</title>
+    <title>Predictor Pro v114 - Sovereign Corrections</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #c9d1d9; --acc: #00d2ff; --gold: #ffb703; --bomb: #ff4444; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; }
@@ -22,7 +22,7 @@
 
         .match-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; border-left: 5px solid var(--border); position: relative; }
         .status-tag { position: absolute; top: 10px; right: 10px; padding: 2px 8px; border-radius: 5px; font-size: 0.65rem; font-weight: 900; }
-        .ft { background: #333; color: #aaa; border-left-color: #555 !important; opacity: 0.7; }
+        .ft { background: #1a1a1a; color: #666; border-left-color: #333 !important; opacity: 0.6; }
         .live { background: var(--bomb); color: #fff; }
         .ns { background: var(--border); color: #fff; }
         
@@ -33,17 +33,17 @@
 
 <div class="container">
     <div class="card">
-        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin-bottom:15px;">PREDICTOR PRO v113</h1>
+        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin-bottom:15px;">PREDICTOR PRO v114</h1>
 
         <select id="leagueSelect">
-            <option value="39">Premier League (Αγγλία)</option>
-            <option value="203">Super League 1 (Ελλάδα)</option>
-            <option value="140">La Liga (Ισπανία)</option>
-            <option value="135">Serie A (Ιταλία)</option>
-            <option value="78">Bundesliga (Γερμανία)</option>
-            <option value="40">Championship (Αγγλία)</option>
-            <option value="262">Liga MX (Μεξικό)</option>
-            <option value="113">A-League (Αυστραλία)</option>
+            <option value="203">🇬🇷 Super League 1 (Ελλάδα)</option>
+            <option value="79">🇩🇪 2. Bundesliga (Γερμανία 2)</option>
+            <option value="204">🇹🇷 Super Lig (Τουρκία)</option>
+            <option value="39">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League (Αγγλία)</option>
+            <option value="140">🇪🇸 La Liga (Ισπανία)</option>
+            <option value="135">🇮🇹 Serie A (Ιταλία)</option>
+            <option value="78">🇩🇪 Bundesliga (Γερμανία)</option>
+            <option value="40">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship (Αγγλία 2)</option>
         </select>
 
         <button class="btn-sync" onclick="syncLeague()">SYNC & ANALYZE LEAGUE</button>
@@ -60,7 +60,7 @@
 
         <div id="analysisPanel">
             <span style="float:right; color:var(--bomb); cursor:pointer;" onclick="this.parentElement.style.display='none'">[X]</span>
-            <h3 id="mTitle" style="text-align:center; color:var(--gold); font-size:0.9rem; margin-top:0;">DEEP ANALYSIS</h3>
+            <h3 id="mTitle" style="text-align:center; color:var(--gold); font-size:0.9rem; margin-top:0;">DEEP ANALYSIS (LIVE STATS)</h3>
             <div class="stat-row">
                 <div id="hXG" class="p-val">0.0</div><div style="color:var(--acc); font-size:0.6rem;">xGOALS (H/A)</div><div id="aXG" class="p-val">0.0</div>
             </div>
@@ -68,7 +68,7 @@
                 <div id="hXC" class="p-val">0</div><div style="color:var(--acc); font-size:0.6rem;">xCORNERS (H/A)</div><div id="aXC" class="p-val">0</div>
             </div>
             <div id="piArea" style="text-align:center; padding:10px; border:1px solid var(--p); border-radius:10px;">
-                <span style="font-size:0.6rem; display:block;">PRESS INDEX</span>
+                <span style="font-size:0.6rem; display:block;">LIVE PRESSURE INDEX</span>
                 <span id="l_pi" style="font-size:1.5rem; font-weight:900; color:var(--p);">0.0</span>
             </div>
         </div>
@@ -86,6 +86,7 @@ async function syncLeague() {
     const lId = document.getElementById('leagueSelect').value;
     const list = document.getElementById('matchList');
     list.innerHTML = "<p style='text-align:center;'>Fetching data...</p>";
+    document.getElementById('accOutput').innerHTML = "";
     
     const today = new Date().toISOString().split('T')[0];
     const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${lId}&date=${today}&season=2025`, {
@@ -98,7 +99,7 @@ async function syncLeague() {
         document.getElementById('proTools').style.display = "block";
         renderList();
     } else {
-        list.innerHTML = "No matches found for today.";
+        list.innerHTML = "Δεν βρέθηκαν αγώνες για σήμερα.";
     }
 }
 
@@ -112,7 +113,7 @@ function renderList() {
         div.className = `match-item ${isFT ? 'ft' : ''}`;
         div.onclick = () => getDeepStats(m.fixture.id, m.teams.home.name, m.teams.away.name);
         
-        let statusText = isFT ? "FINISHED" : (isLive ? m.fixture.status.elapsed+"'" : "NS");
+        let statusText = isFT ? "FT" : (isLive ? m.fixture.status.elapsed+"'" : "NS");
         let statusClass = isFT ? "ft" : (isLive ? "live" : "ns");
 
         div.innerHTML = `
@@ -123,23 +124,26 @@ function renderList() {
     });
 }
 
-function getLogicProb(m, type) {
-    const s = m.fixture.id % 15;
-    if (type === 'o25') return 55 + s;
-    if (type === 'o35') return Math.floor((55+s)*0.48);
-    if (type === 'pts') return 48 + s;
-    return 50 + s;
+function calculateProb(m, type) {
+    const salt = m.fixture.id % 15;
+    let base = 50 + salt;
+    if (m.league.id === 79 || m.league.id === 78) base += 10; // Γερμανία Factor
+    if (m.league.id === 203) base -= 5; // Ελλάδα Factor
+    
+    if (type === 'o25') return Math.min(base + 5, 75);
+    if (type === 'o35') return Math.floor(base * 0.45);
+    return base;
 }
 
 function engine(mode) {
     const upcoming = currentMatches.filter(f => f.fixture.status.short === "NS");
     if(upcoming.length < 3) return;
     const pool = [...upcoming].sort(() => 0.5 - Math.random());
-    let html = `<div class="acc-box"><b style="color:var(--acc); font-size:0.8rem;">PRO ${mode.toUpperCase()} SELECTION</b>`;
+    let html = `<div class="acc-box"><b style="color:var(--acc); font-size:0.8rem;">UNIQUE ${mode.toUpperCase()} ACCA</b>`;
     pool.slice(0, 3).forEach(m => {
         const pick = mode==='pts'?'1':(mode==='o25'?'O 2.5':(mode==='o35'?'O 3.5':'O 9.5 COR'));
-        html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:5px 0; border-bottom:1px solid #333;">
-            <span>${m.teams.home.name}</span> <b>${pick} (${getLogicProb(m, mode)}%)</b>
+        html += `<div style="display:flex; justify-content:space-between; font-size:0.85rem; padding:6px 0; border-bottom:1px solid #333;">
+            <span>${m.teams.home.name}</span> <b>${pick} (${calculateProb(m, mode)}%)</b>
         </div>`;
     });
     document.getElementById('accOutput').innerHTML = html + "</div>";
@@ -154,7 +158,7 @@ function genMOD() {
         <div class="match-card" style="border:2px solid var(--gold); text-align:center;">
             <b style="color:var(--gold)">MATCH OF THE DAY ⭐</b><br>
             <span>${best.teams.home.name} - ${best.teams.away.name}</span><br>
-            <b style="color:var(--p)">PICK: 1 (${getLogicProb(best, 'pts')}%)</b>
+            <b style="color:var(--p)">PICK: 1 (${calculateProb(best, 'pts')}%)</b>
         </div>`;
 }
 
@@ -166,16 +170,21 @@ async function getDeepStats(fid, h, a) {
     });
     const d = await res.json();
     const s = d.response;
-    if(!s || s.length < 2) return;
+    if(!s || s.length < 2) {
+        document.getElementById('hXG').innerText = "NS";
+        document.getElementById('aXG').innerText = "NS";
+        document.getElementById('l_pi').innerText = "0.0";
+        return;
+    }
 
     const gV = (st, t) => { const f = st.find(i => i.type === t); return f ? (parseInt(f.value) || 0) : 0; };
     const hS = s[0].statistics, aS = s[1].statistics;
 
-    document.getElementById('hXG').innerText = (gV(hS, "Shots on Goal") * 0.35).toFixed(2);
-    document.getElementById('aXG').innerText = (gV(aS, "Shots on Goal") * 0.35).toFixed(2);
+    document.getElementById('hXG').innerText = (gV(hS, "Shots on Goal") * 0.30).toFixed(2);
+    document.getElementById('aXG').innerText = (gV(aS, "Shots on Goal") * 0.30).toFixed(2);
     document.getElementById('hXC').innerText = gV(hS, "Corner Kicks");
     document.getElementById('aXC').innerText = gV(aS, "Corner Kicks");
-    document.getElementById('l_pi').innerText = (((gV(hS,"Dangerous Attacks")+gV(aS,"Dangerous Attacks"))*0.5) / 45 * 10).toFixed(1);
+    document.getElementById('l_pi').innerText = (((gV(hS,"Dangerous Attacks")+gV(aS,"Dangerous Attacks"))*0.4) / 45 * 10).toFixed(1);
 }
 </script>
 </body>
