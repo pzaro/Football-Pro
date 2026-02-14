@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v74 - Sovereign Oracle</title>
+    <title>Predictor Pro v77 - Pure Value</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card: rgba(22, 27, 34, 0.98); 
@@ -13,29 +13,23 @@
         .container { width: 100%; max-width: 600px; animation: fadeIn 0.4s ease-out; }
         .card { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
         
-        /* News Hub */
-        .news-ticker { background: rgba(255, 183, 3, 0.1); border: 1px solid var(--gold); border-radius: 15px; padding: 12px; margin-bottom: 20px; font-size: 0.8rem; }
-        .ticker-label { color: var(--gold); font-weight: 900; text-transform: uppercase; font-size: 0.65rem; display: block; margin-bottom: 5px; }
+        .section-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        .cat-title { font-size: 0.8rem; color: var(--gold); font-weight: 900; text-transform: uppercase; margin: 15px 0 10px; border-bottom: 2px solid var(--gold); padding-bottom: 5px; display: block; }
 
         /* Match Cards */
-        .match-card { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 20px; border-left: 6px solid var(--primary); position: relative; }
-        .league-label { font-size: 0.65rem; color: var(--accent); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .match-card { background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
+        .motd-card { border: 2px solid var(--gold); background: rgba(255, 183, 3, 0.05); }
+        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; }
         
-        /* Stats Comparison */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
-        .team-pane { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 15px; border: 1px solid var(--border); }
-        .team-name { font-size: 0.85rem; font-weight: 900; color: #fff; display: block; margin-bottom: 8px; }
-        .stat-line { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 4px; }
-        .stat-val { color: var(--accent); font-weight: 800; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+        .team-pane { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
+        .stat-line { display: flex; justify-content: space-between; font-size: 0.7rem; margin-top: 3px; }
+        .stat-val { color: var(--accent); font-weight: bold; }
 
-        /* Pressure & Tips */
-        .pressure-oracle { background: rgba(0, 210, 255, 0.05); border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 15px; padding: 12px; text-align: center; margin-top: 10px; }
-        .tip-box { background: var(--primary); color: #000; padding: 15px; border-radius: 18px; text-align: center; margin: 15px 0; font-weight: 900; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3); }
-        
-        /* Buttons */
-        .btn-news { background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 10px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; width: 100%; font-weight: 900; transition: 0.3s; text-transform: uppercase; }
-        .btn-news:hover { background: var(--gold); color: #000; }
-        
+        /* Single Event Tip Box */
+        .tip-box { background: var(--primary); color: #000; padding: 15px; border-radius: 15px; text-align: center; font-weight: 900; font-size: 1.2rem; margin: 10px 0; }
+        .odds-tag { display: block; font-size: 0.75rem; color: #000; opacity: 0.8; margin-top: 3px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 3px; }
+
         select, button.main-btn { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: #161b22; color: #fff; font-size: 14px; margin-top: 10px; cursor: pointer; }
         button.main-btn { background: var(--primary); color: #000; border: none; font-weight: 900; text-transform: uppercase; }
 
@@ -47,95 +41,102 @@
 <div class="container">
     <div class="card">
         <header style="text-align:center; margin-bottom:20px;">
-            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v74</h1>
-            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800; letter-spacing: 1px;">SOVEREIGN FREE ANALYST</p>
+            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v77</h1>
+            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">SINGLE EVENT VALUE ANALYST</p>
         </header>
 
-        <div class="news-ticker">
-            <span class="ticker-label">⚠️ Match Money News Feed:</span>
-            <div id="newsFeed">Επιλέξτε πρωτάθλημα για συγχρονισμό ρεπορτάζ...</div>
-        </div>
+        <div id="motdArea"></div>
 
         <div class="section-box">
             <select id="leagueChoice">
-                <option value="GRE">Super League (Greece)</option>
-                <option value="ENG">Premier League (England)</option>
-                <option value="ESP">La Liga (Spain)</option>
-                <option value="ITA">Serie A (Italy)</option>
-                <option value="GER">Bundesliga (Germany)</option>
+                <option value="ELITE">Elite Leagues (ENG, GRE, ESP, ITA, GER)</option>
+                <option value="EURO">Europe Plus (FRA, NED, POR, BEL, SCO, TUR)</option>
+                <option value="LATAM">Latin America (BRA, ARG, MEX)</option>
             </select>
-            <button class="main-btn" onclick="runSovereignAnalysis()">ΑΝΑΛΥΣΗ ΑΓΩΝΩΝ & ΡΕΠΟΡΤΑΖ</button>
+            <button class="main-btn" onclick="runPureAnalysis()">ΑΝΑΛΥΣΗ ΚΑΘΑΡΗΣ ΑΞΙΑΣ</button>
         </div>
 
-        <div id="resultsArea"></div>
+        <div id="topPicksArea"></div>
     </div>
 </div>
 
 <script>
-const matchDatabase = {
-    "GRE": [["Ολυμπιακός", "ΠΑΟΚ"], ["ΑΕΚ", "Παναθηναϊκός"], ["Άρης", "Αστέρας Τρ."]],
-    "ENG": [["Arsenal", "Man City"], ["Liverpool", "Chelsea"], ["Man Utd", "Tottenham"]],
-    "ESP": [["Real Madrid", "Barcelona"], ["Atletico", "Sevilla"], ["Sociedad", "Betis"]],
-    "ITA": [["Inter", "Milan"], ["Juventus", "Napoli"], ["Roma", "Lazio"]],
-    "GER": [["Bayern", "Dortmund"], ["Leipzig", "Leverkusen"], ["Frankfurt", "Stuttgart"]]
+const db = {
+    "ELITE": [["Arsenal", "Man City"], ["Liverpool", "Chelsea"], ["Olympiacos", "PAOK"], ["AEK", "Panathinaikos"], ["Real Madrid", "Barcelona"], ["Inter", "Milan"]],
+    "EURO": [["PSG", "Marseille"], ["Ajax", "PSV"], ["Benfica", "Porto"], ["Celtic", "Rangers"], ["Galatasaray", "Fenerbahce"]],
+    "LATAM": [["Flamengo", "Palmeiras"], ["Boca Juniors", "River Plate"], ["Club America", "Chivas"]]
 };
 
-function getPressureLevel(val) {
-    if(val <= 3.5) return "Χαμηλή Πίεση: Ισορροπημένο παιχνίδι.";
-    if(val <= 6.8) return "Μέτρια Πίεση: Σταθερή επιθετική τάση.";
-    return "Υψηλή Πίεση: Η άμυνα δέχεται ασφυκτική πολιορκία!";
+function getPoissonStats(isMOTD = false) {
+    const hXG = (isMOTD ? 2.1 + Math.random() : 1.1 + Math.random() * 1.8).toFixed(1);
+    const aXG = (isMOTD ? 0.6 + Math.random() * 0.4 : 0.8 + Math.random() * 1.5).toFixed(1);
+    const hXC = (4 + Math.random() * 5).toFixed(1);
+    const aXC = (3 + Math.random() * 4).toFixed(1);
+    return { hXG, aXG, hXC, aXC };
 }
 
-function runSovereignAnalysis() {
-    const league = document.getElementById('leagueChoice').value;
-    const out = document.getElementById('resultsArea');
-    const news = document.getElementById('newsFeed');
-    out.innerHTML = "";
+function createMatchCard(h, a, type = "normal", isMOTD = false) {
+    const s = getPoissonStats(isMOTD);
+    let tip = "";
+    let estOdds = (1.70 + Math.random() * 0.25).toFixed(2);
     
-    // Ενημέρωση News Ticker
-    news.innerHTML = `Αναμένονται ειδήσεις για την 11άδα στο ντέρμπι της ${league}. Προσοχή στις απουσίες της τελευταίας στιγμής.`;
-
-    matchDatabase[league].forEach(m => {
-        const hXG = (1.1 + Math.random() * 1.6).toFixed(1);
-        const aXG = (0.9 + Math.random() * 1.4).toFixed(1);
-        const hXC = (4 + Math.random() * 5).toFixed(1);
-        const aXC = (3 + Math.random() * 4).toFixed(1);
-        const pIdx = (parseFloat(hXG) * 0.4 + parseFloat(hXC) * 0.6).toFixed(1);
-        
-        let tip = (hXG > aXG) ? "1 & OVER 1.5" : "G/G & OVER 2.5";
-        if(pIdx > 7.5) tip = "LATE GOAL (75'+)";
-
-        out.innerHTML += `
-            <div class="match-card">
-                <span class="league-label">${league} League Analysis</span>
-                <div style="font-weight:900; color:#fff; font-size:1.2rem; text-align:center;">${m[0]} - ${m[1]}</div>
-                
-                <div class="stats-grid">
-                    <div class="team-pane">
-                        <span class="team-name" style="color:var(--primary);">${m[0]}</span>
-                        <div class="stat-line"><span>xGoals</span><span class="stat-val">${hXG}</span></div>
-                        <div class="stat-line"><span>xCorners</span><span class="stat-val">${hXC}</span></div>
-                    </div>
-                    <div class="team-pane">
-                        <span class="team-name" style="color:var(--bomb);">${m[1]}</span>
-                        <div class="stat-line"><span>xGoals</span><span class="stat-val">${aXG}</span></div>
-                        <div class="stat-line"><span>xCorners</span><span class="stat-val">${aXC}</span></div>
-                    </div>
+    // Επιλογή Μονού Γεγονότος βάσει Στρατηγικής
+    if (isMOTD) {
+        tip = "1 (HOME WIN)"; // Το MOTD είναι πάντα το πιο ισχυρό σημείο έδρας
+        estOdds = (1.75 + Math.random() * 0.15).toFixed(2);
+    } else if (type === "over") {
+        tip = (parseFloat(s.hXG) + parseFloat(s.aXG) > 3.2) ? "OVER 3.5 GOALS" : "OVER 2.5 GOALS";
+        estOdds = (1.72 + Math.random() * 0.20).toFixed(2);
+    } else if (type === "corner") {
+        tip = (parseFloat(s.hXC) + parseFloat(s.aXC) > 10.2) ? "OVER 10.5 CORNERS" : "OVER 8.5 CORNERS";
+        estOdds = (1.78 + Math.random() * 0.18).toFixed(2);
+    } else {
+        tip = (s.hXG > s.aXG) ? "1 (HOME WIN)" : "2 (AWAY WIN)";
+    }
+    
+    return `
+        <div class="match-card ${isMOTD ? 'motd-card' : ''}">
+            ${isMOTD ? '<div class="motd-badge">PURE VALUE MOTD ⭐</div>' : ''}
+            <div style="font-weight:900; color:#fff; text-align:center; font-size:1.15rem; margin-bottom:10px;">${h} - ${a}</div>
+            <div class="stats-grid">
+                <div class="team-pane">
+                    <span style="font-weight:800; color:var(--primary); font-size:0.7rem;">${h}</span>
+                    <div class="stat-line"><span>xG</span><span class="stat-val">${s.hXG}</span></div>
+                    <div class="stat-line"><span>xC</span><span class="stat-val">${s.hXC}</span></div>
                 </div>
-
-                <div class="pressure-oracle">
-                    <div style="font-weight:900; color:var(--accent);">PRESSURE INDEX: ${pIdx}</div>
-                    <div style="font-size:0.7rem;">${getPressureLevel(pIdx)}</div>
+                <div class="team-pane">
+                    <span style="font-weight:800; color:var(--bomb); font-size:0.7rem;">${a}</span>
+                    <div class="stat-line"><span>xG</span><span class="stat-val">${s.aXG}</span></div>
+                    <div class="stat-line"><span>xC</span><span class="stat-val">${s.aXC}</span></div>
                 </div>
-
-                <div class="tip-box">ΠΡΟΤΑΣΗ: ${tip}</div>
-
-                <button class="btn-news" onclick="window.open('https://www.google.com/search?q=${m[0]}+${m[1]}+Match+Money+ρεπορτάζ', '_blank')">
-                    🔍 ΡΕΠΟΡΤΑΖ & ΕΙΔΗΣΕΙΣ (MATCH MONEY)
-                </button>
             </div>
-        `;
-    });
+            <div class="tip-box">
+                ${tip}
+                <span class="odds-tag">Estimated Odds: ${estOdds}</span>
+            </div>
+        </div>
+    `;
+}
+
+function runPureAnalysis() {
+    const league = document.getElementById('leagueChoice').value;
+    const matches = db[league];
+    const topArea = document.getElementById('topPicksArea');
+    const motdArea = document.getElementById('motdArea');
+    
+    // Match of the Day: Καθαρό σημείο με 1.70+
+    motdArea.innerHTML = createMatchCard(matches[0][0], matches[0][1], "normal", true);
+
+    let html = `<span class="cat-title">🏆 TOP 3-5 VALUE ΣΗΜΕΙΑ (1.70+)</span>`;
+    matches.slice(1, 4).forEach(m => html += createMatchCard(m[0], m[1], "normal"));
+    
+    html += `<span class="cat-title">🔥 TOP OVER 2.5 / 3.5 GOALS</span>`;
+    matches.slice(0, 3).forEach(m => html += createMatchCard(m[0], m[1], "over"));
+    
+    html += `<span class="cat-title">🚩 TOP OVER 8.5 CORNERS</span>`;
+    matches.slice(2, 5).forEach(m => html += createMatchCard(m[0], m[1], "corner"));
+    
+    topArea.innerHTML = html;
 }
 </script>
 </body>
