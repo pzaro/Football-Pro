@@ -3,42 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v67 - Visual Oracle</title>
+    <title>Predictor Pro v69 - Global Expansion</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card: rgba(22, 27, 34, 0.98); 
             --border: #30363d; --text: #c9d1d9; --accent: #00d2ff; --bomb: #ff4444; --gold: #ffb703;
-            --low: #8b949e; --mid: #58a6ff; --high: #ff7b72; --critical: #f85149;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: radial-gradient(circle at top, #1a1f2e 0%, #0d1117 100%); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 600px; animation: fadeIn 0.3s ease-out; }
         .card { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
         .section-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
         
-        /* Analysis Cards */
-        .value-item { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
-        .live-tag { position: absolute; top: 15px; right: 15px; background: var(--bomb); color: white; padding: 3px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; animation: pulse 1.5s infinite; }
-        
-        /* Comparison Grid */
+        .value-item { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); }
         .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .team-pane { background: rgba(255, 255, 255, 0.04); padding: 12px; border-radius: 15px; border: 1px solid var(--border); }
         .stat-line { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 5px; }
         .stat-val { color: var(--accent); font-weight: 800; }
 
-        /* Visual Pressure Index */
         .pressure-status-box { margin-top: 15px; padding: 12px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .pressure-label { font-size: 0.9rem; font-weight: 900; text-transform: uppercase; display: block; margin-bottom: 4px; }
-        .pressure-desc { font-size: 0.75rem; line-height: 1.3; color: #b1bac4; display: block; }
+        .pressure-label { font-size: 0.85rem; font-weight: 900; text-transform: uppercase; display: block; }
+        .pressure-desc { font-size: 0.7rem; line-height: 1.3; color: #b1bac4; display: block; margin-top: 4px; }
 
-        /* Tip Area */
-        .tip-box { background: linear-gradient(90deg, rgba(0,255,136,0.1), rgba(0,210,255,0.1)); border: 2px solid var(--primary); padding: 18px; border-radius: 20px; margin: 15px 0; text-align: center; }
-        .tip-val { font-size: 1.4rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+        .tip-box { background: rgba(0, 255, 136, 0.05); border: 2px solid var(--primary); padding: 15px; border-radius: 20px; margin: 15px 0; text-align: center; }
+        .tip-val { font-size: 1.25rem; font-weight: 900; color: #fff; }
 
-        select, button { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 14px; margin-top: 8px; cursor: pointer; }
+        select, button { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 13px; margin-top: 8px; cursor: pointer; }
         .btn-main { background: var(--primary); color: #000; font-weight: 900; border: none; text-transform: uppercase; }
         .btn-gold { background: var(--gold); color: #000; font-weight: 900; border: none; margin-bottom: 15px; }
 
-        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
     </style>
 </head>
@@ -46,142 +38,130 @@
 
 <div class="container">
     <div class="card">
-        <header style="text-align:center; margin-bottom:20px;">
-            <h1 style="color:var(--primary); font-size:1.5rem; margin:0;">PREDICTOR PRO v67</h1>
-            <p id="clock" style="font-size: 0.65rem; color: var(--accent); font-weight: 800; margin-top: 5px;"></p>
+        <header style="text-align:center; margin-bottom:15px;">
+            <h1 style="color:var(--primary); font-size:1.4rem; margin:0;">PREDICTOR PRO v69</h1>
+            <p style="font-size: 0.65rem; color: var(--accent); font-weight: 800;">GLOBAL LEAGUE ANALYST</p>
         </header>
 
         <button class="btn-gold" onclick="getEliteMOTD()">⭐ STRATEGIC MATCH OF THE DAY</button>
 
         <div class="section-box">
-            <span style="font-size:0.65rem; color:var(--accent); font-weight:800;">DEEP ANALYSIS SELECTOR</span>
-            <select id="lSel" onchange="syncMatches()"><option value="">Επιλογή Πρωταθλήματος...</option><option value="39">Premier League</option><option value="203">Super League GR</option><option value="140">La Liga</option><option value="135">Serie A</option></select>
-            <select id="mSel" style="display:none;"></select>
-            <button id="anlBtn" class="btn-main" style="display:none;" onclick="runDeepAnalysis()">ΑΝΑΛΥΣΗ ΑΓΩΝΑ</button>
-        </div>
-
-        <div class="section-box">
-            <span style="font-size:0.65rem; color:var(--accent); font-weight:800;">ELITE HYPER SCANNER</span>
+            <span style="font-size:0.65rem; color:var(--accent); font-weight:800;">GLOBAL SCANNER SETTINGS</span>
+            <select id="leagueGroup">
+                <option value="elite">Elite Leagues (ENG, ESP, ITA, GER, GRE)</option>
+                <option value="europe">Europe Plus (FRA, POR, NED, BEL, TUR, SCO)</option>
+                <option value="latam">Latin America (BRA, ARG, MEX, COL)</option>
+                <option value="secondary">Secondary (ENG Champ, ESP 2, ITA 2, GRE 2)</option>
+            </select>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                 <select id="dayRange"><option value="0">Σήμερα</option><option value="1">Αύριο</option></select>
-                <select id="risk"><option value="safe">Safe Values</option><option value="over">Over 3.5 Goal</option><option value="bomb">Bomb Hunter (Single 4.00+)</option></select>
+                <select id="risk"><option value="safe">Safe Values</option><option value="over">Over Analysis</option><option value="bomb">Logical Bomb</option></select>
             </div>
-            <button class="btn-main" onclick="runScanner()">SCAN ELITE PRESSURE POINTS</button>
+            <button class="btn-main" onclick="runScanner()">SCAN SELECTED LEAGUES</button>
         </div>
 
-        <div id="loader" style="text-align:center; font-size:0.75rem; color:var(--accent); margin-bottom:15px;"></div>
+        <div id="loader" style="text-align:center; font-size:0.7rem; color:var(--accent); margin-bottom:10px;"></div>
         <div id="results"></div>
     </div>
 </div>
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0"; 
-const ELITE = [39, 40, 203, 140, 135, 179, 164, 141, 136, 41];
-document.getElementById('clock').innerText = `PRESSURE ORACLE ACTIVE | ${new Date().toLocaleDateString('el-GR')}`;
+
+// Grouping Leagues for easier access
+const LEAGUES = {
+    elite: [39, 140, 135, 78, 203], // Premier, La Liga, Serie A, B-Liga, SLGR
+    europe: [61, 94, 88, 144, 203, 179], // Ligue 1, Primeira, Eredivisie, Jupiler, Super Lig, Prem(Sco)
+    latam: [71, 103, 262, 239], // Serie A Bra, Superliga Arg, Liga MX, Primera Col
+    secondary: [40, 141, 136, 204] // Championship, Segunda, Serie B, SLGR 2
+};
 
 async function api(e) {
     const r = await fetch(`https://v3.football.api-sports.io/${e}`, { headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" } });
     return r.json();
 }
 
-function getPressureLevel(val) {
-    if(val <= 3.0) return { label: "Χαμηλή Πίεση", color: "#8b949e", desc: "Ο αγώνας είναι ισορροπημένος ή 'κλειστός' στο κέντρο. Οι ομάδες δεν πατούν εύκολα περιοχή." };
-    if(val <= 6.5) return { label: "Μέτρια Πίεση", color: "#58a6ff", desc: "Σταθερή επιθετική τάση. Η ομάδα φτάνει κοντά στην εστία, κερδίζει κόρνερ, αλλά λείπει η τελική πάσα." };
-    if(val <= 8.5) return { label: "Υψηλή Πίεση", color: "#ff7b72", desc: "Η άμυνα υποφέρει. Πολλά κόρνερ στη σειρά και φάσεις. Πιθανό γκολ στα επόμενα 10-15 λεπτά." };
-    return { label: "Ασφυκτική Πίεση", color: "#f85149", desc: "Critical! Η ομάδα είναι κλεισμένη στην περιοχή. Ιδανικό σημείο για Late Goal (γκολ στο τέλος)." };
+function getPressureInfo(val) {
+    if(val <= 3.0) return { label: "Χαμηλή Πίεση", color: "#8b949e", desc: "Ισορροπημένο ματς. Οι ομάδες δεν πατούν περιοχή." };
+    if(val <= 6.5) return { label: "Μέτρια Πίεση", color: "#58a6ff", desc: "Σταθερή τάση. Η ομάδα φτάνει κοντά, αλλά λείπει η τελική πάσα." };
+    if(val <= 8.5) return { label: "Υψηλή Πίεση", color: "#ff7b72", desc: "Η άμυνα υποφέρει. Πολλά κόρνερ και φάσεις. Πιθανό γκολ." };
+    return { label: "Ασφυκτική Πίεση", color: "#f85149", desc: "Critical! Η άμυνα έχει καταρρεύσει. Πιθανό Late Goal." };
 }
 
-function createMatchCard(h, a, isLive, score, league, type) {
-    const xH = (1.1 + Math.random() * 1.7).toFixed(1);
-    const xA = (0.8 + Math.random() * 1.4).toFixed(1);
-    const cH = (4 + Math.random() * 5).toFixed(1);
+function createCard(h, a, league, type) {
+    const xH = (1.1 + Math.random() * 2).toFixed(1);
+    const xA = (0.7 + Math.random() * 1.5).toFixed(1);
+    const cH = (4 + Math.random() * 6).toFixed(1);
     const cA = (3 + Math.random() * 4).toFixed(1);
-    const pIdx = (parseFloat(xH) * 0.4 + parseFloat(cH) * 0.6).toFixed(1);
-    const pLevel = getPressureLevel(pIdx);
     
-    let tip = "1 & OVER 1.5";
-    if(type === 'over') tip = "OVER 3.5 GOALS";
+    const mainXG = Math.max(xH, xA);
+    const mainXC = (mainXG == xH) ? cH : cA;
+    const pIdx = (parseFloat(mainXG) * 0.4 + parseFloat(mainXC) * 0.6).toFixed(1);
+    const pInfo = getPressureInfo(pIdx);
+    
+    let tip = "";
+    if(type === 'safe') tip = (xH > xA) ? `1 & OVER 1.5` : `2 & OVER 1.5`;
+    if(type === 'over') tip = `OVER 2.5 & G/G`;
     if(type === 'bomb') {
-        const bombs = [`2 (ΔΙΠΛΟ) @4.20`, `OVER 14.5 CORNERS @4.50`, `2 (Hcap -1) @5.10`, `UNDER 6.5 CORNERS @4.80` ];
-        tip = bombs[Math.floor(Math.random() * bombs.length)];
+        if(pIdx > 8.0) tip = `OVER 12.5 CORNERS (Value)`;
+        else tip = (xH > xA) ? `1 (Hcap -1.5)` : `2 (Hcap -1.5)`;
     }
 
     return `
-        <div class="value-item" style="border-left-color: ${pLevel.color}">
-            ${isLive ? '<div class="live-tag">LIVE ' + score + '</div>' : ''}
+        <div class="value-item" style="border-left-color: ${pInfo.color}">
             <span style="font-size:0.6rem; color:var(--accent); font-weight:800; text-transform:uppercase;">${league}</span>
-            <div style="font-weight:900; color:#fff; font-size:1.15rem; margin:5px 0;">${h} - ${a}</div>
-            
+            <div style="font-weight:900; color:#fff; font-size:1.1rem; margin:5px 0;">${h} - ${a}</div>
             <div class="comp-grid">
                 <div class="team-pane">
-                    <span style="font-size:0.75rem; font-weight:900; color:#fff;">${h}</span>
+                    <span style="font-size:0.7rem; font-weight:900; color:#fff;">${h}</span>
                     <div class="stat-line"><span>xG</span><span class="stat-val">${xH}</span></div>
                     <div class="stat-line"><span>xC</span><span class="stat-val">${cH}</span></div>
                 </div>
                 <div class="team-pane">
-                    <span style="font-size:0.75rem; font-weight:900; color:#fff;">${a}</span>
+                    <span style="font-size:0.7rem; font-weight:900; color:#fff;">${a}</span>
                     <div class="stat-line"><span>xG</span><span class="stat-val">${xA}</span></div>
                     <div class="stat-line"><span>xC</span><span class="stat-val">${cA}</span></div>
                 </div>
             </div>
-
-            <div class="pressure-status-box" style="background: ${pLevel.color}15; border-color: ${pLevel.color}40">
-                <span class="pressure-label" style="color: ${pLevel.color}">${pIdx} - ${pLevel.label}</span>
-                <span class="pressure-desc">${pLevel.desc}</span>
+            <div class="pressure-status-box" style="background: ${pInfo.color}15; border-color: ${pInfo.color}40">
+                <span class="pressure-label" style="color: ${pInfo.color}">${pIdx} - ${pInfo.label}</span>
+                <span class="pressure-desc">${pInfo.desc}</span>
             </div>
-
-            <div class="tip-box" style="border-color: ${type === 'bomb' ? 'var(--bomb)' : 'var(--primary)'}">
-                <span style="font-size:0.6rem; color:var(--primary); font-weight:900; text-transform:uppercase;">Oracle Single Event</span>
+            <div class="tip-box">
                 <div class="tip-val">${tip}</div>
             </div>
         </div>`;
 }
 
-async function syncMatches() {
-    const lid = document.getElementById('lSel').value;
-    const mSel = document.getElementById('mSel');
-    if(!lid) return;
-    document.getElementById('loader').innerText = "Φόρτωση αγώνων...";
-    const res = await api(`fixtures?league=${lid}&date=${new Date().toISOString().split('T')[0]}`);
-    mSel.innerHTML = '<option value="">Επιλογή Αγώνα...</option>';
-    if(res.response) {
-        res.response.forEach(f => {
-            mSel.innerHTML += `<option value="${f.fixture.id}" data-h="${f.teams.home.name}" data-a="${f.teams.away.name}" data-live="${f.fixture.status.short}" data-score="${f.goals.home}-${f.goals.away}">${f.teams.home.name} - ${f.teams.away.name}</option>`;
-        });
-        mSel.style.display = 'block'; document.getElementById('anlBtn').style.display = 'block';
-    }
-    document.getElementById('loader').innerText = "";
-}
-
-function runDeepAnalysis() {
-    const out = document.getElementById('results');
-    const opt = document.getElementById('mSel').options[document.getElementById('mSel').selectedIndex];
-    out.innerHTML = "";
-    const isLive = opt.getAttribute('data-live') !== "NS" && opt.getAttribute('data-live') !== "FT";
-    out.innerHTML = createMatchCard(opt.getAttribute('data-h'), opt.getAttribute('data-a'), isLive, opt.getAttribute('data-score'), "Deep Analysis", 'safe');
-}
-
 async function runScanner() {
     const out = document.getElementById('results');
     out.innerHTML = "";
-    document.getElementById('loader').innerText = "Hyper-Scanning Elite Leagues...";
+    document.getElementById('loader').innerText = "Σάρωση Παγκόσμιου Κουπονιού...";
+    
+    const group = document.getElementById('leagueGroup').value;
     const day = parseInt(document.getElementById('dayRange').value);
     const type = document.getElementById('risk').value;
+    
     let d = new Date(); d.setDate(d.getDate() + day);
     const res = await api(`fixtures?date=${d.toISOString().split('T')[0]}`);
-    const filtered = res.response.filter(f => ELITE.includes(f.league.id));
-    filtered.sort(() => 0.5 - Math.random()).slice(0, 3).forEach(f => {
-        const isLive = f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT";
-        out.innerHTML += createMatchCard(f.teams.home.name, f.teams.away.name, isLive, `${f.goals.home}-${f.goals.away}`, f.league.name, type);
-    });
+    
+    const filtered = res.response.filter(f => LEAGUES[group].includes(f.league.id));
+    
+    if(filtered.length === 0) {
+        out.innerHTML = "<p style='text-align:center; font-size:0.8rem;'>Δεν βρέθηκαν αγώνες για τη συγκεκριμένη κατηγορία σήμερα.</p>";
+    } else {
+        filtered.sort(() => 0.5 - Math.random()).slice(0, 4).forEach(f => {
+            out.innerHTML += createCard(f.teams.home.name, f.teams.away.name, f.league.name, type);
+        });
+    }
     document.getElementById('loader').innerText = "";
 }
 
 async function getEliteMOTD() {
     document.getElementById('results').innerHTML = "";
     const res = await api(`fixtures?date=${new Date().toISOString().split('T')[0]}`);
-    const elite = res.response.filter(f => ELITE.includes(f.league.id));
-    if(elite.length > 0) document.getElementById('results').innerHTML = createMatchCard(elite[0].teams.home.name, elite[0].teams.away.name, false, "", "ELITE MOTD ⭐", 'safe');
+    const elite = res.response.filter(f => LEAGUES.elite.includes(f.league.id));
+    if(elite.length > 0) document.getElementById('results').innerHTML = createCard(elite[0].teams.home.name, elite[0].teams.away.name, "ELITE MOTD ⭐", 'safe');
 }
 </script>
 </body>
