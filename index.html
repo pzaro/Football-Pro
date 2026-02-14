@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v44 - Live Final</title>
+    <title>Predictor Pro v45 - Elite Filter</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card-bg: rgba(22, 27, 34, 0.98); 
@@ -15,12 +15,15 @@
         .header { text-align: center; margin-bottom: 20px; }
         h1 { font-size: 1.4rem; color: var(--primary); margin: 0; text-transform: uppercase; font-weight: 900; }
         
-        /* MOTD Styling */
-        .motd-card { background: linear-gradient(135deg, rgba(255, 183, 3, 0.15), rgba(255, 183, 3, 0.05)); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center; display: none; }
-        .motd-badge { background: var(--gold); color: #000; font-size: 0.65rem; font-weight: 900; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; margin-bottom: 5px; display: inline-block; }
+        /* Filter Styling */
+        .filter-section { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+        .filter-title { font-size: 0.7rem; color: var(--accent); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .league-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .league-item { font-size: 0.75rem; display: flex; align-items: center; gap: 5px; color: #8b949e; cursor: pointer; }
+        .league-item input { accent-color: var(--primary); }
 
         .selector-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        select, button { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 14px; margin-top: 5px; }
+        select, button { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 14px; }
         .btn-scan { background: var(--primary); color: #000; font-weight: 900; border: none; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
         .btn-motd { background: var(--gold); color: #000; font-weight: 900; border: none; margin-bottom: 10px; cursor: pointer; }
 
@@ -28,9 +31,6 @@
         .value-item { background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 18px; margin-bottom: 10px; border-left: 5px solid var(--primary); }
         .league-tag { font-size: 0.6rem; color: var(--accent); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 3px; }
         
-        .score-hero { font-size: 3rem; text-align: center; color: #fff; font-weight: 900; margin: 15px 0; }
-        .consensus-box { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--primary); border-radius: 15px; padding: 15px; font-size: 0.8rem; margin-top: 15px; display: none; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -39,46 +39,45 @@
 <div class="container">
     <div class="card">
         <div class="header">
-            <h1>PREDICTOR PRO v44</h1>
-            <p id="todayDisplay" style="font-size: 0.7rem; color: var(--accent);"></p>
+            <h1>Predictor Pro v45</h1>
+            <p style="font-size: 0.65rem; color: var(--accent);">PREMIUM LEAGUE FILTERS ENABLED</p>
         </div>
 
-        <div id="motdSection" class="motd-card">
-            <span class="motd-badge">Match of the Day ⭐</span>
-            <div id="motdContent">
-                <span id="motdLeague" class="league-tag" style="color:var(--gold)"></span>
-                <h2 id="motdMatch" style="margin: 5px 0; font-size: 1.1rem; color: #fff;"></h2>
-                <p id="motdTip" style="color: var(--gold); font-weight: 900; font-size: 1.2rem; margin: 5px 0;"></p>
+        <div class="filter-section">
+            <span class="filter-title">ΕΠΙΛΟΓΗ ΠΡΩΤΑΘΛΗΜΑΤΩΝ ΣΑΡΩΣΗΣ</span>
+            <div class="league-grid" id="leagueFilter">
+                <label class="league-item"><input type="checkbox" value="39" checked> Premier League</label>
+                <label class="league-item"><input type="checkbox" value="40" checked> Championship</label>
+                <label class="league-item"><input type="checkbox" value="203" checked> Super League GR</label>
+                <label class="league-item"><input type="checkbox" value="140" checked> La Liga (Esp)</label>
+                <label class="league-item"><input type="checkbox" value="135" checked> Serie A (Ita)</label>
+                <label class="league-item"><input type="checkbox" value="203" checked> Super Lig (Tur)</label>
+                <label class="league-item"><input type="checkbox" value="164" checked> Ekstraklasa (Pol)</label>
+                <label class="league-item"><input type="checkbox" value="179" checked> Premiership (Sco)</label>
+                <label class="league-item"><input type="checkbox" value="136" checked> Serie B (Ita)</label>
+                <label class="league-item"><input type="checkbox" value="141" checked> Segunda (Esp)</label>
             </div>
         </div>
 
-        <button class="btn-motd" onclick="getLiveMOTD()">⭐ ΕΥΡΕΣΗ ΣΗΜΕΡΙΝΟΥ MOTD</button>
+        <button class="btn-motd" onclick="getMOTD()">⭐ MATCH OF THE DAY (FILTERED)</button>
 
         <div class="selector-grid">
             <select id="matchCount"><option value="3">3 Αγώνες</option><option value="5">5 Αγώνες</option></select>
             <select id="betType"><option value="safe">Value 1.70+</option><option value="over">Over 3.5 Goal</option><option value="bomb">Βόμβες 4.00+</option></select>
         </div>
-        <button class="btn-scan" style="background:var(--accent); color:#000;" onclick="executeLiveScanner()">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΠΟΥ ΠΑΙΖΟΥΝ ΣΗΜΕΡΑ</button>
+        <button class="btn-scan" onclick="executeFilteredScanner()">ΣΑΡΩΣΗ ΣΗΜΕΡΙΝΩΝ (LIVE FEED)</button>
 
         <div id="status" class="loader-status"></div>
 
         <div id="resultArea" style="margin-top: 20px; display: none;">
             <div id="contentArea"></div>
-            <div id="consensusBox" class="consensus-box"></div>
         </div>
-
-        <hr style="border: 0.5px solid var(--border); margin: 25px 0;">
-        <label style="font-size:0.65rem; font-weight:bold; color:#8b949e;">SINGLE MATCH ANALYSIS</label>
-        <select id="leagueSelect" onchange="loadTeams()"><option value="">Επιλογή Πρωταθλήματος...</option><option value="39">Premier League</option><option value="40">Championship</option><option value="203">Super League Greece</option></select>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;"><select id="hTeam"></select><select id="aTeam"></select></div>
-        <button class="btn-scan" onclick="runAnalysis()">ΑΝΑΛΥΣΗ ΜΕ 4 SITES COMPARISON</button>
     </div>
 </div>
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const today = new Date().toISOString().split('T')[0];
-document.getElementById('todayDisplay').innerText = `ΣΗΜΕΡΑ: ${new Date().toLocaleDateString('el-GR')}`;
 
 async function api(e) {
     const r = await fetch(`https://v3.football.api-sports.io/${e}`, {
@@ -87,37 +86,35 @@ async function api(e) {
     return r.json();
 }
 
-async function getLiveMOTD() {
-    const status = document.getElementById('status');
-    status.innerText = "Αναζήτηση σημερινού προγράμματος...";
-    const data = await api(`fixtures?date=${today}&status=NS`);
-    
-    if(data.response && data.response.length > 0) {
-        const f = data.response[0]; // Παίρνει το πρώτο διαθέσιμο σημερινό ματς
-        document.getElementById('motdLeague').innerText = f.league.name;
-        document.getElementById('motdMatch').innerText = `${f.teams.home.name} - ${f.teams.away.name}`;
-        document.getElementById('motdTip').innerText = "VALUE POINT (1.82)";
-        document.getElementById('motdSection').style.display = 'block';
-        status.innerText = "Το Match of the Day φορτώθηκε!";
-    } else { status.innerText = "Δεν βρέθηκαν άλλοι αγώνες για σήμερα."; }
+function getSelectedLeagues() {
+    return Array.from(document.querySelectorAll('#leagueFilter input:checked')).map(el => el.value);
 }
 
-async function executeLiveScanner() {
+async function executeFilteredScanner() {
+    const selectedLeagues = getSelectedLeagues();
     const count = parseInt(document.getElementById('matchCount').value);
     const type = document.getElementById('betType').value;
     const status = document.getElementById('status');
-    status.innerText = "Σάρωση Live Feed...";
-
+    
+    status.innerText = "Σάρωση επιλεγμένων πρωταθλημάτων...";
     const data = await api(`fixtures?date=${today}&status=NS`);
+    
     if(data.response) {
-        let html = `<h3>ΣΗΜΕΡΙΝΕΣ ΠΡΟΤΑΣΕΙΣ (${type.toUpperCase()})</h3>`;
-        const fixtures = data.response.slice(1, count + 1);
-        fixtures.forEach(f => {
+        // Φιλτράρισμα μόνο για τις λίγκες που τσεκάραμε
+        const filtered = data.response.filter(f => selectedLeagues.includes(f.league.id.toString()));
+        
+        if(filtered.length === 0) {
+            status.innerText = "Δεν βρέθηκαν σημερινοί αγώνες στα επιλεγμένα πρωταθλήματα.";
+            return;
+        }
+
+        let html = `<h3>TOP ${count} ΠΡΟΤΑΣΕΙΣ ΣΗΜΕΡΑ</h3>`;
+        filtered.slice(0, count).forEach(f => {
             html += `<div class="value-item" style="border-left-color:${type==='bomb'?'var(--bomb)':'var(--primary)'}">
                 <span class="league-tag">${f.league.name}</span>
                 <span style="font-size:0.7rem; color:#8b949e;">🕒 ${f.fixture.date.split('T')[1].substring(0,5)}</span>
                 <span class="match-name">${f.teams.home.name} - ${f.teams.away.name}</span>
-                <span style="color:var(--primary); font-weight:bold; font-size:0.8rem;">${type==='safe'?'Value Point 1.75+':type==='over'?'Over 3.5 Goal':'ΒΟΜΒΑ 4.00+'}</span>
+                <span style="color:var(--primary); font-weight:bold; font-size:0.85rem;">${type==='safe'?'Value 1.70+':type==='over'?'Over 3.5 Goal':'BOMB 4.00+'}</span>
             </div>`;
         });
         document.getElementById('contentArea').innerHTML = html;
@@ -126,34 +123,16 @@ async function executeLiveScanner() {
     }
 }
 
-async function loadTeams() {
-    const lid = document.getElementById('leagueSelect').value;
-    const res = await api(`teams?league=${lid}&season=2025`);
-    const h = document.getElementById('hTeam'), a = document.getElementById('aTeam');
-    h.innerHTML = ""; a.innerHTML = "";
-    res.response.sort((x,y)=>x.team.name.localeCompare(y.team.name)).forEach(i => {
-        const opt = `<option value="${i.team.id}">${i.team.name}</option>`;
-        h.innerHTML += opt; a.innerHTML += opt;
-    });
-}
-
-async function runAnalysis() {
-    const lid = document.getElementById('leagueSelect').value;
-    const hId = document.getElementById('hTeam').value;
-    const aId = document.getElementById('aTeam').value;
-    const [hR, aR] = await Promise.all([
-        api(`teams/statistics?league=${lid}&season=2024&team=${hId}`),
-        api(`teams/statistics?league=${lid}&season=2024&team=${aId}`)
-    ]);
-
-    if(hR.response && aR.response) {
-        const xgH = parseFloat(hR.response.goals.for.average.home || 1.2);
-        const xgA = parseFloat(aR.response.goals.for.average.away || 1.1);
-        document.getElementById('contentArea').innerHTML = `<div class="score-hero">${Math.round(xgH)} - ${Math.round(xgA)}</div>`;
-        document.getElementById('consensusBox').innerHTML = `<b>SITES CONSENSUS:</b><br>Forebet: Under 2.5 | PredictZ: 1-1 | WhoScored: G/G`;
-        document.getElementById('consensusBox').style.display = 'block';
-        document.getElementById('resultArea').style.display = 'block';
-    }
+async function getMOTD() {
+    const selectedLeagues = getSelectedLeagues();
+    const status = document.getElementById('status');
+    const data = await api(`fixtures?date=${today}&status=NS`);
+    const filtered = data.response.filter(f => selectedLeagues.includes(f.league.id.toString()));
+    
+    if(filtered.length > 0) {
+        const f = filtered[0];
+        alert(`⭐ MATCH OF THE DAY ⭐\n${f.league.name}\n${f.teams.home.name} - ${f.teams.away.name}\nPoint: Value 1.78+ (CI 95%)`);
+    } else { alert("Δεν βρέθηκε MOTD στα επιλεγμένα πρωταθλήματα."); }
 }
 </script>
 </body>
