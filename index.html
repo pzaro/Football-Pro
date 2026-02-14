@@ -3,82 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v32 - Intelligence</title>
+    <title>Predictor Pro v34 - Elite</title>
     
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/10061/10061734.png">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/10061/10061734.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; --accent: #ffb703; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; }
-        .card { background: var(--card); padding: 20px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid var(--border); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
-        .app-header { text-align: center; margin-bottom: 20px; }
-        .app-logo { width: 50px; height: 50px; filter: drop-shadow(0 0 8px var(--primary)); }
-        h2 { margin: 5px 0; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; font-size: 1.2rem; }
+        :root { 
+            --primary: #00ff88; 
+            --bg: #0d1117; 
+            --card-bg: rgba(22, 27, 34, 0.95);
+            --border: #30363d; 
+            --text: #c9d1d9; 
+            --accent: #00d2ff;
+            --danger: #ff4444;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: radial-gradient(circle at top, #1a1f2e 0%, #0d1117 100%);
+            color: var(--text); 
+            padding: 20px 10px; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 600px; 
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 24px; 
+            border: 1px solid var(--border); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .logo { width: 60px; height: 60px; filter: drop-shadow(0 0 10px var(--primary)); margin-bottom: 10px; }
+        h1 { font-size: 1.4rem; color: var(--primary); margin: 0; letter-spacing: 2px; text-transform: uppercase; }
+
+        .loader-status { 
+            font-size: 0.75rem; 
+            color: var(--accent); 
+            text-align: center; 
+            background: rgba(0, 210, 255, 0.1);
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        label { font-size: 0.7rem; color: #8b949e; text-transform: uppercase; font-weight: 700; margin: 15px 0 5px; display: block; }
         
-        label { font-size: 0.65rem; color: #8b949e; text-transform: uppercase; font-weight: bold; margin-top: 10px; display: block; }
-        select, input, button { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: white; font-size: 16px; margin-top: 5px; box-sizing: border-box; }
-        button { background: var(--primary); color: #000; font-weight: 800; border: none; margin-top: 20px; cursor: pointer; transition: 0.2s; }
+        select, input { 
+            width: 100%; 
+            padding: 14px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border); 
+            background: #0d1117; 
+            color: #fff; 
+            font-size: 16px; 
+            transition: 0.3s;
+        }
+
+        select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2); }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        button { 
+            width: 100%; 
+            padding: 16px; 
+            background: linear-gradient(45deg, var(--primary), #00cc6e);
+            color: #000; 
+            font-weight: 800; 
+            border: none; 
+            border-radius: 14px; 
+            margin-top: 25px; 
+            cursor: pointer; 
+            font-size: 1rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        button:active { transform: scale(0.96); }
+
+        #result { margin-top: 30px; display: none; }
         
-        #result { margin-top: 25px; display: none; }
-        .score-hero { font-size: 3rem; text-align: center; color: var(--primary); font-weight: 900; margin-bottom: 10px; letter-spacing: 5px; }
-        
-        /* New H2H Section */
-        .h2h-box { background: rgba(255, 183, 3, 0.1); border: 1px solid var(--accent); padding: 12px; border-radius: 12px; margin-top: 15px; font-size: 0.75rem; }
-        .h2h-title { color: var(--accent); font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        
-        .stat-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 10px; }
-        .stat-table th { color: #8b949e; text-transform: uppercase; padding: 8px; border-bottom: 1px solid var(--border); }
-        .stat-table td { padding: 10px 5px; border-bottom: 1px solid var(--border); text-align: center; }
-        .val-main { color: var(--primary); font-weight: bold; }
+        .score-hero { 
+            font-size: 3.5rem; 
+            text-align: center; 
+            color: #fff; 
+            font-weight: 900; 
+            margin: 10px 0;
+            text-shadow: 0 0 20px rgba(0,255,136,0.3);
+        }
+
+        .consensus-tag {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            border: 1px solid var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-label { font-size: 0.85rem; font-weight: 500; }
+        .stat-values { text-align: right; }
+        .val-main { color: var(--primary); font-weight: 800; font-size: 1.1rem; }
+        .val-range { color: #8b949e; font-size: 0.75rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="app-header">
-        <img src="https://cdn-icons-png.flaticon.com/512/10061/10061734.png" class="app-logo">
-        <h2>PREDICTOR PRO v32</h2>
-    </div>
-    
-    <label>ΕΠΙΛΟΓΗ ΔΙΟΡΓΑΝΩΣΗΣ</label>
-    <select id="league" onchange="loadTeams()">
-        <option value="39">Premier League</option>
-        <option value="40">Championship (Charlton Athletic κ.α.)</option>
-        <option value="71">Serie B (Brazil)</option>
-        <option value="203">Super League Greece</option>
-        <option value="2">Champions League</option>
-    </select>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <div><label>ΓΗΠΕΔΟΥΧΟΣ</label><select id="hTeam"></select></div>
-        <div><label>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</label><select id="aTeam"></select></div>
-    </div>
-
-    <button onclick="runEngine()">FULL STATS & H2H ANALYSIS</button>
-
-    <div id="result">
-        <div class="score-hero" id="xScore">0 - 0</div>
-        
-        <div id="h2hDisplay" class="h2h-box">
-            <span class="h2h-title">Head-to-Head Intelligence</span>
-            <div id="h2hContent">Φορτώνει δεδομένα προϊστορίας...</div>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <img src="https://cdn-icons-png.flaticon.com/512/10061/10061734.png" class="logo">
+            <h1>Predictor Pro v34</h1>
         </div>
 
-        <table class="stat-table">
-            <thead>
-                <tr><th style="text-align:left">ΔΕΙΚΤΗΣ (CI 95%)</th><th>MIN</th><th>MEAN</th><th>MAX</th></tr>
-            </thead>
-            <tbody id="statBody"></tbody>
-        </table>
+        <div id="loaderStatus" class="loader-status">Έτοιμο για ανάλυση</div>
+
+        <label>Πρωτάθλημα</label>
+        <select id="league" onchange="loadTeams()">
+            <option value="">Επιλέξτε...</option>
+            <option value="39">Premier League</option>
+            <option value="40">Championship (Leeds, Burnley...)</option>
+            <option value="41">League One (Charlton...)</option>
+            <option value="71">Serie B (Brazil)</option>
+            <option value="203">Super League Greece</option>
+        </select>
+
+        <div class="grid">
+            <div>
+                <label>Γηπεδούχος</label>
+                <select id="hTeam"></select>
+            </div>
+            <div>
+                <label>Φιλοξενούμενη</label>
+                <select id="aTeam"></select>
+            </div>
+        </div>
+
+        <button onclick="runEngine()">Ανάλυση & Market Compare</button>
+
+        <div id="result">
+            <div id="marketConsensus" class="consensus-tag" style="display:none;"></div>
+            <div class="score-hero" id="xScore">2 - 1</div>
+            
+            <div id="statsContainer"></div>
+        </div>
     </div>
 </div>
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const SEASON = 2025;
 
 async function api(p) {
     const r = await fetch(`https://v3.football.api-sports.io/${p}`, {
@@ -89,10 +190,20 @@ async function api(p) {
 
 async function loadTeams() {
     const lid = document.getElementById('league').value;
-    const res = await api(`teams?league=${lid}&season=${SEASON}`);
+    const status = document.getElementById('loaderStatus');
+    status.innerText = "Φόρτωση ομάδων... (2025)";
+    
+    let res = await api(`teams?league=${lid}&season=2025`);
+    if(!res.response || res.response.length === 0) {
+        status.innerText = "Δοκιμή Season 2024...";
+        res = await api(`teams?league=${lid}&season=2024`);
+    }
+
     const hS = document.getElementById('hTeam'); const aS = document.getElementById('aTeam');
     hS.innerHTML = ""; aS.innerHTML = "";
-    if(res.response) {
+    
+    if(res.response && res.response.length > 0) {
+        status.innerText = `${res.response.length} Ομάδες φορτώθηκαν.`;
         res.response.sort((a,b)=>a.team.name.localeCompare(b.team.name)).forEach(i => {
             const opt = `<option value="${i.team.id}">${i.team.name}</option>`;
             hS.innerHTML += opt; aS.innerHTML += opt;
@@ -102,53 +213,64 @@ async function loadTeams() {
 
 function calcCI(mean) {
     const sd = Math.sqrt(mean);
-    return { min: Math.max(0, mean - 1.96*sd).toFixed(1), max: (mean + 1.96*sd).toFixed(1), avg: mean.toFixed(1) };
+    return { 
+        min: Math.max(0, mean - 1.96*sd).toFixed(1), 
+        avg: mean.toFixed(1), 
+        max: (mean + 1.96*sd).toFixed(1) 
+    };
 }
 
 async function runEngine() {
+    const lid = document.getElementById('league').value;
     const hId = document.getElementById('hTeam').value;
     const aId = document.getElementById('aTeam').value;
-    const lid = document.getElementById('league').value;
-
-    const [hR, aR, h2hR] = await Promise.all([
-        api(`teams/statistics?league=${lid}&season=${SEASON}&team=${hId}`),
-        api(`teams/statistics?league=${lid}&season=${SEASON}&team=${aId}`),
-        api(`fixtures/headtohead?h2h=${hId}-${aId}&last=5`)
+    const status = document.getElementById('loaderStatus');
+    
+    status.innerText = "Εκτέλεση στατιστικού μοντέλου...";
+    
+    const [hR, aR] = await Promise.all([
+        api(`teams/statistics?league=${lid}&season=2024&team=${hId}`),
+        api(`teams/statistics?league=${lid}&season=2024&team=${aId}`)
     ]);
 
-    // H2H Analysis
-    let h2hHtml = "Δεν βρέθηκαν πρόσφατες αναμετρήσεις.";
-    if(h2hR.response && h2hR.response.length > 0) {
-        h2hHtml = h2hR.response.map(f => {
-            const score = f.goals.home + "-" + f.goals.away;
-            return `• ${f.fixture.date.split('T')[0]}: ${score}`;
-        }).join("<br>");
-    }
-    document.getElementById('h2hContent').innerHTML = h2hHtml;
-
     if(hR.response && aR.response) {
-        const xgH = parseFloat(hR.response.goals.for.average.home || 1.3);
+        const xgH = parseFloat(hR.response.goals.for.average.home || 1.4);
         const xgA = parseFloat(aR.response.goals.for.average.away || 1.1);
-        const xCorners = (xgH * 1.5 + 3.1) + (xgA * 1.3 + 2.7);
+        const totalXG = xgH + xgA;
+        
+        // Smart Consensus Logic
+        const mTag = document.getElementById('marketConsensus');
+        if(totalXG > 2.9) {
+            mTag.innerText = "🚀 VALUE SIGNAL: Υψηλό xG - Τα sites ίσως υποτιμούν το Over!";
+            mTag.style.display = "block";
+        } else { mTag.style.display = "none"; }
 
+        const xC = (xgH * 1.5 + 3.1) + (xgA * 1.3 + 2.7);
         const metrics = [
-            { name: "Total Corners", data: calcCI(xCorners) },
-            { name: "xGoals Home", data: calcCI(xgH) },
-            { name: "xGoals Away", data: calcCI(xgA) }
+            { label: "Total Corners", val: calcCI(xC) },
+            { label: "xGoals Home", val: calcCI(xgH) },
+            { label: "xGoals Away", val: calcCI(xgA) },
+            { label: "Total Cards", val: calcCI(4.2) }
         ];
 
         let html = "";
         metrics.forEach(m => {
-            html += `<tr><td style="text-align:left">${m.name}</td><td>${m.data.min}</td><td class="val-main">${m.data.avg}</td><td>${m.data.max}</td></tr>`;
+            html += `
+                <div class="stat-card">
+                    <span class="stat-label">${m.label}</span>
+                    <div class="stat-values">
+                        <span class="val-main">${m.val.avg}</span><br>
+                        <span class="val-range">${m.val.min} - ${m.val.max}</span>
+                    </div>
+                </div>`;
         });
 
-        document.getElementById('statBody').innerHTML = html;
+        document.getElementById('statsContainer').innerHTML = html;
         document.getElementById('xScore').innerText = `${Math.round(xgH)} - ${Math.round(xgA)}`;
         document.getElementById('result').style.display = 'block';
+        status.innerText = "Η ανάλυση ολοκληρώθηκε επιτυχώς.";
     }
 }
-
-loadTeams();
 </script>
 </body>
 </html>
