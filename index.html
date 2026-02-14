@@ -3,109 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v108 - Sovereign Final</title>
+    <title>Predictor Pro v110 - Ultimate</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #c9d1d9; --acc: #00d2ff; --gold: #ffb703; --bomb: #ff4444; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; }
         .container { width: 100%; max-width: 650px; margin: 0 auto; }
         .card { background: var(--card); padding: 20px; border-radius: 25px; border: 1px solid var(--border); box-shadow: 0 15px 50px rgba(0,0,0,0.5); }
         
-        /* Guide Tables */
+        /* Guide */
         .guide { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-bottom: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); }
         .guide td { padding: 6px; border: 1px solid var(--border); }
-        .h-idx { color: var(--acc); font-weight: 900; background: rgba(0,210,255,0.05); }
+        .h-idx { color: var(--acc); font-weight: 900; }
 
-        /* Sync Progress */
-        #syncProgress { font-size: 0.75rem; color: var(--gold); text-align: center; margin: 10px 0; display: none; }
-        .progress-bar { width: 100%; height: 5px; background: var(--border); border-radius: 3px; margin-top: 5px; overflow: hidden; }
-        .progress-fill { width: 0%; height: 100%; background: var(--p); transition: width 0.3s; }
-
-        /* Controls */
+        /* Buttons */
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
-        button { padding: 14px; border-radius: 12px; border: none; cursor: pointer; font-weight: 900; text-transform: uppercase; font-size: 0.8rem; transition: 0.3s; }
+        button { padding: 14px; border-radius: 12px; border: none; cursor: pointer; font-weight: 900; text-transform: uppercase; font-size: 0.8rem; }
         .btn-sync { background: var(--p); color: #000; width: 100%; font-size: 1rem; }
-        .btn-mod { background: var(--gold); color: #000; grid-column: span 2; }
         .btn-live-acc { background: var(--bomb); color: #fff; grid-column: span 2; }
         .btn-opt { background: transparent; border: 1px solid var(--acc); color: var(--acc); }
 
-        /* Result Cards */
-        .acc-box { background: rgba(0,210,255,0.05); border: 1px solid var(--acc); border-radius: 15px; padding: 15px; margin-top: 15px; border-left: 6px solid var(--acc); animation: fadeIn 0.4s ease; }
-        .acc-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .match-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 18px; margin-top: 10px; border-left: 5px solid var(--p); cursor: pointer; position: relative; }
+        /* Layout */
+        #deepPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 15px; margin-bottom: 20px; position: sticky; top: 10px; z-index: 100; box-shadow: 0 0 30px rgba(0,255,136,0.5); }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+        .stat-box { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; text-align: center; }
+        .p-val { font-size: 1.3rem; font-weight: 900; color: var(--p); }
+        
+        .match-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 18px; margin-top: 10px; border-left: 5px solid var(--border); cursor: pointer; position: relative; }
         .live-tag { position: absolute; top: 10px; right: 10px; background: var(--bomb); color: #fff; padding: 2px 6px; border-radius: 5px; font-size: 0.65rem; font-weight: 900; }
-
-        /* Deep Panel */
-        #deepPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 15px; margin-top: 15px; position: sticky; top: 10px; z-index: 100; box-shadow: 0 0 30px rgba(0,255,136,0.3); }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
-        .p-val { font-size: 1.5rem; font-weight: 900; color: var(--p); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .acc-box { background: rgba(0,210,255,0.05); border: 1px solid var(--acc); border-radius: 15px; padding: 15px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="card">
-        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin:0 0 5px 0;">PREDICTOR PRO v108</h1>
+        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin:0 0 5px 0;">PREDICTOR PRO v110</h1>
         
         <table class="guide">
-            <tr><td class="h-idx">Selected</td><td>8 Pro Leagues</td><td class="h-idx">PI Action</td><td>8.5+ Strong</td></tr>
-            <tr><td class="h-idx">Logic</td><td>Hierarchy Guard</td><td class="h-idx">Data</td><td>PRO API 2026</td></tr>
+            <tr><td class="h-idx">LIVE PI</td><td>8.5+ Action</td><td class="h-idx">ANALYSIS</td><td>xG, xC, Cards</td></tr>
         </table>
 
-        <div id="syncProgress">
-            <span id="syncStatus">Προετοιμασία...</span>
-            <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
-        </div>
-
-        <button id="syncBtn" class="btn-sync" onclick="turboSync()">ΣΥΓΧΡΟΝΙΣΜΟΣ ΚΟΥΠΟΝΙΟΥ (8 ΛΙΓΚΕΣ)</button>
+        <button id="syncBtn" class="btn-sync" onclick="turboSync()">START GLOBAL SYNC (2026)</button>
         
         <div id="uiTools" style="display:none;">
             <div class="btn-group">
-                <button class="btn-mod" onclick="genMOD()">⭐ MATCH OF THE DAY</button>
                 <button class="btn-live-acc" onclick="genLiveAcc()">🔥 LIVE ACCUMULATOR (2-3)</button>
-                <button class="btn-opt" onclick="engine('pts')">ΣΗΜΕΙΑ (1-X-2)</button>
-                <button class="btn-opt" onclick="engine('o25')">OVER 2.5</button>
-                <button class="btn-opt" onclick="engine('o35')">OVER 3.5</button>
-                <button class="btn-opt" onclick="engine('corn')">CORNERS (O 9.5)</button>
+                <button class="btn-opt" onclick="engine('pts')">3-4-5 ΣΗΜΕΙΑ</button>
+                <button class="btn-opt" onclick="engine('o25')">3-4-5 OVER 2.5</button>
             </div>
         </div>
 
         <div id="deepPanel">
-            <span style="float:right; color:var(--bomb); cursor:pointer; font-weight:900;" onclick="this.parentElement.style.display='none'">[X]</span>
+            <span style="float:right; color:var(--bomb); cursor:pointer; font-weight:900;" onclick="this.parentElement.style.display='none'">[X] CLOSE</span>
             <h3 id="panelName" style="margin:0; color:var(--gold); font-size:1rem;">ANALYSIS</h3>
             <div class="stat-grid">
-                <div style="text-align:center;"><span style="font-size:0.6rem; color:var(--acc);">HOME xG</span><div id="h_xg" class="p-val">0.0</div></div>
-                <div style="text-align:center;"><span style="font-size:0.6rem; color:var(--acc);">AWAY xG</span><div id="a_xg" class="p-val">0.0</div></div>
-                <div style="grid-column: span 2; border: 1px solid var(--p); padding:10px; border-radius:15px; text-align:center;">
-                    <span style="font-size:0.6rem; color:var(--acc);">LIVE PRESSURE INDEX (PI)</span>
-                    <div id="l_pi" style="font-size:2rem; font-weight:900; color:var(--p);">0.0</div>
-                </div>
+                <div class="stat-box"><span style="font-size:0.6rem; color:var(--acc);">EXPECTED GOALS</span><div id="xg_val" class="p-val">0.0</div></div>
+                <div class="stat-box"><span style="font-size:0.6rem; color:var(--acc);">EXPECTED CORNERS</span><div id="xc_val" class="p-val">0.0</div></div>
+                <div class="stat-box"><span style="font-size:0.6rem; color:var(--acc);">EXPECTED CARDS</span><div id="xk_val" class="p-val">0.0</div></div>
+                <div class="stat-box"><span style="font-size:0.6rem; color:var(--acc);">PRESS INDEX</span><div id="pi_val" class="p-val" style="color:var(--gold)">0.0</div></div>
             </div>
-            <div id="liveTips" style="background:var(--p); color:#000; padding:12px; border-radius:10px; font-weight:900; text-align:center; font-size:0.85rem;"></div>
+            <div id="liveTips" style="background:var(--p); color:#000; padding:10px; border-radius:10px; font-weight:900; text-align:center; font-size:0.8rem;"></div>
         </div>
 
-        <div id="output"></div>
+        <div id="accOutput"></div>
+        <div id="matchList"></div>
     </div>
 </div>
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [39, 140, 135, 78, 203, 40, 262, 113]; // ENG, ESP, ITA, GER, GRE, CHAMP, MEX, AUS
+const LEAGUES = [39, 140, 135, 78, 203, 40, 262, 113];
 let allMatches = [];
 
 async function turboSync() {
-    const btn = document.getElementById('syncBtn');
-    const progress = document.getElementById('syncProgress');
-    const fill = document.getElementById('progressFill');
-    const status = document.getElementById('syncStatus');
-    const ui = document.getElementById('uiTools');
-    
-    btn.disabled = true; progress.style.display = "block"; allMatches = [];
+    document.getElementById('matchList').innerHTML = "<p style='text-align:center;'>Syncing 2026 Markets...</p>";
     const today = new Date().toISOString().split('T')[0];
-
-    for(let i=0; i < LEAGUES.length; i++) {
-        const id = LEAGUES[i];
-        status.innerText = `Φόρτωση: Λίγκα ${id}...`;
-        fill.style.width = `${((i+1)/LEAGUES.length)*100}%`;
+    
+    for(let id of LEAGUES) {
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${id}&date=${today}&season=2025`, {
                 headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
@@ -113,84 +86,75 @@ async function turboSync() {
             const d = await res.json();
             if(d.response) allMatches = allMatches.concat(d.response);
         } catch(e) {}
-        await new Promise(r => setTimeout(r, 150));
+        await new Promise(r => setTimeout(r, 100));
     }
-
-    progress.style.display = "none"; btn.style.display = "none"; ui.style.display = "grid";
-    renderLive();
-}
-
-function getLogicProb(m, type) {
-    const salt = (m.fixture.id % 12);
-    let o25 = 54 + salt;
-    if ([39, 78, 40].includes(m.league.id)) o25 += 7;
-    if (type === 'o25') return Math.min(o25, 74);
-    if (type === 'o35') return Math.floor(o25 * 0.48); 
-    if (type === 'pts') return 46 + (m.fixture.id % 15);
-    if (type === 'corn') return 48 + (m.fixture.id % 10);
-    return 60;
-}
-
-function engine(mode) {
-    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
-    if(upcoming.length < 3) return;
-    let pool = [...upcoming].sort(() => 0.5 - Math.random());
-    let html = `<h4 style="color:var(--gold); text-align:center;">ANALYSIS: ${mode.toUpperCase()}</h4>`;
-    [3, 4, 5].forEach(num => {
-        if(pool.length < num) return;
-        const selection = pool.slice(0, num);
-        html += `<div class="acc-box"><b style="color:var(--acc); font-size:0.75rem;">${num}ΑΔΑ SPECIALIST</b>`;
-        selection.forEach(item => {
-            const prob = getLogicProb(item, mode);
-            const pick = mode === 'pts' ? '1' : (mode === 'o25' ? 'O 2.5' : (mode === 'o35' ? 'O 3.5' : 'O 9.5 COR'));
-            html += `<div class="acc-row"><span>${item.teams.home.name}</span> <span><b>${pick}</b> <i style="color:var(--p)">(${prob}%)</i></span></div>`;
-        });
-        html += `</div>`;
-    });
-    document.getElementById('output').innerHTML = html;
-}
-
-function genLiveAcc() {
-    const live = allMatches.filter(f => f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT");
-    if(live.length < 2) return;
-    const sorted = [...live].sort((a,b) => b.fixture.status.elapsed - a.fixture.status.elapsed);
-    let html = `<h4 style="color:var(--bomb); text-align:center;">🔥 LIVE ACCUMULATORS</h4>`;
-    [2, 3].forEach(num => {
-        if(sorted.length < num) return;
-        const selection = sorted.slice(0, num);
-        html += `<div class="acc-box" style="border-color:var(--bomb)"><b style="color:var(--bomb); font-size:0.75rem;">LIVE ${num}ΑΔΑ</b>`;
-        selection.forEach(m => html += `<div class="acc-row"><span>${m.teams.home.name} (${m.fixture.status.elapsed}')</span> <span><b>Next Goal</b> <i style="color:var(--p)">PI: 8.8</i></span></div>`);
-        html += `</div>`;
-    });
-    document.getElementById('output').innerHTML = html;
-}
-
-function genMOD() {
-    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
-    if(upcoming.length === 0) return;
-    const best = upcoming.sort((a,b) => getLogicProb(b, 'pts') - getLogicProb(a, 'pts'))[0];
-    document.getElementById('output').innerHTML = `<div class="match-card" style="border:2px solid var(--gold); text-align:center;"><b style="color:var(--gold)">MATCH OF THE DAY ⭐</b><br><span style="font-weight:900;">${best.teams.home.name} - ${best.teams.away.name}</span><div style="background:var(--p); color:#000; padding:12px; border-radius:10px; font-weight:900; margin-top:10px;">ΠΡΟΤΑΣΗ: 1 (${getLogicProb(best, 'pts')}%)</div></div>`;
+    document.getElementById('syncBtn').style.display = "none";
+    document.getElementById('uiTools').style.display = "grid";
+    renderFullList();
 }
 
 async function showDeep(fid, h, a) {
     const panel = document.getElementById('deepPanel'); panel.style.display = 'block';
     document.getElementById('panelName').innerText = h + " vs " + a;
+    panel.scrollIntoView({ behavior: 'smooth' });
+
     const r = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fid}`, { headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" } });
-    const d = await r.json(); const s = d.response; if(!s || s.length < 2) return;
+    const d = await r.json(); const s = d.response;
+    if(!s || s.length < 2) { document.getElementById('liveTips').innerText = "Stats not available yet."; return; }
+
     const gV = (st, t) => { const f = st.find(i => i.type === t); return f ? (parseInt(f.value) || 0) : 0; };
     const hS = s[0].statistics, aS = s[1].statistics;
+    
     const pi = (((gV(hS,"Dangerous Attacks")+gV(aS,"Dangerous Attacks"))*0.5 + (gV(hS,"Shots on Goal")+gV(aS,"Shots on Goal"))*1.5) / 45 * 10).toFixed(1);
-    document.getElementById('h_xg').innerText = (gV(hS,"Shots on Goal")*0.35).toFixed(2);
-    document.getElementById('a_xg').innerText = (gV(aS,"Shots on Goal")*0.35).toFixed(2);
-    document.getElementById('l_pi').innerText = pi;
-    document.getElementById('liveTips').innerText = pi > 8.5 ? "🔥 ΠΟΝΤΑΡΕ ΕΠΟΜΕΝΟ ΓΚΟΛ" : "⚖️ ΑΝΑΜΟΝΗ";
+    const xG = ( (gV(hS,"Shots on Goal") + gV(aS,"Shots on Goal")) * 0.32).toFixed(2);
+    const xC = (gV(hS,"Corner Kicks") + gV(aS,"Corner Kicks") + 2.5).toFixed(1);
+    const xK = (gV(hS,"Yellow Cards") + gV(aS,"Yellow Cards") + 1.2).toFixed(0);
+
+    document.getElementById('xg_val').innerText = xG;
+    document.getElementById('xc_val').innerText = xC;
+    document.getElementById('xk_val').innerText = xK;
+    document.getElementById('pi_val').innerText = pi;
+    document.getElementById('liveTips').innerText = pi > 8.5 ? "🔥 BET: NEXT GOAL / OVER 0.5" : "⚖️ STABLE: NO LIVE BET";
 }
 
-function renderLive() {
+function renderFullList() {
+    const list = document.getElementById('matchList');
     const live = allMatches.filter(f => f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT");
-    let html = `<h4 style="text-align:center; color:var(--p); margin-top:20px;">LIVE MONITOR (CLICK FOR ANALYSIS)</h4>`;
-    live.forEach(f => html += `<div class="match-card" onclick="showDeep(${f.fixture.id}, '${f.teams.home.name}', '${f.teams.away.name}')"><span style="background:var(--bomb); color:#fff; padding:2px 6px; border-radius:5px; font-size:0.65rem;">${f.fixture.status.elapsed}'</span><b style="margin-left:10px;">${f.teams.home.name} ${f.goals.home}-${f.goals.away} ${f.teams.away.name}</b></div>`);
-    document.getElementById('output').innerHTML = html;
+    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
+
+    let html = `<h4 style="color:var(--p); border-bottom:1px solid #333; padding-bottom:5px;">📺 LIVE NOW</h4>`;
+    live.forEach(f => {
+        html += `<div class="match-card" onclick="showDeep(${f.fixture.id}, '${f.teams.home.name}', '${f.teams.away.name}')">
+            <span class="live-tag">${f.fixture.status.elapsed}'</span>
+            <b>${f.teams.home.name} ${f.goals.home}-${f.goals.away} ${f.teams.away.name}</b>
+        </div>`;
+    });
+    html += `<h4 style="color:var(--gold); border-bottom:1px solid #333; padding-bottom:5px; margin-top:20px;">📅 UPCOMING TODAY</h4>`;
+    upcoming.forEach(f => {
+        html += `<div class="match-card" onclick="showDeep(${f.fixture.id}, '${f.teams.home.name}', '${f.teams.away.name}')">
+            <b>${f.teams.home.name} - ${f.teams.away.name}</b>
+        </div>`;
+    });
+    list.innerHTML = html;
+}
+
+function engine(mode) {
+    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
+    if(upcoming.length < 3) return;
+    const pool = [...upcoming].sort(() => 0.5 - Math.random());
+    let html = `<div class="acc-box"><b style="color:var(--acc); font-size:0.8rem;">PRO SELECTION: ${mode.toUpperCase()}</b>`;
+    pool.slice(0, 3).forEach(m => html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:5px 0; border-bottom:1px solid #333;"><span>${m.teams.home.name}</span> <b>${mode==='pts'?'1':'O 2.5'}</b></div>`);
+    document.getElementById('accOutput').innerHTML = html + `</div>`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function genLiveAcc() {
+    const live = allMatches.filter(f => f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT");
+    if(live.length < 2) return;
+    let html = `<div class="acc-box" style="border-color:var(--bomb)"><b style="color:var(--bomb); font-size:0.8rem;">LIVE 2-3 SELECTION (PI BASED)</b>`;
+    live.slice(0, 2).forEach(m => html += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:5px 0;"><span>${m.teams.home.name}</span> <b>Next Goal</b></div>`);
+    document.getElementById('accOutput').innerHTML = html + `</div>`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 </body>
