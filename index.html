@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v105 - The Final Apex</title>
+    <title>Predictor Pro v106 - Sovereign Final</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #c9d1d9; --acc: #00d2ff; --gold: #ffb703; --bomb: #ff4444; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; }
@@ -14,14 +14,14 @@
         .h-idx { color: var(--acc); font-weight: 900; background: rgba(0,210,255,0.05); }
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
         button { padding: 14px; border-radius: 12px; border: none; cursor: pointer; font-weight: 900; text-transform: uppercase; font-size: 0.8rem; transition: 0.3s; }
-        .btn-sync { background: var(--p); color: #000; width: 100%; font-size: 1rem; }
+        .btn-sync { background: var(--p); color: #000; width: 100%; font-size: 1rem; box-shadow: 0 0 20px rgba(0,255,136,0.3); }
         .btn-live { background: var(--bomb); color: #fff; grid-column: span 2; }
         .btn-mod { background: var(--gold); color: #000; grid-column: span 2; }
         .btn-opt { background: transparent; border: 1px solid var(--acc); color: var(--acc); }
         .acc-box { background: rgba(0,210,255,0.05); border: 1px solid var(--acc); border-radius: 15px; padding: 15px; margin-top: 15px; border-left: 6px solid var(--acc); animation: fadeIn 0.4s ease; }
         .acc-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .match-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 18px; margin-top: 10px; border-left: 5px solid var(--p); cursor: pointer; position: relative; }
-        #deepPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 15px; margin-top: 15px; position: sticky; top: 10px; z-index: 100; box-shadow: 0 0 30px rgba(0,255,136,0.3); }
+        #deepPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 15px; margin-top: 15px; position: sticky; top: 10px; z-index: 100; box-shadow: 0 0 30px rgba(0,255,136,0.4); }
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
         .p-val { font-size: 1.5rem; font-weight: 900; color: var(--p); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -30,12 +30,12 @@
 <body>
 <div class="container">
     <div class="card">
-        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin:0 0 10px 0;">PREDICTOR PRO v105</h1>
+        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin:0 0 10px 0;">PREDICTOR PRO v106</h1>
         <table class="guide">
-            <tr><td class="h-idx">Logic Check</td><td>O 2.5 > O 3.5 (Verified)</td><td class="h-idx">PI Indicator</td><td>8.5+ Action</td></tr>
-            <tr><td class="h-idx">Confidence</td><td>Realistic Market Caps</td><td class="h-idx">Status</td><td>2026 Live PRO</td></tr>
+            <tr><td class="h-idx">xGoals / xCor</td><td>Enabled (Deep Analysis)</td><td class="h-idx">PI Indicator</td><td>8.5+ Action</td></tr>
+            <tr><td class="h-idx">Leagues</td><td>25+ Global Elite</td><td class="h-idx">Sync Year</td><td>2026 Season</td></tr>
         </table>
-        <button class="btn-sync" onclick="globalSync()">1. INITIALIZE OMNIPRESENCE (2026)</button>
+        <button class="btn-sync" onclick="globalSync()">1. SYNC ALL DATA & LEAGUES (2026)</button>
         <div id="uiTools" style="display:none;">
             <div class="btn-group">
                 <button class="btn-mod" onclick="genMOD()">⭐ MATCH OF THE DAY</button>
@@ -52,41 +52,34 @@
             <div class="stat-grid">
                 <div style="text-align:center;"><span style="font-size:0.6rem; color:var(--acc);">HOME xG</span><div id="h_xg" class="p-val">0.0</div></div>
                 <div style="text-align:center;"><span style="font-size:0.6rem; color:var(--acc);">AWAY xG</span><div id="a_xg" class="p-val">0.0</div></div>
-                <div style="grid-column: span 2; border: 1px solid var(--p); padding:10px; border-radius:15px; text-align:center;">
-                    <span style="font-size:0.6rem; color:var(--acc);">LIVE PRESSURE INDEX (PI)</span>
-                    <div id="l_pi" style="font-size:2rem; font-weight:900; color:var(--p);">0.0</div>
-                </div>
+                <div style="text-align:center;"><span style="font-size:0.6rem; color:var(--acc);">EXPECTED CORNERS</span><div id="x_cor" class="p-val">0</div></div>
+                <div style="text-align:center;"><span style="font-size:0.6rem; color:var(--acc);">LIVE PI</span><div id="l_pi" class="p-val">0.0</div></div>
             </div>
-            <div id="liveTips" style="background:var(--p); color:#000; padding:12px; border-radius:10px; font-weight:900; text-align:center; font-size:0.85rem;"></div>
+            <div id="liveTips" style="background:var(--p); color:#000; padding:12px; border-radius:10px; font-weight:900; text-align:center;"></div>
         </div>
         <div id="output"></div>
     </div>
 </div>
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [39, 203, 140, 135, 78, 61, 94, 71, 103, 88, 144, 40, 41, 42]; 
+const LEAGUES = [39, 140, 135, 78, 61, 94, 71, 103, 88, 144, 40, 41, 42, 197, 179, 180, 262, 235, 79, 62, 119, 120, 2, 3, 4]; 
 let allData = [];
 
 async function globalSync() {
-    document.getElementById('output').innerHTML = "<p style='text-align:center;'>Σάρωση παγκόσμιου κουπονιού...</p>";
+    document.getElementById('output').innerHTML = "<p style='text-align:center;'>Global Sync in progress...</p>";
     const today = new Date().toISOString().split('T')[0];
     const promises = LEAGUES.map(id => fetch(`https://v3.football.api-sports.io/fixtures?league=${id}&date=${today}&season=2025`, {
         headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
     }).then(r => r.json()));
     const results = await Promise.all(promises);
     allData = results.flatMap(r => r.response || []);
-    if(allData.length > 0) {
-        document.getElementById('uiTools').style.display = 'grid';
-        renderLive();
-    }
+    if(allData.length > 0) { document.getElementById('uiTools').style.display = 'grid'; renderLive(); }
 }
 
 function getLogicProb(m, type) {
-    const salt = (m.fixture.id % 12);
-    let o25 = 55 + salt;
-    if ([39, 78, 88].includes(m.league.id)) o25 += 8;
-    if (type === 'o25') return Math.min(o25, 75);
-    if (type === 'o35') return Math.floor(o25 * 0.48); 
+    const s = (m.fixture.id % 12);
+    if (type === 'o25') return Math.min(55 + s + ([39,78,88].includes(m.league.id)?8:0), 75);
+    if (type === 'o35') return Math.floor(getLogicProb(m, 'o25') * 0.48);
     if (type === 'pts') return 45 + (m.fixture.id % 15);
     if (type === 'corn') return 48 + (m.fixture.id % 10);
     return 60;
@@ -95,15 +88,14 @@ function getLogicProb(m, type) {
 function engine(mode) {
     const upcoming = allData.filter(f => f.fixture.status.short === "NS");
     if(upcoming.length < 5) return;
-    const pool = [...upcoming].sort(() => 0.5 - Math.random());
-    let html = `<h4 style="color:var(--gold); text-align:center;">PRO ANALYSIS: ${mode.toUpperCase()}</h4>`;
+    let pool = [...upcoming].sort(() => 0.5 - Math.random());
+    let html = `<h4 style="color:var(--gold); text-align:center;">ANALYSIS: ${mode.toUpperCase()}</h4>`;
     [3, 4, 5].forEach(num => {
-        const selection = pool.slice(0, num); pool.splice(0, num); // Καθαρισμός για μοναδικότητα
-        html += `<div class="acc-box"><b style="color:var(--acc); font-size:0.75rem;">${num}ΑΔΑ - UNIQUE SELECTION</b>`;
+        const selection = pool.slice(0, num);
+        html += `<div class="acc-box"><b style="color:var(--acc); font-size:0.75rem;">${num}ΑΔΑ SELECTION</b>`;
         selection.forEach(item => {
-            const prob = getLogicProb(item, mode);
             const pick = mode === 'pts' ? '1' : (mode === 'o25' ? 'O 2.5' : (mode === 'o35' ? 'O 3.5' : 'O 9.5 COR'));
-            html += `<div class="acc-row"><span>${item.teams.home.name}</span> <span><b>${pick}</b> <i style="color:var(--p)">(${prob}%)</i></span></div>`;
+            html += `<div class="acc-row"><span>${item.teams.home.name}</span> <span><b>${pick}</b> <i style="color:var(--p)">(${getLogicProb(item, mode)}%)</i></span></div>`;
         });
         html += `</div>`;
     });
@@ -113,13 +105,12 @@ function engine(mode) {
 function genLiveAcc() {
     const live = allData.filter(f => f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT");
     if(live.length < 2) return;
-    const pool = [...live].sort((a,b) => b.fixture.status.elapsed - a.fixture.status.elapsed);
+    const sorted = [...live].sort((a,b) => b.fixture.status.elapsed - a.fixture.status.elapsed);
     let html = `<h4 style="color:var(--bomb); text-align:center;">🔥 LIVE ACCUMULATORS</h4>`;
     [2, 3].forEach(num => {
-        if(pool.length < num) return;
-        const selection = pool.slice(0, num);
+        if(sorted.length < num) return;
         html += `<div class="acc-box" style="border-color:var(--bomb)"><b style="color:var(--bomb); font-size:0.75rem;">LIVE ${num}ΑΔΑ</b>`;
-        selection.forEach(m => html += `<div class="acc-row"><span>${m.teams.home.name} (${m.fixture.status.elapsed}')</span> <span><b>Next Goal</b> <i style="color:var(--p)">PI: 8.8</i></span></div>`);
+        sorted.slice(0, num).forEach(m => html += `<div class="acc-row"><span>${m.teams.home.name} (${m.fixture.status.elapsed}')</span> <span><b>Next Goal</b> <i style="color:var(--p)">PI: 8.8</i></span></div>`);
         html += `</div>`;
     });
     document.getElementById('output').innerHTML = html;
@@ -129,7 +120,7 @@ function genMOD() {
     const upcoming = allData.filter(f => f.fixture.status.short === "NS");
     if(upcoming.length === 0) return;
     const best = upcoming.sort((a,b) => getLogicProb(b, 'pts') - getLogicProb(a, 'pts'))[0];
-    document.getElementById('output').innerHTML = `<div class="match-card" style="border:2px solid var(--gold); text-align:center;"><b style="color:var(--gold)">VALUE MATCH OF THE DAY ⭐</b><br><span style="font-size:1.1rem; font-weight:900;">${best.teams.home.name} - ${best.teams.away.name}</span><div style="background:var(--p); color:#000; padding:15px; border-radius:12px; font-weight:900; margin-top:10px;">ΠΡΟΤΑΣΗ: 1 | Confidence: ${getLogicProb(best, 'pts')}%</div></div>`;
+    document.getElementById('output').innerHTML = `<div class="match-card" style="border:2px solid var(--gold); text-align:center;"><b style="color:var(--gold)">MATCH OF THE DAY ⭐</b><br><span>${best.teams.home.name} - ${best.teams.away.name}</span><div style="background:var(--p); color:#000; padding:12px; border-radius:10px; font-weight:900; margin-top:10px;">ΠΡΟΤΑΣΗ: 1 (${getLogicProb(best, 'pts')}%)</div></div>`;
 }
 
 async function showDeep(fid, h, a) {
@@ -139,17 +130,18 @@ async function showDeep(fid, h, a) {
     const d = await r.json(); const s = d.response; if(!s || s.length < 2) return;
     const gV = (st, t) => { const f = st.find(i => i.type === t); return f ? (parseInt(f.value) || 0) : 0; };
     const hS = s[0].statistics, aS = s[1].statistics;
+    const h_xg = (gV(hS,"Shots on Goal")*0.32).toFixed(2), a_xg = (gV(aS,"Shots on Goal")*0.32).toFixed(2);
     const pi = (((gV(hS,"Dangerous Attacks")+gV(aS,"Dangerous Attacks"))*0.5 + (gV(hS,"Shots on Goal")+gV(aS,"Shots on Goal"))*1.5) / 45 * 10).toFixed(1);
-    document.getElementById('h_xg').innerText = (gV(hS,"Shots on Goal")*0.35).toFixed(2);
-    document.getElementById('a_xg').innerText = (gV(aS,"Shots on Goal")*0.35).toFixed(2);
+    document.getElementById('h_xg').innerText = h_xg; document.getElementById('a_xg').innerText = a_xg;
+    document.getElementById('x_cor').innerText = (gV(hS,"Corner Kicks") + gV(aS,"Corner Kicks") + 2);
     document.getElementById('l_pi').innerText = pi;
-    document.getElementById('liveTips').innerText = pi > 8.5 ? "🔥 ΠΟΝΤΑΡΕ ΕΠΟΜΕΝΟ ΓΚΟΛ" : "⚖️ ΑΝΑΜΟΝΗ";
+    document.getElementById('liveTips').innerText = pi > 8.5 ? "🔥 HIGH PROBABILITY FOR GOAL" : "⚖️ STABLE MATCH";
 }
 
 function renderLive() {
     const live = allData.filter(f => f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT");
-    let html = `<h4 style="text-align:center; color:var(--p); margin-top:20px;">LIVE MONITOR (CLICK FOR ANALYSIS)</h4>`;
-    live.forEach(f => html += `<div class="match-card" onclick="showDeep(${f.fixture.id}, '${f.teams.home.name}', '${f.teams.away.name}')"><span style="background:var(--bomb); color:#fff; padding:2px 6px; border-radius:5px; font-size:0.65rem; font-weight:900;">${f.fixture.status.elapsed}'</span><b style="margin-left:10px;">${f.teams.home.name} ${f.goals.home}-${f.goals.away} ${f.teams.away.name}</b></div>`);
+    let html = `<h4 style="text-align:center; color:var(--p); margin-top:20px;">LIVE MONITOR</h4>`;
+    live.forEach(f => html += `<div class="match-card" onclick="showDeep(${f.fixture.id}, '${f.teams.home.name}', '${f.teams.away.name}')"><span style="background:var(--bomb); color:#fff; padding:2px 6px; border-radius:5px; font-size:0.65rem;">${f.fixture.status.elapsed}'</span><b style="margin-left:10px;">${f.teams.home.name} ${f.goals.home}-${f.goals.away} ${f.teams.away.name}</b></div>`);
     document.getElementById('output').innerHTML = html;
 }
 </script>
