@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v35 - Expert Advisor</title>
+    <title>Predictor Pro v36 - Universal</title>
     <style>
-        :root { --primary: #00ff88; --bg: #0d1117; --card-bg: rgba(22, 27, 34, 0.95); --border: #30363d; --text: #c9d1d9; --accent: #00d2ff; --warning: #ffb703; }
-        body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: var(--text); padding: 15px; margin: 0; display: flex; justify-content: center; }
+        :root { --primary: #00ff88; --bg: #0d1117; --card-bg: rgba(22, 27, 34, 0.98); --border: #30363d; --text: #c9d1d9; --warning: #ffb703; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: var(--text); padding: 10px; margin: 0; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 600px; }
-        .card { background: var(--card-bg); padding: 20px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card { background: var(--card-bg); padding: 25px; border-radius: 28px; border: 1px solid var(--border); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
         .header { text-align: center; margin-bottom: 20px; }
-        .logo { width: 50px; filter: drop-shadow(0 0 10px var(--primary)); }
-        select, button { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 16px; margin-top: 10px; }
-        button { background: var(--primary); color: #000; font-weight: 800; border: none; cursor: pointer; text-transform: uppercase; }
+        .logo { width: 55px; filter: drop-shadow(0 0 12px var(--primary)); }
         
-        /* New Recommendations Box */
-        .advice-box { background: rgba(255, 183, 3, 0.1); border: 1px solid var(--warning); padding: 15px; border-radius: 16px; margin-top: 20px; display: none; }
-        .advice-title { color: var(--warning); font-weight: bold; font-size: 0.9rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
-        .advice-text { font-size: 0.85rem; line-height: 1.4; color: #fff; }
+        label { font-size: 0.7rem; color: #8b949e; text-transform: uppercase; font-weight: 800; margin: 15px 0 5px; display: block; }
+        select, button { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 16px; margin-top: 5px; }
+        button { background: var(--primary); color: #000; font-weight: 900; border: none; cursor: pointer; text-transform: uppercase; margin-top: 25px; transition: 0.3s; }
+        button:active { transform: scale(0.97); }
 
-        .score-hero { font-size: 3rem; text-align: center; color: #fff; font-weight: 900; margin: 20px 0; }
-        .stat-card { background: rgba(255, 255, 255, 0.03); border-radius: 16px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .val-main { color: var(--primary); font-weight: 800; }
+        .advice-box { background: rgba(255, 183, 3, 0.12); border: 1px solid var(--warning); padding: 18px; border-radius: 20px; margin-top: 25px; display: none; animation: slideIn 0.4s ease; }
+        .advice-title { color: var(--warning); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .advice-text { font-size: 0.88rem; line-height: 1.5; color: #fff; }
+
+        .score-hero { font-size: 4rem; text-align: center; color: #fff; font-weight: 900; margin: 20px 0; text-shadow: 0 0 15px rgba(0,255,136,0.2); }
+        .stat-card { background: rgba(255, 255, 255, 0.04); border-radius: 18px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
+        .val-main { color: var(--primary); font-weight: 900; font-size: 1.2rem; }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -30,26 +34,51 @@
     <div class="card">
         <div class="header">
             <img src="https://cdn-icons-png.flaticon.com/512/10061/10061734.png" class="logo">
-            <h1 style="color:var(--primary); font-size:1.2rem; margin:5px;">PREDICTOR PRO v35</h1>
+            <h1 style="color:var(--primary); font-size:1.4rem; margin:10px 0 0;">PREDICTOR PRO v36</h1>
         </div>
 
+        <label>Διοργάνωση</label>
         <select id="league" onchange="loadTeams()">
             <option value="">Επιλέξτε Πρωτάθλημα...</option>
-            <option value="39">Premier League</option>
-            <option value="40">Championship</option>
-            <option value="71">Serie B (Brazil)</option>
+            <optgroup label="Αγγλία">
+                <option value="39">Premier League</option>
+                <option value="40">Championship</option>
+                <option value="41">League One (Charlton κ.α.)</option>
+                <option value="42">League Two</option>
+            </optgroup>
+            <optgroup label="Ελλάδα & Κύπρος">
+                <option value="203">Super League 1</option>
+                <option value="318">Cyprus First Division</option>
+            </optgroup>
+            <optgroup label="Ευρώπη">
+                <option value="140">La Liga (Spain)</option>
+                <option value="135">Serie A (Italy)</option>
+                <option value="78">Bundesliga (Germany)</option>
+                <option value="61">Ligue 1 (France)</option>
+                <option value="94">Primeira Liga (Portugal)</option>
+            </optgroup>
+            <optgroup label="Νότια Αμερική">
+                <option value="71">Serie A (Brazil)</option>
+                <option value="72">Serie B (Brazil)</option>
+                <option value="128">Liga Profesional (Argentina)</option>
+            </optgroup>
+            <optgroup label="Διεθνή">
+                <option value="2">Champions League</option>
+                <option value="3">Europa League</option>
+                <option value="848">Conference League</option>
+            </optgroup>
         </select>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <select id="hTeam"></select>
-            <select id="aTeam"></select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div><label>Γηπεδούχος</label><select id="hTeam"></select></div>
+            <div><label>Φιλοξενούμενη</label><select id="aTeam"></select></div>
         </div>
 
-        <button onclick="runEngine()">ΑΝΑΛΥΣΗ & ΣΥΣΤΑΣΕΙΣ</button>
+        <button onclick="runEngine()">Ανάλυση & Συστάσεις</button>
 
         <div id="result">
             <div id="adviceBox" class="advice-box">
-                <span class="advice-title">💡 Expert Recommendation</span>
+                <span class="advice-title">💡 Expert Strategy Advice</span>
                 <div id="adviceContent" class="advice-text"></div>
             </div>
 
@@ -71,25 +100,28 @@ async function api(p) {
 
 async function loadTeams() {
     const lid = document.getElementById('league').value;
+    if(!lid) return;
     let res = await api(`teams?league=${lid}&season=2024`);
     const hS = document.getElementById('hTeam'); const aS = document.getElementById('aTeam');
     hS.innerHTML = ""; aS.innerHTML = "";
-    res.response.sort((a,b)=>a.team.name.localeCompare(b.team.name)).forEach(i => {
-        const opt = `<option value="${i.team.id}">${i.team.name}</option>`;
-        hS.innerHTML += opt; aS.innerHTML += opt;
-    });
+    if(res.response) {
+        res.response.sort((a,b)=>a.team.name.localeCompare(b.team.name)).forEach(i => {
+            const opt = `<option value="${i.team.id}">${i.team.name}</option>`;
+            hS.innerHTML += opt; aS.innerHTML += opt;
+        });
+    }
 }
 
-function generateAdvice(xgTotal, corners) {
-    let advice = "";
-    if (xgTotal > 3.0) advice += "🔥 Υψηλή πιθανότητα για Over 2.5 γκολ. Οι ομάδες δημιουργούν πολλές φάσεις. <br>";
-    else if (xgTotal < 2.0) advice += "🛡️ Παιχνίδι τακτικής. Το Under 2.5 έχει τον πρώτο λόγο. <br>";
+function getAdvice(xg, corners) {
+    let text = "";
+    if (xg > 2.9) text += "• <b>High Score Alert:</b> Τα xG δείχνουν ανοιχτό ματς. Το Over 2.5 είναι στατιστικά ισχυρό. <br>";
+    else if (xg < 2.1) text += "• <b>Tactical Match:</b> Χαμηλός ρυθμός xG. Το Under 2.5 έχει περισσότερες πιθανότητες. <br>";
     
-    if (corners > 10) advice += "🚩 Προσοχή στα κόρνερ: Ο ρυθμός ευνοεί το Over 9.5. <br>";
-    else advice += "⚖️ Μέτριος ρυθμός στα κόρνερ. Αποφύγετε τα υψηλά όρια. <br>";
-
-    advice += "⏱️ <b>Live Tip:</b> Αν το ματς είναι 0-0 στο 30', η αξία του Over ανεβαίνει κατακόρυφα.";
-    return advice;
+    if (corners > 10.2) text += "• <b>Corner Pressure:</b> Οι ομάδες επιτίθενται από τα πλάγια. Το Over 9.5 έχει αξία. <br>";
+    else text += "• <b>Low Flank Usage:</b> Μικρή παραγωγή κόρνερ. Αποφύγετε τα υψηλά όρια (Target). <br>";
+    
+    text += "• <b>Live Tip:</b> Αν το σκορ είναι 0-0 στο 30', η στατιστική πίεση για γκολ αυξάνεται.";
+    return text;
 }
 
 async function runEngine() {
@@ -105,16 +137,15 @@ async function runEngine() {
     if(hR.response && aR.response) {
         const xgH = parseFloat(hR.response.goals.for.average.home || 1.2);
         const xgA = parseFloat(aR.response.goals.for.average.away || 1.1);
-        const xC = (xgH * 1.5 + 3.1) + (xgA * 1.3 + 2.7);
+        const corners = (xgH * 1.5 + 3.1) + (xgA * 1.3 + 2.7);
 
-        // Display Recommendations
-        document.getElementById('adviceContent').innerHTML = generateAdvice(xgH + xgA, xC);
+        document.getElementById('adviceContent').innerHTML = getAdvice(xgH + xgA, corners);
         document.getElementById('adviceBox').style.display = "block";
 
         document.getElementById('statsContainer').innerHTML = `
-            <div class="stat-card"><span>Total Corners</span><span class="val-main">${xC.toFixed(1)}</span></div>
-            <div class="stat-card"><span>xGoals Home</span><span class="val-main">${xgH.toFixed(1)}</span></div>
-            <div class="stat-card"><span>xGoals Away</span><span class="val-main">${xgA.toFixed(1)}</span></div>
+            <div class="stat-card"><span>Total Corners (Mean)</span><span class="val-main">${corners.toFixed(1)}</span></div>
+            <div class="stat-card"><span>xGoals Home Team</span><span class="val-main">${xgH.toFixed(1)}</span></div>
+            <div class="stat-card"><span>xGoals Away Team</span><span class="val-main">${xgA.toFixed(1)}</span></div>
         `;
         document.getElementById('xScore').innerText = `${Math.round(xgH)} - ${Math.round(xgA)}`;
         document.getElementById('result').style.display = 'block';
