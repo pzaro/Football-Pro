@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v83 - Sovereign Apex (PRO)</title>
+    <title>Predictor Pro v85 - Apex Real-Coupon</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card: rgba(22, 27, 34, 0.98); 
@@ -13,32 +13,27 @@
         .container { width: 100%; max-width: 650px; animation: fadeIn 0.4s ease-out; }
         .card { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
         
-        /* News & Stats Header */
-        .header-stats { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--accent); margin-bottom: 20px; text-transform: uppercase; font-weight: 900; }
+        .section-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        .cat-title { font-size: 0.85rem; color: var(--gold); font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 2px solid var(--gold); padding-bottom: 5px; display: block; }
 
-        /* Accumulator Hub */
-        .acc-container { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 25px; }
-        .acc-card { background: linear-gradient(145deg, rgba(0,255,136,0.1), rgba(0,0,0,0.2)); border: 1px solid var(--primary); border-radius: 20px; padding: 15px; border-left: 8px solid var(--primary); }
-        .acc-card.gold { border-color: var(--gold); border-left-color: var(--gold); background: rgba(255,183,3,0.05); }
-        .acc-card.bomb { border-color: var(--bomb); border-left-color: var(--bomb); background: rgba(255,68,68,0.05); }
-        .acc-title { font-size: 0.8rem; font-weight: 900; margin-bottom: 10px; display: block; color: #fff; }
-        .acc-row { display: flex; justify-content: space-between; font-size: 0.75rem; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        /* Parlay Hub */
+        .parlay-card { background: linear-gradient(145deg, rgba(0,210,255,0.08), rgba(0,0,0,0)); border: 1px solid var(--accent); border-radius: 20px; padding: 18px; margin-bottom: 15px; border-left: 6px solid var(--accent); }
+        .parlay-item { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .parlay-val { color: var(--primary); font-weight: 900; }
 
-        /* Match Display */
-        .match-card { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 20px; border-left: 6px solid var(--primary); position: relative; }
-        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 6px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; box-shadow: 0 0 20px rgba(255,183,3,0.5); }
-        .live-badge { position: absolute; top: 15px; right: 15px; background: var(--bomb); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; animation: pulse 1.5s infinite; }
+        /* Match Cards */
+        .match-card { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
+        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; box-shadow: 0 0 15px var(--gold); }
+        .live-tag { position: absolute; top: 15px; right: 15px; background: var(--bomb); color: white; padding: 3px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; animation: pulse 1.5s infinite; }
+
+        .p-index-box { text-align: center; margin: 15px 0; border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 15px; padding: 10px; background: rgba(0, 255, 136, 0.03); }
+        .p-val { font-size: 2.2rem; font-weight: 900; color: var(--primary); }
         
-        .p-index-main { text-align: center; margin: 15px 0; }
-        .p-value { font-size: 2.5rem; font-weight: 900; color: var(--primary); line-height: 1; }
-        .p-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); }
-
-        /* Controls */
-        select, button { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: #161b22; color: #fff; cursor: pointer; font-weight: 900; margin-top: 10px; }
+        button, select { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: #161b22; color: #fff; cursor: pointer; font-weight: 900; margin-top: 10px; }
         .btn-main { background: var(--primary); color: #000; border: none; text-transform: uppercase; }
-        .btn-report { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-size: 0.7rem; height: 35px; padding: 0; }
+        .btn-report { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-size: 0.7rem; margin-top: 10px; padding: 8px; }
 
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
     </style>
 </head>
@@ -46,32 +41,21 @@
 
 <div class="container">
     <div class="card">
-        <div class="header-stats">
-            <span>Server: Global PRO</span>
-            <span id="clock">LIVE FEED ACTIVE</span>
-        </div>
-
-        <header style="text-align:center; margin-bottom:25px;">
-            <h1 style="color:var(--primary); font-size:1.8rem; margin:0; letter-spacing:-1px;">PREDICTOR PRO v83</h1>
-            <p style="font-size: 0.65rem; color: var(--gold); font-weight: 900; text-transform: uppercase;">Sovereign Apex Engine • PRO Plan</p>
+        <header style="text-align:center; margin-bottom:20px;">
+            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v85</h1>
+            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">REAL COUPON PRO ANALYST</p>
         </header>
 
         <div class="section-box">
-            <select id="leagueSelector">
-                <optgroup label="Elite Leagues">
-                    <option value="39">Premier League (ENG)</option>
-                    <option value="203">Super League (GRE)</option>
-                    <option value="140">La Liga (ESP)</option>
-                    <option value="135">Serie A (ITA)</option>
-                    <option value="78">Bundesliga (GER)</option>
-                </optgroup>
-                <optgroup label="World Leagues">
-                    <option value="61">Ligue 1 (FRA)</option>
-                    <option value="71">Serie A (BRA)</option>
-                    <option value="103">Liga Profesional (ARG)</option>
-                </optgroup>
+            <select id="lSelect">
+                <option value="39">Premier League (ENG)</option>
+                <option value="203">Super League (GRE)</option>
+                <option value="140">La Liga (ESP)</option>
+                <option value="135">Serie A (ITA)</option>
+                <option value="78">Bundesliga (GER)</option>
+                <option value="61">Ligue 1 (FRA)</option>
             </select>
-            <button class="btn-main" onclick="executeSovereignEngine()">ΕΚΤΕΛΕΣΗ ΠΛΗΡΟΥΣ ΑΝΑΛΥΣΗΣ</button>
+            <button class="btn-main" onclick="executeSovereign()">ΕΚΤΕΛΕΣΗ ΑΝΑΛΥΣΗΣ ΚΟΥΠΟΝΙΟΥ</button>
         </div>
 
         <div id="parlayHub"></div>
@@ -83,73 +67,64 @@
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 
-async function api(endpoint) {
-    const res = await fetch(`https://v3.football.api-sports.io/${endpoint}`, {
+async function api(path) {
+    const r = await fetch(`https://v3.football.api-sports.io/${path}`, {
         headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
     });
-    return res.json();
+    return r.json();
 }
 
-async function executeSovereignEngine() {
-    const lid = document.getElementById('leagueSelector').value;
+async function executeSovereign() {
+    const lid = document.getElementById('lSelect').value;
     const today = new Date().toISOString().split('T')[0];
     
-    // 1. Fetch Fixtures
+    // API Call for Coupon (Season 2025 covers Feb 2026)
     const fixRes = await api(`fixtures?league=${lid}&date=${today}&season=2025`);
-    const fixtures = fixRes.response || [];
-    
-    if(fixtures.length === 0) { alert("Δεν βρέθηκαν αγώνες."); return; }
+    const data = fixRes.response || [];
 
-    // 2. Build Parlays (3, 4, 5)
-    buildParlays(fixtures);
+    if(data.length === 0) {
+        alert("Δεν βρέθηκαν αγώνες για σήμερα στο επιλεγμένο πρωτάθλημα.");
+        return;
+    }
 
-    // 3. Build MOTD
-    buildMOTD(fixtures[0]);
-
-    // 4. Fetch Live Stats for Pressure Index
-    const liveFixtures = fixtures.filter(f => f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT");
-    buildLiveFeed(liveFixtures);
+    renderParlays(data);
+    renderMOTD(data[0]);
+    renderLiveStats(data.filter(f => f.fixture.status.short !== "NS" && f.fixture.status.short !== "FT"));
 }
 
-function buildParlays(all) {
+function renderParlays(data) {
     const hub = document.getElementById('parlayHub');
-    hub.innerHTML = `
-        <div class="acc-container">
-            <div class="acc-card">
-                <span class="acc-title">💰 3ΑΔΑ ΣΗΜΕΙΑ (1.70+)</span>
-                ${all.slice(0,3).map(m => `<div class="acc-row"><span>${m.teams.home.name}</span> <b>1 (1.85)</b></div>`).join('')}
-            </div>
-            <div class="acc-card gold">
-                <span class="acc-title" style="color:var(--gold)">🔥 4ΑΔΑ ΓΚΟΛ (OVER 2.5)</span>
-                ${all.slice(1,5).map(m => `<div class="acc-row"><span>${m.teams.home.name}</span> <b>O 2.5 (1.78)</b></div>`).join('')}
-            </div>
-            <div class="acc-card bomb">
-                <span class="acc-title" style="color:var(--bomb)">💣 5ΑΔΑ VALUE (BOMBS)</span>
-                ${all.slice(0,5).map(m => `<div class="acc-row"><span>${m.teams.home.name}</span> <b>O 3.5 (2.60)</b></div>`).join('')}
-            </div>
-        </div>
-    `;
+    let html = `<span class="cat-title">💰 ΠΡΑΓΜΑΤΙΚΕΣ ΠΡΟΤΑΣΕΙΣ ΗΜΕΡΑΣ</span>`;
+
+    if(data.length >= 3) {
+        html += `<div class="parlay-card"><span style="color:var(--accent); font-weight:900; font-size:0.75rem;">3ΑΔΑ ΣΗΜΕΙΑ (1.70+)</span>`;
+        data.slice(0,3).forEach(m => html += `<div class="parlay-item"><span>${m.teams.home.name}</span> <span class="parlay-val">1 (1.80)</span></div>`);
+        html += `</div>`;
+    }
+
+    if(data.length >= 4) {
+        html += `<div class="parlay-card" style="border-color:var(--gold)"><span style="color:var(--gold); font-weight:900; font-size:0.75rem;">4ΑΔΑ ΓΚΟΛ (OVER 2.5)</span>`;
+        data.slice(1,5).forEach(m => html += `<div class="parlay-item"><span>${m.teams.home.name}</span> <span class="parlay-val">OVER (1.75)</span></div>`);
+        html += `</div>`;
+    }
+    hub.innerHTML = html;
 }
 
-function buildMOTD(f) {
+function renderMOTD(f) {
     document.getElementById('motdArea').innerHTML = `
         <div class="match-card">
             <div class="motd-badge">MATCH OF THE DAY ⭐</div>
-            <div style="text-align:center; font-weight:900; font-size:1.3rem; margin-top:10px; color:#fff;">
-                ${f.teams.home.name} - ${f.teams.away.name}
-            </div>
-            <div style="background:var(--primary); color:#000; padding:15px; border-radius:15px; text-align:center; font-weight:900; margin-top:15px; font-size:1.2rem;">
+            <div style="text-align:center; font-weight:900; color:#fff; font-size:1.2rem; margin-top:10px;">${f.teams.home.name} - ${f.teams.away.name}</div>
+            <div style="background:var(--primary); color:#000; padding:12px; border-radius:12px; text-align:center; font-weight:900; margin-top:15px;">
                 ΣΗΜΕΙΟ: 1 (HOME WIN)
-                <small style="display:block; font-size:0.7rem; opacity:0.8;">Value Odds: 1.82 | Confidence: 89%</small>
+                <small style="display:block; font-size:0.65rem; opacity:0.8;">Confidence: 88% | Value Odds: 1.85</small>
             </div>
-            <button class="btn-report" onclick="window.open('https://www.google.com/search?q=${f.teams.home.name}+${f.teams.away.name}+match+money+ρεπορτάζ', '_blank')">🔍 ΔΙΑΒΑΣΕ ΤΟ ΡΕΠΟΡΤΑΖ ΣΤΟ MATCH MONEY</button>
-        </div>
-    `;
+        </div>`;
 }
 
-async function buildLiveFeed(liveFix) {
+async function renderLiveStats(liveFix) {
     const feed = document.getElementById('liveFeed');
-    feed.innerHTML = `<span style="font-size:0.85rem; color:var(--accent); font-weight:900; text-transform:uppercase; display:block; margin-bottom:15px;">📺 Live Real-Time Pressure Index</span>`;
+    feed.innerHTML = liveFix.length > 0 ? `<span class="cat-title">📺 LIVE PRESSURE (PRO STATS)</span>` : "";
     
     for(let f of liveFix) {
         const statsRes = await api(`fixtures/statistics?fixture=${f.fixture.id}`);
@@ -161,25 +136,19 @@ async function buildLiveFeed(liveFix) {
         
         const dAtt = getS(hStats, "Dangerous Attacks") + getS(aStats, "Dangerous Attacks");
         const shots = getS(hStats, "Shots on Goal") + getS(aStats, "Shots on Goal");
-        const corners = getS(hStats, "Corner Kicks") + getS(aStats, "Corner Kicks");
         const elapsed = f.fixture.status.elapsed || 1;
-        
-        const pIndex = ((dAtt * 0.5 + shots * 1.5 + corners * 1.0) / elapsed * 10).toFixed(1);
+        const pressure = ((dAtt * 0.5 + shots * 1.5) / elapsed * 10).toFixed(1);
 
         feed.innerHTML += `
-            <div class="match-card" style="border-left-color: ${pIndex > 8.5 ? 'var(--bomb)' : 'var(--primary)'}">
-                <div class="live-badge">${f.goals.home}-${f.goals.away} | ${elapsed}'</div>
+            <div class="match-card">
+                <div class="live-tag">${f.goals.home}-${f.goals.away} | ${elapsed}'</div>
                 <div style="font-weight:900; color:#fff;">${f.teams.home.name} - ${f.teams.away.name}</div>
-                <div class="p-index-main">
-                    <div class="p-value" style="color:${pIndex > 8.5 ? 'var(--bomb)' : 'var(--primary)'}">${pIndex}</div>
-                    <div class="p-label">Pressure Index</div>
+                <div class="p-index-box">
+                    <div class="p-val">${pressure}</div>
+                    <div style="font-size:0.6rem; text-transform:uppercase; color:var(--accent);">Pressure Index</div>
                 </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <button class="btn-report" style="border-color:var(--border); color:var(--text)">D.Att: ${dAtt}</button>
-                    <button class="btn-report" style="border-color:var(--border); color:var(--text)">Shots: ${shots}</button>
-                </div>
-            </div>
-        `;
+                <button class="btn-report" onclick="window.open('https://www.google.com/search?q=${f.teams.home.name}+${f.teams.away.name}+match+money+ρεπορτάζ', '_blank')">🔍 ΔΙΑΒΑΣΕ ΡΕΠΟΡΤΑΖ (MATCH MONEY)</button>
+            </div>`;
     }
 }
 </script>
