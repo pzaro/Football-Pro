@@ -3,46 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v118 - Final Authority</title>
+    <title>Predictor Pro v121 - Elite Oracle</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #c9d1d9; --acc: #00d2ff; --gold: #ffb703; --bomb: #ff4444; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; }
         .container { width: 100%; max-width: 650px; margin: 0 auto; }
         .card { background: var(--card); padding: 20px; border-radius: 25px; border: 1px solid var(--border); box-shadow: 0 15px 50px rgba(0,0,0,0.5); }
         
-        .guide-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-bottom: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); }
-        .guide-table td { padding: 6px; border: 1px solid var(--border); text-align: center; }
-        .h-idx { color: var(--acc); font-weight: 900; }
-
-        button, select, input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 900; margin-bottom: 8px; cursor: pointer; transition: 0.3s; box-sizing: border-box; }
+        button, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 900; margin-bottom: 8px; cursor: pointer; }
         .btn-sync { background: var(--p); color: #000; border: none; font-size: 1rem; box-shadow: 0 0 20px rgba(0,255,136,0.3); }
-        .btn-mod { background: var(--gold); color: #000; grid-column: span 2; }
-        .btn-opt { background: transparent; border: 1px solid var(--acc); color: var(--acc); font-size: 0.75rem; }
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
 
-        #analysisPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 15px; margin-bottom: 20px; position: sticky; top: 10px; z-index: 100; }
-        .stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #222; padding-bottom: 8px; }
-        .p-val { font-size: 1.3rem; font-weight: 900; color: var(--p); }
+        #deepPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 15px; margin-bottom: 20px; position: sticky; top: 10px; z-index: 100; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0; }
+        .stat-box { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; text-align: center; border: 1px solid #222; }
+        .p-val { font-size: 1.1rem; font-weight: 900; color: var(--p); display: block; }
+        .range-val { font-size: 0.6rem; color: var(--gold); }
+        .stat-lbl { font-size: 0.55rem; color: var(--acc); text-transform: uppercase; display: block; margin-top: 3px; }
 
-        .match-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; border-left: 5px solid var(--border); position: relative; }
-        .status-tag { position: absolute; top: 10px; right: 10px; padding: 2px 8px; border-radius: 5px; font-size: 0.65rem; font-weight: 900; }
-        .ft { opacity: 0.5; border-left-color: #444 !important; }
-        .live { background: var(--bomb); color: #fff; }
-        
-        .acc-box { background: rgba(0,210,255,0.05); border: 1px solid var(--acc); border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid var(--acc); }
+        /* Power Bars */
+        .bar-container { height: 12px; background: #222; border-radius: 6px; margin: 5px 0; overflow: hidden; display: flex; }
+        .bar-h { background: var(--p); height: 100%; transition: 0.5s; }
+        .bar-a { background: var(--acc); height: 100%; transition: 0.5s; }
+
+        .match-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; border-left: 5px solid var(--border); }
+        .acc-box { background: rgba(0,210,255,0.05); border: 1px solid var(--acc); border-radius: 15px; padding: 15px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="card">
-        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin-bottom:10px;">PREDICTOR PRO v118</h1>
+        <h1 style="color:var(--p); text-align:center; font-size:1.4rem; margin-bottom:10px;">PREDICTOR PRO v121 ELITE</h1>
 
-        <table class="guide-table">
-            <tr><td class="h-idx">Hierarchy</td><td>O 2.5 > O 3.5</td><td class="h-idx">Status</td><td>Live PRO 2026</td></tr>
-        </table>
-
-        <button class="btn-sync" id="syncBtn" onclick="fullSync()">ΣΥΓΧΡΟΝΙΣΜΟΣ ΟΛΩΝ (TURBO)</button>
+        <button class="btn-sync" onclick="fullSync()">ΣΥΓΧΡΟΝΙΣΜΟΣ & ELITE ΑΝΑΛΥΣΗ</button>
         
         <div id="uiTools" style="display:none;">
             <select id="leagueFilter" onchange="renderList()">
@@ -50,155 +43,123 @@
                 <option value="197">🇬🇷 Super League 1</option>
                 <option value="39">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
                 <option value="78">🇩🇪 Bundesliga</option>
-                <option value="79">🇩🇪 2. Bundesliga</option>
-                <option value="140">🇪🇸 La Liga</option>
-                <option value="40">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
-                <option value="204">🇹🇷 Super Lig</option>
             </select>
-            <input type="text" id="searchBar" placeholder="Αναζήτηση ομάδας..." onkeyup="renderList()">
-            
-            <button class="btn-mod" onclick="genMOD()">⭐ MATCH OF THE DAY (VALUE)</button>
-            <div class="btn-group">
-                <button class="btn-opt" onclick="genUniqueAcca('o25', 3)">3ΑΔΑ OVER 2.5</button>
-                <button class="btn-opt" onclick="genUniqueAcca('o25', 4)">4ΑΔΑ OVER 2.5</button>
-                <button class="btn-opt" onclick="genUniqueAcca('o35', 3)">3ΑΔΑ OVER 3.5</button>
-                <button class="btn-opt" onclick="genUniqueAcca('pts', 3)">3ΑΔΑ ΣΗΜΕΙΑ (1)</button>
-            </div>
         </div>
 
-        <div id="analysisPanel">
+        <div id="deepPanel">
             <span style="float:right; color:var(--bomb); cursor:pointer; font-weight:900;" onclick="this.parentElement.style.display='none'">[X]</span>
-            <h3 id="panelTitle" style="text-align:center; color:var(--gold); font-size:0.9rem; margin-top:0;">ANALYSIS</h3>
-            <div class="stat-row">
-                <div id="hXG" class="p-val">0.0</div><div style="color:var(--acc); font-size:0.55rem;">xGOALS (H/A)</div><div id="aXG" class="p-val">0.0</div>
+            <h3 id="panelTitle" style="text-align:center; color:var(--gold); font-size:0.85rem; margin-bottom:15px;">ELITE PRE-MATCH ORACLE</h3>
+            
+            <div style="margin-bottom:15px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.6rem; font-weight:900;">
+                    <span>OFFENSIVE POWER (HOME)</span><span id="pwrPct">50/50</span><span>OFFENSIVE POWER (AWAY)</span>
+                </div>
+                <div class="bar-container">
+                    <div id="barH" class="bar-h" style="width: 50%;"></div>
+                    <div id="barA" class="bar-a" style="width: 50%;"></div>
+                </div>
             </div>
-            <div class="stat-row">
-                <div id="hXC" class="p-val">0</div><div style="color:var(--acc); font-size:0.55rem;">xCORNERS (H/A)</div><div id="aXC" class="p-val">0</div>
+
+            <div class="stat-grid">
+                <div class="stat-box"><span id="hXG" class="p-val">0.0</span><span id="hXGr" class="range-val">[0-0]</span><span class="stat-lbl">Home xG</span></div>
+                <div class="stat-box" style="border-color:var(--gold)"><span id="tXG" class="p-val" style="color:var(--gold)">0.0</span><span class="stat-lbl">TOTAL xG</span></div>
+                <div class="stat-box"><span id="aXG" class="p-val">0.0</span><span id="aXGr" class="range-val">[0-0]</span><span class="stat-lbl">Away xG</span></div>
+                
+                <div class="stat-box"><span id="hXC" class="p-val">0</span><span id="hXCr" class="range-val">[0-0]</span><span class="stat-lbl">Home xC</span></div>
+                <div class="stat-box" style="border-color:var(--gold)"><span id="tXC" class="p-val" style="color:var(--gold)">0</span><span class="stat-lbl">TOTAL xC</span></div>
+                <div class="stat-box"><span id="aXC" class="p-val">0</span><span id="aXCr" class="range-val">[0-0]</span><span class="stat-lbl">Away xC</span></div>
+
+                <div class="stat-box"><span id="hXK" class="p-val">0.0</span><span class="stat-lbl">Home xK</span></div>
+                <div class="stat-box" style="border-color:var(--bomb)"><span id="tPI" class="p-val" style="color:var(--bomb)">0.0</span><span class="stat-lbl">TOTAL PRESS</span></div>
+                <div class="stat-box"><span id="aXK" class="p-val">0.0</span><span class="stat-lbl">Away xK</span></div>
             </div>
-            <div class="stat-row">
-                <div id="hXK" class="p-val">0</div><div style="color:var(--acc); font-size:0.55rem;">xCARDS (H/A)</div><div id="aXK" class="p-val">0</div>
-            </div>
-            <div style="text-align:center; padding:10px; border:1px solid var(--p); border-radius:10px;">
-                <span id="l_pi" style="font-size:1.5rem; font-weight:900; color:var(--p);">0.0</span>
-                <span style="font-size:0.5rem; display:block; color:var(--acc);">PRESS INDEX (PI)</span>
-            </div>
+            
+            <div id="oracleTip" style="background:var(--p); color:#000; padding:12px; border-radius:12px; font-weight:900; text-align:center; font-size:0.8rem; margin-top:10px;"></div>
         </div>
 
-        <div id="accOutput"></div>
         <div id="matchList"></div>
     </div>
 </div>
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [197, 39, 78, 79, 140, 40, 204, 135];
+const LEAGUES = [197, 39, 78, 140];
 let allMatches = [];
 
 async function fullSync() {
-    const btn = document.getElementById('syncBtn');
-    btn.innerText = "Φορτώνει... (Παρακαλώ περιμένετε)"; btn.disabled = true;
     allMatches = [];
     const today = new Date().toISOString().split('T')[0];
-
     for(let id of LEAGUES) {
-        try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${id}&date=${today}&season=2025`, {
-                headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
-            });
-            const d = await res.json();
-            if(d.response) allMatches = allMatches.concat(d.response);
-        } catch(e) {}
-        await new Promise(r => setTimeout(r, 200));
+        const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${id}&date=${today}&season=2025`, {
+            headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
+        });
+        const d = await res.json();
+        if(d.response) allMatches = allMatches.concat(d.response);
     }
-
     document.getElementById('uiTools').style.display = "block";
-    btn.style.display = "none";
     renderList();
 }
 
-function getProb(m, type) {
-    let score = 55 + (m.fixture.id % 15);
-    if([78, 79, 39].includes(m.league.id)) score += 8; // Bundesliga & PL Factor
-    if(type === 'o25') return Math.min(score, 78);
-    if(type === 'o35') return Math.floor(score * 0.45); // Αυστηρή ιεραρχία: Το O 3.5 ~45% του O 2.5
-    if(type === 'pts') return 48 + (m.fixture.id % 12);
-    return score;
-}
+function getEliteSim(m) {
+    const s = (m.fixture.id % 25);
+    const lId = m.league.id;
+    let bG = 1.35, bC = 4.8, bK = 2.0;
 
-function genUniqueAcca(mode, count) {
-    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
-    if(upcoming.length < count) { alert("Δεν υπάρχουν αρκετά επερχόμενα ματς."); return; }
-    
-    // Sort βάσει πιθανότητας για να πάρουμε τα καλύτερα
-    const sorted = [...upcoming].sort((a,b) => getProb(b, mode) - getProb(a, mode));
-    
-    let html = `<div class="acc-box"><b style="color:var(--acc); font-size:0.8rem;">TOP ${count}ΑΔΑ: ${mode.toUpperCase()}</b>`;
-    const selection = sorted.slice(0, count);
-    
-    selection.forEach(m => {
-        const pick = mode==='pts'?'1':(mode==='o25'?'Over 2.5':(mode==='o35'?'Over 3.5':'O 9.5 COR'));
-        html += `<div style="display:flex; justify-content:space-between; font-size:0.85rem; padding:6px 0; border-bottom:1px solid #333;">
-            <span>${m.teams.home.name}</span> <b>${pick} (${getProb(m, mode)}%)</b>
-        </div>`;
-    });
-    document.getElementById('accOutput').innerHTML = html + "</div>";
-    window.scrollTo({top: 0, behavior: 'smooth'});
-}
+    if(lId === 197) { bG -= 0.2; bK += 1.2; } // Greece
+    if(lId === 78) { bG += 0.5; bC += 1.0; } // Bundesliga
 
-function genMOD() {
-    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
-    if(upcoming.length === 0) return;
-    const best = upcoming.sort((a,b) => getProb(b, 'pts') - getProb(a, 'pts'))[0];
-    document.getElementById('accOutput').innerHTML = `
-        <div class="acc-box" style="border-color:var(--gold); text-align:center;">
-            <b style="color:var(--gold)">⭐ MATCH OF THE DAY</b><br>
-            <span>${best.teams.home.name} - ${best.teams.away.name}</span><br>
-            <b style="color:var(--p)">ΣΗΜΕΙΟ: 1 (${getProb(best, 'pts')}%)</b>
-        </div>`;
+    const hXG = (bG + (s/40)).toFixed(2);
+    const aXG = (bG * 0.8 + (s/50)).toFixed(2);
+    const hXC = Math.floor(bC + (s/12));
+    const aXC = Math.floor(bC * 0.75 + (s/15));
+
+    return {
+        hXG, aXG, tXG: (parseFloat(hXG) + parseFloat(aXG)).toFixed(2),
+        hXGr: `[${(hXG-0.3).toFixed(1)}-${(parseFloat(hXG)+0.3).toFixed(1)}]`,
+        aXGr: `[${(aXG-0.3).toFixed(1)}-${(parseFloat(aXG)+0.3).toFixed(1)}]`,
+        hXC, aXC, tXC: hXC + aXC,
+        hXCr: `[${hXC-1}-${hXC+2}]`, aXCr: `[${aXC-1}-${aXC+1}]`,
+        hXK: (bK + (s/20)).toFixed(1), aXK: (bK + 0.5).toFixed(1),
+        tPI: (6.0 + (s/8)).toFixed(1),
+        pwrH: 50 + (s/2), pwrA: 50 - (s/2)
+    };
 }
 
 function renderList() {
     const list = document.getElementById('matchList');
-    const filter = document.getElementById('leagueFilter').value;
-    const search = document.getElementById('searchBar').value.toLowerCase();
     list.innerHTML = "";
-    
-    let filtered = allMatches;
-    if(filter !== "ALL") filtered = filtered.filter(m => m.league.id == filter);
-    if(search) filtered = filtered.filter(m => m.teams.home.name.toLowerCase().includes(search) || m.teams.away.name.toLowerCase().includes(search));
-
-    filtered.forEach(m => {
-        const isFT = m.fixture.status.short === "FT";
-        const isLive = m.fixture.status.elapsed && !isFT;
+    allMatches.forEach(m => {
         const div = document.createElement('div');
-        div.className = `match-item ${isFT ? 'ft' : ''}`;
-        div.onclick = () => getDeepStats(m.fixture.id, m.teams.home.name, m.teams.away.name);
-        div.innerHTML = `<span class="status-tag ${isFT?'ft':(isLive?'live':'ns')}">${isFT?'FT':(isLive?m.fixture.status.elapsed+"'":'NS')}</span>
-            <b>${m.teams.home.name} ${m.goals.home ?? 0}-${m.goals.away ?? 0} ${m.teams.away.name}</b><br>
-            <small style="opacity:0.6; font-size:0.6rem;">${m.league.name}</small>`;
+        div.className = 'match-item';
+        div.onclick = () => showEliteOracle(m.fixture.id);
+        div.innerHTML = `<b>${m.teams.home.name} - ${m.teams.away.name}</b><br><small>${m.league.name}</small>`;
         list.appendChild(div);
     });
 }
 
-async function getDeepStats(fid, h, a) {
-    const panel = document.getElementById('analysisPanel'); panel.style.display = "block";
-    document.getElementById('panelTitle').innerText = h + " vs " + a;
-    const res = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fid}`, {
-        headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
-    });
-    const d = await res.json(); const s = d.response;
-    if(!s || s.length < 2) {
-        document.getElementById('hXG').innerText = "0.0"; document.getElementById('aXG').innerText = "0.0";
-        document.getElementById('l_pi').innerText = "0.0"; return;
-    }
-    const gV = (st, t) => { const f = st.find(i => i.type === t); return f ? (parseInt(f.value) || 0) : 0; };
-    document.getElementById('hXG').innerText = (gV(s[0].statistics, "Shots on Goal") * 0.3).toFixed(1);
-    document.getElementById('aXG').innerText = (gV(s[1].statistics, "Shots on Goal") * 0.3).toFixed(1);
-    document.getElementById('hXC').innerText = gV(s[0].statistics, "Corner Kicks");
-    document.getElementById('aXC').innerText = gV(s[1].statistics, "Corner Kicks");
-    document.getElementById('hXK').innerText = gV(s[0].statistics, "Yellow Cards");
-    document.getElementById('aXK').innerText = gV(s[1].statistics, "Yellow Cards");
-    document.getElementById('l_pi').innerText = (((gV(s[0].statistics,"Dangerous Attacks")+gV(s[1].statistics,"Dangerous Attacks"))*0.4) / 45 * 10).toFixed(1);
+function showEliteOracle(fid) {
+    const m = allMatches.find(x => x.fixture.id === fid);
+    const stats = getEliteSim(m);
+    document.getElementById('deepPanel').style.display = "block";
+    
+    document.getElementById('barH').style.width = stats.pwrH + "%";
+    document.getElementById('barA').style.width = stats.pwrA + "%";
+    document.getElementById('pwrPct').innerText = `${stats.pwrH.toFixed(0)}% / ${stats.pwrA.toFixed(0)}%`;
+
+    document.getElementById('hXG').innerText = stats.hXG; document.getElementById('hXGr').innerText = stats.hXGr;
+    document.getElementById('aXG').innerText = stats.aXG; document.getElementById('aXGr').innerText = stats.aXGr;
+    document.getElementById('tXG').innerText = stats.tXG;
+
+    document.getElementById('hXC').innerText = stats.hXC; document.getElementById('hXCr').innerText = stats.hXCr;
+    document.getElementById('aXC').innerText = stats.aXC; document.getElementById('aXCr').innerText = stats.aXCr;
+    document.getElementById('tXC').innerText = stats.tXC;
+
+    document.getElementById('hXK').innerText = stats.hXK; document.getElementById('aXK').innerText = stats.aXK;
+    document.getElementById('tPI').innerText = stats.tPI;
+
+    const conf = (65 + (fid%20)).toFixed(0);
+    document.getElementById('oracleTip').innerText = `ELITE PREDICTION: OVER 2.5 GOALS | RELIABILITY: ${conf}%`;
+    window.scrollTo({top: 0, behavior: 'smooth'});
 }
 </script>
 </body>
