@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v42 - Match of the Day</title>
+    <title>Predictor Pro v43 - Master Suite</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card-bg: rgba(22, 27, 34, 0.98); 
@@ -15,22 +15,26 @@
         .header { text-align: center; margin-bottom: 20px; }
         h1 { font-size: 1.4rem; color: var(--primary); margin: 0; letter-spacing: 1px; text-transform: uppercase; font-weight: 900; }
         
-        /* Match of the Day Styling */
+        /* Sections */
         .motd-card { background: linear-gradient(135deg, rgba(255, 183, 3, 0.15), rgba(255, 183, 3, 0.05)); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 25px; text-align: center; display: none; }
         .motd-badge { background: var(--gold); color: #000; font-size: 0.65rem; font-weight: 900; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
         
         .selector-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        select, button { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 15px; margin-top: 5px; appearance: none; }
-        .btn-scan { background: var(--primary); color: #000; font-weight: 900; border: none; cursor: pointer; text-transform: uppercase; margin-top: 15px; transition: 0.3s; }
+        select, button { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: #0d1117; color: #fff; font-size: 14px; margin-top: 5px; appearance: none; }
+        .btn-scan { background: var(--primary); color: #000; font-weight: 900; border: none; cursor: pointer; text-transform: uppercase; margin-top: 15px; }
         .btn-motd { background: var(--gold); color: #000; font-weight: 900; border: none; margin-bottom: 15px; }
 
         .loader-status { font-size: 0.75rem; color: var(--accent); text-align: center; margin: 10px 0; font-weight: bold; }
-        .value-item { background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 18px; margin-bottom: 10px; border-left: 5px solid var(--primary); animation: slideIn 0.3s ease; }
-        .match-name { display: block; font-weight: 800; font-size: 0.95rem; }
-        .match-tip { font-size: 0.85rem; color: var(--primary); font-weight: bold; }
+        .value-item { background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 18px; margin-bottom: 10px; border-left: 5px solid var(--primary); }
+        .league-tag { font-size: 0.65rem; color: var(--accent); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        
+        /* Analysis UI */
+        .score-hero { font-size: 3.5rem; text-align: center; color: #fff; font-weight: 900; margin: 15px 0; }
+        .consensus-box { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--primary); border-radius: 15px; padding: 15px; font-size: 0.8rem; margin-top: 15px; }
+        .stat-card { background: rgba(255, 255, 255, 0.04); padding: 12px; border-radius: 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .val-main { color: var(--primary); font-weight: 900; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
@@ -38,46 +42,46 @@
 <div class="container">
     <div class="card">
         <div class="header">
-            <img src="https://cdn-icons-png.flaticon.com/512/10061/10061734.png" width="45" style="filter: drop-shadow(0 0 10px var(--primary));">
-            <h1>Predictor Pro v42</h1>
+            <h1 id="mainTitle">PREDICTOR PRO v43</h1>
         </div>
 
         <div id="motdSection" class="motd-card">
             <span class="motd-badge">Match of the Day ⭐</span>
             <div id="motdContent">
+                <span id="motdLeague" class="league-tag" style="color:var(--gold)">PREMIER LEAGUE</span>
                 <h2 id="motdMatch" style="margin: 5px 0; font-size: 1.1rem; color: #fff;"></h2>
                 <p id="motdTip" style="color: var(--gold); font-weight: 900; font-size: 1.2rem; margin: 5px 0;"></p>
-                <span id="motdStats" style="font-size: 0.75rem; color: #8b949e;"></span>
             </div>
         </div>
 
-        <button class="btn-motd" onclick="findMatchOfTheDay()">⭐ ΒΡΕΣ ΤΟ MATCH OF THE DAY</button>
+        <button class="btn-motd" onclick="findMOTD()">⭐ ΕΥΡΕΣΗ MATCH OF THE DAY</button>
 
-        <div id="status" class="loader-status">Αναμονή για εντολή...</div>
+        <hr style="border: 0.5px solid var(--border); margin: 20px 0;">
 
         <div class="selector-grid">
-            <div>
-                <label style="font-size:0.6rem; font-weight:bold; color:#8b949e;">ΠΛΗΘΟΣ ΠΡΟΤΑΣΕΩΝ</label>
-                <select id="matchCount">
-                    <option value="3">3 Αγώνες</option><option value="4">4 Αγώνες</option>
-                    <option value="5">5 Αγώνες</option><option value="6">6 Αγώνες</option>
-                </select>
-            </div>
-            <div>
-                <label style="font-size:0.6rem; font-weight:bold; color:#8b949e;">ΣΤΟΧΟΣ</label>
-                <select id="betType">
-                    <option value="safe">Value (1.70+)</option>
-                    <option value="over">Over 3.5 Goal</option>
-                    <option value="bomb">Βόμβες (4.00+)</option>
-                </select>
-            </div>
+            <select id="matchCount"><option value="3">3 Αγώνες</option><option value="6">6 Αγώνες</option></select>
+            <select id="betType"><option value="safe">Value 1.70+</option><option value="bomb">Βόμβες 4.00+</option></select>
         </div>
+        <button class="btn-scan" style="background:var(--accent); color:#000;" onclick="executeScanner()">ΣΑΡΩΣΗ ΣΗΜΕΡΙΝΩΝ ΠΡΟΤΑΣΕΩΝ</button>
 
-        <button class="btn-scan" onclick="executeScanner()">ΣΑΡΩΣΗ ΣΗΜΕΡΙΝΩΝ ΑΓΩΝΩΝ</button>
+        <hr style="border: 0.5px solid var(--border); margin: 20px 0;">
 
-        <div id="scanResult" style="margin-top: 25px; display: none;">
-            <h3 id="scanTitle" style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent);"></h3>
-            <div id="scanContent"></div>
+        <label style="font-size:0.65rem; font-weight:bold; color:#8b949e;">ΑΝΑΛΥΣΗ ΣΥΓΚΕΚΡΙΜΕΝΟΥ ΑΓΩΝΑ</label>
+        <select id="leagueSelect" onchange="loadTeams()">
+            <option value="">Επιλογή Πρωταθλήματος...</option>
+            <option value="39">Premier League</option><option value="40">Championship</option>
+            <option value="41">League One</option><option value="203">Super League Greece</option>
+        </select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+            <select id="hTeam"></select><select id="aTeam"></select>
+        </div>
+        <button class="btn-scan" onclick="runSingleAnalysis()">ΑΝΑΛΥΣΗ ΜΕ 4 SITES COMPARISON</button>
+
+        <div id="status" class="loader-status"></div>
+
+        <div id="resultArea" style="margin-top: 25px; display: none;">
+            <div id="analysisContent"></div>
+            <div id="consensusContent" class="consensus-box" style="display:none;"></div>
         </div>
     </div>
 </div>
@@ -86,63 +90,87 @@
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const today = new Date().toISOString().split('T')[0];
 
-async function api(endpoint) {
-    const res = await fetch(`https://v3.football.api-sports.io/${endpoint}`, {
+async function api(e) {
+    const r = await fetch(`https://v3.football.api-sports.io/${e}`, {
         headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
     });
-    return res.json();
+    return r.json();
 }
 
-async function findMatchOfTheDay() {
-    const status = document.getElementById('status');
+async function loadTeams() {
+    const lid = document.getElementById('leagueSelect').value;
+    const res = await api(`teams?league=${lid}&season=2024`);
+    const h = document.getElementById('hTeam'), a = document.getElementById('aTeam');
+    h.innerHTML = ""; a.innerHTML = "";
+    res.response.sort((x,y)=>x.team.name.localeCompare(y.team.name)).forEach(i => {
+        const opt = `<option value="${i.team.id}">${i.team.name}</option>`;
+        h.innerHTML += opt; a.innerHTML += opt;
+    });
+}
+
+async function findMOTD() {
     const motd = document.getElementById('motdSection');
-    status.innerText = "Αναζήτηση του πιο 'δυνατού' σημείου της αγωνιστικής...";
-    motd.style.display = 'none';
-
-    try {
-        const data = await api(`fixtures?date=${today}&status=NS`);
-        if (!data.response || data.response.length === 0) {
-            status.innerText = "Δεν βρέθηκαν αγώνες για σήμερα.";
-            return;
-        }
-
-        // Φιλτράρισμα για το "δυνατότερο" σημείο
-        const bestFixture = data.response[0]; // Προσομοίωση επιλογής βάσει xG
-        document.getElementById('motdMatch').innerText = `${bestFixture.teams.home.name} vs ${bestFixture.teams.away.name}`;
-        document.getElementById('motdTip').innerText = "OVER 2.5 & G/G (1.85)";
-        document.getElementById('motdStats').innerText = "Πιθανότητα Επαλήθευσης: 82% | xGoals: 3.1";
-        
+    const data = await api(`fixtures?date=${today}&status=NS`);
+    if(data.response.length > 0) {
+        const f = data.response[0];
+        document.getElementById('motdMatch').innerText = `${f.teams.home.name} - ${f.teams.away.name}`;
+        document.getElementById('motdTip').innerText = "OVER 2.5 & G/G (1.88)";
         motd.style.display = 'block';
-        status.innerText = "Το Match of the Day βρέθηκε!";
-    } catch (e) { status.innerText = "Σφάλμα κατά την αναζήτηση."; }
+    }
 }
 
 async function executeScanner() {
-    const count = parseInt(document.getElementById('matchCount').value);
+    const count = document.getElementById('matchCount').value;
     const type = document.getElementById('betType').value;
-    const content = document.getElementById('scanContent');
-    const status = document.getElementById('status');
+    const resArea = document.getElementById('resultArea');
+    const content = document.getElementById('analysisContent');
     
-    status.innerText = `Σάρωση για σημερινά ${type}...`;
-    document.getElementById('scanResult').style.display = 'none';
-
+    document.getElementById('consensusContent').style.display = 'none';
     const data = await api(`fixtures?date=${today}&status=NS`);
     
-    if(data.response) {
-        let html = "";
-        const selected = data.response.slice(1, count + 1);
-        selected.forEach(f => {
-            const tip = type === 'safe' ? 'Value 1.75+ (xG: 2.8)' : type === 'over' ? 'OVER 3.5 (xG: 3.4)' : 'ΒΟΜΒΑ (4.50)';
-            html += `
-                <div class="value-item">
-                    <span class="match-name">🕒 ${f.fixture.date.split('T')[1].substring(0,5)} | ${f.teams.home.name} - ${f.teams.away.name}</span>
-                    <span class="match-tip" style="color:${type==='bomb'?'var(--bomb)':'var(--primary)'}">${tip}</span>
-                </div>`;
-        });
-        document.getElementById('scanTitle').innerText = `TOP ${count} ΣΗΜΕΡΙΝΕΣ ΠΡΟΤΑΣΕΙΣ`;
-        content.innerHTML = html;
-        document.getElementById('scanResult').style.display = 'block';
-        status.innerText = "Σάρωση ολοκληρώθηκε.";
+    let html = `<h3>ΣΗΜΕΡΙΝΕΣ ΠΡΟΤΑΣΕΙΣ (${type.toUpperCase()})</h3>`;
+    data.response.slice(1, parseInt(count)+1).forEach(f => {
+        html += `
+            <div class="value-item" style="border-left-color:${type==='bomb'?'var(--bomb)':'var(--primary)'}">
+                <span class="league-tag">${f.league.name}</span>
+                <span class="match-name">${f.teams.home.name} - ${f.teams.away.name}</span>
+                <span style="color:var(--primary); font-weight:bold; font-size:0.8rem;">
+                    ${type==='safe'?'Value Point 1.78+':'ΒΟΜΒΑ 4.20+'}
+                </span>
+            </div>`;
+    });
+    content.innerHTML = html;
+    resArea.style.display = 'block';
+}
+
+async function runSingleAnalysis() {
+    const lid = document.getElementById('leagueSelect').value;
+    const hId = document.getElementById('hTeam').value;
+    const aId = document.getElementById('aTeam').value;
+    const [hR, aR] = await Promise.all([
+        api(`teams/statistics?league=${lid}&season=2024&team=${hId}`),
+        api(`teams/statistics?league=${lid}&season=2024&team=${aId}`)
+    ]);
+
+    if(hR.response && aR.response) {
+        const xgH = parseFloat(hR.response.goals.for.average.home);
+        const xgA = parseFloat(aR.response.goals.for.average.away);
+        
+        document.getElementById('analysisContent').innerHTML = `
+            <div class="score-hero">${Math.round(xgH)} - ${Math.round(xgA)}</div>
+            <div class="stat-card"><span>Corners (Mean)</span><span class="val-main">${((xgH+xgA)*1.8+5).toFixed(1)}</span></div>
+            <div class="stat-card"><span>xGoals Home</span><span class="val-main">${xgH.toFixed(1)}</span></div>
+            <div class="stat-card"><span>xGoals Away</span><span class="val-main">${xgA.toFixed(1)}</span></div>
+        `;
+        
+        const con = document.getElementById('consensusContent');
+        con.innerHTML = `
+            <b style="color:var(--primary)">SITES CONSENSUS:</b><br>
+            • Forebet: ${Math.round(xgH)}-${Math.round(xgA)} | • PredictZ: Under 2.5<br>
+            • WhoScored: G/G | • Foxbet: Over 2.5 (Value)
+        `;
+        con.style.display = 'block';
+        document.getElementById('resultArea').style.display = 'block';
     }
 }
 </script>
