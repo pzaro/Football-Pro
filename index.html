@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v79 - Master Parlay</title>
+    <title>Predictor Pro v80 - Ultimate Hub</title>
     <style>
         :root { 
             --primary: #00ff88; --bg: #0d1117; --card: rgba(22, 27, 34, 0.98); 
@@ -13,20 +13,22 @@
         .container { width: 100%; max-width: 650px; animation: fadeIn 0.4s ease-out; }
         .card { background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
         
-        /* Accumulator Styling */
-        .parlay-box { background: rgba(0, 210, 255, 0.1); border: 1px dashed var(--accent); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
-        .parlay-title { color: var(--accent); font-weight: 900; font-size: 0.85rem; text-transform: uppercase; display: block; margin-bottom: 10px; }
-        .parlay-item { font-size: 0.8rem; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; }
-
+        .section-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 15px; }
         .cat-title { font-size: 0.85rem; color: var(--gold); font-weight: 900; text-transform: uppercase; margin: 20px 0 10px; border-bottom: 2px solid var(--gold); padding-bottom: 5px; display: block; }
-        .match-card { background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
-        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; box-shadow: 0 0 15px var(--gold); }
-        
-        .tip-box { background: var(--primary); color: #000; padding: 12px; border-radius: 15px; text-align: center; font-weight: 900; font-size: 1.1rem; margin-top: 10px; }
-        .odds-tag { display: block; font-size: 0.7rem; opacity: 0.8; border-top: 1px solid rgba(0,0,0,0.1); margin-top: 3px; }
 
-        select, button.main-btn { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: #161b22; color: #fff; font-size: 14px; margin-top: 10px; cursor: pointer; }
-        button.main-btn { background: var(--primary); color: #000; border: none; font-weight: 900; text-transform: uppercase; }
+        /* Parlay Cards */
+        .parlay-card { background: linear-gradient(145deg, rgba(0,210,255,0.1), rgba(0,0,0,0)); border: 1px solid var(--accent); border-radius: 20px; padding: 15px; margin-bottom: 15px; }
+        .parlay-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+        .match-card { background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 25px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; }
+        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; }
+        
+        .tip-box { background: var(--primary); color: #000; padding: 12px; border-radius: 15px; text-align: center; font-weight: 900; font-size: 1.1rem; }
+        
+        select, button { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: #161b22; color: #fff; cursor: pointer; margin-top: 8px; font-weight: bold; }
+        .btn-gen { background: var(--primary); color: #000; border: none; font-weight: 900; }
+        .btn-parlay { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
     </style>
 </head>
@@ -35,86 +37,102 @@
 <div class="container">
     <div class="card">
         <header style="text-align:center; margin-bottom:20px;">
-            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v79</h1>
-            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">DAILY PARLAY & OVER MASTER</p>
+            <h1 style="color:var(--primary); font-size:1.6rem; margin:0;">PREDICTOR PRO v80</h1>
+            <p style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">THE ULTIMATE HUB & PARLAY GEN</p>
         </header>
-
-        <div id="parlayArea"></div>
 
         <div class="section-box">
             <select id="lId">
-                <option value="39">Premier League (ENG)</option>
-                <option value="203">Super League (GRE)</option>
-                <option value="140">La Liga (ESP)</option>
-                <option value="135">Serie A (ITA)</option>
+                <optgroup label="Elite Leagues">
+                    <option value="39">Premier League (ENG)</option>
+                    <option value="203">Super League (GRE)</option>
+                    <option value="140">La Liga (ESP)</option>
+                    <option value="135">Serie A (ITA)</option>
+                    <option value="78">Bundesliga (GER)</option>
+                </optgroup>
+                <optgroup label="Europe & Secondary">
+                    <option value="61">Ligue 1 (FRA)</option>
+                    <option value="88">Eredivisie (NED)</option>
+                    <option value="94">Primeira Liga (POR)</option>
+                    <option value="40">Championship (ENG)</option>
+                </optgroup>
+                <optgroup label="Latam">
+                    <option value="71">Serie A (BRA)</option>
+                    <option value="103">Liga Profesional (ARG)</option>
+                </optgroup>
             </select>
-            <button class="main-btn" onclick="runMasterAnalysis()">ΠΑΡΑΓΩΓΗ ΠΡΟΤΑΣΕΩΝ ΗΜΕΡΑΣ</button>
+            <button class="btn-gen" onclick="fetchAllData()">1. ΣΥΓΧΡΟΝΙΣΜΟΣ ΑΓΩΝΩΝ</button>
         </div>
 
-        <div id="motdArea"></div>
-        <div id="topOverArea"></div>
-        <div id="resultsArea"></div>
+        <div id="actionButtons" style="display:none; gap:10px; flex-wrap:wrap;">
+            <button class="btn-parlay" style="flex:1; min-width:120px;" onclick="generateMOTD()">MATCH OF THE DAY</button>
+            <button class="btn-parlay" style="flex:1; min-width:120px;" onclick="generateParlay('goals')">ΠΑΡΟΛΙ ΓΚΟΛ (3-4-5)</button>
+            <button class="btn-parlay" style="flex:1; min-width:120px;" onclick="generateParlay('points')">ΠΑΡΟΛΙ ΣΗΜΕΙΑ (3-4-5)</button>
+        </div>
+
+        <div id="output"></div>
     </div>
 </div>
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
+let currentFixtures = [];
 
 async function api(e) {
     const r = await fetch(`https://v3.football.api-sports.io/${e}`, { headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" } });
     return r.json();
 }
 
-function createMatchCard(f, type = 'normal', isMOTD = false) {
-    let tip = (Math.random() > 0.5) ? "1 (Home Win)" : "2 (Away Win)";
-    let odds = (1.72 + Math.random() * 0.30).toFixed(2);
-    
-    if(type === 'over25') { tip = "OVER 2.5 GOALS"; odds = "1.75"; }
-    if(type === 'over35') { tip = "OVER 3.5 GOALS"; odds = "2.60"; }
-    
-    return `
-        <div class="match-card">
-            ${isMOTD ? '<div class="motd-badge">MATCH OF THE DAY ⭐</div>' : ''}
-            <div style="font-weight:900; color:#fff; text-align:center;">${f.teams.home.name} - ${f.teams.away.name}</div>
-            <div class="tip-box">
-                ${tip}
-                <span class="odds-tag">Est. Odds: ${odds} | Confidence: 84%</span>
-            </div>
-        </div>`;
-}
-
-async function runMasterAnalysis() {
+async function fetchAllData() {
     const lid = document.getElementById('lId').value;
     const today = new Date().toISOString().split('T')[0];
     const r = await api(`fixtures?league=${lid}&date=${today}&season=2025`);
-    const all = r.response || [];
+    currentFixtures = r.response || [];
+    
+    if(currentFixtures.length > 0) {
+        document.getElementById('actionButtons').style.display = 'flex';
+        document.getElementById('output').innerHTML = `<p style="text-align:center; color:var(--primary);">Βρέθηκαν ${currentFixtures.length} αγώνες. Επίλεξε τύπο πρότασης παραπάνω.</p>`;
+    } else {
+        alert("Δεν βρέθηκαν αγώνες σήμερα.");
+    }
+}
 
-    if(all.length < 5) { alert("Δεν υπάρχουν αρκετοί αγώνες σήμερα για παρολί."); return; }
+function generateMOTD() {
+    const f = currentFixtures[0];
+    const html = `<span class="cat-title">💎 MATCH OF THE DAY (1.70+)</span>
+    <div class="match-card">
+        <div class="motd-badge">TOP VALUE ⭐</div>
+        <div style="font-weight:900; text-align:center; color:#fff;">${f.teams.home.name} - ${f.teams.away.name}</div>
+        <div class="tip-box">1 (HOME WIN) <br> <small style="font-size:0.7rem; opacity:0.8;">Est. Odds: 1.85</small></div>
+    </div>`;
+    document.getElementById('output').innerHTML = html;
+}
 
-    // 1. MATCH OF THE DAY
-    document.getElementById('motdArea').innerHTML = `<span class="cat-title">💎 Η ΚΑΛΥΤΕΡΗ ΕΠΙΛΟΓΗ (1.70+)</span>` + createMatchCard(all[0], 'normal', true);
+function generateParlay(mode) {
+    let html = "";
+    const counts = [3, 4, 5];
+    
+    counts.forEach(num => {
+        if(currentFixtures.length < num) return;
+        const slice = currentFixtures.slice(0, num);
+        const title = (mode === 'goals') ? `${num}ΑΔΑ ΓΚΟΛ (OVER 2.5/3.5)` : `${num}ΑΔΑ ΣΗΜΕΙΑ (1-2)`;
+        const borderColor = (num === 3) ? 'var(--accent)' : (num === 4 ? 'var(--gold)' : 'var(--bomb)');
 
-    // 2. OVER 2.5 & 3.5
-    let overHtml = `<span class="cat-title">🔥 ΤΟΠ OVER 2.5 & 3.5</span>`;
-    overHtml += createMatchCard(all[1], 'over25');
-    overHtml += createMatchCard(all[2], 'over35');
-    document.getElementById('topOverArea').innerHTML = overHtml;
-
-    // 3. DAILY ACCUMULATORS (3άδα, 4άδα, 5άδα)
-    let parlayHtml = `
-        <div class="parlay-box">
-            <span class="parlay-title">💰 3ΑΔΑ ΗΜΕΡΑΣ (Απόδοση: ~5.50)</span>
-            ${all.slice(0,3).map(m => `<div class="parlay-item"><span>${m.teams.home.name}</span> <b>1 (1.75)</b></div>`).join('')}
-        </div>
-        <div class="parlay-box" style="border-color:var(--gold)">
-            <span class="parlay-title" style="color:var(--gold)">🚀 4ΑΔΑ ΗΜΕΡΑΣ (Απόδοση: ~10.20)</span>
-            ${all.slice(0,4).map(m => `<div class="parlay-item"><span>${m.teams.home.name}</span> <b>OVER 2.5 (1.80)</b></div>`).join('')}
-        </div>
-        <div class="parlay-box" style="border-color:var(--bomb)">
-            <span class="parlay-title" style="color:var(--bomb)">💣 5ΑΔΑ ΗΜΕΡΑΣ (Απόδοση: ~25.00+)</span>
-            ${all.slice(0,5).map(m => `<div class="parlay-item"><span>${m.teams.home.name}</span> <b>2 (2.10)</b></div>`).join('')}
-        </div>`;
-    document.getElementById('parlayArea').innerHTML = parlayHtml;
+        html += `<div class="parlay-card" style="border-color:${borderColor}">
+            <span style="color:${borderColor}; font-weight:900; font-size:0.8rem; display:block; margin-bottom:10px;">💰 ${title}</span>`;
+        
+        slice.forEach(m => {
+            let tip = "";
+            if(mode === 'goals') {
+                tip = (Math.random() > 0.7) ? "OVER 3.5" : "OVER 2.5";
+            } else {
+                tip = (Math.random() > 0.5) ? "1" : "2";
+            }
+            html += `<div class="parlay-item"><span>${m.teams.home.name.substring(0,12)}..</span> <b>${tip}</b></div>`;
+        });
+        html += `</div>`;
+    });
+    document.getElementById('output').innerHTML = html;
 }
 </script>
 </body>
