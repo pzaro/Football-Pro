@@ -3,59 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predictor Pro v156 - Intel Alpha</title>
+    <title>Predictor Pro v157 - Comparison Engine</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live: #ff3e3e; --value: #bf40bf; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; font-size: 0.85rem; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; }
         
-        /* Sections */
-        .live-radar { background: rgba(255, 62, 62, 0.05); border: 2px solid var(--live); border-radius: 20px; padding: 15px; margin-bottom: 25px; }
-        .league-group { background: #000; border: 1px solid var(--border); border-radius: 15px; margin-bottom: 20px; padding: 10px; }
-        .section-title { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; }
+        /* Analysis Panel */
+        #intelPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 20px; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 0 60px #000; }
+        
+        /* Comparison Table */
+        .comp-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.8rem; }
+        .comp-table th { color: var(--gold); text-align: left; padding: 8px; border-bottom: 1px solid #333; }
+        .comp-table td { padding: 10px 8px; border-bottom: 1px solid #222; }
+        
+        .delta-tag { font-weight: 900; padding: 2px 6px; border-radius: 4px; }
+        .plus { background: rgba(0, 255, 136, 0.2); color: var(--p); }
+        .minus { background: rgba(255, 62, 62, 0.2); color: var(--live); }
 
-        /* Match Cards */
-        .match-card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 8px; border-left: 5px solid var(--border); cursor: pointer; transition: 0.3s; }
-        .match-card:hover { transform: translateY(-2px); border-left-color: var(--p); }
-        .live-card { border-left-color: var(--live); background: #1c1313; }
-
-        /* Stats & Intel */
-        .intel-panel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 20px; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 0 60px #000; }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
-        .stat-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; text-align: center; border: 1px solid var(--border); }
-        .delta-box { padding: 10px; border-radius: 10px; font-weight: 800; font-size: 0.75rem; text-align: center; margin-top: 5px; }
-        .delta-pos { background: rgba(0, 255, 136, 0.1); color: var(--p); border: 1px solid var(--p); }
-        .delta-neg { background: rgba(255, 62, 62, 0.1); color: var(--live); border: 1px solid var(--live); }
-
-        button { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--p); color: #000; font-weight: 900; cursor: pointer; margin-bottom: 10px; }
+        .live-radar { background: rgba(255, 62, 62, 0.05); border: 2px solid var(--live); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        .match-card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; border-left: 5px solid var(--border); }
+        button { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--p); color: #000; font-weight: 900; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v156</h2>
-    <button onclick="globalSync()">🌍 ΕΚΤΕΛΕΣΗ ΚΑΘΟΛΙΚΗΣ ΑΝΑΛΥΣΗΣ & LIVE RADAR</button>
+    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v157</h2>
+    <button onclick="globalSync()">🌍 ΣΥΓΧΡΟΝΙΣΜΟΣ & LIVE COMPARISON</button>
 
-    <div id="progressCont" style="display:none; margin-bottom:20px;">
-        <div style="display:flex; justify-content:space-between;"><span id="pStatus">Data Mining...</span><span id="pPercent">0%</span></div>
-        <div style="background:#333; height:8px; border-radius:4px; margin-top:5px; overflow:hidden;"><div id="pFill" style="background:var(--p); width:0%; height:100%; transition:0.3s;"></div></div>
-    </div>
-
-    <div id="liveRadar" class="live-radar" style="display:none;">
-        <div class="section-title" style="color:var(--live);"><span style="margin-right:10px;">📡</span> GLOBAL LIVE RADAR (ALL LEAGUES)</div>
+    <div id="liveRadar" class="live-radar" style="display:none; margin-top:15px;">
+        <div style="color:var(--live); font-weight:900; margin-bottom:10px;">📡 GLOBAL LIVE RADAR</div>
         <div id="liveList"></div>
     </div>
 
-    <div id="intelPanel" class="intel-panel">
+    <div id="intelPanel">
         <span onclick="this.parentElement.style.display='none'" style="float:right; cursor:pointer; color:var(--live); font-weight:900;">✕ CLOSE</span>
-        <h3 id="matchHeader" style="text-align:center; color:var(--gold); margin:0 0 15px 0;"></h3>
+        <h3 id="matchHeader" style="text-align:center; color:var(--gold); margin-bottom:15px;"></h3>
         
-        <div class="stat-grid" id="mainStats"></div>
-        
-        <div id="liveComparison" style="margin-top:15px; border-top:1px solid #333; padding-top:15px;">
-            <b style="color:var(--gold); font-size:0.8rem;">ΣΥΓΚΡΙΣΗ LIVE VS PRE-MATCH & xCORNERS:</b>
-            <div id="comparisonData" style="margin-top:10px;"></div>
-        </div>
+        <table class="comp-table">
+            <thead>
+                <tr>
+                    <th>ΚΑΤΗΓΟΡΙΑ</th>
+                    <th>PRE-MATCH</th>
+                    <th>LIVE</th>
+                    <th>ΑΠΟΚΛΙΣΗ (Δ)</th>
+                </tr>
+            </thead>
+            <tbody id="comparisonBody"></tbody>
+        </table>
+
+        <div id="liveAdvice" style="margin-top:20px; padding:15px; border-radius:15px; background:rgba(191, 64, 191, 0.1); border:1px solid var(--value); text-align:center;"></div>
     </div>
 
     <div id="leagueMatches"></div>
@@ -63,28 +61,20 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [197, 39, 140, 141, 135, 136, 78, 281, 40, 262, 113];
+const LEAGUES = [197, 39, 140, 141, 135, 136, 78, 281];
 let allMatches = [];
 
 async function globalSync() {
     allMatches = [];
-    document.getElementById('progressCont').style.display = 'block';
     const today = new Date().toISOString().split('T')[0];
-
-    for(let i=0; i<LEAGUES.length; i++) {
-        const perc = Math.round(((i+1)/LEAGUES.length)*100);
-        document.getElementById('pFill').style.width = perc+'%';
-        document.getElementById('pPercent').innerText = perc+'%';
-        try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {
-                headers: {"x-rapidapi-key": KEY}
-            });
-            const d = await res.json();
-            if(d.response) allMatches = allMatches.concat(d.response);
-        } catch(e) {}
+    for(let id of LEAGUES) {
+        const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${id}&date=${today}&season=2025`, {
+            headers: {"x-rapidapi-key": KEY}
+        });
+        const d = await res.json();
+        if(d.response) allMatches = allMatches.concat(d.response);
         await new Promise(r => setTimeout(r, 200));
     }
-    document.getElementById('progressCont').style.display = 'none';
     renderStructure();
 }
 
@@ -96,7 +86,7 @@ function renderStructure() {
     const liveMatches = allMatches.filter(m => ["1H","HT","2H"].includes(m.fixture.status.short));
     if(liveMatches.length > 0) {
         document.getElementById('liveRadar').style.display = 'block';
-        liveMatches.forEach(m => radar.appendChild(createMatchCard(m, true)));
+        liveMatches.forEach(m => radar.appendChild(createCard(m)));
     }
 
     const grouped = allMatches.reduce((acc, m) => {
@@ -107,40 +97,24 @@ function renderStructure() {
 
     for(let league in grouped) {
         const div = document.createElement('div');
-        div.className = 'league-group';
-        div.innerHTML = `<div class="section-title" style="color:var(--gold); padding:5px;">${league}</div>`;
-        grouped[league].forEach(m => div.appendChild(createMatchCard(m, false)));
+        div.innerHTML = `<div style="color:var(--gold); padding:10px; font-weight:900;">${league}</div>`;
+        grouped[league].forEach(m => div.appendChild(createCard(m)));
         leagueCont.appendChild(div);
     }
 }
 
-function createMatchCard(m, isRadar) {
-    const status = m.fixture.status.short;
-    const isLive = ["1H","HT","2H"].includes(status);
-    const isFT = ["FT","AET","PEN"].includes(status);
-    
-    const card = document.createElement('div');
-    card.className = `match-card ${isLive ? 'live-card' : ''}`;
-    card.onclick = () => showIntel(m);
-    card.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="flex:1;">
-                <div style="font-weight:800;">${m.teams.home.name}</div>
-                <div style="font-weight:800;">${m.teams.away.name}</div>
-            </div>
-            <div style="text-align:center; min-width:60px;">
-                <div style="font-size:1.2rem; font-weight:900; color:var(--p);">${(isLive || isFT) ? m.goals.home+'-'+m.goals.away : 'VS'}</div>
-                <div style="font-size:0.6rem; opacity:0.7;">${isLive ? m.fixture.status.elapsed+"'" : (isFT ? 'ΕΛΗΞΕ' : 'NS')}</div>
-            </div>
-        </div>
-    `;
-    return card;
+function createCard(m) {
+    const live = ["1H","HT","2H"].includes(m.fixture.status.short);
+    const div = document.createElement('div');
+    div.className = 'match-card';
+    div.onclick = () => showComparison(m);
+    div.innerHTML = `<b>${m.teams.home.name} - ${m.teams.away.name}</b> <span style="float:right; color:var(--p);">${m.goals.home}-${m.goals.away} (${live ? m.fixture.status.elapsed+"'" : "NS"})</span>`;
+    return div;
 }
 
-async function showIntel(m) {
-    const panel = document.getElementById('intelPanel');
-    panel.style.display = 'block';
-    document.getElementById('matchHeader').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
+async function showComparison(m) {
+    document.getElementById('intelPanel').style.display = 'block';
+    document.getElementById('matchHeader').innerText = `${m.teams.home.name} vs ${m.teams.away.name}`;
     window.scrollTo({top: 0, behavior: 'smooth'});
 
     const [predRes, statsRes] = await Promise.all([
@@ -149,45 +123,43 @@ async function showIntel(m) {
     ]);
 
     const pred = (await predRes.json()).response[0];
-    const liveStats = (await statsRes.json()).response;
+    const live = (await statsRes.json()).response;
 
-    const hXG = pred?.teams?.home?.last_5?.goals?.for?.average || 1.1;
-    const aXG = pred?.teams?.away?.last_5?.goals?.for?.average || 1.1;
-    const pOver = pred?.predictions?.goals?.over || 50;
+    const time = m.fixture.status.elapsed || 1;
+    const factor = time / 90;
 
-    document.getElementById('mainStats').innerHTML = `
-        <div class="stat-box"><span style="font-size:0.6rem;">HOME xG / xGA</span><br><b>${hXG} / ${pred?.teams?.home?.last_5?.goals?.against?.average || 1.0}</b></div>
-        <div class="stat-box"><span style="font-size:0.6rem;">AWAY xG / xGA</span><br><b>${aXG} / ${pred?.teams?.away?.last_5?.goals?.against?.average || 1.0}</b></div>
+    // PRE-MATCH VALUES (Derived from API averages)
+    const pGoals = (parseFloat(pred?.predictions?.goals?.over) / 40) || 2.5;
+    const pCorners = (parseFloat(pred?.teams?.home?.last_5?.corners?.average) || 4.5) + (parseFloat(pred?.teams?.away?.last_5?.corners?.average) || 4.1);
+    const pCards = (parseFloat(pred?.teams?.home?.last_5?.cards?.average) || 2.2) + (parseFloat(pred?.teams?.away?.last_5?.cards?.average) || 2.4);
+
+    // LIVE VALUES
+    let lGoals = (m.goals.home + m.goals.away);
+    let lCorners = 0, lCards = 0;
+
+    if(live && live.length > 0) {
+        lCorners = (live[0].statistics.find(s=>s.type==="Corner Kicks").value || 0) + (live[1].statistics.find(s=>s.type==="Corner Kicks").value || 0);
+        lCards = (live[0].statistics.find(s=>s.type==="Yellow Cards").value || 0) + (live[1].statistics.find(s=>s.type==="Yellow Cards").value || 0);
+    }
+
+    // DELTA CALCULATION
+    const dGoals = (lGoals - (pGoals * factor)).toFixed(2);
+    const dCorners = (lCorners - (pCorners * factor)).toFixed(2);
+    const dCards = (lCards - (pCards * factor)).toFixed(2);
+
+    document.getElementById('comparisonBody').innerHTML = `
+        <tr><td>ΓΚΟΛ</td><td>${pGoals.toFixed(1)}</td><td>${lGoals}</td><td><span class="delta-tag ${dGoals < 0 ? 'minus' : 'plus'}">${dGoals}</span></td></tr>
+        <tr><td>ΚΟΡΝΕΡ</td><td>${pCorners.toFixed(1)}</td><td>${lCorners}</td><td><span class="delta-tag ${dCorners < 0 ? 'minus' : 'plus'}">${dCorners}</span></td></tr>
+        <tr><td>ΚΑΡΤΕΣ</td><td>${pCards.toFixed(1)}</td><td>${lCards}</td><td><span class="delta-tag ${dCards < 0 ? 'minus' : 'plus'}">${dCards}</span></td></tr>
     `;
 
-    // COMPARISON & xCORNERS LOGIC
-    if(liveStats && liveStats.length > 0) {
-        const hS = liveStats[0].statistics;
-        const aS = liveStats[1].statistics;
-        const curCorners = (hS.find(s=>s.type==="Corner Kicks").value || 0) + (aS.find(s=>s.type==="Corner Kicks").value || 0);
-        const curGoals = (m.goals.home + m.goals.away);
-        
-        // xCorners Calculation: (Current Corners / Time) * Remaining Time + Pressure Factor
-        const time = m.fixture.status.elapsed || 45;
-        const xCorners = ((curCorners / time) * 90).toFixed(1);
-        
-        // Deviation (Delta)
-        const expGoals = (parseFloat(pOver)/40) * (time/90);
-        const delta = (curGoals - expGoals).toFixed(2);
+    // LIVE ADVICE LOGIC
+    let advice = "⚖️ ΤΟ ΜΑΤΣ ΕΞΕΛΙΣΣΕΤΑΙ ΟΜΑΛΑ";
+    if(dGoals < -0.6) advice = "⚠️ VALUE: ΤΟ ΜΑΤΣ ΧΡΩΣΤΑΕΙ ΓΚΟΛ (OVER 0.5/1.5)";
+    else if(dCorners > 1.5) advice = "🚩 HOT: ΥΨΗΛΟΣ ΡΥΘΜΟΣ ΚΟΡΝΕΡ (OVER LINE)";
+    else if(dCards > 1.0) advice = "🟨 ΕΝΤΑΣΗ: ΠΟΛΛΕΣ ΚΑΡΤΕΣ (ΠΙΘΑΝΗ ΚΟΚΚΙΝΗ)";
 
-        document.getElementById('comparisonData').innerHTML = `
-            <div class="stat-grid">
-                <div class="stat-box">LIVE CORNERS: <b>${curCorners}</b></div>
-                <div class="stat-box">xCORNERS (PROJ): <b style="color:var(--gold)">${xCorners}</b></div>
-            </div>
-            <div class="delta-box ${delta < 0 ? 'delta-neg' : 'delta-pos'}">
-                ΔΙΑΦΟΡΑ ΠΡΑΓΜΑΤΙΚΟΤΗΤΑΣ / ΠΡΟΒΛΕΨΗΣ: ${delta} <br>
-                ${delta < -0.5 ? '⚠️ VALUE ΓΙΑ ΓΚΟΛ (ΤΟ ΜΑΤΣ ΕΙΝΑΙ ΠΙΣΩ)' : '✅ ΣΥΜΦΩΝΑ ΜΕ ΤΗ ΣΤΑΤΙΣΤΙΚΗ'}
-            </div>
-        `;
-    } else {
-        document.getElementById('comparisonData').innerText = "Αναμονή για έναρξη αγώνα για ανάλυση αποκλίσεων.";
-    }
+    document.getElementById('liveAdvice').innerHTML = `<b>ADVISOR:</b><br>${advice}`;
 }
 </script>
 </body>
