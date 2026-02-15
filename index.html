@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v212 - 15 Point Apex</title>
+    <title>Predictor Pro v213 - Global Expansion</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -68,7 +68,7 @@
         .value-hunter { background: linear-gradient(135deg, #00ff88, #000); color: #000; padding: 25px; border-radius: 20px; text-align: center; margin-top: 25px; font-weight: 900; }
         .league-divider { color: var(--gold); font-weight: 900; border-bottom: 3px solid var(--border); padding: 15px 0; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; }
         
-        /* NEW: LIVE SCORE DISPLAY */
+        /* LIVE SCORE DISPLAY */
         .big-score { font-size: 3.5rem; font-weight: 900; color: #fff; text-align: center; margin: 10px 0; text-shadow: 0 0 20px var(--p); letter-spacing: 2px; }
         .live-dot { height: 12px; width: 12px; background-color: var(--alert); border-radius: 50%; display: inline-block; margin-right: 8px; animation: neonBlink 1s infinite; }
     </style>
@@ -76,14 +76,14 @@
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v212</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v213</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">APEX SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">GLOBAL SYNC...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE APEX SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE GLOBAL SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -141,7 +141,22 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [136, 281, 141, 39, 140, 135, 78]; 
+// UPDATED LEAGUES LIST (13 Total)
+const LEAGUES = [
+    136, // Serie B (Italy)
+    281, // A Kyprou (Cyprus)
+    141, // Segunda Division (Spain)
+    197, // Super League 1 (Greece)
+    61,  // Ligue 1 (France)
+    40,  // Championship (England)
+    94,  // Primeira Liga (Portugal)
+    262, // Liga MX (Mexico)
+    128, // Liga Profesional (Argentina)
+    39,  // Premier League (England)
+    140, // La Liga (Spain)
+    135, // Serie A (Italy)
+    78   // Bundesliga (Germany)
+]; 
 let masterData = [];
 
 function getPoisson(lambda, k) {
@@ -150,6 +165,7 @@ function getPoisson(lambda, k) {
     return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial;
 }
 
+// LOGIC LOCK & PREDICTION ENGINE
 function getMatchVerdict(p) {
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
@@ -163,7 +179,7 @@ function getMatchVerdict(p) {
     const finA = Math.round((intA + fbA + zuA) / 3);
     const predScoreGoals = finH + finA;
 
-    // Logic Lock
+    // Logic Lock: Sign
     let smartSign = "X";
     if(finH > finA) smartSign = "1";
     else if(finA > finH) smartSign = "2";
@@ -173,6 +189,7 @@ function getMatchVerdict(p) {
     const finalSign = winProb < 40 ? "NO BET" : smartSign;
     const signColor = winProb < 40 ? "low-conf" : (winProb > 60 ? "high-conf" : "mid-conf");
 
+    // Logic Lock: Overs
     const over15 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1))) * 100);
     const over25 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1) + getPoisson(tXG, 2))) * 100);
     
@@ -282,7 +299,7 @@ async function showIntel(d) {
     const isL = ["1H", "HT", "2H"].includes(status);
     const elapsed = m.fixture.status.elapsed || 0;
     
-    // NEW: LIVE SCORE DISPLAY
+    // LIVE SCORE DISPLAY
     const scoreText = (isL || isFT) ? `${m.goals.home} - ${m.goals.away}` : "-";
     document.getElementById('bigScoreDisplay').innerText = scoreText;
 
