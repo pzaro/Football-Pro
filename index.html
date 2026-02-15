@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v218 - Global Live</title>
+    <title>Predictor Pro v220 - Platinum</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -20,7 +20,6 @@
         .mod-box { background: linear-gradient(145deg, #1e2530, #000); border: 4px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; }
         .btn-gen { background: var(--value); color: #fff; width: 100%; padding: 22px; border-radius: 15px; border: none; font-weight: 900; font-size: 1.3rem; cursor: pointer; }
 
-        /* LIST CARD STYLES */
         .match-card { background: var(--card); border-radius: 15px; margin-top: 15px; border-left: 8px solid var(--border); cursor: pointer; overflow: hidden; transition: transform 0.2s; }
         .match-card:active { transform: scale(0.98); }
         .card-header { padding: 20px; }
@@ -30,7 +29,6 @@
         .mp-label { font-size: 0.7rem; color: #888; display: block; margin-bottom: 2px; }
         .league-label { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; display: block; letter-spacing: 1px; }
 
-        /* Tables */
         .verdict-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #000; border: 2px solid var(--gold); border-radius: 12px; overflow: hidden; }
         .verdict-table th { background: #1c2128; color: var(--gold); padding: 10px; font-size: 0.9rem; text-transform: uppercase; }
         .verdict-table td { padding: 15px; text-align: center; border-bottom: 1px solid #333; font-weight: 800; }
@@ -54,7 +52,6 @@
         .fail-tag { color: var(--alert); border: 1px solid var(--alert); padding: 5px 10px; border-radius: 8px; }
         .no-picks { color: var(--alert); font-weight: 900; text-align: center; padding: 20px; border: 2px dashed var(--alert); border-radius: 15px; margin-top: 20px; }
 
-        /* Prediction Box Style */
         .pred-box { display: flex; justify-content: space-between; background: #161b22; padding: 15px; border-radius: 15px; margin-top: 20px; border: 1px solid var(--border); }
         .pred-item { text-align: center; width: 33%; }
         .pred-label { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
@@ -67,27 +64,31 @@
         .time-badge { color: var(--alert); font-weight: 900; border: 2px solid var(--alert); padding: 8px 15px; border-radius: 10px; display: inline-block; background:rgba(255,62,62,0.1); }
         .ended-badge { color: #888; font-weight: 900; border: 2px solid #555; padding: 8px 15px; border-radius: 10px; display: inline-block; background:#222; }
         .value-hunter { background: linear-gradient(135deg, #00ff88, #000); color: #000; padding: 25px; border-radius: 20px; text-align: center; margin-top: 25px; font-weight: 900; }
-        .league-divider { color: var(--gold); font-weight: 900; border-bottom: 3px solid var(--border); padding: 15px 0; text-transform: uppercase; letter-spacing: 2px; margin-top: 30px; }
+        .league-divider { color: var(--gold); font-weight: 900; border-bottom: 3px solid var(--border); padding: 15px 0; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; }
         
-        /* LIVE SCORE DISPLAY */
         .big-score { font-size: 3.5rem; font-weight: 900; color: #fff; text-align: center; margin: 10px 0; text-shadow: 0 0 20px var(--p); letter-spacing: 2px; }
-        .live-dot { height: 12px; width: 12px; background-color: var(--alert); border-radius: 50%; display: inline-block; margin-right: 8px; animation: neonBlink 1s infinite; }
-        
-        /* LIVE ZONE HEADER */
         .live-zone-header { background: linear-gradient(90deg, #000, rgba(0, 255, 65, 0.2), #000); text-align: center; padding: 15px; color: var(--live-green); font-weight: 900; letter-spacing: 3px; border-top: 2px solid var(--live-green); border-bottom: 2px solid var(--live-green); margin-bottom: 15px; }
+
+        /* FORM GUIDE STYLES */
+        .form-container { display: flex; justify-content: center; gap: 5px; margin-top: 5px; }
+        .form-dot { width: 12px; height: 12px; border-radius: 50%; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #000; }
+        .form-w { background: var(--live-green); }
+        .form-d { background: #888; }
+        .form-l { background: var(--alert); }
+        .team-form-wrapper { display: flex; justify-content: space-between; padding: 0 10px; margin-bottom: 15px; font-size: 0.8rem; color: #aaa; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v218</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v220</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">GLOBAL LIVE SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">PLATINUM SYNC...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE GLOBAL SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE PLATINUM SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -103,8 +104,10 @@
 
     <div id="intelPanel">
         <span onclick="this.parentElement.style.display='none'" style="position:absolute; top:20px; right:25px; font-size:3.5rem; color:var(--live-green); cursor:pointer;">×</span>
-        <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-bottom:0px;"></h2>
+        <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-bottom:5px;"></h2>
         
+        <div id="formGuideArea" class="team-form-wrapper"></div>
+
         <div id="bigScoreDisplay" class="big-score"></div>
         <div style="text-align:center; margin-bottom:20px;"><div id="statusBadge"></div></div>
         
@@ -279,12 +282,30 @@ function generateAcca() {
     document.getElementById('accaResult').innerHTML = html + "</div>";
 }
 
+function renderFormDots(formString) {
+    if(!formString) return '<span style="color:#555">No Data</span>';
+    return formString.split('').map(char => {
+        let cls = 'form-d';
+        if(char === 'W') cls = 'form-w';
+        if(char === 'L') cls = 'form-l';
+        return `<div class="form-dot ${cls}">${char}</div>`;
+    }).join('');
+}
+
 async function showIntel(d) {
     const panel = document.getElementById('intelPanel'); panel.style.display = 'block';
     const m = d.fixture; const p = d.prediction;
     const v = getMatchVerdict(p);
 
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
+    
+    // 20. RENDER FORM GUIDE
+    const hForm = p.teams.home.league.form || "?????";
+    const aForm = p.teams.away.league.form || "?????";
+    document.getElementById('formGuideArea').innerHTML = `
+        <div style="text-align:center;"><span>HOME FORM</span><div class="form-container">${renderFormDots(hForm)}</div></div>
+        <div style="text-align:center;"><span>AWAY FORM</span><div class="form-container">${renderFormDots(aForm)}</div></div>
+    `;
 
     const status = m.fixture.status.short;
     const isFT = ["FT", "AET", "PEN"].includes(status);
@@ -386,7 +407,7 @@ function renderMatches() {
     const liveMatches = masterData.filter(d => liveStatus.includes(d.fixture.fixture.status.short));
     const otherMatches = masterData.filter(d => !liveStatus.includes(d.fixture.fixture.status.short));
 
-    // 19. GLOBAL LIVE ZONE
+    // GLOBAL LIVE ZONE
     if (liveMatches.length > 0) {
         const liveDiv = document.createElement('div');
         liveDiv.innerHTML = `<div class="live-zone-header">⚡ GLOBAL LIVE ZONE (${liveMatches.length})</div>`;
@@ -416,7 +437,6 @@ function renderMatches() {
         list.appendChild(liveDiv);
     }
 
-    // OTHER MATCHES GROUPED BY LEAGUE
     const grouped = otherMatches.reduce((acc, d) => { acc[d.fixture.league.name] = acc[d.fixture.league.name] || []; acc[d.fixture.league.name].push(d); return acc; }, {});
     
     for(let league in grouped) {
