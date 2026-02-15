@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v215 - Live Apex</title>
+    <title>Predictor Pro v216 - Hierarchy</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -76,14 +76,14 @@
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v215</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v216</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">LIVE APEX SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">HIERARCHY SYNC...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE APEX SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE HIERARCHY SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -367,14 +367,14 @@ function renderMatches() {
         const div = document.createElement('div');
         div.innerHTML = `<div class="league-divider">${league}</div>`;
         
-        // 17. LIVE PRIORITY SORTING
+        // 18. STRICT STATUS SORTING (LIVE -> NS -> FT)
         grouped[league].sort((a, b) => {
-            const liveStatus = ["1H","HT","2H","ET","P"];
-            const isLiveA = liveStatus.includes(a.fixture.fixture.status.short);
-            const isLiveB = liveStatus.includes(b.fixture.fixture.status.short);
-            if (isLiveA && !isLiveB) return -1;
-            if (!isLiveA && isLiveB) return 1;
-            return 0;
+            const getWeight = (s) => {
+                if (['1H','HT','2H','ET','P','BT','LIVE'].includes(s)) return 3; // Live Top
+                if (['NS','TBD'].includes(s)) return 2; // Scheduled Middle
+                return 1; // Ended Bottom
+            };
+            return getWeight(b.fixture.fixture.status.short) - getWeight(a.fixture.fixture.status.short);
         });
 
         grouped[league].forEach(d => {
