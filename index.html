@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v206 - Perfect Dozen</title>
+    <title>Predictor Pro v208 - The Absolute</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -63,20 +63,21 @@
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v206</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v208</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">MASTER DOZEN SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">SYNCING ABSOLUTE DATA...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE DOZEN SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE ABSOLUTE SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
         <select id="accaType" style="width:100%; padding:20px; background:var(--card); color:#fff; border-radius:15px; border:2px solid var(--border); margin-bottom:15px; font-weight:800; font-size:1.1rem;">
             <option value="BUILDER">BET BUILDER (ΣΗΜΕΙΟ + O1.5 | xG > 1.9)</option>
             <option value="O25">OVER 2.5 GOALS (Min Prob 55%)</option>
+            <option value="O35">OVER 3.5 GOALS (Min Prob 50%)</option>
             <option value="1X2">ΣΗΜΕΙΑ 1X2 (Min Prob 60%)</option>
         </select>
         <button onclick="generateAcca()" class="btn-gen">GENERATE HIGH-VALUE PICKS</button>
@@ -134,12 +135,6 @@ function getPoisson(lambda, k) {
     return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial;
 }
 
-function calcScore(hXG, aXG) {
-    const h = Math.round(hXG);
-    const a = Math.round(aXG);
-    return `${h} - ${a}`;
-}
-
 async function globalSync() {
     masterData = [];
     document.getElementById('syncCont').style.display = 'block';
@@ -178,15 +173,16 @@ function renderMOD() {
         </div>`;
 }
 
+// CHECKPOINT: GENERATOR LOGIC GUARD
 function generateAcca() {
     const type = document.getElementById('accaType').value;
     let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
-    // Checkpoint: Stat Guards (xG > 1.9 for Builder, etc.)
+    // Step 1: Filter by xG (Quality of Play)
     if(type === 'BUILDER') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 1.9);
     if(type === 'O25') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 2.5);
     
-    // Checkpoint: Confidence Guard (>60%, >55%)
+    // Step 2: Filter by Probability % (Cut-off)
     const filtered = pool.filter(s => {
         const hXG = parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1);
         const aXG = parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1);
@@ -196,14 +192,18 @@ function generateAcca() {
         let prob = 0;
         if(type === '1X2') prob = winProb;
         else if(type === 'O25') prob = s.prediction?.predictions?.goals?.over || Math.round((1 - (getPoisson(totalXG,0)+getPoisson(totalXG,1)+getPoisson(totalXG,2)))*100);
+        else if(type === 'O35') prob = Math.round((1 - (getPoisson(totalXG,0)+getPoisson(totalXG,1)+getPoisson(totalXG,2)+getPoisson(totalXG,3)))*100);
         else if(type === 'BUILDER') {
             const over15 = Math.round((1 - (getPoisson(totalXG,0) + getPoisson(totalXG,1))) * 100);
             prob = Math.round(winProb * (over15/100));
         }
         
         s._calcProb = prob; 
+        
+        // STRICT CUT-OFF LIMITS
         if(type === '1X2') return prob >= 60;
         if(type === 'O25') return prob >= 55;
+        if(type === 'O35') return prob >= 50;
         if(type === 'BUILDER') return prob >= 50;
         return false;
     });
@@ -222,7 +222,7 @@ function generateAcca() {
         const aXG = parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1).toFixed(2);
         const totalXG = (parseFloat(hXG)+parseFloat(aXG)).toFixed(2);
         
-        let display = type === 'BUILDER' ? `${s.prediction?.predictions?.winner?.name} & O1.5` : (type === '1X2' ? s.prediction?.predictions?.winner?.name : 'Over 2.5');
+        let display = type === 'BUILDER' ? `${s.prediction?.predictions?.winner?.name} & O1.5` : (type === '1X2' ? s.prediction?.predictions?.winner?.name : (type==='O25'?'Over 2.5':'Over 3.5'));
         
         html += `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #444;">
             <span>${s.fixture.teams.home.name}</span>
@@ -269,25 +269,42 @@ async function showIntel(d) {
         document.getElementById('liveSection').style.display = 'block';
         document.getElementById('predBox').style.display = 'flex';
 
-        // 1. Prediction Box Logic
+        // 1. CONSENSUS & LOGIC LOCK
         const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
         const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
         const tXG = hXG + aXG;
 
+        const intH = Math.round(hXG); const intA = Math.round(aXG);
+        const fbH = Math.round(hXG + 0.2); const fbA = Math.max(0, Math.round(aXG - 0.1));
+        const zuH = Math.max(0, Math.round(hXG - 0.1)); const zuA = Math.round(aXG + 0.1);
+        const finH = Math.round((intH + fbH + zuH) / 3); 
+        const finA = Math.round((intA + fbA + zuA) / 3);
+
+        // CHECKPOINT: LOGIC LOCK
+        let smartSign = "X";
+        if(finH > finA) smartSign = "1";
+        else if(finA > finH) smartSign = "2";
+        else smartSign = "X (Draw)";
+
         const winProb = parseInt(p.predictions.percent.home);
+        const finalSign = winProb < 40 ? "NO BET" : smartSign;
+        const finalSignClass = winProb < 40 ? "low-conf" : (winProb > 60 ? "high-conf" : "mid-conf");
+
         const over15 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1))) * 100);
         const over25 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1) + getPoisson(tXG, 2))) * 100);
         
-        const winClass = winProb >= 60 ? "high-conf" : (winProb >= 40 ? "mid-conf" : "low-conf");
         const o15Class = over15 >= 70 ? "high-conf" : (over15 >= 50 ? "mid-conf" : "low-conf");
         const o25Class = over25 >= 55 ? "high-conf" : (over25 >= 45 ? "mid-conf" : "low-conf");
         
         document.getElementById('predBox').innerHTML = `
-            <div class="pred-item"><div class="pred-label">ΣΗΜΕΙΟ</div><div class="pred-val ${winClass}">${p.predictions.winner.name} (${winProb}%)</div></div>
+            <div class="pred-item"><div class="pred-label">ΣΗΜΕΙΟ</div><div class="pred-val ${finalSignClass}">${finalSign}</div></div>
             <div class="pred-item"><div class="pred-label">U/O 1.5</div><div class="pred-val ${o15Class}">${over15 >= 50 ? 'OVER' : 'UNDER'} (${over15 >= 50 ? over15 : 100-over15}%)</div></div>
             <div class="pred-item"><div class="pred-label">U/O 2.5</div><div class="pred-val ${o25Class}">${over25 >= 50 ? 'OVER' : 'UNDER'} (${over25 >= 50 ? over25 : 100-over25}%)</div></div>
         `;
 
+        document.getElementById('scoreBody').innerHTML = `<tr><td>${intH}-${intA}</td><td>${fbH}-${fbA}</td><td>${zuH}-${zuA}</td><td style="background:var(--cyan); color:#000;">${finH} - ${finA}</td></tr>`;
+
+        // Live Stats
         const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
         const sData = (await sRes.json()).response;
         
@@ -301,15 +318,6 @@ async function showIntel(d) {
             aK = sData[1].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
         }
 
-        // Consensus Score
-        const intH = Math.round(hXG); const intA = Math.round(aXG);
-        const fbH = Math.round(hXG + 0.2); const fbA = Math.max(0, Math.round(aXG - 0.1));
-        const zuH = Math.max(0, Math.round(hXG - 0.1)); const zuA = Math.round(aXG + 0.1);
-        const finH = Math.round((intH + fbH + zuH) / 3); const finA = Math.round((intA + fbA + zuA) / 3);
-        
-        document.getElementById('scoreBody').innerHTML = `<tr><td>${intH}-${intA}</td><td>${fbH}-${fbA}</td><td>${zuH}-${zuA}</td><td style="background:var(--cyan); color:#000;">${finH} - ${finA}</td></tr>`;
-
-        // Matrix
         const deltaC = ((hC + aC) - (9.5 * (elapsed/90))).toFixed(2);
         const deltaG = ((m.goals.home + m.goals.away) - (2.5 * (elapsed/90))).toFixed(2);
         
@@ -320,7 +328,6 @@ async function showIntel(d) {
             <tr><td>CARDS</td><td>2.1 (Avg) ${isL?`<br><span class="live-neon">(${hK} Live)</span>`:''}</td><td>2.3 (Avg) ${isL?`<br><span class="live-neon">(${aK} Live)</span>`:''}</td><td>-</td></tr>
         `;
 
-        // Pressure Audit
         const hPI = ((hDA * 1.2) + (hC * 5)) / (elapsed || 1);
         const aPI = ((aDA * 1.2) + (aC * 5)) / (elapsed || 1);
         document.getElementById('auditBody').innerHTML = `
