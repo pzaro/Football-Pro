@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v187 - Universal Analyst</title>
+    <title>Predictor Pro v189 - Sovereign Legacy</title>
     <style>
-        :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; }
+        :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
         .container { width: 100%; max-width: 1050px; margin: 0 auto; }
         
@@ -24,24 +24,24 @@
         
         .delta-tag { font-size: 0.9rem; padding: 4px 10px; border-radius: 8px; font-weight: 900; }
         .d-plus { background: rgba(0, 255, 65, 0.2); color: var(--live-green); }
-        .d-minus { background: rgba(255, 62, 62, 0.2); color: #ff3e3e; }
+        .d-minus { background: rgba(255, 62, 62, 0.2); color: var(--alert); }
 
         #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; z-index: 2000; overflow-y: auto; box-shadow: 0 0 100px #000; }
         .close-btn { position: absolute; top: 20px; right: 25px; font-size: 3rem; color: var(--live-green); cursor: pointer; font-weight: 900; }
         
         .time-bar { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 15px 0; }
-        .time-fill { background: #ff3e3e; height: 100%; transition: 0.3s; }
-        .adv-box { background: linear-gradient(135deg, #bf40bf, #000); border: 2px solid #fff; padding: 25px; border-radius: 20px; text-align: center; margin-top: 30px; }
+        .time-fill { background: var(--alert); height: 100%; transition: 0.3s; }
+        .value-alert-box { background: linear-gradient(135deg, #bf40bf, #000); border: 2px solid #fff; padding: 25px; border-radius: 20px; text-align: center; margin-top: 30px; box-shadow: 0 0 30px rgba(191, 64, 191, 0.4); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v187</h1>
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🌍 START ANALYST SYNC</button>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v189</h1>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🌍 START LEGACY ANALYST SYNC</button>
 
     <div id="pCont" style="display:none; margin-bottom:25px;">
-        <div style="display:flex; justify-content:space-between; font-weight: 900;"><span>Mining Global Data...</span><span id="pPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; font-weight: 900;"><span>Mining Final Data...</span><span id="pPerc">0%</span></div>
         <div style="background:#333; height:12px; border-radius:6px; overflow:hidden;"><div id="pFill" style="background:var(--p); height:100%; width:0%; transition:0.4s;"></div></div>
     </div>
 
@@ -51,9 +51,6 @@
             <option value="1X2">ΣΗΜΕΙΑ (1X2)</option>
             <option value="O25">OVER 2.5 GOALS</option>
             <option value="O35">OVER 3.5 GOALS</option>
-        </select>
-        <select id="accaCount" class="scroll-select">
-            <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
         </select>
         <button onclick="generateAcca()" class="btn-gen">GENERATE SMART ACCA</button>
         <div id="accaResult" style="margin-top:20px;"></div>
@@ -69,10 +66,7 @@
             </thead>
             <tbody id="matrixBody"></tbody>
         </table>
-        <div id="adviceBox" class="adv-box" style="display:none;">
-            <div id="adviceText" style="font-size:1.5rem; font-weight:900; color:#fff;"></div>
-            <div id="pressureText" style="color:var(--p); margin-top:10px; font-weight:800;"></div>
-        </div>
+        <div id="valueSection"></div>
     </div>
 
     <div id="matchList"></div>
@@ -83,6 +77,7 @@ const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [136, 281, 141, 39, 140, 135, 78]; 
 let masterData = [];
 
+// Poisson Formula (Checkpoint: NaN% Fix)
 function getPoisson(lambda, k) {
     let factorial = 1;
     for (let i = 1; i <= k; i++) factorial *= i;
@@ -119,25 +114,19 @@ function renderMOD() {
     const pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     if(pool.length === 0) return;
     const best = pool.sort((a,b) => (b.prediction?.predictions?.percent?.home || 0) - (a.prediction?.predictions?.percent?.home || 0))[0];
-    document.getElementById('modArea').innerHTML = `<div class="mod-box"><div style="color:var(--gold);font-size:0.8rem;font-weight:900;">MATCH OF THE DAY</div><div style="font-size:1.6rem;font-weight:900;">${best.fixture.teams.home.name} - ${best.fixture.teams.away.name}</div><div style="color:var(--p);font-size:1.3rem;">PICK: ${best.prediction?.predictions?.winner?.name} (${best.prediction?.predictions?.percent?.home}%)</div></div>`;
+    document.getElementById('modArea').innerHTML = `<div class="mod-box"><div style="color:var(--gold);font-size:0.8rem;font-weight:900;letter-spacing:1px;">MATCH OF THE DAY</div><div style="font-size:1.6rem;font-weight:900;margin:10px 0;">${best.fixture.teams.home.name} - ${best.fixture.teams.away.name}</div><div style="color:var(--p);font-size:1.3rem;">PICK: ${best.prediction?.predictions?.winner?.name} (${best.prediction?.predictions?.percent?.home}%)</div></div>`;
 }
 
 function generateAcca() {
     const type = document.getElementById('accaType').value;
-    const count = parseInt(document.getElementById('accaCount').value);
     let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
-    // Checkpoint: Stat Guard Goals Filters
+    // Checkpoint: xG Stat Guards
     if(type === 'O25') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 2.5);
     if(type === 'O35') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 3.5);
 
     let sorted = pool.sort((a,b) => (type === '1X2') ? (parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0)) : (parseFloat(b.prediction?.predictions?.goals?.over || 0) - parseFloat(a.prediction?.predictions?.goals?.over || 0)));
-    const selected = sorted.slice(0, count);
-
-    if(selected.length < count) {
-        document.getElementById('accaResult').innerHTML = `<div style="color:var(--gold); text-align:center; padding:15px; border:1px solid #444; border-radius:15px;">⚠️ Ανεπαρκή xG δεδομένα για ${type} Acca.</div>`;
-        return;
-    }
+    const selected = sorted.slice(0, 3);
 
     let html = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:20px; border:2px solid var(--value);">`;
     selected.forEach(s => {
@@ -177,23 +166,27 @@ async function showIntel(d) {
     const deltaC = ((hC + aC) - (9.5 * (elapsed/90))).toFixed(2);
     const suggestedLine = (hC + aC) + 2.5;
 
+    // Checkpoint: Neon Parentheses Data Insertion
     document.getElementById('matrixBody').innerHTML = `
         <tr><td>xG ATTACK</td><td>${p?.teams?.home?.last_5?.goals?.for?.average || 1.1} ${isL ? `<br><span class="live-neon">(${hG} Live)</span>` : ''}</td><td>${p?.teams?.away?.last_5?.goals?.for?.average || 1.1} ${isL ? `<br><span class="live-neon">(${aG} Live)</span>` : ''}</td><td><span class="delta-tag ${deltaG >= 0 ? 'd-plus' : 'd-minus'}">${deltaG}</span></td></tr>
         <tr><td>CORNERS</td><td>4.5 ${isL ? `<br><span class="live-neon">(${hC} Live)</span>` : ''}</td><td>4.0 ${isL ? `<br><span class="live-neon">(${aC} Live)</span>` : ''}</td><td><span class="delta-tag ${deltaC >= 0 ? 'd-plus' : 'd-minus'}">${deltaC}</span></td></tr>
         <tr><td>PRESS INDEX</td><td class="${isL ? 'live-neon' : ''}">${hPI.toFixed(2)}</td><td class="${isL ? 'live-neon' : ''}">${aPI.toFixed(2)}</td><td>-</td></tr>`;
 
-    // Checkpoint: Precision Advice
-    const advBox = document.getElementById('adviceBox');
+    // Checkpoint: Live Value Betting Advice
+    const valSec = document.getElementById('valueSection'); valSec.innerHTML = "";
     if(isL && elapsed > 20) {
-        advBox.style.display = 'block';
-        if(deltaC < -1.2 && (hDA + aDA) > 50) {
-            document.getElementById('adviceText').innerText = `ΠΡΟΤΑΣΗ: OVER ${Math.ceil(suggestedLine)}.5 ΚΟΡΝΕΡ (ΣΥΝΟΛΟ)`;
-            document.getElementById('pressureText').innerText = `ΠΙΕΣΗ ΑΠΟ: ${hDA > aDA ? m.teams.home.name.toUpperCase() : m.teams.away.name.toUpperCase()}`;
-        } else if (hPI > 2.8 && hG <= aG) {
-            document.getElementById('adviceText').innerText = `ΠΡΟΤΑΣΗ: ΕΠΟΜΕΝΟ ΓΚΟΛ ${m.teams.home.name.toUpperCase()}`;
-            document.getElementById('pressureText').innerText = `ΚΥΡΙΑΡΧΙΑ ΜΕ PI: ${hPI.toFixed(2)}`;
-        } else { advBox.style.display = 'none'; }
-    } else { advBox.style.display = 'none'; }
+        let advice = "";
+        if(deltaC < -1.2 && (hDA + aDA) > 50) advice = `VALUE: OVER ${Math.ceil(suggestedLine)}.5 CORNERS (Total)`;
+        else if (hPI > 2.8 && hG <= aG) advice = `VALUE: NEXT GOAL ${m.teams.home.name.toUpperCase()} (High PI)`;
+        
+        if(advice) {
+            valSec.innerHTML = `<div class="value-alert-box">
+                <div style="color:var(--gold); font-size:0.8rem; font-weight:900; margin-bottom:5px;">LIVE VALUE SIGNAL</div>
+                <div style="font-size:1.4rem; font-weight:900;">${advice}</div>
+                <div style="color:var(--live-green); margin-top:8px; font-size:0.9rem;">Δ Corner: ${deltaC} | Press: ${hDA > aDA ? 'Home' : 'Away'}</div>
+            </div>`;
+        }
+    }
 }
 
 function renderMatches() {
