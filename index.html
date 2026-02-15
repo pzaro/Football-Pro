@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v203 - Complete Collection</title>
+    <title>Predictor Pro v205 - Sovereign Crystal</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -42,6 +42,16 @@
 
         .success-tag { color: var(--live-green); border: 1px solid var(--live-green); padding: 5px 10px; border-radius: 8px; }
         .fail-tag { color: var(--alert); border: 1px solid var(--alert); padding: 5px 10px; border-radius: 8px; }
+        .no-picks { color: var(--alert); font-weight: 900; text-align: center; padding: 20px; border: 2px dashed var(--alert); border-radius: 15px; margin-top: 20px; }
+
+        /* Prediction Box Style */
+        .pred-box { display: flex; justify-content: space-between; background: #161b22; padding: 15px; border-radius: 15px; margin-top: 20px; border: 1px solid var(--border); }
+        .pred-item { text-align: center; width: 33%; }
+        .pred-label { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
+        .pred-val { font-size: 1.2rem; font-weight: 900; }
+        .high-conf { color: var(--live-green); }
+        .mid-conf { color: var(--gold); }
+        .low-conf { color: var(--alert); }
 
         #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 2%; left: 2%; right: 2%; bottom: 2%; z-index: 2000; overflow-y: auto; }
         .time-badge { color: var(--alert); font-weight: 900; border: 2px solid var(--alert); padding: 8px 15px; border-radius: 10px; display: inline-block; background:rgba(255,62,62,0.1); }
@@ -52,24 +62,23 @@
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v203</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v205</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">MASTER SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">CRYSTAL SYNC...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE COMPLETE SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE CRYSTAL SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
         <select id="accaType" style="width:100%; padding:20px; background:var(--card); color:#fff; border-radius:15px; border:2px solid var(--border); margin-bottom:15px; font-weight:800; font-size:1.1rem;">
             <option value="BUILDER">BET BUILDER (ΣΗΜΕΙΟ + O1.5 | xG > 1.9)</option>
-            <option value="O25">OVER 2.5 GOALS</option>
-            <option value="O35">OVER 3.5 GOALS</option>
-            <option value="1X2">ΣΗΜΕΙΑ (1X2)</option>
+            <option value="O25">OVER 2.5 GOALS (Min Prob 55%)</option>
+            <option value="1X2">ΣΗΜΕΙΑ 1X2 (Min Prob 60%)</option>
         </select>
-        <button onclick="generateAcca()" class="btn-gen">GENERATE SOVEREIGN PICKS</button>
+        <button onclick="generateAcca()" class="btn-gen">GENERATE HIGH-VALUE PICKS</button>
         <div id="accaResult" style="margin-top:20px;"></div>
     </div>
 
@@ -78,6 +87,8 @@
         <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-bottom:10px;"></h2>
         <div style="text-align:center;"><div id="statusBadge"></div></div>
         
+        <div id="predBox" class="pred-box"></div>
+
         <div id="verdictSection" style="display:none;">
             <h3 style="color:var(--gold); text-align:center; margin-top:20px;">⚖️ FINAL VERDICT AUDIT</h3>
             <table class="verdict-table">
@@ -120,12 +131,6 @@ function getPoisson(lambda, k) {
     if(lambda <= 0) return 0;
     let factorial = 1; for (let i = 1; i <= k; i++) factorial *= i;
     return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial;
-}
-
-function calcScore(hXG, aXG) {
-    const h = Math.round(hXG);
-    const a = Math.round(aXG);
-    return `${h} - ${a}`;
 }
 
 async function globalSync() {
@@ -172,24 +177,47 @@ function generateAcca() {
     
     if(type === 'BUILDER') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 1.9);
     if(type === 'O25') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 2.5);
-    if(type === 'O35') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 3.5);
+    
+    const filtered = pool.filter(s => {
+        const hXG = parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1);
+        const aXG = parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1);
+        const totalXG = hXG + aXG;
+        const winProb = parseInt(s.prediction?.predictions?.percent?.home || 0);
+        
+        let prob = 0;
+        if(type === '1X2') prob = winProb;
+        else if(type === 'O25') prob = s.prediction?.predictions?.goals?.over || Math.round((1 - (getPoisson(totalXG,0)+getPoisson(totalXG,1)+getPoisson(totalXG,2)))*100);
+        else if(type === 'BUILDER') {
+            const over15 = Math.round((1 - (getPoisson(totalXG,0) + getPoisson(totalXG,1))) * 100);
+            prob = Math.round(winProb * (over15/100));
+        }
+        
+        s._calcProb = prob; 
+        if(type === '1X2') return prob >= 60;
+        if(type === 'O25') return prob >= 55;
+        if(type === 'BUILDER') return prob >= 50;
+        return false;
+    });
 
-    let sorted = pool.sort((a,b) => (parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0)));
+    if(filtered.length === 0) {
+        document.getElementById('accaResult').innerHTML = `<div class="no-picks">⚠️ SYSTEM HOLD: NO HIGH-VALUE PICKS FOUND<br><small>All matches failed the ${type} confidence guard.</small></div>`;
+        return;
+    }
+
+    let sorted = filtered.sort((a,b) => b._calcProb - a._calcProb);
     const selected = sorted.slice(0, 3);
 
     let html = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:20px; border:2px solid var(--value);">`;
     selected.forEach(s => {
-        const totalXG = (parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1) + parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1)).toFixed(2);
-        const winProb = parseInt(s.prediction?.predictions?.percent?.home || 0);
-        const over15 = Math.round((1 - (getPoisson(totalXG,0) + getPoisson(totalXG,1))) * 100);
-        const builderProb = Math.round(winProb * (over15/100));
+        const hXG = parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1).toFixed(2);
+        const aXG = parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1).toFixed(2);
+        const totalXG = (parseFloat(hXG)+parseFloat(aXG)).toFixed(2);
         
         let display = type === 'BUILDER' ? `${s.prediction?.predictions?.winner?.name} & O1.5` : (type === '1X2' ? s.prediction?.predictions?.winner?.name : 'Over 2.5');
-        let stats = type === 'BUILDER' ? `(${builderProb}%)` : `(${winProb}%)`;
         
         html += `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #444;">
             <span>${s.fixture.teams.home.name}</span>
-            <b style="color:var(--p); text-align:right;">${display} <span style="color:var(--gold)">${stats}</span></b>
+            <b style="color:var(--p); text-align:right;">${display} <span style="color:var(--gold)">(${s._calcProb}% | xG: ${totalXG})</span></b>
         </div>`;
     });
     document.getElementById('accaResult').innerHTML = html + "</div>";
@@ -217,11 +245,10 @@ async function showIntel(d) {
         const winnerCheck = (actualWinner === predWinner) || (predWinner === m.teams.home.name && m.goals.home > m.goals.away) || (predWinner === m.teams.away.name && m.goals.away > m.goals.home);
         const totalGoals = m.goals.home + m.goals.away;
         const overCheck = totalGoals > 2.5;
-        const xGTotal = (parseFloat(p?.teams?.home?.last_5?.goals?.for?.average)+parseFloat(p?.teams?.away?.last_5?.goals?.for?.average)).toFixed(2);
 
         document.getElementById('verdictBody').innerHTML = `
             <tr><td>WINNER</td><td>${predWinner}</td><td>${actualWinner === "Draw" ? "X" : actualWinner}</td><td>${winnerCheck ? '<span class="success-tag">✅ ΕΠΙΤΥΧΙΑ</span>' : '<span class="fail-tag">❌ ΑΣΤΟΧΙΑ</span>'}</td></tr>
-            <tr><td>GOALS</td><td>xG: ${xGTotal}</td><td>${totalGoals} Goals</td><td>${overCheck ? '<span class="success-tag">OVER 2.5</span>' : '<span class="fail-tag">UNDER 2.5</span>'}</td></tr>
+            <tr><td>GOALS</td><td>xG: -</td><td>${totalGoals} Goals</td><td>${overCheck ? '<span class="success-tag">OVER 2.5</span>' : '<span class="fail-tag">UNDER 2.5</span>'}</td></tr>
         `;
 
     } else {
@@ -230,6 +257,26 @@ async function showIntel(d) {
         document.getElementById('verdictSection').style.display = 'none';
         document.getElementById('liveSection').style.display = 'block';
 
+        const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
+        const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
+        const tXG = hXG + aXG;
+
+        // CRYSTAL CLEAR PREDICTION CALCULATION
+        const winProb = parseInt(p.predictions.percent.home);
+        const over15 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1))) * 100);
+        const over25 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1) + getPoisson(tXG, 2))) * 100);
+        
+        const winClass = winProb >= 60 ? "high-conf" : (winProb >= 40 ? "mid-conf" : "low-conf");
+        const o15Class = over15 >= 70 ? "high-conf" : (over15 >= 50 ? "mid-conf" : "low-conf");
+        const o25Class = over25 >= 55 ? "high-conf" : (over25 >= 45 ? "mid-conf" : "low-conf");
+        
+        document.getElementById('predBox').innerHTML = `
+            <div class="pred-item"><div class="pred-label">ΣΗΜΕΙΟ</div><div class="pred-val ${winClass}">${p.predictions.winner.name} (${winProb}%)</div></div>
+            <div class="pred-item"><div class="pred-label">U/O 1.5</div><div class="pred-val ${o15Class}">${over15 >= 50 ? 'OVER' : 'UNDER'} (${over15 >= 50 ? over15 : 100-over15}%)</div></div>
+            <div class="pred-item"><div class="pred-label">U/O 2.5</div><div class="pred-val ${o25Class}">${over25 >= 50 ? 'OVER' : 'UNDER'} (${over25 >= 50 ? over25 : 100-over25}%)</div></div>
+        `;
+
+        // ... [Rest of Live Logic: Matrix, Consensus, Pressure] ...
         const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
         const sData = (await sRes.json()).response;
         
@@ -243,29 +290,16 @@ async function showIntel(d) {
             aK = sData[1].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
         }
 
-        const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
-        const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
-        
-        // Score Consensus
-        const intH = Math.round(hXG); const intA = Math.round(aXG);
-        const fbH = Math.round(hXG + 0.2); const fbA = Math.max(0, Math.round(aXG - 0.1));
-        const zuH = Math.max(0, Math.round(hXG - 0.1)); const zuA = Math.round(aXG + 0.1);
-        const finH = Math.round((intH + fbH + zuH) / 3); const finA = Math.round((intA + fbA + zuA) / 3);
-        
-        document.getElementById('scoreBody').innerHTML = `<tr><td>${intH}-${intA}</td><td>${fbH}-${fbA}</td><td>${zuH}-${zuA}</td><td style="background:var(--cyan); color:#000;">${finH} - ${finA}</td></tr>`;
-
-        // Quantum Matrix
         const deltaC = ((hC + aC) - (9.5 * (elapsed/90))).toFixed(2);
         const deltaG = ((m.goals.home + m.goals.away) - (2.5 * (elapsed/90))).toFixed(2);
         
         document.getElementById('matrixBody').innerHTML = `
             <tr><td>xG ATTACK</td><td>${hXG} ${isL?`<br><span class="live-neon">(${m.goals.home} Live)</span>`:''}</td><td>${aXG} ${isL?`<br><span class="live-neon">(${m.goals.away} Live)</span>`:''}</td><td><span class="delta-tag ${deltaG>=0?'d-plus':'d-minus'}">${deltaG}</span></td></tr>
             <tr><td>xGA DEFENSE</td><td>${p?.teams?.home?.last_5?.goals?.against?.average || 1.0}</td><td>${p?.teams?.away?.last_5?.goals?.against?.average || 1.0}</td><td>-</td></tr>
-            <tr><td>CORNERS</td><td>4.5 ${isL?`<br><span class="live-neon">(${hC} Live)</span>`:''}</td><td>4.0 ${isL?`<br><span class="live-neon">(${aC} Live)</span>`:''}</td><td><span class="delta-tag ${deltaC>=0?'d-plus':'d-minus'}">${deltaC}</span></td></tr>
-            <tr><td>CARDS</td><td>2.1 ${isL?`<br><span class="live-neon">(${hK} Live)</span>`:''}</td><td>2.3 ${isL?`<br><span class="live-neon">(${aK} Live)</span>`:''}</td><td>-</td></tr>
+            <tr><td>CORNERS </td><td>4.5 (Avg) ${isL?`<br><span class="live-neon">(${hC} Live)</span>`:''}</td><td>4.0 (Avg) ${isL?`<br><span class="live-neon">(${aC} Live)</span>`:''}</td><td><span class="delta-tag ${deltaC>=0?'d-plus':'d-minus'}">${deltaC}</span></td></tr>
+            <tr><td>CARDS</td><td>2.1 (Avg) ${isL?`<br><span class="live-neon">(${hK} Live)</span>`:''}</td><td>2.3 (Avg) ${isL?`<br><span class="live-neon">(${aK} Live)</span>`:''}</td><td>-</td></tr>
         `;
 
-        // Pressure Audit
         const hPI = ((hDA * 1.2) + (hC * 5)) / (elapsed || 1);
         const aPI = ((aDA * 1.2) + (aC * 5)) / (elapsed || 1);
         document.getElementById('auditBody').innerHTML = `
@@ -273,7 +307,6 @@ async function showIntel(d) {
             <tr><td>${m.teams.away.name}</td><td>${aDA}</td><td>${aC}</td><td style="color:${aPI>2.5?'var(--alert)':'var(--gold)'}">${aPI.toFixed(2)}</td></tr>
         `;
 
-        // Value Hunter
         let adv = ""; let conf = 0;
         if(isL && elapsed > 20) {
             if(hPI > 3.0 && m.goals.home <= m.goals.away) { adv = `NEXT GOAL: ${m.teams.home.name.toUpperCase()}`; conf = 76; }
@@ -282,9 +315,7 @@ async function showIntel(d) {
             
             if(adv && conf >= 70) {
                 document.getElementById('valueAlertArea').innerHTML = `<div class="value-hunter">🎯 ${adv} <br> <small>CONFIDENCE: ${conf}% | PI: ${Math.max(hPI,aPI).toFixed(1)}</small></div>`;
-            } else {
-                 document.getElementById('valueAlertArea').innerHTML = "";
-            }
+            } else { document.getElementById('valueAlertArea').innerHTML = ""; }
         }
     }
 }
@@ -295,7 +326,7 @@ function renderMatches() {
     
     for(let league in grouped) {
         const div = document.createElement('div');
-        div.innerHTML = `<div style="color:var(--gold); border-bottom:2px solid var(--border); padding:10px 0; text-transform:uppercase; font-weight:900;">${league}</div>`;
+        div.innerHTML = `<div class="league-divider">${league}</div>`;
         grouped[league].forEach(d => {
             const status = d.fixture.fixture.status.short;
             const isFT = ["FT", "AET", "PEN"].includes(status);
