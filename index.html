@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v208 - The Absolute</title>
+    <title>Predictor Pro v210 - Ultimate Logic</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -63,14 +63,14 @@
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v208</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v210</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">SYNCING ABSOLUTE DATA...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">ULTIMATE SYNC...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE ABSOLUTE SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE ULTIMATE SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -135,6 +135,12 @@ function getPoisson(lambda, k) {
     return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial;
 }
 
+function calcScore(hXG, aXG) {
+    const h = Math.round(hXG);
+    const a = Math.round(aXG);
+    return { str: `${h} - ${a}`, h: h, a: a };
+}
+
 async function globalSync() {
     masterData = [];
     document.getElementById('syncCont').style.display = 'block';
@@ -173,16 +179,16 @@ function renderMOD() {
         </div>`;
 }
 
-// CHECKPOINT: GENERATOR LOGIC GUARD
+// CHECKPOINT: GENERATOR CUT-OFF & STAT GUARD
 function generateAcca() {
     const type = document.getElementById('accaType').value;
     let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
-    // Step 1: Filter by xG (Quality of Play)
+    // Step 1: Filter by xG
     if(type === 'BUILDER') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 1.9);
     if(type === 'O25') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 2.5);
     
-    // Step 2: Filter by Probability % (Cut-off)
+    // Step 2: Filter by Probability (Cut-off)
     const filtered = pool.filter(s => {
         const hXG = parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1);
         const aXG = parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1);
@@ -256,10 +262,11 @@ async function showIntel(d) {
         const winnerCheck = (actualWinner === predWinner) || (predWinner === m.teams.home.name && m.goals.home > m.goals.away) || (predWinner === m.teams.away.name && m.goals.away > m.goals.home);
         const totalGoals = m.goals.home + m.goals.away;
         const overCheck = totalGoals > 2.5;
+        const xGTotal = (parseFloat(p?.teams?.home?.last_5?.goals?.for?.average)+parseFloat(p?.teams?.away?.last_5?.goals?.for?.average)).toFixed(2);
 
         document.getElementById('verdictBody').innerHTML = `
             <tr><td>WINNER</td><td>${predWinner}</td><td>${actualWinner === "Draw" ? "X" : actualWinner}</td><td>${winnerCheck ? '<span class="success-tag">✅ ΕΠΙΤΥΧΙΑ</span>' : '<span class="fail-tag">❌ ΑΣΤΟΧΙΑ</span>'}</td></tr>
-            <tr><td>GOALS</td><td>-</td><td>${totalGoals} Goals</td><td>${overCheck ? '<span class="success-tag">OVER 2.5</span>' : '<span class="fail-tag">UNDER 2.5</span>'}</td></tr>
+            <tr><td>GOALS</td><td>xG: ${xGTotal}</td><td>${totalGoals} Goals</td><td>${overCheck ? '<span class="success-tag">OVER 2.5</span>' : '<span class="fail-tag">UNDER 2.5</span>'}</td></tr>
         `;
 
     } else {
@@ -269,7 +276,7 @@ async function showIntel(d) {
         document.getElementById('liveSection').style.display = 'block';
         document.getElementById('predBox').style.display = 'flex';
 
-        // 1. CONSENSUS & LOGIC LOCK
+        // 1. HARMONIZED LOGIC
         const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
         const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
         const tXG = hXG + aXG;
@@ -279,12 +286,17 @@ async function showIntel(d) {
         const zuH = Math.max(0, Math.round(hXG - 0.1)); const zuA = Math.round(aXG + 0.1);
         const finH = Math.round((intH + fbH + zuH) / 3); 
         const finA = Math.round((intA + fbA + zuA) / 3);
+        const predScoreGoals = finH + finA;
 
-        // CHECKPOINT: LOGIC LOCK
+        // CHECKPOINT: LOGIC HARMONY (Score drives Prediction)
         let smartSign = "X";
         if(finH > finA) smartSign = "1";
         else if(finA > finH) smartSign = "2";
         else smartSign = "X (Draw)";
+
+        let smartOver15 = "UNDER"; let smartOver25 = "UNDER";
+        if(predScoreGoals >= 2) smartOver15 = "OVER";
+        if(predScoreGoals >= 3) smartOver25 = "OVER";
 
         const winProb = parseInt(p.predictions.percent.home);
         const finalSign = winProb < 40 ? "NO BET" : smartSign;
@@ -293,13 +305,19 @@ async function showIntel(d) {
         const over15 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1))) * 100);
         const over25 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1) + getPoisson(tXG, 2))) * 100);
         
-        const o15Class = over15 >= 70 ? "high-conf" : (over15 >= 50 ? "mid-conf" : "low-conf");
-        const o25Class = over25 >= 55 ? "high-conf" : (over25 >= 45 ? "mid-conf" : "low-conf");
+        // Force Harmony: If score says Over, display Over
+        const o15Disp = smartOver15 === "OVER" ? "OVER" : "UNDER";
+        const o25Disp = smartOver25 === "OVER" ? "OVER" : "UNDER";
+        const o15Prob = smartOver15 === "OVER" ? over15 : (100-over15);
+        const o25Prob = smartOver25 === "OVER" ? over25 : (100-over25);
+
+        const o15Class = o15Prob >= 65 ? "high-conf" : "mid-conf";
+        const o25Class = o25Prob >= 55 ? "high-conf" : "mid-conf";
         
         document.getElementById('predBox').innerHTML = `
             <div class="pred-item"><div class="pred-label">ΣΗΜΕΙΟ</div><div class="pred-val ${finalSignClass}">${finalSign}</div></div>
-            <div class="pred-item"><div class="pred-label">U/O 1.5</div><div class="pred-val ${o15Class}">${over15 >= 50 ? 'OVER' : 'UNDER'} (${over15 >= 50 ? over15 : 100-over15}%)</div></div>
-            <div class="pred-item"><div class="pred-label">U/O 2.5</div><div class="pred-val ${o25Class}">${over25 >= 50 ? 'OVER' : 'UNDER'} (${over25 >= 50 ? over25 : 100-over25}%)</div></div>
+            <div class="pred-item"><div class="pred-label">U/O 1.5</div><div class="pred-val ${o15Class}">${o15Disp} (${o15Prob}%)</div></div>
+            <div class="pred-item"><div class="pred-label">U/O 2.5</div><div class="pred-val ${o25Class}">${o25Disp} (${o25Prob}%)</div></div>
         `;
 
         document.getElementById('scoreBody').innerHTML = `<tr><td>${intH}-${intA}</td><td>${fbH}-${fbA}</td><td>${zuH}-${zuA}</td><td style="background:var(--cyan); color:#000;">${finH} - ${finA}</td></tr>`;
