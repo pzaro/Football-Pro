@@ -3,70 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v167 - Pro-Vision</title>
+    <title>Predictor Pro v168 - Sovereign Ultimate</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live: #ff3e3e; --value: #bf40bf; }
-        /* ΑΥΞΗΣΗ ΓΡΑΜΜΑΤΟΣΕΙΡΑΣ */
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1rem; line-height: 1.5; }
-        .container { width: 100%; max-width: 950px; margin: 0 auto; }
         
-        .dashboard { background: #000; border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 25px; }
-        .p-bar { background: #333; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; }
-        .p-fill { background: var(--p); height: 100%; width: 0%; transition: 0.3s; }
-        
-        button, select { padding: 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 800; cursor: pointer; font-size: 1rem; }
-        .btn-sync { background: var(--p); color: #000; border: none; width: 100%; margin-bottom: 20px; font-size: 1.1rem; }
+        /* ΜΕΓΑΛΥΤΕΡΗ ΓΡΑΜΜΑΤΟΣΕΙΡΑ */
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.6; }
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; }
 
-        .league-group { background: #000; border: 1px solid var(--border); border-radius: 15px; margin-bottom: 20px; padding: 15px; }
-        .league-title { color: var(--gold); font-weight: 900; padding-bottom: 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; margin-bottom: 15px; font-size: 1.1rem; }
+        /* Dashboard & Controls */
+        .dashboard { background: #000; border: 3px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 30px; }
+        .acca-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; margin-bottom: 20px; }
+        select, button { padding: 18px; border-radius: 15px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 900; font-size: 1.1rem; cursor: pointer; }
+        .btn-sync { background: var(--p); color: #000; border: none; width: 100%; font-size: 1.2rem; margin-bottom: 15px; }
+
+        /* Progress Bar */
+        .p-bar { background: #333; height: 15px; border-radius: 8px; overflow: hidden; margin-top: 10px; }
+        .p-fill { background: var(--p); height: 100%; width: 0%; transition: 0.4s; }
+
+        /* Categorization & Cards */
+        .league-group { background: #000; border: 2px solid var(--border); border-radius: 20px; margin-bottom: 25px; padding: 15px; }
+        .league-title { color: var(--gold); font-weight: 900; padding-bottom: 12px; border-bottom: 3px solid var(--border); text-transform: uppercase; font-size: 1.3rem; margin-bottom: 15px; }
         
-        .match-card { background: var(--card); padding: 20px; border-radius: 15px; margin-top: 10px; border-left: 8px solid var(--border); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .match-live { border-left-color: var(--live); box-shadow: 0 0 15px rgba(255, 62, 62, 0.2); }
+        .match-card { background: var(--card); padding: 25px; border-radius: 20px; margin-top: 12px; border-left: 10px solid var(--border); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .match-live { border-left-color: var(--live); box-shadow: 0 0 20px rgba(255, 62, 62, 0.2); }
 
         /* MATRIX TABLE UI */
-        #intelPanel { display: none; background: #000; border: 3px solid var(--p); border-radius: 25px; padding: 25px; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 0 80px #000; }
-        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .matrix-table th { color: var(--gold); text-align: left; padding: 12px; border-bottom: 3px solid var(--border); font-size: 0.9rem; }
-        .matrix-table td { padding: 15px 12px; border-bottom: 1px solid #222; font-weight: 700; font-size: 1rem; }
-        .live-val { display: block; color: var(--live); font-size: 0.85rem; font-weight: 400; margin-top: 5px; }
+        #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; z-index: 2000; overflow-y: auto; box-shadow: 0 0 100px #000; }
+        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 25px; }
+        .matrix-table th { color: var(--gold); text-align: left; padding: 15px; border-bottom: 4px solid var(--border); font-size: 1rem; }
+        .matrix-table td { padding: 20px 15px; border-bottom: 1px solid #222; font-weight: 800; font-size: 1.2rem; }
+        .live-val { display: block; color: var(--live); font-size: 0.95rem; font-weight: 600; margin-top: 6px; }
 
-        .advice-box { background: rgba(191, 64, 191, 0.2); border: 2px solid var(--value); padding: 20px; border-radius: 15px; text-align: center; margin-top: 25px; }
-        .advice-text { font-size: 1.3rem; font-weight: 900; color: #fff; }
+        /* Strategic Recommendation */
+        .advice-box { background: rgba(191, 64, 191, 0.25); border: 3px solid var(--value); padding: 25px; border-radius: 20px; text-align: center; margin-top: 30px; }
+        .advice-text { font-size: 1.5rem; font-weight: 900; color: #fff; text-transform: uppercase; }
+        
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; color: var(--live); cursor: pointer; font-weight: 900; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); letter-spacing: 2px;">PREDICTOR PRO v167</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v168</h1>
     
-    <button class="btn-sync" onclick="globalSync()">🌍 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΥΓΧΡΟΝΙΣΜΟΥ</button>
-    <div id="pCont" style="display:none; margin-bottom:20px;">
+    <button class="btn-sync" onclick="globalSync()">🌍 ΕΝΑΡΞΗ ΚΑΘΟΛΙΚΟΥ ΣΥΓΧΡΟΝΙΣΜΟΥ</button>
+    
+    <div id="pCont" style="display:none; margin-bottom:25px;">
         <div style="display:flex; justify-content:space-between; font-weight: 900;"><span>Data Mining...</span><span id="pPerc">0%</span></div>
         <div class="p-bar"><div id="pFill" class="p-fill"></div></div>
     </div>
 
     <div id="dashboard" class="dashboard" style="display:none;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 15px;">
-            <select id="accaType"><option value="1X2">ΣΗΜΕΙΑ (1X2)</option><option value="O25">OVER 2.5</option></select>
+        <div class="acca-grid">
+            <select id="accaType"><option value="1X2">ΣΗΜΕΙΑ (1X2)</option><option value="O25">GOALS > 2.5</option><option value="O35">GOALS > 3.5</option></select>
             <select id="accaCount"><option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option></select>
-            <button onclick="generateAcca()" style="background:var(--value); border:none; color:#fff;">GENERATE</button>
+            <button onclick="generateAcca()" style="background:var(--value); color:#fff; border:none;">GENERATE ACCA</button>
         </div>
         <div id="accaResult"></div>
     </div>
 
     <div id="intelPanel">
-        <span onclick="this.parentElement.style.display='none'" style="float:right; cursor:pointer; font-weight:900; color:var(--live); font-size: 1.5rem;">✕</span>
-        <h2 id="mTitle" style="text-align:center; color:var(--gold); margin:0 0 15px 0;"></h2>
+        <span class="close-btn" onclick="this.parentElement.style.display='none'">×</span>
+        <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-bottom: 20px;"></h2>
         
         <table class="matrix-table">
             <thead>
-                <tr><th>ΣΤΑΤΙΣΤΙΚΟ</th><th>ΓΗΠΕΔΟΥΧΟΣ</th><th>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</th></tr>
+                <tr><th>ΣΤΑΤΙΣΤΙΚΟ (MATRIX)</th><th>ΓΗΠΕΔΟΥΧΟΣ</th><th>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</th></tr>
             </thead>
             <tbody id="matrixBody"></tbody>
         </table>
 
         <div id="adviceBox" class="advice-box" style="display:none;">
-            <div style="color:var(--value); font-weight:900; font-size:0.8rem; margin-bottom:5px;">ΣΤΡΑΤΗΓΙΚΗ ΠΡΟΤΑΣΗ</div>
+            <div style="color:var(--value); font-weight:900; font-size:0.9rem; margin-bottom:8px;">ΣΤΡΑΤΗΓΙΚΗ ΠΡΟΤΑΣΗ VALUE BET</div>
             <div id="adviceText" class="advice-text"></div>
         </div>
     </div>
@@ -107,19 +116,21 @@ async function globalSync() {
 function generateAcca() {
     const type = document.getElementById('accaType').value;
     const count = parseInt(document.getElementById('accaCount').value);
-    const pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
+    const upcoming = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
-    let sorted = pool.sort((a,b) => {
+    let sorted = upcoming.sort((a,b) => {
         if(type === '1X2') return (parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0));
         return (parseFloat(b.prediction?.predictions?.goals?.over || 0) - parseFloat(a.prediction?.predictions?.goals?.over || 0));
     });
 
     const selected = sorted.slice(0, count);
-    let html = `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; border:1px solid var(--border);">`;
+    if(selected.length === 0) { alert("Δεν βρέθηκαν επερχόμενοι αγώνες!"); return; }
+
+    let html = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:15px; border:2px solid var(--value);">`;
     selected.forEach(s => {
-        const pick = type === '1X2' ? (s.prediction?.predictions?.winner?.name || '1') : 'OVER 2.5';
-        html += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #333;">
-            <span style="font-weight:900;">${s.fixture.teams.home.name}</span> <b style="color:var(--p);">${pick}</b>
+        const pick = type === '1X2' ? (s.prediction?.predictions?.winner?.name || '1') : (type === 'O25' ? 'OVER 2.5' : 'OVER 3.5');
+        html += `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #444;">
+            <span style="font-weight:900;">${s.fixture.teams.home.name} - ${s.fixture.teams.away.name}</span> <b style="color:var(--p);">${pick}</b>
         </div>`;
     });
     document.getElementById('accaResult').innerHTML = html + "</div>";
@@ -130,8 +141,8 @@ async function showIntel(d) {
     panel.style.display = 'block';
     const m = d.fixture; const p = d.prediction;
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
-    window.scrollTo({top: 0, behavior: 'smooth'});
 
+    // LIVE STATS FETCHING
     const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
     const sData = (await sRes.json()).response;
 
@@ -139,10 +150,11 @@ async function showIntel(d) {
     let lH_G = m.goals.home, lA_G = m.goals.away, lH_C = 0, lA_C = 0, lH_K = 0, lA_K = 0;
 
     if(sData && sData.length > 0){
-        lH_C = sData[0].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
-        lA_C = sData[1].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
-        lH_K = sData[0].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
-        lA_K = sData[1].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
+        const hS = sData[0].statistics; const aS = sData[1].statistics;
+        lH_C = hS.find(s=>s.type==="Corner Kicks")?.value || 0;
+        lA_C = aS.find(s=>s.type==="Corner Kicks")?.value || 0;
+        lH_K = hS.find(s=>s.type==="Yellow Cards")?.value || 0;
+        lA_K = aS.find(s=>s.type==="Yellow Cards")?.value || 0;
     }
 
     const rows = [
@@ -162,11 +174,12 @@ async function showIntel(d) {
     });
     document.getElementById('matrixBody').innerHTML = html;
 
+    // STRATEGIC ADVICE
     const time = m.fixture.status.elapsed || 1;
     let adv = "";
     if(isLive && time > 15){
-        if(lH_G === 0 && rows[0].h > 1.4) adv = "Πρόταση: Ποντάρετε επόμενο γκολ Γηπεδούχος";
-        else if(lA_G === 0 && rows[0].a > 1.4) adv = "Πρόταση: Ποντάρετε επόμενο γκολ Φιλοξενούμενη";
+        if(lH_G === 0 && rows[0].h > 1.4) adv = `Πρόταση: Ποντάρετε επόμενο γκολ ${m.teams.home.name}`;
+        else if(lA_G === 0 && rows[0].a > 1.4) adv = `Πρόταση: Ποντάρετε επόμενο γκολ ${m.teams.away.name}`;
         else if((lH_C + lA_C) < 3 && time > 30) adv = "Πρόταση: Over Κόρνερ (Υπάρχει πίεση)";
     }
     
@@ -185,7 +198,7 @@ function renderMatches() {
             const isL = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
             const card = document.createElement('div'); card.className = `match-card ${isL ? 'match-live' : ''}`;
             card.onclick = () => showIntel(d);
-            card.innerHTML = `<div><b style="font-size:1.1rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br><small>${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' ('+d.fixture.fixture.status.elapsed+"')" : d.fixture.fixture.status.short}</small></div><div style="font-weight:900; color:var(--p);">${isL ? 'LIVE SCAN' : 'PRE-DATA'}</div>`;
+            card.innerHTML = `<div><b style="font-size:1.2rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br><small style="font-size:1rem;">${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' ('+d.fixture.fixture.status.elapsed+"')" : d.fixture.fixture.status.short}</small></div><div style="font-weight:900; color:var(--p); font-size:1rem;">${isL ? 'LIVE SCAN' : 'PRE-DATA'}</div>`;
             div.appendChild(card);
         });
         list.appendChild(div);
