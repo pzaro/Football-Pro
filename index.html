@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v223 - Legacy</title>
+    <title>Predictor Pro v224 - True Home</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -87,7 +87,6 @@
         .ngp-bars { display: flex; justify-content: space-between; align-items: center; }
         .ngp-val { font-size: 1.4rem; font-weight: 900; }
 
-        /* H2H STYLES */
         .h2h-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #111; font-size: 0.85rem; border: 1px solid #333; }
         .h2h-table td { padding: 8px; border-bottom: 1px solid #333; color: #ccc; }
         .h2h-score { font-weight: 900; color: var(--gold); padding: 0 10px; }
@@ -97,14 +96,14 @@
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v223</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v224</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">LEGACY SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">TRUE HOME SYNC...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE LEGACY SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE FULL SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -147,7 +146,7 @@
             </table>
 
             <div id="h2hSection" style="margin-top:20px;">
-                <h3 style="color:#aaa; font-size:0.8rem; text-align:center; margin-bottom:5px;">HEAD-TO-HEAD HISTORY (LAST 5)</h3>
+                <h3 style="color:#aaa; font-size:0.8rem; text-align:center; margin-bottom:5px;">STRICT HOME/AWAY HISTORY</h3>
                 <div id="h2hContent" style="text-align:center; font-style:italic; color:#666;">Loading History...</div>
             </div>
 
@@ -330,19 +329,26 @@ async function showIntel(d) {
         <div style="text-align:center;"><span>AWAY FORM</span><div class="form-container">${renderFormDots(aForm)}</div></div>
     `;
 
-    // 23. H2H FETCH
+    // 22. STRICT HOME/AWAY H2H
     document.getElementById('h2hContent').innerHTML = "Fetching History...";
     try {
         const h2hRes = await fetch(`https://v3.football.api-sports.io/fixtures/headtohead?h2h=${m.teams.home.id}-${m.teams.away.id}`, {headers: {"x-rapidapi-key": KEY}});
         const h2hData = await h2hRes.json();
         if(h2hData.response && h2hData.response.length > 0) {
-            let h2hHtml = `<table class="h2h-table">`;
-            h2hData.response.slice(0,5).forEach(game => {
-                const date = new Date(game.fixture.date).toLocaleDateString('en-GB', {day:'2-digit', month:'2-digit', year:'2-digit'});
-                h2hHtml += `<tr><td class="h2h-date">${date}</td><td style="text-align:right">${game.teams.home.name}</td><td class="h2h-score">${game.goals.home}-${game.goals.away}</td><td style="text-align:left">${game.teams.away.name}</td></tr>`;
-            });
-            h2hHtml += `</table>`;
-            document.getElementById('h2hContent').innerHTML = h2hHtml;
+            // FILTER: STRICT HOME/AWAY
+            const strictH2H = h2hData.response.filter(g => g.teams.home.id === m.teams.home.id);
+            
+            if (strictH2H.length > 0) {
+                let h2hHtml = `<table class="h2h-table">`;
+                strictH2H.slice(0,5).forEach(game => {
+                    const date = new Date(game.fixture.date).toLocaleDateString('en-GB', {day:'2-digit', month:'2-digit', year:'2-digit'});
+                    h2hHtml += `<tr><td class="h2h-date">${date}</td><td style="text-align:right">${game.teams.home.name}</td><td class="h2h-score">${game.goals.home}-${game.goals.away}</td><td style="text-align:left">${game.teams.away.name}</td></tr>`;
+                });
+                h2hHtml += `</table>`;
+                document.getElementById('h2hContent').innerHTML = h2hHtml;
+            } else {
+                document.getElementById('h2hContent').innerHTML = "<small>No past matches at this venue.</small>";
+            }
         } else {
             document.getElementById('h2hContent').innerHTML = "<small>No recent H2H history found.</small>";
         }
@@ -495,6 +501,7 @@ function renderMatches() {
     const liveMatches = masterData.filter(d => liveStatus.includes(d.fixture.fixture.status.short));
     const otherMatches = masterData.filter(d => !liveStatus.includes(d.fixture.fixture.status.short));
 
+    // GLOBAL LIVE ZONE
     if (liveMatches.length > 0) {
         const liveDiv = document.createElement('div');
         liveDiv.innerHTML = `<div class="live-zone-header">⚡ GLOBAL LIVE ZONE (${liveMatches.length})</div>`;
