@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v220 - Platinum</title>
+    <title>Predictor Pro v221 - Total Cyprus</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -69,7 +69,6 @@
         .big-score { font-size: 3.5rem; font-weight: 900; color: #fff; text-align: center; margin: 10px 0; text-shadow: 0 0 20px var(--p); letter-spacing: 2px; }
         .live-zone-header { background: linear-gradient(90deg, #000, rgba(0, 255, 65, 0.2), #000); text-align: center; padding: 15px; color: var(--live-green); font-weight: 900; letter-spacing: 3px; border-top: 2px solid var(--live-green); border-bottom: 2px solid var(--live-green); margin-bottom: 15px; }
 
-        /* FORM GUIDE STYLES */
         .form-container { display: flex; justify-content: center; gap: 5px; margin-top: 5px; }
         .form-dot { width: 12px; height: 12px; border-radius: 50%; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #000; }
         .form-w { background: var(--live-green); }
@@ -81,14 +80,14 @@
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v220</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v221</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">PLATINUM SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">SCANNING ALL LEAGUES...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE PLATINUM SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE FULL SCAN</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -148,7 +147,13 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [136, 281, 141, 197, 61, 40, 94, 262, 128, 39, 140, 135, 78]; 
+// ALL CYPRUS LEAGUES ADDED
+const LEAGUES = [
+    318, // 1. Division Cyprus
+    320, // 2. Division Cyprus
+    319, // Cyprus Cup
+    136, 141, 197, 61, 40, 94, 262, 128, 39, 140, 135, 78
+]; 
 let masterData = [];
 
 function getPoisson(lambda, k) {
@@ -299,7 +304,7 @@ async function showIntel(d) {
 
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
     
-    // 20. RENDER FORM GUIDE
+    // FORM GUIDE
     const hForm = p.teams.home.league.form || "?????";
     const aForm = p.teams.away.league.form || "?????";
     document.getElementById('formGuideArea').innerHTML = `
@@ -407,7 +412,6 @@ function renderMatches() {
     const liveMatches = masterData.filter(d => liveStatus.includes(d.fixture.fixture.status.short));
     const otherMatches = masterData.filter(d => !liveStatus.includes(d.fixture.fixture.status.short));
 
-    // GLOBAL LIVE ZONE
     if (liveMatches.length > 0) {
         const liveDiv = document.createElement('div');
         liveDiv.innerHTML = `<div class="live-zone-header">⚡ GLOBAL LIVE ZONE (${liveMatches.length})</div>`;
@@ -443,7 +447,6 @@ function renderMatches() {
         const div = document.createElement('div');
         div.innerHTML = `<div class="league-divider">${league}</div>`;
         
-        // Sort: NS first, then FT
         grouped[league].sort((a, b) => {
             const isFTA = ["FT", "AET", "PEN"].includes(a.fixture.fixture.status.short);
             const isFTB = ["FT", "AET", "PEN"].includes(b.fixture.fixture.status.short);
