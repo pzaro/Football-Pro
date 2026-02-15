@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v195 - Sovereign Final</title>
+    <title>Predictor Pro v197 - Pressure Audit</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -12,60 +12,52 @@
         @keyframes neonBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--live-green); } 50% { opacity: 0.5; } }
         .live-neon { color: var(--live-green); font-weight: 900; animation: neonBlink 1.5s infinite; }
 
-        .sync-container { display: none; margin-bottom: 20px; background: #000; padding: 15px; border-radius: 12px; border: 1px solid var(--p); }
-        .sync-bar { height: 10px; background: #222; border-radius: 5px; overflow: hidden; }
-        .sync-fill { height: 100%; background: var(--p); width: 0%; transition: 0.3s; }
-
         .dashboard { background: #000; border: 3px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 30px; }
-        .scroll-select { background: var(--card); color: #fff; padding: 18px; border-radius: 15px; border: 2px solid var(--border); font-size: 1.1rem; font-weight: 800; width: 100%; margin-bottom: 12px; cursor: pointer; }
-        .btn-gen { background: var(--value); color: #fff; width: 100%; padding: 22px; border-radius: 15px; border: none; font-weight: 900; font-size: 1.3rem; cursor: pointer; }
+        .btn-gen { background: var(--value); color: #fff; width: 100%; padding: 20px; border-radius: 15px; border: none; font-weight: 900; font-size: 1.2rem; cursor: pointer; }
 
-        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .matrix-table th { color: var(--gold); text-align: left; padding: 15px; border-bottom: 4px solid var(--border); }
-        .matrix-table td { padding: 18px 15px; border-bottom: 1px solid #222; font-weight: 800; font-size: 1.2rem; }
-        
-        .delta-tag { font-size: 0.9rem; padding: 4px 10px; border-radius: 8px; font-weight: 900; }
-        .d-plus { background: rgba(0, 255, 65, 0.2); color: var(--live-green); }
-        .d-minus { background: rgba(255, 62, 62, 0.2); color: var(--alert); }
+        /* Pressure Audit Table Style */
+        .audit-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #080a0c; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .audit-table th { background: #1c2128; color: var(--p); padding: 10px; font-size: 0.85rem; text-transform: uppercase; text-align: center; border: 1px solid var(--border); }
+        .audit-table td { padding: 12px; text-align: center; border: 1px solid var(--border); font-weight: 800; }
+        .pi-score { font-size: 1.4rem; color: var(--gold); }
 
-        #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; z-index: 2000; overflow-y: auto; }
-        .league-title { color: var(--gold); font-weight: 900; border-bottom: 3px solid var(--border); text-transform: uppercase; font-size: 1.3rem; margin: 30px 0 15px 0; padding-bottom: 10px; letter-spacing: 1px; }
-        .value-alert-box { background: linear-gradient(135deg, #bf40bf, #000); border: 2px solid #fff; padding: 25px; border-radius: 20px; text-align: center; margin-top: 30px; }
+        #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; z-index: 2000; overflow-y: auto; box-shadow: 0 0 100px #000; }
+        .time-rem { color: var(--alert); font-weight: 900; background: rgba(255, 62, 62, 0.1); padding: 5px 10px; border-radius: 8px; border: 1px solid var(--alert); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v195</h1>
-    
-    <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Syncing Leagues...</span><span id="syncPerc">0%</span></div>
-        <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
-    </div>
-
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🌍 START GLOBAL SYNC</button>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v197</h1>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🌍 START PRESSURE AUDIT</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
-        <select id="accaType" class="scroll-select">
+        <select id="accaType" style="width:100%; padding:15px; background:var(--card); color:#fff; border-radius:12px; border:1px solid var(--border); margin-bottom:15px; font-weight:800;">
+            <option value="BUILDER">BET BUILDER (ΣΗΜΕΙΟ + O1.5 | xG > 1.9)</option>
             <option value="1X2">ΣΗΜΕΙΑ (1X2)</option>
-            <option value="O25">OVER 2.5 GOALS</option>
-            <option value="O35">OVER 3.5 GOALS</option>
-            <option value="BUILDER">BET BUILDER (ΣΗΜΕΙΟ + O1.5)</option>
         </select>
-        <button onclick="generateAcca()" class="btn-gen">GENERATE SMART SELECTIONS</button>
+        <button onclick="generateAcca()" class="btn-gen">GENERATE SOVEREIGN PICKS</button>
         <div id="accaResult" style="margin-top:20px;"></div>
     </div>
 
     <div id="intelPanel">
-        <span onclick="this.parentElement.style.display='none'" style="position:absolute; top:20px; right:25px; font-size:3rem; color:var(--live-green); cursor:pointer; font-weight:900;">×</span>
+        <span onclick="this.parentElement.style.display='none'" style="position:absolute; top:20px; right:25px; font-size:3rem; color:var(--live-green); cursor:pointer;">×</span>
         <h2 id="mTitle" style="text-align:center; color:var(--gold);"></h2>
-        <div id="timeStatus"></div>
-        <table class="matrix-table">
+        <div id="timeStatus" style="text-align:center; margin-bottom:20px;"></div>
+        
+        <h3 style="color:var(--p); font-size:1rem; border-bottom:1px solid var(--border); padding-bottom:10px;">📊 PRESSURE INDEX AUDIT</h3>
+        <table class="audit-table">
             <thead>
-                <tr><th>QUANTUM MATRIX</th><th>HOME</th><th>AWAY</th><th>Δ (DELTA)</th></tr>
+                <tr>
+                    <th>TEAM</th>
+                    <th>D. ATTACKS</th>
+                    <th>CORNERS</th>
+                    <th>PRESS INDEX</th>
+                </tr>
             </thead>
-            <tbody id="matrixBody"></tbody>
+            <tbody id="auditBody"></tbody>
         </table>
+
         <div id="valueSection"></div>
     </div>
 
@@ -85,14 +77,10 @@ function getPoisson(lambda, k) {
 
 async function globalSync() {
     masterData = [];
-    document.getElementById('syncCont').style.display = 'block';
     const today = new Date().toISOString().split('T')[0];
-    for(let i=0; i<LEAGUES.length; i++){
-        const p = Math.round(((i+1)/LEAGUES.length)*100);
-        document.getElementById('syncFill').style.width = p+'%';
-        document.getElementById('syncPerc').innerText = p+'%';
+    for(let id of LEAGUES){
         try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {headers: {"x-rapidapi-key": KEY}});
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${id}&date=${today}&season=2025`, {headers: {"x-rapidapi-key": KEY}});
             const d = await res.json();
             if(d.response) {
                 for(let m of d.response){
@@ -103,7 +91,6 @@ async function globalSync() {
             }
         } catch(e){}
     }
-    document.getElementById('syncCont').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     renderMatches();
 }
@@ -112,8 +99,7 @@ function generateAcca() {
     const type = document.getElementById('accaType').value;
     let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
-    if(type === 'O25') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 2.5);
-    if(type === 'O35') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 3.5);
+    if(type === 'BUILDER') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 1.9);
 
     let sorted = pool.sort((a,b) => (parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0)));
     const selected = sorted.slice(0, 3);
@@ -121,19 +107,14 @@ function generateAcca() {
     let html = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:20px; border:2px solid var(--value);">`;
     selected.forEach(s => {
         const totalXG = (parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1) + parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1)).toFixed(2);
-        let pick = ""; let stats = "";
+        const winProb = parseInt(s.prediction?.predictions?.percent?.home || 0);
+        const over15 = Math.round((1 - (getPoisson(totalXG,0) + getPoisson(totalXG,1))) * 100);
+        const builderProb = Math.round(winProb * (over15/100));
         
-        if(type === 'BUILDER') {
-            const winProb = parseInt(s.prediction?.predictions?.percent?.home || 0);
-            const over15 = Math.round((1 - (getPoisson(totalXG,0) + getPoisson(totalXG,1))) * 100);
-            pick = `${s.prediction?.predictions?.winner?.name} & O1.5`;
-            stats = `(${Math.round(winProb * (over15/100))}% | xG: ${totalXG})`;
-        } else {
-            const prob = (type === '1X2') ? s.prediction?.predictions?.percent?.home : s.prediction?.predictions?.goals?.over;
-            pick = (type === '1X2') ? s.prediction?.predictions?.winner?.name : 'Over 2.5';
-            stats = `(${prob}% | xG: ${totalXG})`;
-        }
-        html += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #444;"><span>${s.fixture.teams.home.name}</span><b style="color:var(--p);">${pick} <span style="color:var(--gold)">${stats}</span></b></div>`;
+        html += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #444;">
+            <span>${s.fixture.teams.home.name}</span>
+            <b style="color:var(--p);">${s.prediction?.predictions?.winner?.name} & O1.5 <span style="color:var(--gold)">(${builderProb}% | xG: ${totalXG})</span></b>
+        </div>`;
     });
     document.getElementById('accaResult').innerHTML = html + "</div>";
 }
@@ -148,54 +129,53 @@ async function showIntel(d) {
 
     const isL = ["1H","HT","2H"].includes(m.fixture.status.short);
     const elapsed = m.fixture.status.elapsed || 1;
-    
-    let hG = m.goals.home, aG = m.goals.away, hC = 0, aC = 0, hK = 0, aK = 0, hDA = 0, aDA = 0;
+    const remaining = 90 - elapsed > 0 ? 90 - elapsed : 0;
+
+    document.getElementById('timeStatus').innerHTML = `<span class="time-rem">REMAINING: ${remaining}'</span>`;
+
+    let stats = { hDA: 0, aDA: 0, hC: 0, aC: 0 };
     if(sData && sData.length > 1) {
-        hC = sData[0].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
-        aC = sData[1].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
-        hK = sData[0].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
-        aK = sData[1].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
-        hDA = sData[0].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
-        aDA = sData[1].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
+        stats.hDA = sData[0].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
+        stats.aDA = sData[1].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
+        stats.hC = sData[0].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
+        stats.aC = sData[1].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
     }
 
-    const hPI = ((hDA * 1.2) + (hC * 5)) / elapsed;
-    const aPI = ((aDA * 1.2) + (aC * 5)) / elapsed;
-    const dC = ((hC + aC) - (9.5 * (elapsed/90))).toFixed(2);
-    const dG = ((hG + aG) - (2.5 * (elapsed/90))).toFixed(2);
+    const hPI = ((stats.hDA * 1.2) + (stats.hC * 5)) / elapsed;
+    const aPI = ((stats.aDA * 1.2) + (stats.aC * 5)) / elapsed;
 
-    document.getElementById('matrixBody').innerHTML = `
-        <tr><td>xG ATTACK</td><td>${p?.teams?.home?.last_5?.goals?.for?.average || 1.1} ${isL ? `<br><span class="live-neon">(${hG} Live)</span>` : ''}</td><td>${p?.teams?.away?.last_5?.goals?.for?.average || 1.1} ${isL ? `<br><span class="live-neon">(${aG} Live)</span>` : ''}</td><td><span class="delta-tag ${dG >= 0 ? 'd-plus' : 'd-minus'}">${dG}</span></td></tr>
-        <tr><td>xGA DEFENSE</td><td>${p?.teams?.home?.last_5?.goals?.against?.average || 1.1}</td><td>${p?.teams?.away?.last_5?.goals?.against?.average || 1.1}</td><td>-</td></tr>
-        <tr><td>CORNERS</td><td>4.5 ${isL ? `<br><span class="live-neon">(${hC} Live)</span>` : ''}</td><td>4.0 ${isL ? `<br><span class="live-neon">(${aC} Live)</span>` : ''}</td><td><span class="delta-tag ${dC >= 0 ? 'd-plus' : 'd-minus'}">${dC}</span></td></tr>
-        <tr><td>CARDS</td><td>2.1 ${isL ? `<br><span class="live-neon">(${hK} Live)</span>` : ''}</td><td>2.2 ${isL ? `<br><span class="live-neon">(${aK} Live)</span>` : ''}</td><td>-</td></tr>
-        <tr><td>PRESS INDEX</td><td class="${isL ? 'live-neon' : ''}">${hPI.toFixed(2)}</td><td class="${isL ? 'live-neon' : ''}">${aPI.toFixed(2)}</td><td>-</td></tr>`;
+    document.getElementById('auditBody').innerHTML = `
+        <tr><td>${m.teams.home.name}</td><td>${stats.hDA}</td><td>${stats.hC}</td><td class="pi-score">${hPI.toFixed(2)}</td></tr>
+        <tr><td>${m.teams.away.name}</td><td>${stats.aDA}</td><td>${stats.aC}</td><td class="pi-score">${aPI.toFixed(2)}</td></tr>
+    `;
 
     const valSec = document.getElementById('valueSection'); valSec.innerHTML = "";
     if(isL && elapsed > 20) {
-        let adv = "";
-        if(hPI > 3.0 && hG <= aG) adv = `VALUE: NEXT GOAL ${m.teams.home.name.toUpperCase()}`;
-        else if(dC < -1.5 && (hDA + aDA) > 40) adv = `VALUE: OVER ${(hC+aC)+1.5} CORNERS`;
-        if(adv) valSec.innerHTML = `<div class="value-alert-box"><div style="font-size:1.4rem; font-weight:900;">🎯 ${adv}</div></div>`;
+        let adv = ""; let prob = 0;
+        if(hPI > 3.2 && m.goals.home <= m.goals.away) { adv = `NEXT GOAL ${m.teams.home.name.toUpperCase()}`; prob = 74; }
+        else if(aPI > 3.2 && m.goals.away <= m.goals.home) { adv = `NEXT GOAL ${m.teams.away.name.toUpperCase()}`; prob = 71; }
+
+        if(adv && prob >= 70) {
+            valSec.innerHTML = `<div style="background:var(--value); padding:20px; border-radius:15px; text-align:center; margin-top:20px;">
+                <div style="font-weight:900; font-size:1.4rem;">🎯 ${adv}</div>
+                <div style="font-size:0.9rem;">AI CONFIDENCE: ${prob}%</div>
+            </div>`;
+        }
     }
 }
 
 function renderMatches() {
     const list = document.getElementById('matchList'); list.innerHTML = "";
-    const grouped = masterData.reduce((acc, d) => { acc[d.fixture.league.name] = acc[d.fixture.league.name] || []; acc[d.fixture.league.name].push(d); return acc; }, {});
-    for(let league in grouped) {
-        const div = document.createElement('div');
-        div.innerHTML = `<div class="league-title">${league}</div>`;
-        grouped[league].forEach(d => {
-            const isL = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
-            const card = document.createElement('div');
-            card.style = "background:var(--card); padding:25px; border-radius:20px; margin-top:12px; border-left:10px solid " + (isL ? "var(--live-green)" : "var(--border)");
-            card.onclick = () => showIntel(d);
-            card.innerHTML = `<b style="font-size:1.3rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br><small class="${isL?'live-neon':''}" style="font-size:1.1rem;">${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' ('+d.fixture.fixture.status.elapsed+"')" : 'NS'}</small>`;
-            div.appendChild(card);
-        });
-        list.appendChild(div);
-    }
+    masterData.forEach(d => {
+        const isL = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
+        const rem = isL ? (90 - d.fixture.fixture.status.elapsed) : 0;
+        const card = document.createElement('div');
+        card.style = "background:var(--card); padding:25px; border-radius:20px; margin-top:12px; border-left:10px solid " + (isL ? "var(--live-green)" : "var(--border)");
+        card.onclick = () => showIntel(d);
+        card.innerHTML = `<b style="font-size:1.3rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br>
+        <small class="${isL?'live-neon':''}" style="font-size:1.1rem;">${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' | '+rem+"' REMAINING" : 'NS'}</small>`;
+        list.appendChild(card);
+    });
 }
 </script>
 </body>
