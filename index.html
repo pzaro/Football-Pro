@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v205 - Sovereign Crystal</title>
+    <title>Predictor Pro v206 - Perfect Dozen</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -57,19 +57,20 @@
         .time-badge { color: var(--alert); font-weight: 900; border: 2px solid var(--alert); padding: 8px 15px; border-radius: 10px; display: inline-block; background:rgba(255,62,62,0.1); }
         .ended-badge { color: #888; font-weight: 900; border: 2px solid #555; padding: 8px 15px; border-radius: 10px; display: inline-block; background:#222; }
         .value-hunter { background: linear-gradient(135deg, #00ff88, #000); color: #000; padding: 25px; border-radius: 20px; text-align: center; margin-top: 25px; font-weight: 900; }
+        .league-divider { color: var(--gold); font-weight: 900; border-bottom: 3px solid var(--border); padding: 15px 0; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v205</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v206</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">CRYSTAL SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">MASTER DOZEN SYNC...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE CRYSTAL SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE DOZEN SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -87,7 +88,7 @@
         <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-bottom:10px;"></h2>
         <div style="text-align:center;"><div id="statusBadge"></div></div>
         
-        <div id="predBox" class="pred-box"></div>
+        <div id="predBox" class="pred-box" style="display:none;"></div>
 
         <div id="verdictSection" style="display:none;">
             <h3 style="color:var(--gold); text-align:center; margin-top:20px;">⚖️ FINAL VERDICT AUDIT</h3>
@@ -133,6 +134,12 @@ function getPoisson(lambda, k) {
     return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial;
 }
 
+function calcScore(hXG, aXG) {
+    const h = Math.round(hXG);
+    const a = Math.round(aXG);
+    return `${h} - ${a}`;
+}
+
 async function globalSync() {
     masterData = [];
     document.getElementById('syncCont').style.display = 'block';
@@ -175,9 +182,11 @@ function generateAcca() {
     const type = document.getElementById('accaType').value;
     let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
+    // Checkpoint: Stat Guards (xG > 1.9 for Builder, etc.)
     if(type === 'BUILDER') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 1.9);
     if(type === 'O25') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 2.5);
     
+    // Checkpoint: Confidence Guard (>60%, >55%)
     const filtered = pool.filter(s => {
         const hXG = parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1);
         const aXG = parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1);
@@ -233,12 +242,14 @@ async function showIntel(d) {
     const isL = ["1H", "HT", "2H"].includes(status);
     const elapsed = m.fixture.status.elapsed || 0;
     
-    // Status Badge
     const badge = document.getElementById('statusBadge');
+    
+    // VERDICT LOGIC
     if (isFT) {
         badge.className = "ended-badge"; badge.innerText = `ΕΛΗΞΕ (${m.goals.home}-${m.goals.away})`;
         document.getElementById('verdictSection').style.display = 'block';
         document.getElementById('liveSection').style.display = 'none';
+        document.getElementById('predBox').style.display = 'none';
 
         const actualWinner = m.goals.home > m.goals.away ? m.teams.home.name : (m.goals.away > m.goals.home ? m.teams.away.name : "Draw");
         const predWinner = p.predictions.winner.name;
@@ -248,7 +259,7 @@ async function showIntel(d) {
 
         document.getElementById('verdictBody').innerHTML = `
             <tr><td>WINNER</td><td>${predWinner}</td><td>${actualWinner === "Draw" ? "X" : actualWinner}</td><td>${winnerCheck ? '<span class="success-tag">✅ ΕΠΙΤΥΧΙΑ</span>' : '<span class="fail-tag">❌ ΑΣΤΟΧΙΑ</span>'}</td></tr>
-            <tr><td>GOALS</td><td>xG: -</td><td>${totalGoals} Goals</td><td>${overCheck ? '<span class="success-tag">OVER 2.5</span>' : '<span class="fail-tag">UNDER 2.5</span>'}</td></tr>
+            <tr><td>GOALS</td><td>-</td><td>${totalGoals} Goals</td><td>${overCheck ? '<span class="success-tag">OVER 2.5</span>' : '<span class="fail-tag">UNDER 2.5</span>'}</td></tr>
         `;
 
     } else {
@@ -256,12 +267,13 @@ async function showIntel(d) {
         badge.innerText = isL ? `REMAINING: ${90-elapsed}' MIN` : "NOT STARTED";
         document.getElementById('verdictSection').style.display = 'none';
         document.getElementById('liveSection').style.display = 'block';
+        document.getElementById('predBox').style.display = 'flex';
 
+        // 1. Prediction Box Logic
         const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
         const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
         const tXG = hXG + aXG;
 
-        // CRYSTAL CLEAR PREDICTION CALCULATION
         const winProb = parseInt(p.predictions.percent.home);
         const over15 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1))) * 100);
         const over25 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1) + getPoisson(tXG, 2))) * 100);
@@ -276,7 +288,6 @@ async function showIntel(d) {
             <div class="pred-item"><div class="pred-label">U/O 2.5</div><div class="pred-val ${o25Class}">${over25 >= 50 ? 'OVER' : 'UNDER'} (${over25 >= 50 ? over25 : 100-over25}%)</div></div>
         `;
 
-        // ... [Rest of Live Logic: Matrix, Consensus, Pressure] ...
         const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
         const sData = (await sRes.json()).response;
         
@@ -290,6 +301,15 @@ async function showIntel(d) {
             aK = sData[1].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
         }
 
+        // Consensus Score
+        const intH = Math.round(hXG); const intA = Math.round(aXG);
+        const fbH = Math.round(hXG + 0.2); const fbA = Math.max(0, Math.round(aXG - 0.1));
+        const zuH = Math.max(0, Math.round(hXG - 0.1)); const zuA = Math.round(aXG + 0.1);
+        const finH = Math.round((intH + fbH + zuH) / 3); const finA = Math.round((intA + fbA + zuA) / 3);
+        
+        document.getElementById('scoreBody').innerHTML = `<tr><td>${intH}-${intA}</td><td>${fbH}-${fbA}</td><td>${zuH}-${zuA}</td><td style="background:var(--cyan); color:#000;">${finH} - ${finA}</td></tr>`;
+
+        // Matrix
         const deltaC = ((hC + aC) - (9.5 * (elapsed/90))).toFixed(2);
         const deltaG = ((m.goals.home + m.goals.away) - (2.5 * (elapsed/90))).toFixed(2);
         
@@ -300,6 +320,7 @@ async function showIntel(d) {
             <tr><td>CARDS</td><td>2.1 (Avg) ${isL?`<br><span class="live-neon">(${hK} Live)</span>`:''}</td><td>2.3 (Avg) ${isL?`<br><span class="live-neon">(${aK} Live)</span>`:''}</td><td>-</td></tr>
         `;
 
+        // Pressure Audit
         const hPI = ((hDA * 1.2) + (hC * 5)) / (elapsed || 1);
         const aPI = ((aDA * 1.2) + (aC * 5)) / (elapsed || 1);
         document.getElementById('auditBody').innerHTML = `
@@ -307,6 +328,7 @@ async function showIntel(d) {
             <tr><td>${m.teams.away.name}</td><td>${aDA}</td><td>${aC}</td><td style="color:${aPI>2.5?'var(--alert)':'var(--gold)'}">${aPI.toFixed(2)}</td></tr>
         `;
 
+        // Value Hunter (Guard 70%)
         let adv = ""; let conf = 0;
         if(isL && elapsed > 20) {
             if(hPI > 3.0 && m.goals.home <= m.goals.away) { adv = `NEXT GOAL: ${m.teams.home.name.toUpperCase()}`; conf = 76; }
