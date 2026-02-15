@@ -3,77 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v163 - Data Integrity</title>
+    <title>Predictor Pro v164 - Strategic</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live: #ff3e3e; --value: #bf40bf; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; font-size: 0.85rem; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; }
         
-        button { padding: 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 900; cursor: pointer; margin-bottom: 8px; width: 100%; }
-        .btn-sync { background: var(--p); color: #000; font-size: 1rem; border: none; }
-        
-        #progressContainer { display: none; background: #1a1d23; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .p-bar { background: #333; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; }
-        .p-fill { background: var(--p); height: 100%; width: 0%; transition: 0.3s; }
+        /* Dashboard & Acca Controls */
+        .dashboard { background: #000; border: 2px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        .acca-controls { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        select, button { padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 800; cursor: pointer; }
+        .btn-sync { background: var(--p); color: #000; width: 100%; border: none; font-size: 1rem; margin-bottom: 15px; }
 
-        .mod-box { background: linear-gradient(145deg, #222, #000); border: 3px solid var(--gold); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        /* Match Display */
         .league-group { background: #000; border: 1px solid var(--border); border-radius: 15px; margin-bottom: 15px; padding: 10px; }
-        .league-title { color: var(--gold); font-weight: 900; padding: 8px; border-bottom: 1px solid var(--border); text-transform: uppercase; margin-bottom: 10px; }
-        
-        .match-card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 8px; border-left: 5px solid var(--border); cursor: pointer; }
+        .league-title { color: var(--gold); font-weight: 900; padding: 8px; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+        .match-card { background: var(--card); padding: 15px; border-radius: 12px; margin-top: 8px; border-left: 5px solid var(--border); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .match-live { border-left-color: var(--live); }
 
-        /* INTEL PANEL UI */
-        #intelPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 20px; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 0 60px #000; }
-        .comp-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.8rem; }
-        .comp-table th { color: var(--gold); text-align: left; padding: 8px; border-bottom: 1px solid #333; }
-        .comp-table td { padding: 10px 8px; border-bottom: 1px solid #222; }
-        .delta { font-weight: 900; padding: 3px 6px; border-radius: 4px; }
-        .d-plus { background: rgba(0, 255, 136, 0.2); color: var(--p); }
-        .d-minus { background: rgba(255, 62, 62, 0.2); color: var(--live); }
+        /* Value Badge */
+        .value-badge { background: var(--value); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 900; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.6; } }
 
-        .value-bet-alert { background: var(--live); color: #fff; padding: 12px; border-radius: 10px; font-weight: 900; text-align: center; margin-bottom: 15px; animation: pulse 1s infinite; display: none; border: 2px solid #fff; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        /* Intel Panel */
+        #intelPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 20px; position: sticky; top: 10px; z-index: 1000; }
+        .recommendation-box { background: rgba(191, 64, 191, 0.2); border: 2px solid var(--value); padding: 15px; border-radius: 12px; text-align: center; margin-top: 15px; }
+        .rec-text { font-size: 1.1rem; font-weight: 900; color: #fff; }
+
+        .p-bar { background: #333; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+        .p-fill { background: var(--p); height: 100%; width: 0%; transition: 0.3s; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v163</h2>
-    <button class="btn-sync" onclick="globalSync()">🌍 ΣΥΓΧΡΟΝΙΣΜΟΣ & ΕΠΑΛΗΘΕΥΣΗ ΔΕΔΟΜΕΝΩΝ</button>
-
-    <div id="progressContainer">
-        <div style="display:flex; justify-content:space-between;"><span id="pStatus">Data Mining...</span><span id="pPercent">0%</span></div>
+    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v164</h2>
+    
+    <button class="btn-sync" onclick="globalSync()">🌍 ΕΝΑΡΞΗ ΣΤΡΑΤΗΓΙΚΗΣ ΑΝΑΛΥΣΗΣ</button>
+    <div id="pContainer" style="display:none; margin-bottom:15px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.7rem;"><span>Mining Data...</span><span id="pPerc">0%</span></div>
         <div class="p-bar"><div id="pFill" class="p-fill"></div></div>
     </div>
 
-    <div id="dashboard" style="display:none;">
-        <div id="modArea"></div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
-            <button style="background:var(--value); color:#fff;" onclick="genAcca(3)">TOP 3</button>
-            <button style="background:var(--value); color:#fff;" onclick="genAcca(4)">TOP 4</button>
-            <button style="background:var(--value); color:#fff;" onclick="genAcca(5)">TOP 5</button>
+    <div id="dashboard" class="dashboard" style="display:none;">
+        <div class="acca-controls">
+            <select id="accaType">
+                <option value="1X2">ΣΗΜΕΙΑ (1-X-2)</option>
+                <option value="O25">GOALS > 2.5</option>
+                <option value="O35">GOALS > 3.5</option>
+            </select>
+            <select id="accaCount">
+                <option value="3">3-ΑΔΑ</option>
+                <option value="4">4-ΑΔΑ</option>
+                <option value="5">5-ΑΔΑ</option>
+            </select>
+            <button onclick="generateAcca()" style="background:var(--value); flex-grow:1;">GENERATE</button>
         </div>
-        <div id="accaDisplay"></div>
+        <div id="accaResult"></div>
     </div>
 
     <div id="intelPanel">
-        <span onclick="this.parentElement.style.display='none'" style="float:right; cursor:pointer; color:var(--live); font-weight:900;">✕ CLOSE</span>
-        <h3 id="mTitle" style="text-align:center; color:var(--gold); margin:0 0 15px 0;"></h3>
-        
-        <div id="valueBetAdvice" class="value-bet-alert">🔥 VALUE BET DETECTED</div>
-
-        <table class="comp-table">
-            <thead>
-                <tr><th>ΑΝΑΛΥΣΗ LIVE</th><th>PRE-MATCH</th><th>LIVE</th><th>ΑΠΟΚΛΙΣΗ Δ</th></tr>
-            </thead>
-            <tbody id="compBody"></tbody>
-        </table>
-
-        <div style="margin-top:20px; border-top: 1px solid #333; padding-top:15px;">
-            <h4 style="color:var(--p); margin:0 0 10px 0;">RAW ANALYTICS (Last 5 Games)</h4>
-            <div id="rawStatsArea"></div>
-        </div>
+        <span onclick="this.parentElement.style.display='none'" style="float:right; cursor:pointer; color:var(--live); font-weight:900;">✕</span>
+        <h3 id="mTitle" style="text-align:center; color:var(--gold);"></h3>
+        <div id="analysisContent"></div>
     </div>
 
     <div id="matchList"></div>
@@ -86,13 +78,13 @@ let masterData = [];
 
 async function globalSync() {
     masterData = [];
-    document.getElementById('progressContainer').style.display = 'block';
+    document.getElementById('pContainer').style.display = 'block';
     const today = new Date().toISOString().split('T')[0];
     
     for(let i=0; i<LEAGUES.length; i++) {
         const perc = Math.round(((i+1)/LEAGUES.length)*100);
         document.getElementById('pFill').style.width = perc+'%';
-        document.getElementById('pPercent').innerText = perc+'%';
+        document.getElementById('pPerc').innerText = perc+'%';
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {
                 headers: {"x-rapidapi-key": KEY}
@@ -107,64 +99,71 @@ async function globalSync() {
             }
         } catch(e) {}
     }
-    document.getElementById('progressContainer').style.display = 'none';
+    document.getElementById('pContainer').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    renderAll();
+    renderMatches();
 }
 
-async function showIntel(d) {
+function generateAcca() {
+    const type = document.getElementById('accaType').value;
+    const count = parseInt(document.getElementById('accaCount').value);
+    const pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
+    
+    let sorted;
+    if(type === '1X2') sorted = pool.sort((a,b) => parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0));
+    else sorted = pool.sort((a,b) => parseFloat(b.prediction?.predictions?.goals?.over || 0) - parseFloat(a.prediction?.predictions?.goals?.over || 0));
+
+    const selected = sorted.slice(0, count);
+    let html = `<div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; margin-top:10px;">`;
+    selected.forEach(s => {
+        const pick = type === '1X2' ? (s.prediction?.predictions?.winner?.name || '1') : (type === 'O25' ? 'OVER 2.5' : 'OVER 3.5');
+        html += `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #333;">
+            <span>${s.fixture.teams.home.name}</span> <b style="color:var(--p);">${pick}</b>
+        </div>`;
+    });
+    document.getElementById('accaResult').innerHTML = html + "</div>";
+}
+
+async function showAnalysis(d) {
     const panel = document.getElementById('intelPanel');
     panel.style.display = 'block';
     const m = d.fixture; const p = d.prediction;
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
     window.scrollTo({top: 0, behavior: 'smooth'});
 
-    // FETCH LIVE STATS
     const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
     const sData = (await sRes.json()).response;
 
+    let lGoals = (m.goals.home + m.goals.away);
     const time = m.fixture.status.elapsed || 1;
     const factor = time / 90;
+    const expGoals = (parseFloat(p?.predictions?.goals?.over) / 40) || 2.5;
+    const delta = (lGoals - (expGoals * factor)).toFixed(2);
 
-    // PRE-MATCH DATA
-    const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average) || 1.1;
-    const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average) || 1.1;
-    const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average) || 1.0;
-    const aXGA = parseFloat(p?.teams?.away?.last_5?.goals?.against?.average) || 1.0;
+    let recommendation = "ΣΤΑΣΗ ΑΝΑΜΟΝΗΣ";
+    let isValue = false;
     
-    const pGoals = (hXG + aXG) / 1.1; // Poisson Projection
-    const pCorners = (parseFloat(p?.teams?.home?.last_5?.corners?.average || 4.5) + parseFloat(p?.teams?.away?.last_5?.corners?.average || 4.1));
-    const pCards = (parseFloat(p?.teams?.home?.last_5?.cards?.average || 2.2) + parseFloat(p?.teams?.away?.last_5?.cards?.average || 2.4));
-
-    let lGoals = (m.goals.home + m.goals.away), lCorners = 0, lCards = 0;
-    if(sData && sData.length > 0) {
-        lCorners = (sData[0].statistics.find(s=>s.type==="Corner Kicks").value || 0) + (sData[1].statistics.find(s=>s.type==="Corner Kicks").value || 0);
-        lCards = (sData[0].statistics.find(s=>s.type==="Yellow Cards").value || 0) + (sData[1].statistics.find(s=>s.type==="Yellow Cards").value || 0);
+    if(delta < -0.75 && time > 30) {
+        recommendation = `VALUE: OVER ${lGoals + 0.5} GOALS`;
+        isValue = true;
+    } else if (p?.predictions?.percent?.home > 75 && m.goals.home === 0 && time > 40) {
+        recommendation = "VALUE: HOME TEAM TO SCORE";
+        isValue = true;
     }
 
-    const dG = (lGoals - (pGoals * factor)).toFixed(2);
-    const dCo = (lCorners - (pCorners * factor)).toFixed(2);
-    const dCa = (lCards - (pCards * factor)).toFixed(2);
-
-    document.getElementById('valueBetAdvice').style.display = (dG < -0.6 || dCo < -1.5) ? 'block' : 'none';
-
-    document.getElementById('compBody').innerHTML = `
-        <tr><td>ΓΚΟΛ</td><td>${pGoals.toFixed(1)}</td><td>${lGoals}</td><td><span class="delta ${dG<0?'d-minus':'d-plus'}">${dG}</span></td></tr>
-        <tr><td>ΚΟΡΝΕΡ</td><td>${pCorners.toFixed(1)}</td><td>${lCorners}</td><td><span class="delta ${dCo<0?'d-minus':'d-plus'}">${dCo}</span></td></tr>
-        <tr><td>ΚΑΡΤΕΣ</td><td>${pCards.toFixed(1)}</td><td>${lCards}</td><td><span class="delta ${dCa<0?'d-minus':'d-plus'}">${dCa}</span></td></tr>
-    `;
-
-    document.getElementById('rawStatsArea').innerHTML = `
-        <table class="comp-table">
-            <tr><td>HOME xG / xGA</td><td><b>${hXG} / ${hXGA}</b></td></tr>
-            <tr><td>AWAY xG / xGA</td><td><b>${aXG} / ${aXGA}</b></td></tr>
-            <tr><td>CORNERS (H/A)</td><td><b>${p?.teams?.home?.last_5?.corners?.average || 0} / ${p?.teams?.away?.last_5?.corners?.average || 0}</b></td></tr>
-            <tr><td>CARDS (H/A)</td><td><b>${p?.teams?.home?.last_5?.cards?.average || 0} / ${p?.teams?.away?.last_5?.cards?.average || 0}</b></td></tr>
-        </table>
+    document.getElementById('analysisContent').innerHTML = `
+        <div class="recommendation-box" style="border-color: ${isValue ? 'var(--value)' : 'var(--border)'}">
+            <div style="color:var(--gold); font-size:0.7rem;">STRATEGIC RECOMMENDATION</div>
+            <div class="rec-text">${recommendation}</div>
+        </div>
+        <div style="margin-top:15px; font-size:0.8rem;">
+            <div>ΑΠΟΚΛΙΣΗ Δ (ΓΚΟΛ): <b style="color:${delta < 0 ? 'var(--live)' : 'var(--p)'}">${delta}</b></div>
+            <div>LIVE xG (EST.): <b>${((parseFloat(p?.teams?.home?.last_5?.goals?.for?.average) || 1) * factor).toFixed(2)}</b></div>
+        </div>
     `;
 }
 
-function renderAll() {
+function renderMatches() {
     const list = document.getElementById('matchList');
     list.innerHTML = "";
     const grouped = masterData.reduce((acc, d) => {
@@ -178,12 +177,17 @@ function renderAll() {
         div.className = 'league-group';
         div.innerHTML = `<div class="league-title">${league}</div>`;
         grouped[league].forEach(d => {
-            const m = d.fixture;
-            const live = ["1H","HT","2H"].includes(m.fixture.status.short);
+            const isLive = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
             const card = document.createElement('div');
-            card.className = `match-card ${live ? 'match-live' : ''}`;
-            card.onclick = () => showIntel(d);
-            card.innerHTML = `<b>${m.teams.home.name} - ${m.teams.away.name}</b> <span style="float:right;">${live ? m.goals.home+'-'+m.goals.away+' ('+m.fixture.status.elapsed+"')" : m.fixture.status.short}</span>`;
+            card.className = `match-card ${isLive ? 'match-live' : ''}`;
+            card.onclick = () => showAnalysis(d);
+            card.innerHTML = `
+                <div>
+                    <b>${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br>
+                    <small>${isLive ? d.fixture.goals.home+'-'+d.fixture.goals.away+' ('+d.fixture.fixture.status.elapsed+"')" : d.fixture.fixture.status.short}</small>
+                </div>
+                ${isLive ? '<div class="value-badge">LIVE SCAN</div>' : ''}
+            `;
             div.appendChild(card);
         });
         list.appendChild(div);
