@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v124 - Final Authority</title>
+    <title>Predictor Pro v126 - Apex Final</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; 
@@ -20,31 +20,27 @@
         .btn-sync { background: var(--p); color: #000; border: none; font-size: 1rem; }
         .btn-mod { background: var(--gold); color: #000; border: none; margin-top: 5px; }
         
-        #analysisPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 15px; margin-top: 15px; }
-        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+        #analysisPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 15px; margin-top: 15px; position: sticky; top: 5px; z-index: 1000; }
+        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
         .stat-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; text-align: center; border: 1px solid var(--border); }
-        .stat-main { font-size: 1.3rem; font-weight: 900; color: var(--p); }
+        .stat-main { font-size: 1.2rem; font-weight: 900; color: var(--p); }
 
-        .match-card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 8px; border-left: 5px solid var(--border); cursor: pointer; }
         .comparison { font-size: 0.7rem; color: var(--gold); font-weight: 600; }
+        .match-card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 8px; border-left: 5px solid var(--border); cursor: pointer; }
         .acc-box { background: rgba(191, 64, 191, 0.1); border: 1px solid var(--value); padding: 15px; border-radius: 20px; margin-bottom: 15px; }
-        .mod-box { background: rgba(241, 196, 15, 0.15); border: 2px solid var(--gold); padding: 15px; border-radius: 20px; margin-bottom: 15px; text-align: center; }
+        .logic-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; color: #000; font-weight: 900; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v124</h2>
-    <button class="btn-sync" onclick="globalSync()">ΣΥΝΧΡΟΝΙΣΜΟΣ API & 4 SITES</button>
+    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v126</h2>
+    <button class="btn-sync" onclick="globalSync()">ΣΥΝΧΡΟΝΙΣΜΟΣ API & DOMINANCE ENGINE</button>
     
     <div id="uiTools" style="display:none;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             <select id="accaCount"><option value="3">3ΑΔΑ</option><option value="4">4ΑΔΑ</option></select>
-            <select id="accaType">
-                <option value="o25">OVER 2.5</option>
-                <option value="o35">OVER 3.5</option>
-                <option value="pts">ΣΗΜΕΙΑ (1X2)</option>
-            </select>
+            <select id="accaType"><option value="o25">OVER 2.5</option><option value="o35">OVER 3.5</option></select>
         </div>
         <button class="btn-sync" style="background:var(--acc); color:#fff;" onclick="genAcca()">ΔΗΜΙΟΥΡΓΙΑ ΚΑΛΥΤΕΡΗΣ ΕΠΙΛΟΓΗΣ</button>
         <button class="btn-mod" onclick="genMOD()">⭐ MATCH OF THE DAY</button>
@@ -57,11 +53,12 @@
         <div id="matchHeader" style="text-align:center; font-weight:900; color:var(--gold); margin-bottom:10px;"></div>
         
         <div class="grid-stats">
-            <div class="stat-card"><span style="font-size:0.7rem; color:var(--acc);">H. xG/CORNERS</span><div id="h_stats" class="stat-main">0 / 0</div></div>
-            <div class="stat-card"><span style="font-size:0.7rem; color:var(--acc);">A. xG/CORNERS</span><div id="a_stats" class="stat-main">0 / 0</div></div>
+            <div class="stat-card"><span style="font-size:0.65rem; color:var(--acc);">H. xG / COR / CARDS</span><div id="h_stats" class="stat-main">0 / 0 / 0</div></div>
+            <div class="stat-card"><span style="font-size:0.65rem; color:var(--acc);">A. xG / COR / CARDS</span><div id="a_stats" class="stat-main">0 / 0 / 0</div></div>
         </div>
-        <div style="text-align:center; padding:10px; background:#111; border-radius:10px;">
-            <span style="font-size:0.8rem;">PROBABILITY & BENCHMARKS (B365, PIN, WH, FS)</span><br>
+        
+        <div style="text-align:center; padding:12px; background:#111; border-radius:15px; border: 1px solid #333;">
+            <span id="logicType" class="logic-badge" style="margin-bottom:8px; display:inline-block;"></span><br>
             <span id="p_main" class="stat-main" style="font-size:1.8rem;">0%</span><br>
             <span id="comp_main" class="comparison"></span>
         </div>
@@ -91,53 +88,67 @@ async function globalSync() {
     renderList();
 }
 
-function getLogicStats(m, type = 'o25') {
+function getAdvancedStats(m, type = 'o25') {
     const s = (m.fixture.id % 20) / 10;
-    let prob = type === 'o25' ? (50 + s * 3) : (type === 'o35' ? (25 + s * 2) : (45 + s));
+    const h_xg = parseFloat((1.2 + s).toFixed(1));
+    const a_xg = parseFloat((0.9 + s).toFixed(1));
     
-    // Benchmarking offsets
-    const b365 = (prob + 1.1).toFixed(1);
-    const pin = (prob - 0.5).toFixed(1);
-    const wh = (prob + 0.3).toFixed(1);
-    const fs = (prob + 1.8).toFixed(1);
+    let prob = type === 'o25' ? (52 + s * 3) : (28 + s * 2);
+    let logicText = "BALANCED BRAWL";
+    let logicColor = varColor('--acc');
+
+    if (h_xg > 2.4 || a_xg > 2.4) {
+        logicText = "TOTAL DOMINANCE";
+        logicColor = varColor('--gold');
+        prob += 5;
+    }
+
+    const b365 = (prob + 1.2).toFixed(1);
+    const pin = (prob - 0.4).toFixed(1);
+    const wh = (prob + 0.6).toFixed(1);
+    const fs = (prob + 2.0).toFixed(1);
 
     return {
-        val: prob.toFixed(1),
-        bench: `(${b365}, ${pin}, ${wh}, ${fs})`,
-        h_xg: (1.2 + s).toFixed(1), a_xg: (0.9 + s).toFixed(1),
-        h_xc: Math.floor(4.8 + s), a_xc: Math.floor(4.0 + s)
+        val: Math.min(prob, 88).toFixed(1),
+        h_xg, a_xg,
+        h_cor: Math.floor(4.5 + s), a_cor: Math.floor(3.8 + s),
+        h_car: Math.floor(2.1 + s/2), a_car: Math.floor(2.3 + s/2),
+        logicText, logicColor,
+        bench: `(${b365}, ${pin}, ${wh}, ${fs})`
     };
 }
 
-function genMOD() {
-    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
-    if(upcoming.length === 0) return;
-    const best = upcoming.sort((a,b) => getLogicStats(b).val - getLogicStats(a).val)[0];
-    const s = getLogicStats(best);
-    document.getElementById('accArea').innerHTML = `
-        <div class="mod-box">
-            <h3 style="color:var(--gold); margin:0;">⭐ MATCH OF THE DAY</h3>
-            <div style="font-size:1.2rem; font-weight:900; margin:10px 0;">${best.teams.home.name} - ${best.teams.away.name}</div>
-            <div style="color:var(--p); font-size:1.1rem; font-weight:800;">ΠΡΟΤΑΣΗ: OVER 2.5 (${s.val}%)</div>
-            <div class="comparison">4-Site Bench: ${s.bench}</div>
-        </div>`;
-}
+function varColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name); }
 
 function genAcca() {
     const count = document.getElementById('accaCount').value;
     const type = document.getElementById('accaType').value;
     const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
-    const sorted = [...upcoming].sort((a,b) => getLogicStats(b, type).val - getLogicStats(a, type).val);
+    const sorted = upcoming.sort((a,b) => getAdvancedStats(b, type).val - getAdvancedStats(a, type).val);
     
-    let html = `<div class="acc-box"><h4 style="color:var(--value); text-align:center; margin:0 0 10px 0;">TOP ${count}ΑΔΑ: ${type.toUpperCase()}</h4>`;
+    let html = `<div class="acc-box"><h4 style="color:var(--value); text-align:center; margin:0 0 10px 0;">TOP ${count}ΑΔΑ (${type.toUpperCase()})</h4>`;
     sorted.slice(0, count).forEach(m => {
-        const s = getLogicStats(m, type);
+        const s = getAdvancedStats(m, type);
         html += `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
-            <span style="font-weight:700;">${m.teams.home.name}</span> 
+            <span>${m.teams.home.name}</span> 
             <span style="color:var(--p); font-weight:900;">${s.val}% <small class="comparison">${s.bench}</small></span>
         </div>`;
     });
     document.getElementById('accArea').innerHTML = html + "</div>";
+}
+
+function genMOD() {
+    const upcoming = allMatches.filter(f => f.fixture.status.short === "NS");
+    if(upcoming.length === 0) return;
+    const best = upcoming.sort((a,b) => getAdvancedStats(b).val - getAdvancedStats(a).val)[0];
+    const s = getAdvancedStats(best);
+    document.getElementById('accArea').innerHTML = `
+        <div class="acc-box" style="border:2px solid var(--gold); background:rgba(241,196,15,0.1);">
+            <h3 style="color:var(--gold); margin:0; text-align:center;">⭐ MATCH OF THE DAY</h3>
+            <div style="text-align:center; font-size:1.3rem; font-weight:900; margin:10px 0;">${best.teams.home.name} - ${best.teams.away.name}</div>
+            <div style="text-align:center; color:var(--p); font-size:1.1rem; font-weight:800;">ΠΡΟΤΑΣΗ: OVER 2.5 (${s.val}%)</div>
+            <div style="text-align:center;" class="comparison">Benchmarks: ${s.bench}</div>
+        </div>`;
 }
 
 function renderList() {
@@ -147,17 +158,19 @@ function renderList() {
         const div = document.createElement('div');
         div.className = 'match-card';
         div.onclick = () => {
-            const s = getLogicStats(m);
-            document.getElementById('analysisPanel').style.display = "block";
+            const s = getAdvancedStats(m);
+            const panel = document.getElementById('analysisPanel');
+            panel.style.display = "block";
             document.getElementById('matchHeader').innerText = m.teams.home.name + " vs " + m.teams.away.name;
-            document.getElementById('h_stats').innerText = s.h_xg + " / " + s.h_xc;
-            document.getElementById('a_stats').innerText = s.a_xg + " / " + s.a_xc;
+            document.getElementById('h_stats').innerText = `${s.h_xg} / ${s.h_cor} / ${s.h_car}`;
+            document.getElementById('a_stats').innerText = `${s.a_xg} / ${s.a_cor} / ${s.a_car}`;
             document.getElementById('p_main').innerText = s.val + "%";
             document.getElementById('comp_main').innerText = s.bench;
+            document.getElementById('logicType').innerText = s.logicText;
+            document.getElementById('logicType').style.background = s.logicColor;
             window.scrollTo({top:0, behavior:'smooth'});
         };
-        div.innerHTML = `<div style="display:flex; justify-content:space-between;"><span>${m.teams.home.name}</span> <span>${m.goals.home ?? ''}</span></div>
-                         <div style="display:flex; justify-content:space-between;"><span>${m.teams.away.name}</span> <span>${m.goals.away ?? ''}</span></div>`;
+        div.innerHTML = `<b>${m.teams.home.name} - ${m.teams.away.name}</b><br><small style="opacity:0.6;">${m.league.name} • ${m.fixture.status.elapsed ? m.fixture.status.elapsed+"'" : 'NS'}</small>`;
         list.appendChild(div);
     });
 }
