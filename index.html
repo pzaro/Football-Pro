@@ -3,37 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v197 - Pressure Audit</title>
+    <title>Predictor Pro v198 - Sovereign Final Audit</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
-        .container { width: 100%; max-width: 1050px; margin: 0 auto; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; }
         
         @keyframes neonBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--live-green); } 50% { opacity: 0.5; } }
         .live-neon { color: var(--live-green); font-weight: 900; animation: neonBlink 1.5s infinite; }
 
+        /* Progress Bar */
+        .sync-container { display: none; margin-bottom: 20px; background: #000; padding: 15px; border-radius: 12px; border: 1px solid var(--p); }
+        .sync-bar { height: 12px; background: #222; border-radius: 6px; overflow: hidden; border: 1px solid #444; }
+        .sync-fill { height: 100%; background: var(--alert); width: 0%; transition: 0.3s; }
+
         .dashboard { background: #000; border: 3px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 30px; }
-        .btn-gen { background: var(--value); color: #fff; width: 100%; padding: 20px; border-radius: 15px; border: none; font-weight: 900; font-size: 1.2rem; cursor: pointer; }
+        .btn-gen { background: var(--value); color: #fff; width: 100%; padding: 22px; border-radius: 15px; border: none; font-weight: 900; font-size: 1.3rem; cursor: pointer; }
 
-        /* Pressure Audit Table Style */
-        .audit-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #080a0c; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-        .audit-table th { background: #1c2128; color: var(--p); padding: 10px; font-size: 0.85rem; text-transform: uppercase; text-align: center; border: 1px solid var(--border); }
-        .audit-table td { padding: 12px; text-align: center; border: 1px solid var(--border); font-weight: 800; }
-        .pi-score { font-size: 1.4rem; color: var(--gold); }
+        /* Pressure Audit Table */
+        .audit-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #080a0c; border: 1px solid var(--border); }
+        .audit-table th { background: #1c2128; color: var(--p); padding: 10px; font-size: 0.8rem; text-align: center; border: 1px solid var(--border); }
+        .audit-table td { padding: 12px; text-align: center; border: 1px solid var(--border); font-weight: 800; font-size: 1.1rem; }
+        .pi-high { color: var(--alert); text-shadow: 0 0 5px var(--alert); }
 
-        #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; z-index: 2000; overflow-y: auto; box-shadow: 0 0 100px #000; }
-        .time-rem { color: var(--alert); font-weight: 900; background: rgba(255, 62, 62, 0.1); padding: 5px 10px; border-radius: 8px; border: 1px solid var(--alert); }
+        #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 2%; left: 2%; right: 2%; bottom: 2%; z-index: 2000; overflow-y: auto; }
+        .time-rem-badge { color: var(--alert); font-weight: 900; border: 2px solid var(--alert); padding: 8px 15px; border-radius: 10px; display: inline-block; margin-bottom: 15px; }
+        .league-divider { color: var(--gold); font-weight: 900; border-bottom: 3px solid var(--border); padding: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v197</h1>
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🌍 START PRESSURE AUDIT</button>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v198</h1>
+
+    <div id="syncCont" class="sync-container">
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">ARCHITECT SYNCING...</span><span id="syncPerc">0%</span></div>
+        <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
+    </div>
+
+    <button onclick="globalSync()" style="width:100%; padding:25px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.4rem; margin-bottom:20px; box-shadow: 0 0 20px var(--p);">🚀 EXECUTE MASTER SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
-        <select id="accaType" style="width:100%; padding:15px; background:var(--card); color:#fff; border-radius:12px; border:1px solid var(--border); margin-bottom:15px; font-weight:800;">
+        <select id="accaType" style="width:100%; padding:20px; background:var(--card); color:#fff; border-radius:15px; border:2px solid var(--border); margin-bottom:15px; font-weight:800; font-size:1.1rem;">
             <option value="BUILDER">BET BUILDER (ΣΗΜΕΙΟ + O1.5 | xG > 1.9)</option>
+            <option value="O25">OVER 2.5 GOALS</option>
             <option value="1X2">ΣΗΜΕΙΑ (1X2)</option>
         </select>
         <button onclick="generateAcca()" class="btn-gen">GENERATE SOVEREIGN PICKS</button>
@@ -41,19 +53,14 @@
     </div>
 
     <div id="intelPanel">
-        <span onclick="this.parentElement.style.display='none'" style="position:absolute; top:20px; right:25px; font-size:3rem; color:var(--live-green); cursor:pointer;">×</span>
-        <h2 id="mTitle" style="text-align:center; color:var(--gold);"></h2>
-        <div id="timeStatus" style="text-align:center; margin-bottom:20px;"></div>
+        <span onclick="this.parentElement.style.display='none'" style="position:absolute; top:20px; right:25px; font-size:3.5rem; color:var(--live-green); cursor:pointer;">×</span>
+        <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-bottom:10px;"></h2>
+        <div style="text-align:center;"><div id="timeStatus" class="time-rem-badge"></div></div>
         
-        <h3 style="color:var(--p); font-size:1rem; border-bottom:1px solid var(--border); padding-bottom:10px;">📊 PRESSURE INDEX AUDIT</h3>
+        <h3 style="color:var(--p); font-size:1rem; border-bottom:1px solid var(--border); padding-bottom:10px; margin-top:20px;">📊 PRESSURE INDEX AUDIT</h3>
         <table class="audit-table">
             <thead>
-                <tr>
-                    <th>TEAM</th>
-                    <th>D. ATTACKS</th>
-                    <th>CORNERS</th>
-                    <th>PRESS INDEX</th>
-                </tr>
+                <tr><th>TEAM</th><th>D. ATTACKS</th><th>CORNERS</th><th>PI SCORE</th></tr>
             </thead>
             <tbody id="auditBody"></tbody>
         </table>
@@ -66,7 +73,7 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [136, 281, 141, 39, 140, 135, 78]; 
+const LEAGUES = [136, 281, 141, 39, 140, 135, 78]; // Serie B, Cyprus, Segunda etc.
 let masterData = [];
 
 function getPoisson(lambda, k) {
@@ -77,10 +84,14 @@ function getPoisson(lambda, k) {
 
 async function globalSync() {
     masterData = [];
+    document.getElementById('syncCont').style.display = 'block';
     const today = new Date().toISOString().split('T')[0];
-    for(let id of LEAGUES){
+    for(let i=0; i<LEAGUES.length; i++){
+        const p = Math.round(((i+1)/LEAGUES.length)*100);
+        document.getElementById('syncFill').style.width = p+'%';
+        document.getElementById('syncPerc').innerText = p+'%';
         try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${id}&date=${today}&season=2025`, {headers: {"x-rapidapi-key": KEY}});
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {headers: {"x-rapidapi-key": KEY}});
             const d = await res.json();
             if(d.response) {
                 for(let m of d.response){
@@ -91,6 +102,7 @@ async function globalSync() {
             }
         } catch(e){}
     }
+    document.getElementById('syncCont').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     renderMatches();
 }
@@ -99,21 +111,24 @@ function generateAcca() {
     const type = document.getElementById('accaType').value;
     let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
+    // Checkpoint: Bet Builder xG > 1.9
     if(type === 'BUILDER') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 1.9);
 
     let sorted = pool.sort((a,b) => (parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0)));
     const selected = sorted.slice(0, 3);
 
-    let html = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:20px; border:2px solid var(--value);">`;
+    let html = `<div style="background:rgba(255,255,255,0.05); padding:25px; border-radius:20px; border:2px solid var(--value);">`;
     selected.forEach(s => {
-        const totalXG = (parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1) + parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1)).toFixed(2);
+        const hXG = parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.0);
+        const aXG = parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.0);
+        const totalXG = (hXG + aXG).toFixed(2);
         const winProb = parseInt(s.prediction?.predictions?.percent?.home || 0);
         const over15 = Math.round((1 - (getPoisson(totalXG,0) + getPoisson(totalXG,1))) * 100);
         const builderProb = Math.round(winProb * (over15/100));
         
         html += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #444;">
-            <span>${s.fixture.teams.home.name}</span>
-            <b style="color:var(--p);">${s.prediction?.predictions?.winner?.name} & O1.5 <span style="color:var(--gold)">(${builderProb}% | xG: ${totalXG})</span></b>
+            <span style="max-width:50%">${s.fixture.teams.home.name}</span>
+            <b style="color:var(--p); text-align:right;">${s.prediction?.predictions?.winner?.name} & O1.5 <br><span style="color:var(--gold)">(${builderProb}% | xG: ${totalXG})</span></b>
         </div>`;
     });
     document.getElementById('accaResult').innerHTML = html + "</div>";
@@ -124,41 +139,44 @@ async function showIntel(d) {
     const m = d.fixture; const p = d.prediction;
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
 
-    const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
-    const sData = (await sRes.json()).response;
-
     const isL = ["1H","HT","2H"].includes(m.fixture.status.short);
     const elapsed = m.fixture.status.elapsed || 1;
     const remaining = 90 - elapsed > 0 ? 90 - elapsed : 0;
 
-    document.getElementById('timeStatus').innerHTML = `<span class="time-rem">REMAINING: ${remaining}'</span>`;
+    // Checkpoint: Remaining Time Badge
+    document.getElementById('timeStatus').innerText = isL ? `REMAINING: ${remaining}' MINUTES` : "NOT STARTED";
 
-    let stats = { hDA: 0, aDA: 0, hC: 0, aC: 0 };
+    const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
+    const sData = (await sRes.json()).response;
+
+    let hDA = 0, aDA = 0, hC = 0, aC = 0;
     if(sData && sData.length > 1) {
-        stats.hDA = sData[0].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
-        stats.aDA = sData[1].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
-        stats.hC = sData[0].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
-        stats.aC = sData[1].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
+        hDA = sData[0].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
+        aDA = sData[1].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
+        hC = sData[0].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
+        aC = sData[1].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
     }
 
-    const hPI = ((stats.hDA * 1.2) + (stats.hC * 5)) / elapsed;
-    const aPI = ((stats.aDA * 1.2) + (stats.aC * 5)) / elapsed;
+    const hPI = ((hDA * 1.2) + (hC * 5)) / elapsed;
+    const aPI = ((aDA * 1.2) + (aC * 5)) / elapsed;
 
+    // Checkpoint: Pressure Audit Table
     document.getElementById('auditBody').innerHTML = `
-        <tr><td>${m.teams.home.name}</td><td>${stats.hDA}</td><td>${stats.hC}</td><td class="pi-score">${hPI.toFixed(2)}</td></tr>
-        <tr><td>${m.teams.away.name}</td><td>${stats.aDA}</td><td>${stats.aC}</td><td class="pi-score">${aPI.toFixed(2)}</td></tr>
+        <tr><td>${m.teams.home.name}</td><td>${hDA}</td><td>${hC}</td><td class="${hPI>2.5?'pi-high':''}">${hPI.toFixed(2)}</td></tr>
+        <tr><td>${m.teams.away.name}</td><td>${aDA}</td><td>${aC}</td><td class="${aPI>2.5?'pi-high':''}">${aPI.toFixed(2)}</td></tr>
     `;
 
+    // Checkpoint: Value Tip 70% Guard
     const valSec = document.getElementById('valueSection'); valSec.innerHTML = "";
     if(isL && elapsed > 20) {
-        let adv = ""; let prob = 0;
-        if(hPI > 3.2 && m.goals.home <= m.goals.away) { adv = `NEXT GOAL ${m.teams.home.name.toUpperCase()}`; prob = 74; }
-        else if(aPI > 3.2 && m.goals.away <= m.goals.home) { adv = `NEXT GOAL ${m.teams.away.name.toUpperCase()}`; prob = 71; }
+        let adv = ""; let conf = 0;
+        if(hPI > 3.0 && m.goals.home <= m.goals.away) { adv = `NEXT GOAL: ${m.teams.home.name.toUpperCase()}`; conf = 76; }
+        else if(aPI > 3.0 && m.goals.away <= m.goals.home) { adv = `NEXT GOAL: ${m.teams.away.name.toUpperCase()}`; conf = 73; }
 
-        if(adv && prob >= 70) {
-            valSec.innerHTML = `<div style="background:var(--value); padding:20px; border-radius:15px; text-align:center; margin-top:20px;">
-                <div style="font-weight:900; font-size:1.4rem;">🎯 ${adv}</div>
-                <div style="font-size:0.9rem;">AI CONFIDENCE: ${prob}%</div>
+        if(adv && conf >= 70) {
+            valSec.innerHTML = `<div style="background:var(--value); padding:25px; border-radius:20px; text-align:center; margin-top:30px; border:2px solid #fff;">
+                <div style="font-size:1.6rem; font-weight:900;">🎯 ${adv}</div>
+                <div style="font-size:1rem; margin-top:5px;">AI CONFIDENCE: ${conf}% | PRESSURE: ${Math.max(hPI,aPI).toFixed(1)}</div>
             </div>`;
         }
     }
@@ -166,16 +184,23 @@ async function showIntel(d) {
 
 function renderMatches() {
     const list = document.getElementById('matchList'); list.innerHTML = "";
-    masterData.forEach(d => {
-        const isL = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
-        const rem = isL ? (90 - d.fixture.fixture.status.elapsed) : 0;
-        const card = document.createElement('div');
-        card.style = "background:var(--card); padding:25px; border-radius:20px; margin-top:12px; border-left:10px solid " + (isL ? "var(--live-green)" : "var(--border)");
-        card.onclick = () => showIntel(d);
-        card.innerHTML = `<b style="font-size:1.3rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br>
-        <small class="${isL?'live-neon':''}" style="font-size:1.1rem;">${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' | '+rem+"' REMAINING" : 'NS'}</small>`;
-        list.appendChild(card);
-    });
+    const grouped = masterData.reduce((acc, d) => { acc[d.fixture.league.name] = acc[d.fixture.league.name] || []; acc[d.fixture.league.name].push(d); return acc; }, {});
+    
+    for(let league in grouped) {
+        const div = document.createElement('div');
+        div.innerHTML = `<div class="league-divider">${league}</div>`;
+        grouped[league].forEach(d => {
+            const isL = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
+            const rem = isL ? (90 - d.fixture.fixture.status.elapsed) : 0;
+            const card = document.createElement('div');
+            card.style = "background:var(--card); padding:25px; border-radius:20px; margin-top:12px; border-left:10px solid " + (isL ? "var(--live-green)" : "var(--border)");
+            card.onclick = () => showIntel(d);
+            card.innerHTML = `<b style="font-size:1.3rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br>
+            <small class="${isL?'live-neon':''}" style="font-size:1.1rem;">${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' | '+rem+"' REMAINING" : 'NOT STARTED'}</small>`;
+            div.appendChild(card);
+        });
+        list.appendChild(div);
+    }
 }
 </script>
 </body>
