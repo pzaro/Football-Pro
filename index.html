@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v211 - Omniscient List</title>
+    <title>Predictor Pro v212 - 15 Point Apex</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -28,7 +28,7 @@
         .mini-pred { font-weight: 900; text-align: center; width: 33%; border-right: 1px solid #333; }
         .mini-pred:last-child { border-right: none; }
         .mp-label { font-size: 0.7rem; color: #888; display: block; margin-bottom: 2px; }
-        
+
         /* Tables */
         .verdict-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #000; border: 2px solid var(--gold); border-radius: 12px; overflow: hidden; }
         .verdict-table th { background: #1c2128; color: var(--gold); padding: 10px; font-size: 0.9rem; text-transform: uppercase; }
@@ -53,7 +53,7 @@
         .fail-tag { color: var(--alert); border: 1px solid var(--alert); padding: 5px 10px; border-radius: 8px; }
         .no-picks { color: var(--alert); font-weight: 900; text-align: center; padding: 20px; border: 2px dashed var(--alert); border-radius: 15px; margin-top: 20px; }
 
-        /* Prediction Box Style (Detail View) */
+        /* Prediction Box Style */
         .pred-box { display: flex; justify-content: space-between; background: #161b22; padding: 15px; border-radius: 15px; margin-top: 20px; border: 1px solid var(--border); }
         .pred-item { text-align: center; width: 33%; }
         .pred-label { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
@@ -67,19 +67,23 @@
         .ended-badge { color: #888; font-weight: 900; border: 2px solid #555; padding: 8px 15px; border-radius: 10px; display: inline-block; background:#222; }
         .value-hunter { background: linear-gradient(135deg, #00ff88, #000); color: #000; padding: 25px; border-radius: 20px; text-align: center; margin-top: 25px; font-weight: 900; }
         .league-divider { color: var(--gold); font-weight: 900; border-bottom: 3px solid var(--border); padding: 15px 0; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; }
+        
+        /* NEW: LIVE SCORE DISPLAY */
+        .big-score { font-size: 3.5rem; font-weight: 900; color: #fff; text-align: center; margin: 10px 0; text-shadow: 0 0 20px var(--p); letter-spacing: 2px; }
+        .live-dot { height: 12px; width: 12px; background-color: var(--alert); border-radius: 50%; display: inline-block; margin-right: 8px; animation: neonBlink 1s infinite; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v211</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v212</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">OMNISCIENT SYNC...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">APEX SYNC...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE FULL SYNC</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE APEX SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -95,8 +99,10 @@
 
     <div id="intelPanel">
         <span onclick="this.parentElement.style.display='none'" style="position:absolute; top:20px; right:25px; font-size:3.5rem; color:var(--live-green); cursor:pointer;">×</span>
-        <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-bottom:10px;"></h2>
-        <div style="text-align:center;"><div id="statusBadge"></div></div>
+        <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-bottom:0px;"></h2>
+        
+        <div id="bigScoreDisplay" class="big-score"></div>
+        <div style="text-align:center; margin-bottom:20px;"><div id="statusBadge"></div></div>
         
         <div id="predBox" class="pred-box" style="display:none;"></div>
 
@@ -144,7 +150,6 @@ function getPoisson(lambda, k) {
     return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial;
 }
 
-// SHARED PREDICTION LOGIC (Ensures list matches detail)
 function getMatchVerdict(p) {
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
@@ -158,7 +163,7 @@ function getMatchVerdict(p) {
     const finA = Math.round((intA + fbA + zuA) / 3);
     const predScoreGoals = finH + finA;
 
-    // Logic Lock: Sign
+    // Logic Lock
     let smartSign = "X";
     if(finH > finA) smartSign = "1";
     else if(finA > finH) smartSign = "2";
@@ -168,7 +173,6 @@ function getMatchVerdict(p) {
     const finalSign = winProb < 40 ? "NO BET" : smartSign;
     const signColor = winProb < 40 ? "low-conf" : (winProb > 60 ? "high-conf" : "mid-conf");
 
-    // Logic Lock: Overs
     const over15 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1))) * 100);
     const over25 = Math.round((1 - (getPoisson(tXG, 0) + getPoisson(tXG, 1) + getPoisson(tXG, 2))) * 100);
     
@@ -176,8 +180,8 @@ function getMatchVerdict(p) {
     let smartOver15 = "UNDER"; if(predScoreGoals >= 2) smartOver15 = "OVER";
     let smartOver25 = "UNDER"; if(predScoreGoals >= 3) smartOver25 = "OVER";
 
-    const o15Disp = smartOver15;
-    const o25Disp = smartOver25;
+    const o15Disp = smartOver15 === "OVER" ? "OVER" : "UNDER";
+    const o25Disp = smartOver25 === "OVER" ? "OVER" : "UNDER";
     const o15Prob = smartOver15 === "OVER" ? over15 : (100-over15);
     const o25Prob = smartOver25 === "OVER" ? over25 : (100-over25);
 
@@ -231,8 +235,6 @@ function renderMOD() {
 }
 
 function generateAcca() {
-    // ... [Existing Acca Code from v210] ...
-    // Note: Reusing the same logic for brevity, but it's preserved in the full file.
     const type = document.getElementById('accaType').value;
     let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
@@ -243,7 +245,7 @@ function generateAcca() {
         const v = getMatchVerdict(s.prediction);
         if(type === '1X2') return v.signProb >= 60;
         if(type === 'O25') return v.o25 === "OVER" && v.o25Prob >= 55;
-        if(type === 'O35') return v.o25Prob >= 50; // Simplified check
+        if(type === 'O35') return v.o25Prob >= 50; 
         if(type === 'BUILDER') return v.signProb >= 50;
         return false;
     });
@@ -271,7 +273,7 @@ function generateAcca() {
 async function showIntel(d) {
     const panel = document.getElementById('intelPanel'); panel.style.display = 'block';
     const m = d.fixture; const p = d.prediction;
-    const v = getMatchVerdict(p); // Get predictions
+    const v = getMatchVerdict(p);
 
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
 
@@ -280,10 +282,14 @@ async function showIntel(d) {
     const isL = ["1H", "HT", "2H"].includes(status);
     const elapsed = m.fixture.status.elapsed || 0;
     
+    // NEW: LIVE SCORE DISPLAY
+    const scoreText = (isL || isFT) ? `${m.goals.home} - ${m.goals.away}` : "-";
+    document.getElementById('bigScoreDisplay').innerText = scoreText;
+
     const badge = document.getElementById('statusBadge');
     
     if (isFT) {
-        badge.className = "ended-badge"; badge.innerText = `ΕΛΗΞΕ (${m.goals.home}-${m.goals.away})`;
+        badge.className = "ended-badge"; badge.innerText = `ΕΛΗΞΕ`;
         document.getElementById('verdictSection').style.display = 'block';
         document.getElementById('liveSection').style.display = 'none';
         document.getElementById('predBox').style.display = 'none';
@@ -301,12 +307,11 @@ async function showIntel(d) {
 
     } else {
         badge.className = "time-badge"; 
-        badge.innerText = isL ? `REMAINING: ${90-elapsed}' MIN` : "NOT STARTED";
+        badge.innerHTML = isL ? `<span class="live-dot"></span>REMAINING: ${90-elapsed}' MIN` : "NOT STARTED";
         document.getElementById('verdictSection').style.display = 'none';
         document.getElementById('liveSection').style.display = 'block';
         document.getElementById('predBox').style.display = 'flex';
 
-        // Render Prediction Box from Verdict Data
         document.getElementById('predBox').innerHTML = `
             <div class="pred-item"><div class="pred-label">ΣΗΜΕΙΟ</div><div class="pred-val ${v.signColor}">${v.sign}</div></div>
             <div class="pred-item"><div class="pred-label">U/O 1.5</div><div class="pred-val ${v.o15Color}">${v.o15} (${v.o15Prob}%)</div></div>
@@ -315,7 +320,6 @@ async function showIntel(d) {
 
         document.getElementById('scoreBody').innerHTML = `<tr><td colspan="4" style="background:var(--cyan); color:#000; font-weight:900;">CONSENSUS SCORE: ${v.score}</td></tr>`;
 
-        // Live Stats & Matrix
         const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
         const sData = (await sRes.json()).response;
         
