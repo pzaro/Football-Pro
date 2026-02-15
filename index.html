@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v221 - Total Cyprus</title>
+    <title>Predictor Pro v222 - Momentum</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
@@ -75,19 +75,31 @@
         .form-d { background: #888; }
         .form-l { background: var(--alert); }
         .team-form-wrapper { display: flex; justify-content: space-between; padding: 0 10px; margin-bottom: 15px; font-size: 0.8rem; color: #aaa; }
+
+        /* MOMENTUM & STAT BARS */
+        .stat-bar-container { display: flex; align-items: center; margin: 5px 0; font-size: 0.85rem; font-weight: bold; }
+        .stat-label { width: 30px; text-align: center; color: #888; }
+        .stat-bar-bg { flex: 1; background: #222; height: 8px; border-radius: 4px; margin: 0 10px; overflow: hidden; display:flex; }
+        .stat-bar-fill-h { background: var(--live-green); height: 100%; }
+        .stat-bar-fill-a { background: var(--alert); height: 100%; }
+        
+        .ngp-box { background: linear-gradient(to right, rgba(0,255,136,0.1), rgba(255,62,62,0.1)); border: 1px solid #444; border-radius: 10px; padding: 15px; margin-top: 15px; }
+        .ngp-title { text-align: center; color: var(--cyan); font-size: 0.8rem; margin-bottom: 8px; letter-spacing: 1px; }
+        .ngp-bars { display: flex; justify-content: space-between; align-items: center; }
+        .ngp-val { font-size: 1.4rem; font-weight: 900; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v221</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v222</h1>
 
     <div id="syncCont" class="sync-container">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">SCANNING ALL LEAGUES...</span><span id="syncPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">SCANNING...</span><span id="syncPerc">0%</span></div>
         <div class="sync-bar"><div id="syncFill" class="sync-fill"></div></div>
     </div>
 
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE FULL SCAN</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE MOMENTUM SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
@@ -121,6 +133,8 @@
         </div>
 
         <div id="liveSection">
+            <div id="momentumArea"></div>
+
             <h3 style="color:var(--cyan); font-size:0.9rem; margin-top:20px;">🎯 BIG 4 CONSENSUS (Simulated)</h3>
             <table class="score-table">
                 <thead><tr><th>INTERNAL</th><th>FOREBET</th><th>ZULUBET</th><th>PREDICTZ</th><th>VITIBET</th><th>FINAL</th></tr></thead>
@@ -147,13 +161,7 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-// ALL CYPRUS LEAGUES ADDED
-const LEAGUES = [
-    318, // 1. Division Cyprus
-    320, // 2. Division Cyprus
-    319, // Cyprus Cup
-    136, 141, 197, 61, 40, 94, 262, 128, 39, 140, 135, 78
-]; 
+const LEAGUES = [318, 320, 319, 136, 141, 197, 61, 40, 94, 262, 128, 39, 140, 135, 78]; 
 let masterData = [];
 
 function getPoisson(lambda, k) {
@@ -304,7 +312,7 @@ async function showIntel(d) {
 
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
     
-    // FORM GUIDE
+    // FORM
     const hForm = p.teams.home.league.form || "?????";
     const aForm = p.teams.away.league.form || "?????";
     document.getElementById('formGuideArea').innerHTML = `
@@ -366,13 +374,57 @@ async function showIntel(d) {
         const sData = (await sRes.json()).response;
         
         let hC = 0, aC = 0, hDA = 0, aDA = 0, hK = 0, aK = 0;
+        let hPoss = 50, aPoss = 50, hSoT = 0, aSoT = 0;
+
         if(sData && sData.length > 1) {
-            hDA = sData[0].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
-            aDA = sData[1].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
-            hC = sData[0].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
-            aC = sData[1].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
-            hK = sData[0].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
-            aK = sData[1].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
+            const getStat = (type, teamIdx) => {
+                const val = sData[teamIdx].statistics.find(s=>s.type===type)?.value;
+                if(!val) return 0;
+                return parseInt(val.toString().replace('%',''));
+            };
+
+            hDA = getStat("Dangerous Attacks", 0);
+            aDA = getStat("Dangerous Attacks", 1);
+            hC = getStat("Corner Kicks", 0);
+            aC = getStat("Corner Kicks", 1);
+            hK = getStat("Yellow Cards", 0);
+            aK = getStat("Yellow Cards", 1);
+            hPoss = getStat("Ball Possession", 0) || 50;
+            aPoss = getStat("Ball Possession", 1) || 50;
+            hSoT = getStat("Shots on Goal", 0);
+            aSoT = getStat("Shots on Goal", 1);
+        }
+
+        // NEXT GOAL ALGORITHM
+        let hMom = (hDA * 1.5) + (hSoT * 8) + (hC * 4) + (hPoss * 0.5);
+        let aMom = (aDA * 1.5) + (aSoT * 8) + (aC * 4) + (aPoss * 0.5);
+        let totalMom = hMom + aMom || 1;
+        let hProb = Math.round((hMom / totalMom) * 100);
+        let aProb = Math.round((aMom / totalMom) * 100);
+
+        if(isL) {
+            document.getElementById('momentumArea').innerHTML = `
+                <div class="stat-bar-container">
+                    <span class="stat-label">${hPoss}%</span>
+                    <div class="stat-bar-bg"><div class="stat-bar-fill-h" style="width:${hPoss}%"></div><div class="stat-bar-fill-a" style="width:${aPoss}%"></div></div>
+                    <span class="stat-label">${aPoss}%</span>
+                </div>
+                <div style="text-align:center; font-size:0.7rem; color:#888;">ΚΑΤΟΧΗ (POSSESSION)</div>
+                
+                <div class="ngp-box">
+                    <div class="ngp-title">ΠΙΘΑΝΟΤΗΤΑ ΕΠΟΜΕΝΟΥ ΓΚΟΛ (NGP)</div>
+                    <div class="ngp-bars">
+                        <div style="text-align:left"><span class="ngp-val" style="color:var(--live-green)">${hProb}%</span></div>
+                        <div style="flex:1; height:6px; background:#222; margin:0 10px; border-radius:3px; display:flex;">
+                            <div style="width:${hProb}%; background:var(--live-green)"></div>
+                            <div style="width:${aProb}%; background:var(--alert)"></div>
+                        </div>
+                        <div style="text-align:right"><span class="ngp-val" style="color:var(--alert)">${aProb}%</span></div>
+                    </div>
+                </div>
+            `;
+        } else {
+            document.getElementById('momentumArea').innerHTML = "";
         }
 
         const deltaC = ((hC + aC) - (9.5 * (elapsed/90))).toFixed(2);
@@ -385,6 +437,7 @@ async function showIntel(d) {
             <tr><td>xGA DEFENSE</td><td>${p?.teams?.home?.last_5?.goals?.against?.average || 1.0}</td><td>${p?.teams?.away?.last_5?.goals?.against?.average || 1.0}</td><td>-</td></tr>
             <tr><td>CORNERS </td><td>4.5 (Avg) ${isL?`<br><span class="live-neon">(${hC})</span>`:''}</td><td>4.0 (Avg) ${isL?`<br><span class="live-neon">(${aC})</span>`:''}</td><td><span class="delta-tag ${deltaC>=0?'d-plus':'d-minus'}">${deltaC}</span></td></tr>
             <tr><td>CARDS</td><td>2.1 (Avg) ${isL?`<br><span class="live-neon">(${hK})</span>`:''}</td><td>2.3 (Avg) ${isL?`<br><span class="live-neon">(${aK})</span>`:''}</td><td>-</td></tr>
+            <tr><td>SHOTS ON TARGET</td><td>${hSoT}</td><td>${aSoT}</td><td>-</td></tr>
         `;
 
         document.getElementById('auditBody').innerHTML = `
