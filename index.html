@@ -2,170 +2,185 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v152 - Sovereign Prime</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictor Pro v153 - Sovereign Global</title>
     <style>
-        :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --bomb: #ff4444; --live: #ff3e3e; --value: #bf40bf; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; font-size: 0.85rem; }
+        :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --value: #bf40bf; --live: #ff3e3e; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; }
         .container { width: 100%; max-width: 850px; margin: 0 auto; }
         
-        /* UI Elements */
+        /* Progress Bar */
         #progressContainer { display: none; background: #1a1d23; border-radius: 12px; padding: 15px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .progress-track { background: #333; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
-        .progress-fill { background: var(--p); height: 100%; width: 0%; transition: width 0.3s; }
-        
-        button, select { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 800; margin-bottom: 8px; cursor: pointer; border: 1px solid var(--border); }
+        .p-bar { background: #333; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; }
+        .p-fill { background: var(--p); height: 100%; width: 0%; transition: 0.3s; }
+
+        button, select { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 800; margin-bottom: 8px; cursor: pointer; }
         .btn-sync { background: var(--p); color: #000; border: none; font-size: 1.1rem; }
         
+        /* League & Match Cards */
+        .league-group { background: #000; border: 1px solid var(--border); border-radius: 15px; margin-bottom: 20px; padding: 10px; }
+        .league-title { color: var(--gold); font-weight: 900; padding: 10px; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+        .match-card { background: var(--card); margin: 8px 0; padding: 15px; border-radius: 12px; border-left: 5px solid var(--border); cursor: pointer; position: relative; }
+        .live-tag { position: absolute; top: 10px; right: 10px; background: var(--live); color: #fff; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 900; }
+
         /* Analysis Panel */
-        #analysisPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 20px; margin-top: 15px; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 0 50px rgba(0,0,0,1); }
+        #analysisPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 20px; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 0 50px #000; }
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
         .stat-box { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; text-align: center; border: 1px solid var(--border); }
-        .label { font-size: 0.7rem; color: #8b949e; text-transform: uppercase; display: block; margin-bottom: 4px; }
-        .val { font-size: 1.1rem; font-weight: 900; color: var(--p); }
-
-        .intel-box { background: rgba(191, 64, 191, 0.1); border: 1px dashed var(--value); padding: 15px; border-radius: 15px; margin-top: 15px; }
-        .match-card { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 6px solid var(--border); cursor: pointer; }
+        .val { font-size: 1.2rem; font-weight: 900; color: var(--p); }
+        
+        .mod-container { background: linear-gradient(145deg, #1e2530, #111); border: 4px solid var(--gold); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v152</h2>
-    <button id="syncBtn" class="btn-sync" onclick="globalSync()">🌍 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΥΓΧΡΟΝΙΣΜΟΥ</button>
+    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v153</h2>
+    <button id="syncBtn" class="btn-sync" onclick="globalSync()">🌍 ΣΥΓΧΡΟΝΙΣΜΟΣ & ΚΑΘΟΛΙΚΗ ΑΝΑΛΥΣΗ</button>
 
     <div id="progressContainer">
-        <div style="display: flex; justify-content: space-between;"><span id="pStatus">Προετοιμασία...</span><span id="pPercent">0%</span></div>
-        <div class="progress-track"><div id="pFill" class="progress-fill"></div></div>
-    </div>
-    
-    <div id="uiTools" style="display:none;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <button style="background:var(--gold); color:#000;" onclick="genMOD()">⭐ MATCH OF THE DAY</button>
-            <button style="background:var(--value); color:#fff; border:none;" onclick="renderList()">🔄 ΑΝΑΝΕΩΣΗ LIVE</button>
-        </div>
+        <div style="display:flex; justify-content:space-between;"><span id="pStatus">Προετοιμασία...</span><span id="pPercent">0%</span></div>
+        <div class="p-bar"><div id="pFill" class="p-fill"></div></div>
     </div>
 
-    <div id="accArea"></div>
+    <div id="uiTools" style="display:none; margin-top:10px; display:grid; grid-template-columns: 1fr 1fr 1fr; gap:5px;">
+        <button style="background:var(--value); color:#fff;" onclick="genAcca(3)">TOP 3</button>
+        <button style="background:var(--value); color:#fff;" onclick="genAcca(4)">TOP 4</button>
+        <button style="background:var(--value); color:#fff;" onclick="genAcca(5)">TOP 5</button>
+    </div>
+
+    <div id="displayArea"></div>
+
     <div id="analysisPanel">
-        <span style="float:right; cursor:pointer; font-weight:900; font-size:1.5rem; color:var(--bomb);" onclick="this.parentElement.style.display='none'">✕</span>
-        <div id="matchHeader" style="text-align:center; font-weight:900; color:var(--p); font-size:1.3rem;"></div>
-        
-        <div class="stat-grid" id="statsGrid"></div>
-
-        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; text-align:center;">
-            <div id="probArea"></div>
-        </div>
-
-        <div class="intel-box" id="intelBox">
-            <b style="color:var(--value);">🤖 LIVE INTEL ADVISOR:</b>
-            <div id="liveAdvice" style="margin-top:8px;"></div>
-        </div>
+        <span onclick="this.parentElement.style.display='none'" style="float:right; cursor:pointer; font-weight:900; color:var(--p);">✕ CLOSE</span>
+        <h3 id="mTitle" style="text-align:center; color:var(--gold);"></h3>
+        <div class="stat-grid" id="mStats"></div>
+        <div id="mMath" style="text-align:center; padding:15px; background:rgba(0,255,136,0.1); border-radius:15px; border:1px solid var(--p);"></div>
+        <div id="mLiveIntel" style="margin-top:10px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); font-size:0.85rem;"></div>
     </div>
+
     <div id="matchList"></div>
 </div>
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [197, 39, 140, 141, 135, 136, 78, 40, 262, 113, 281]; 
+const LEAGUES = [197, 39, 140, 141, 135, 136, 78, 281]; 
 let allMatches = [];
 
-async function globalSync() {
-    allMatches = [];
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('syncBtn').style.display = 'none';
-    document.getElementById('progressContainer').style.display = 'block';
-
-    for(let i = 0; i < LEAGUES.length; i++) {
-        const p = Math.round(((i + 1) / LEAGUES.length) * 100);
-        document.getElementById('pFill').style.width = p + "%";
-        document.getElementById('pPercent').innerText = p + "%";
-        document.getElementById('pStatus').innerText = `Σάρωση Λίγκας ${LEAGUES[i]}...`;
-        try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {
-                headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
-            });
-            const d = await res.json();
-            if(d.response) allMatches = allMatches.concat(d.response);
-        } catch(e) { console.error("Sync Error:", e); }
-        await new Promise(r => setTimeout(r, 200));
-    }
-    document.getElementById('progressContainer').style.display = 'none';
-    document.getElementById('syncBtn').style.display = 'block';
-    document.getElementById('uiTools').style.display = "block";
-    renderList();
-}
-
-// POISSON ENGINE FIX
-function calculatePoisson(mu, k) {
-    const L = Math.exp(-mu);
+// POISSON CORE
+function poisson(lambda, k) {
+    const L = Math.exp(-lambda);
     let p = 1.0;
-    for (let i = 1; i <= k; i++) p *= (mu / i);
+    for (let i = 1; i <= k; i++) p *= (lambda / i);
     return L * p;
 }
 
-async function showAnalysis(fid, h, a, gH, gA, elapsed, status) {
-    const panel = document.getElementById('analysisPanel');
-    panel.style.display = "block";
-    document.getElementById('matchHeader').innerText = h + " - " + a;
-    
-    try {
-        const res = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${fid}`, {
-            headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
-        });
-        const d = await res.json();
-        const data = d.response[0];
-
-        const hXG = parseFloat(data?.teams?.home?.last_5?.goals?.for?.average) || 1.1;
-        const aXG = parseFloat(data?.teams?.away?.last_5?.goals?.for?.average) || 1.1;
-        const hXGA = parseFloat(data?.teams?.home?.last_5?.goals?.against?.average) || 0.9;
-        const aXGA = parseFloat(data?.teams?.away?.last_5?.goals?.against?.average) || 0.9;
-
-        // MATH ENGINE
-        const muH = (hXG + aXGA) / 2;
-        const muA = (aXG + hXGA) / 2;
-        let pUnder = 0;
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3 - i; j++) {
-                pUnder += calculatePoisson(muH, i) * calculatePoisson(muA, j);
-            }
-        }
-        const overProb = ((1 - pUnder) * 100).toFixed(1);
-
-        document.getElementById('statsGrid').innerHTML = `
-            <div class="stat-box"><span class="label">HOME xG</span><span class="val">${hXG}</span></div>
-            <div class="stat-box"><span class="label">AWAY xG</span><span class="val">${aXG}</span></div>
-            <div class="stat-box"><span class="label">HOME xGA</span><span class="val">${hXGA}</span></div>
-            <div class="stat-box"><span class="label">AWAY xGA</span><span class="val">${aXGA}</span></div>
-            <div class="stat-box"><span class="label">CORNERS</span><span class="val">${data?.teams?.home?.last_5?.corners?.average || 0} - ${data?.teams?.away?.last_5?.corners?.average || 0}</span></div>
-            <div class="stat-box"><span class="label">CARDS</span><span class="val">${data?.teams?.home?.last_5?.cards?.average || 0} - ${data?.teams?.away?.last_5?.cards?.average || 0}</span></div>
-        `;
-
-        document.getElementById('probArea').innerHTML = `
-            <div style="font-size:1.4rem; font-weight:900; color:var(--p);">OVER 2.5: ${overProb}%</div>
-            <div style="font-size:1rem; opacity:0.8;">ADVICE: ${data?.predictions?.advice || 'N/A'}</div>
-        `;
-
-        let advice = "Αναμονή για εξέλιξη...";
-        if (status !== "NS") {
-            const actual = (gH || 0) + (gA || 0);
-            advice = `Σκορ Live: ${gH}-${gA} | Λεπτό: ${elapsed}' <br> ${actual > 1 ? '🔥 HOT GAME' : '⚖️ STABLE'}`;
-        }
-        document.getElementById('liveAdvice').innerHTML = advice;
-    } catch(e) { console.error("Analysis Error:", e); }
-    window.scrollTo({top: 0, behavior: 'smooth'});
+function solveMatch(hXG, aXG, hXGA, aXGA) {
+    const muH = (hXG + aXGA) / 2;
+    const muA = (aXG + hXGA) / 2;
+    let pUnder = 0;
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3 - i; j++) pUnder += poisson(muH, i) * poisson(muA, j);
+    }
+    return { 
+        o25: ((1 - pUnder) * 100).toFixed(1),
+        gg: ((1 - poisson(muH, 0)) * (1 - poisson(muA, 0)) * 100).toFixed(1)
+    };
 }
 
-function renderList() {
-    const list = document.getElementById('matchList');
-    list.innerHTML = "";
-    allMatches.forEach(m => {
-        const div = document.createElement('div');
-        div.className = 'match-card';
-        div.onclick = () => showAnalysis(m.fixture.id, m.teams.home.name, m.teams.away.name, m.goals.home, m.goals.away, m.fixture.status.elapsed, m.fixture.status.short);
-        div.innerHTML = `<b>${m.teams.home.name} - ${m.teams.away.name}</b><br><small>${m.league.name} (${m.fixture.status.short})</small>`;
-        list.appendChild(div);
+async function globalSync() {
+    allMatches = [];
+    document.getElementById('progressContainer').style.display = 'block';
+    const today = new Date().toISOString().split('T')[0];
+    
+    for(let i=0; i<LEAGUES.length; i++) {
+        const perc = Math.round(((i+1)/LEAGUES.length)*100);
+        document.getElementById('pFill').style.width = perc+'%';
+        document.getElementById('pPercent').innerText = perc+'%';
+        try {
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {
+                headers: {"x-rapidapi-key": KEY}
+            });
+            const d = await res.json();
+            if(d.response) allMatches = allMatches.concat(d.response);
+        } catch(e) {}
+        await new Promise(r => setTimeout(r, 200));
+    }
+    document.getElementById('progressContainer').style.display = 'none';
+    document.getElementById('uiTools').style.display = 'grid';
+    renderByLeague();
+}
+
+function renderByLeague() {
+    const container = document.getElementById('matchList');
+    container.innerHTML = "";
+    const sorted = allMatches.sort((a,b) => {
+        const p = {"1H":1, "HT":1, "2H":1, "NS":2, "FT":3};
+        return (p[a.fixture.status.short] || 4) - (p[b.fixture.status.short] || 4);
     });
+
+    const grouped = sorted.reduce((acc, m) => {
+        acc[m.league.name] = acc[m.league.name] || [];
+        acc[m.league.name].push(m);
+        return acc;
+    }, {});
+
+    for(let league in grouped) {
+        const lDiv = document.createElement('div');
+        lDiv.className = 'league-group';
+        lDiv.innerHTML = `<div class="league-title">${league}</div>`;
+        grouped[league].forEach(m => {
+            const live = ["1H","HT","2H"].includes(m.fixture.status.short);
+            const card = document.createElement('div');
+            card.className = 'match-card';
+            card.onclick = () => showDeep(m);
+            card.innerHTML = `
+                ${live ? '<span class="live-tag">LIVE '+m.fixture.status.elapsed+"'</span>" : ""}
+                <div style="font-weight:800;">${m.teams.home.name} - ${m.teams.away.name}</div>
+                <div style="color:var(--p); font-weight:900;">${(live || m.fixture.status.short === "FT") ? m.goals.home+"-"+m.goals.away : "VS"}</div>
+            `;
+            lDiv.appendChild(card);
+        });
+        container.appendChild(lDiv);
+    }
+}
+
+async function showDeep(m) {
+    document.getElementById('analysisPanel').style.display = 'block';
+    document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
+    
+    const [predRes, liveRes] = await Promise.all([
+        fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers: {"x-rapidapi-key": KEY}}),
+        fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers: {"x-rapidapi-key": KEY}})
+    ]);
+
+    const pred = (await predRes.json()).response[0];
+    const live = (await liveRes.json()).response;
+
+    const hXG = pred?.teams?.home?.last_5?.goals?.for?.average || 1.2;
+    const aXG = pred?.teams?.away?.last_5?.goals?.for?.average || 1.1;
+    const hXGA = pred?.teams?.home?.last_5?.goals?.against?.average || 0.9;
+    const aXGA = pred?.teams?.away?.last_5?.goals?.against?.average || 0.9;
+
+    const math = solveMatch(parseFloat(hXG), parseFloat(aXG), parseFloat(hXGA), parseFloat(aXGA));
+
+    document.getElementById('mStats').innerHTML = `
+        <div class="stat-box"><small>xG / xGA HOME</small><br><b class="val">${hXG} / ${hXGA}</b></div>
+        <div class="stat-box"><small>xG / xGA AWAY</small><br><b class="val">${aXG} / ${aXGA}</b></div>
+        <div class="stat-box"><small>CORNERS</small><br><b>${pred?.teams?.home?.last_5?.corners?.average || 0}-${pred?.teams?.away?.last_5?.corners?.average || 0}</b></div>
+        <div class="stat-box"><small>CARDS</small><br><b>${pred?.teams?.home?.last_5?.cards?.average || 0}-${pred?.teams?.away?.last_5?.cards?.average || 0}</b></div>
+    `;
+
+    document.getElementById('mMath').innerHTML = `
+        <div style="font-size:1.5rem; font-weight:900;">OVER 2.5: ${math.o25}%</div>
+        <div style="color:var(--gold); font-weight:800;">GG (BTTS): ${math.gg}%</div>
+    `;
+
+    if(live && live.length > 0) {
+        document.getElementById('mLiveIntel').innerHTML = `<b>LIVE INTEL:</b> Shots on Goal: ${live[0].statistics[0].value || 0}-${live[1].statistics[0].value || 0}`;
+    } else {
+        document.getElementById('mLiveIntel').innerText = "Αναμονή για live δεδομένα...";
+    }
 }
 </script>
 </body>
