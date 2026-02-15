@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v185 - Audited Master</title>
+    <title>Predictor Pro v187 - Universal Analyst</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
         .container { width: 100%; max-width: 1050px; margin: 0 auto; }
         
-        /* Checkpoint: Neon Blinking Animation */
+        /* Checkpoint: Neon Parentheses Animation */
         @keyframes neonBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--live-green); } 50% { opacity: 0.5; } }
         .live-neon { color: var(--live-green); font-weight: 900; animation: neonBlink 1.5s infinite; }
 
-        /* Checkpoint: UI & Controls */
         .dashboard { background: #000; border: 3px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 30px; }
-        .mod-box { background: linear-gradient(145deg, #1e2530, #000); border: 4px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; box-shadow: 0 0 20px rgba(241, 196, 15, 0.2); }
+        .mod-box { background: linear-gradient(145deg, #1e2530, #000); border: 4px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; }
         .scroll-select { background: var(--card); color: #fff; padding: 18px; border-radius: 15px; border: 2px solid var(--border); font-size: 1.1rem; font-weight: 800; width: 100%; margin-bottom: 12px; cursor: pointer; appearance: none; }
-        .btn-gen { background: var(--value); color: #fff; width: 100%; padding: 20px; border-radius: 15px; border: none; font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
+        .btn-gen { background: var(--value); color: #fff; width: 100%; padding: 20px; border-radius: 15px; border: none; font-weight: 900; font-size: 1.2rem; cursor: pointer; }
 
-        /* Checkpoint: Matrix & Delta */
         .matrix-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .matrix-table th { color: var(--gold); text-align: left; padding: 15px; border-bottom: 4px solid var(--border); font-size: 0.9rem; }
+        .matrix-table th { color: var(--gold); text-align: left; padding: 15px; border-bottom: 4px solid var(--border); }
         .matrix-table td { padding: 18px 15px; border-bottom: 1px solid #222; font-weight: 800; font-size: 1.2rem; }
+        
         .delta-tag { font-size: 0.9rem; padding: 4px 10px; border-radius: 8px; font-weight: 900; }
         .d-plus { background: rgba(0, 255, 65, 0.2); color: var(--live-green); }
         .d-minus { background: rgba(255, 62, 62, 0.2); color: #ff3e3e; }
@@ -30,19 +29,19 @@
         #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; z-index: 2000; overflow-y: auto; box-shadow: 0 0 100px #000; }
         .close-btn { position: absolute; top: 20px; right: 25px; font-size: 3rem; color: var(--live-green); cursor: pointer; font-weight: 900; }
         
-        .adv-box { background: linear-gradient(135deg, #bf40bf, #000); border: 2px solid #fff; padding: 25px; border-radius: 20px; text-align: center; margin-top: 30px; box-shadow: 0 0 30px rgba(191, 64, 191, 0.4); }
         .time-bar { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 15px 0; }
         .time-fill { background: #ff3e3e; height: 100%; transition: 0.3s; }
+        .adv-box { background: linear-gradient(135deg, #bf40bf, #000); border: 2px solid #fff; padding: 25px; border-radius: 20px; text-align: center; margin-top: 30px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v185</h1>
-    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🌍 START GLOBAL SYNC</button>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v187</h1>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🌍 START ANALYST SYNC</button>
 
     <div id="pCont" style="display:none; margin-bottom:25px;">
-        <div style="display:flex; justify-content:space-between; font-weight: 900;"><span>Mining Audited Data...</span><span id="pPerc">0%</span></div>
+        <div style="display:flex; justify-content:space-between; font-weight: 900;"><span>Mining Global Data...</span><span id="pPerc">0%</span></div>
         <div style="background:#333; height:12px; border-radius:6px; overflow:hidden;"><div id="pFill" style="background:var(--p); height:100%; width:0%; transition:0.4s;"></div></div>
     </div>
 
@@ -54,9 +53,7 @@
             <option value="O35">OVER 3.5 GOALS</option>
         </select>
         <select id="accaCount" class="scroll-select">
-            <option value="3">3-ΑΔΑ (TOP PROB)</option>
-            <option value="4">4-ΑΔΑ (STRATEGIC)</option>
-            <option value="5">5-ΑΔΑ (MAX YIELD)</option>
+            <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
         </select>
         <button onclick="generateAcca()" class="btn-gen">GENERATE SMART ACCA</button>
         <div id="accaResult" style="margin-top:20px;"></div>
@@ -68,7 +65,7 @@
         <div id="timeStatus"></div>
         <table class="matrix-table">
             <thead>
-                <tr><th>STAT MATRIX</th><th>HOME</th><th>AWAY</th><th>Δ (DELTA)</th></tr>
+                <tr><th>QUANTUM MATRIX</th><th>HOME</th><th>AWAY</th><th>Δ (DELTA)</th></tr>
             </thead>
             <tbody id="matrixBody"></tbody>
         </table>
@@ -86,7 +83,6 @@ const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [136, 281, 141, 39, 140, 135, 78]; 
 let masterData = [];
 
-// Checkpoint: Poisson Probability Calculation
 function getPoisson(lambda, k) {
     let factorial = 1;
     for (let i = 1; i <= k; i++) factorial *= i;
@@ -131,7 +127,7 @@ function generateAcca() {
     const count = parseInt(document.getElementById('accaCount').value);
     let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
     
-    // Checkpoint: Strict Stat Guards (xG > 2.5 | 3.5)
+    // Checkpoint: Stat Guard Goals Filters
     if(type === 'O25') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 2.5);
     if(type === 'O35') pool = pool.filter(d => (parseFloat(d.prediction?.teams?.home?.last_5?.goals?.for?.average || 0) + parseFloat(d.prediction?.teams?.away?.last_5?.goals?.for?.average || 0)) > 3.5);
 
@@ -139,7 +135,7 @@ function generateAcca() {
     const selected = sorted.slice(0, count);
 
     if(selected.length < count) {
-        document.getElementById('accaResult').innerHTML = `<div style="color:var(--gold); text-align:center; padding:15px; border:1px solid #444; border-radius:15px;">⚠️ Ανεπαρκή xG δεδομένα για ${type}.</div>`;
+        document.getElementById('accaResult').innerHTML = `<div style="color:var(--gold); text-align:center; padding:15px; border:1px solid #444; border-radius:15px;">⚠️ Ανεπαρκή xG δεδομένα για ${type} Acca.</div>`;
         return;
     }
 
@@ -161,9 +157,7 @@ async function showIntel(d) {
     const sData = (await sRes.json()).response;
 
     const isL = ["1H","HT","2H"].includes(m.fixture.status.short);
-    const elapsed = m.fixture.status.elapsed || 0;
-    
-    // Checkpoint: Time Progress Bar
+    const elapsed = m.fixture.status.elapsed || 1;
     document.getElementById('timeStatus').innerHTML = `<div style="text-align:center; font-weight:900;">TIME: ${elapsed}'</div><div class="time-bar"><div class="time-fill" style="width:${(elapsed/90)*100}%"></div></div>`;
 
     let hG = m.goals.home, aG = m.goals.away, hC = 0, aC = 0, hDA = 0, aDA = 0;
@@ -174,27 +168,30 @@ async function showIntel(d) {
         aDA = sData[1].statistics.find(s=>s.type==="Dangerous Attacks")?.value || 0;
     }
 
-    // Checkpoint: Delta (Δ) Calculations
+    // Checkpoint: Pressure Index (PI) Calculation
+    const hPI = ((hDA * 1.2) + (hC * 5)) / elapsed;
+    const aPI = ((aDA * 1.2) + (aC * 5)) / elapsed;
+
+    // Checkpoint: Delta (Δ) Calculation
     const deltaG = ((hG + aG) - (2.5 * (elapsed/90))).toFixed(2);
     const deltaC = ((hC + aC) - (9.5 * (elapsed/90))).toFixed(2);
     const suggestedLine = (hC + aC) + 2.5;
 
     document.getElementById('matrixBody').innerHTML = `
-        <tr><td>xG ATTACK</td><td>${p?.teams?.home?.last_5?.goals?.for?.average || 1.1}</td><td>${p?.teams?.away?.last_5?.goals?.for?.average || 1.1}</td><td><span class="delta-tag ${deltaG >= 0 ? 'd-plus' : 'd-minus'}">${deltaG}</span></td></tr>
-        <tr><td>xGA DEFENSE</td><td>${p?.teams?.home?.last_5?.goals?.against?.average || 1.1}</td><td>${p?.teams?.away?.last_5?.goals?.against?.average || 1.1}</td><td>-</td></tr>
-        <tr><td>CORNERS</td><td>${hC}</td><td>${aC}</td><td><span class="delta-tag ${deltaC >= 0 ? 'd-plus' : 'd-minus'}">${deltaC}</span></td></tr>
-        <tr><td>D. ATTACKS</td><td>${hDA}</td><td>${aDA}</td><td>-</td></tr>`;
+        <tr><td>xG ATTACK</td><td>${p?.teams?.home?.last_5?.goals?.for?.average || 1.1} ${isL ? `<br><span class="live-neon">(${hG} Live)</span>` : ''}</td><td>${p?.teams?.away?.last_5?.goals?.for?.average || 1.1} ${isL ? `<br><span class="live-neon">(${aG} Live)</span>` : ''}</td><td><span class="delta-tag ${deltaG >= 0 ? 'd-plus' : 'd-minus'}">${deltaG}</span></td></tr>
+        <tr><td>CORNERS</td><td>4.5 ${isL ? `<br><span class="live-neon">(${hC} Live)</span>` : ''}</td><td>4.0 ${isL ? `<br><span class="live-neon">(${aC} Live)</span>` : ''}</td><td><span class="delta-tag ${deltaC >= 0 ? 'd-plus' : 'd-minus'}">${deltaC}</span></td></tr>
+        <tr><td>PRESS INDEX</td><td class="${isL ? 'live-neon' : ''}">${hPI.toFixed(2)}</td><td class="${isL ? 'live-neon' : ''}">${aPI.toFixed(2)}</td><td>-</td></tr>`;
 
-    // Checkpoint: Corner & Pressure Clarity
+    // Checkpoint: Precision Advice
     const advBox = document.getElementById('adviceBox');
     if(isL && elapsed > 20) {
         advBox.style.display = 'block';
         if(deltaC < -1.2 && (hDA + aDA) > 50) {
             document.getElementById('adviceText').innerText = `ΠΡΟΤΑΣΗ: OVER ${Math.ceil(suggestedLine)}.5 ΚΟΡΝΕΡ (ΣΥΝΟΛΟ)`;
             document.getElementById('pressureText').innerText = `ΠΙΕΣΗ ΑΠΟ: ${hDA > aDA ? m.teams.home.name.toUpperCase() : m.teams.away.name.toUpperCase()}`;
-        } else if (hDA > aDA * 1.8 && hG <= aG) {
+        } else if (hPI > 2.8 && hG <= aG) {
             document.getElementById('adviceText').innerText = `ΠΡΟΤΑΣΗ: ΕΠΟΜΕΝΟ ΓΚΟΛ ${m.teams.home.name.toUpperCase()}`;
-            document.getElementById('pressureText').innerText = `ΚΥΡΙΑΡΧΙΑ ΜΕ ${hDA} ΕΠΙΚ. ΕΠΙΘΕΣΕΙΣ`;
+            document.getElementById('pressureText').innerText = `ΚΥΡΙΑΡΧΙΑ ΜΕ PI: ${hPI.toFixed(2)}`;
         } else { advBox.style.display = 'none'; }
     } else { advBox.style.display = 'none'; }
 }
