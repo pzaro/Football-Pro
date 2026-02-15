@@ -3,79 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Predictor Pro v166 - Live Matrix</title>
+    <title>Predictor Pro v167 - Pro-Vision</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live: #ff3e3e; --value: #bf40bf; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; font-size: 0.85rem; }
-        .container { width: 100%; max-width: 900px; margin: 0 auto; }
+        /* ΑΥΞΗΣΗ ΓΡΑΜΜΑΤΟΣΕΙΡΑΣ */
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1rem; line-height: 1.5; }
+        .container { width: 100%; max-width: 950px; margin: 0 auto; }
         
-        /* Dashboard & Progress */
-        .dashboard { background: #000; border: 2px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 20px; }
-        .p-bar { background: #333; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
+        .dashboard { background: #000; border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 25px; }
+        .p-bar { background: #333; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; }
         .p-fill { background: var(--p); height: 100%; width: 0%; transition: 0.3s; }
         
-        button, select { padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 800; cursor: pointer; }
-        .btn-sync { background: var(--p); color: #000; border: none; width: 100%; font-size: 1rem; margin-bottom: 15px; }
+        button, select { padding: 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: 800; cursor: pointer; font-size: 1rem; }
+        .btn-sync { background: var(--p); color: #000; border: none; width: 100%; margin-bottom: 20px; font-size: 1.1rem; }
 
-        /* Categorization */
-        .league-group { background: #000; border: 1px solid var(--border); border-radius: 15px; margin-bottom: 15px; padding: 10px; }
-        .league-title { color: var(--gold); font-weight: 900; padding: 8px; border-bottom: 1px solid var(--border); text-transform: uppercase; margin-bottom: 10px; }
+        .league-group { background: #000; border: 1px solid var(--border); border-radius: 15px; margin-bottom: 20px; padding: 15px; }
+        .league-title { color: var(--gold); font-weight: 900; padding-bottom: 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; margin-bottom: 15px; font-size: 1.1rem; }
         
-        /* Match Cards */
-        .match-card { background: var(--card); padding: 15px; border-radius: 12px; margin-top: 8px; border-left: 5px solid var(--border); cursor: pointer; display: flex; justify-content: space-between; }
-        .match-live { border-left-color: var(--live); box-shadow: inset 4px 0 10px rgba(255, 62, 62, 0.1); }
+        .match-card { background: var(--card); padding: 20px; border-radius: 15px; margin-top: 10px; border-left: 8px solid var(--border); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .match-live { border-left-color: var(--live); box-shadow: 0 0 15px rgba(255, 62, 62, 0.2); }
 
-        /* INTEL PANEL UI */
-        #intelPanel { display: none; background: #000; border: 2px solid var(--p); border-radius: 20px; padding: 20px; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 0 60px #000; }
-        
-        /* MATRIX TABLE */
-        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .matrix-table th { color: var(--gold); text-align: left; padding: 10px; border-bottom: 2px solid var(--border); font-size: 0.75rem; }
-        .matrix-table td { padding: 12px 10px; border-bottom: 1px solid #222; font-weight: 700; }
-        .live-val { display: block; color: var(--live); font-size: 0.7rem; font-weight: 400; margin-top: 4px; }
+        /* MATRIX TABLE UI */
+        #intelPanel { display: none; background: #000; border: 3px solid var(--p); border-radius: 25px; padding: 25px; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 0 80px #000; }
+        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .matrix-table th { color: var(--gold); text-align: left; padding: 12px; border-bottom: 3px solid var(--border); font-size: 0.9rem; }
+        .matrix-table td { padding: 15px 12px; border-bottom: 1px solid #222; font-weight: 700; font-size: 1rem; }
+        .live-val { display: block; color: var(--live); font-size: 0.85rem; font-weight: 400; margin-top: 5px; }
 
-        /* Strategic Advice */
-        .advice-box { background: rgba(191, 64, 191, 0.15); border: 2px solid var(--value); padding: 15px; border-radius: 12px; text-align: center; margin-top: 20px; }
-        .advice-text { font-size: 1.1rem; font-weight: 900; color: #fff; text-transform: uppercase; }
+        .advice-box { background: rgba(191, 64, 191, 0.2); border: 2px solid var(--value); padding: 20px; border-radius: 15px; text-align: center; margin-top: 25px; }
+        .advice-text { font-size: 1.3rem; font-weight: 900; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="text-align:center; color:var(--p);">PREDICTOR PRO v166</h2>
+    <h1 style="text-align:center; color:var(--p); letter-spacing: 2px;">PREDICTOR PRO v167</h1>
     
-    <button class="btn-sync" onclick="globalSync()">🌍 ΕΚΤΕΛΕΣΗ ΣΤΡΑΤΗΓΙΚΟΥ MATRIX</button>
-    <div id="pCont" style="display:none; margin-bottom:15px;">
-        <div style="display:flex; justify-content:space-between; font-size:0.7rem;"><span>Mining Data...</span><span id="pPerc">0%</span></div>
+    <button class="btn-sync" onclick="globalSync()">🌍 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΥΓΧΡΟΝΙΣΜΟΥ</button>
+    <div id="pCont" style="display:none; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; font-weight: 900;"><span>Data Mining...</span><span id="pPerc">0%</span></div>
         <div class="p-bar"><div id="pFill" class="p-fill"></div></div>
     </div>
 
     <div id="dashboard" class="dashboard" style="display:none;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; margin-bottom: 15px;">
-            <select id="accaType"><option value="1X2">ΣΗΜΕΙΑ</option><option value="O25">OVER 2.5</option></select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 15px;">
+            <select id="accaType"><option value="1X2">ΣΗΜΕΙΑ (1X2)</option><option value="O25">OVER 2.5</option></select>
             <select id="accaCount"><option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option></select>
-            <button onclick="generateAcca()" style="background:var(--value); border:none;">GENERATE</button>
+            <button onclick="generateAcca()" style="background:var(--value); border:none; color:#fff;">GENERATE</button>
         </div>
         <div id="accaResult"></div>
     </div>
 
     <div id="intelPanel">
-        <span onclick="this.parentElement.style.display='none'" style="float:right; cursor:pointer; font-weight:900; color:var(--live);">✕</span>
-        <h3 id="mTitle" style="text-align:center; color:var(--gold); margin:0 0 10px 0;"></h3>
+        <span onclick="this.parentElement.style.display='none'" style="float:right; cursor:pointer; font-weight:900; color:var(--live); font-size: 1.5rem;">✕</span>
+        <h2 id="mTitle" style="text-align:center; color:var(--gold); margin:0 0 15px 0;"></h2>
         
         <table class="matrix-table">
             <thead>
-                <tr>
-                    <th>ΣΤΑΤΙΣΤΙΚΟ</th>
-                    <th>ΓΗΠΕΔΟΥΧΟΣ</th>
-                    <th>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</th>
-                </tr>
+                <tr><th>ΣΤΑΤΙΣΤΙΚΟ</th><th>ΓΗΠΕΔΟΥΧΟΣ</th><th>ΦΙΛΟΞΕΝΟΥΜΕΝΗ</th></tr>
             </thead>
             <tbody id="matrixBody"></tbody>
         </table>
 
         <div id="adviceBox" class="advice-box" style="display:none;">
-            <div style="color:var(--value); font-weight:900; font-size:0.7rem; margin-bottom:5px;">ΠΡΟΤΑΣΗ VALUE BET</div>
+            <div style="color:var(--value); font-weight:900; font-size:0.8rem; margin-bottom:5px;">ΣΤΡΑΤΗΓΙΚΗ ΠΡΟΤΑΣΗ</div>
             <div id="adviceText" class="advice-text"></div>
         </div>
     </div>
@@ -113,6 +104,27 @@ async function globalSync() {
     renderMatches();
 }
 
+function generateAcca() {
+    const type = document.getElementById('accaType').value;
+    const count = parseInt(document.getElementById('accaCount').value);
+    const pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
+    
+    let sorted = pool.sort((a,b) => {
+        if(type === '1X2') return (parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0));
+        return (parseFloat(b.prediction?.predictions?.goals?.over || 0) - parseFloat(a.prediction?.predictions?.goals?.over || 0));
+    });
+
+    const selected = sorted.slice(0, count);
+    let html = `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; border:1px solid var(--border);">`;
+    selected.forEach(s => {
+        const pick = type === '1X2' ? (s.prediction?.predictions?.winner?.name || '1') : 'OVER 2.5';
+        html += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #333;">
+            <span style="font-weight:900;">${s.fixture.teams.home.name}</span> <b style="color:var(--p);">${pick}</b>
+        </div>`;
+    });
+    document.getElementById('accaResult').innerHTML = html + "</div>";
+}
+
 async function showIntel(d) {
     const panel = document.getElementById('intelPanel');
     panel.style.display = 'block';
@@ -127,16 +139,16 @@ async function showIntel(d) {
     let lH_G = m.goals.home, lA_G = m.goals.away, lH_C = 0, lA_C = 0, lH_K = 0, lA_K = 0;
 
     if(sData && sData.length > 0){
-        lH_C = sData[0].statistics.find(s=>s.type==="Corner Kicks").value || 0;
-        lA_C = sData[1].statistics.find(s=>s.type==="Corner Kicks").value || 0;
-        lH_K = sData[0].statistics.find(s=>s.type==="Yellow Cards").value || 0;
-        lA_K = sData[1].statistics.find(s=>s.type==="Yellow Cards").value || 0;
+        lH_C = sData[0].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
+        lA_C = sData[1].statistics.find(s=>s.type==="Corner Kicks")?.value || 0;
+        lH_K = sData[0].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
+        lA_K = sData[1].statistics.find(s=>s.type==="Yellow Cards")?.value || 0;
     }
 
     const rows = [
         { label: "xG (ΕΠΙΘΕΣΗ)", h: p?.teams?.home?.last_5?.goals?.for?.average || 1.1, a: p?.teams?.away?.last_5?.goals?.for?.average || 1.1, liveH: lH_G, liveA: lA_G },
         { label: "xGA (ΑΜΥΝΑ)", h: p?.teams?.home?.last_5?.goals?.against?.average || 1.0, a: p?.teams?.away?.last_5?.goals?.against?.average || 1.0, liveH: lA_G, liveA: lH_G },
-        { label: "CORNERS", h: p?.teams?.home?.last_5?.corners?.average || 4.5, a: p?.teams?.away?.last_5?.corners?.average || 4.1, liveH: lH_C, liveA: lA_C },
+        { label: "xCORNERS", h: p?.teams?.home?.last_5?.corners?.average || 4.5, a: p?.teams?.away?.last_5?.corners?.average || 4.1, liveH: lH_C, liveA: lA_C },
         { label: "CARDS", h: p?.teams?.home?.last_5?.cards?.average || 2.2, a: p?.teams?.away?.last_5?.cards?.average || 2.4, liveH: lH_K, liveA: lA_K }
     ];
 
@@ -150,13 +162,12 @@ async function showIntel(d) {
     });
     document.getElementById('matrixBody').innerHTML = html;
 
-    // Value Bet Recommendation Logic
     const time = m.fixture.status.elapsed || 1;
     let adv = "";
-    if(isLive && time > 20){
-        if(lH_G === 0 && r.h > 1.5) adv = "Ποντάρετε: Επόμενο γκολ Γηπεδούχος";
-        else if(lA_G === 0 && r.a > 1.5) adv = "Ποντάρετε: Επόμενο γκολ Φιλοξενούμενη";
-        else if((lH_C + lA_C) < 3 && time > 30) adv = "Ποντάρετε: Over Κόρνερ (Πίεση υπάρχει)";
+    if(isLive && time > 15){
+        if(lH_G === 0 && rows[0].h > 1.4) adv = "Πρόταση: Ποντάρετε επόμενο γκολ Γηπεδούχος";
+        else if(lA_G === 0 && rows[0].a > 1.4) adv = "Πρόταση: Ποντάρετε επόμενο γκολ Φιλοξενούμενη";
+        else if((lH_C + lA_C) < 3 && time > 30) adv = "Πρόταση: Over Κόρνερ (Υπάρχει πίεση)";
     }
     
     const adviceBox = document.getElementById('adviceBox');
@@ -174,7 +185,7 @@ function renderMatches() {
             const isL = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
             const card = document.createElement('div'); card.className = `match-card ${isL ? 'match-live' : ''}`;
             card.onclick = () => showIntel(d);
-            card.innerHTML = `<div><b>${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br><small>${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' ('+d.fixture.fixture.status.elapsed+"')" : d.fixture.fixture.status.short}</small></div><div style="font-weight:900; color:var(--p);">${isL ? 'LIVE SCAN' : 'PRE-DATA'}</div>`;
+            card.innerHTML = `<div><b style="font-size:1.1rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br><small>${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' ('+d.fixture.fixture.status.elapsed+"')" : d.fixture.fixture.status.short}</small></div><div style="font-weight:900; color:var(--p);">${isL ? 'LIVE SCAN' : 'PRE-DATA'}</div>`;
             div.appendChild(card);
         });
         list.appendChild(div);
