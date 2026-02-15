@@ -2,60 +2,77 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Predictor Pro v175 - The Analyst's Pride</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Predictor Pro v176 - Quantum Elite</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; font-size: 1.1rem; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; }
         .container { width: 100%; max-width: 1050px; margin: 0 auto; }
         
         /* Neon Animation */
-        @keyframes neonBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--live-green); } 50% { opacity: 0.5; } }
+        @keyframes neonBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--live-green); } 50% { opacity: 0.5; } }
         .live-neon { color: var(--live-green); font-weight: 900; animation: neonBlink 1.5s infinite; }
 
         /* Dashboard & MOD */
-        .mod-box { background: linear-gradient(145deg, #1e2530, #000); border: 4px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; }
+        .dashboard { background: #000; border: 3px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 30px; }
+        .mod-box { background: linear-gradient(145deg, #1e2530, #000); border: 4px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; box-shadow: 0 0 20px rgba(241, 196, 15, 0.2); }
         
+        /* Improved Scroll List & Controls */
+        .acca-controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .scroll-select { background: var(--card); color: #fff; padding: 18px; border-radius: 15px; border: 2px solid var(--border); font-size: 1.1rem; font-weight: 800; width: 100%; appearance: none; cursor: pointer; }
+        .btn-gen { background: var(--value); color: #fff; padding: 18px; border-radius: 15px; border: none; font-weight: 900; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .btn-gen:active { transform: scale(0.95); }
+
+        /* Matrix Table */
+        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #000; }
+        .matrix-table th { background: #1a1d23; color: var(--gold); padding: 15px; text-align: left; border-bottom: 4px solid var(--border); font-size: 0.9rem; }
+        .matrix-table td { padding: 18px 15px; border-bottom: 1px solid #222; font-weight: 800; font-size: 1.2rem; }
+        .delta-tag { font-size: 0.9rem; padding: 4px 10px; border-radius: 8px; font-weight: 900; margin-left: 10px; }
+        .d-plus { background: rgba(0, 255, 65, 0.2); color: var(--live-green); }
+        .d-minus { background: rgba(255, 62, 62, 0.2); color: #ff3e3e; }
+
         /* Progress Bars */
         .p-bar { background: #333; height: 12px; border-radius: 6px; overflow: hidden; margin: 10px 0; }
         .p-fill { background: var(--p); height: 100%; width: 0%; transition: 0.4s; }
         .time-bar { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 15px 0; }
         .time-fill { background: #ff3e3e; height: 100%; transition: 0.3s; }
 
-        /* Matrix Table */
-        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #000; }
-        .matrix-table th { background: #1a1d23; color: var(--gold); padding: 15px; text-align: left; border-bottom: 3px solid var(--border); }
-        .matrix-table td { padding: 18px 15px; border-bottom: 1px solid #222; font-weight: 700; font-size: 1.2rem; }
-        .delta-tag { font-size: 0.9rem; padding: 4px 8px; border-radius: 6px; margin-left: 10px; font-weight: 900; }
-        .d-plus { background: rgba(0, 255, 65, 0.2); color: var(--live-green); }
-        .d-minus { background: rgba(255, 62, 62, 0.2); color: #ff3e3e; }
-
         #intelPanel { display: none; background: #000; border: 4px solid var(--p); border-radius: 30px; padding: 30px; position: fixed; top: 5%; left: 5%; right: 5%; bottom: 5%; z-index: 2000; overflow-y: auto; }
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 3rem; color: var(--live-green); cursor: pointer; font-weight: 900; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:var(--p);">PREDICTOR PRO v175</h1>
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v176</h1>
     
-    <button onclick="globalSync()" style="width:100%; padding:20px; background:var(--p); color:#000; border:none; border-radius:15px; font-weight:900; cursor:pointer; font-size:1.2rem; margin-bottom:20px;">🌍 ΕΚΤΕΛΕΣΗ ΠΛΗΡΟΥΣ ΣΤΡΑΤΗΓΙΚΗΣ</button>
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🌍 START GLOBAL QUANTUM SYNC</button>
 
-    <div id="pCont" style="display:none;">
-        <div style="display:flex; justify-content:space-between; font-weight:900;"><span>Data Mining...</span><span id="pPerc">0%</span></div>
+    <div id="pCont" style="display:none; margin-bottom:25px;">
+        <div style="display:flex; justify-content:space-between; font-weight: 900;"><span>Mining Data...</span><span id="pPerc">0%</span></div>
         <div class="p-bar"><div id="pFill" class="p-fill"></div></div>
     </div>
 
-    <div id="dashboard" style="display:none; background:#000; padding:25px; border-radius:25px; border:2px solid var(--border); margin-bottom:30px;">
+    <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr auto; gap:12px; margin-bottom:20px;">
-            <select id="accaType"><option value="1X2">ΣΗΜΕΙΑ (1X2)</option><option value="O25">GOALS > 2.5</option></select>
-            <select id="accaCount"><option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option></select>
-            <button onclick="generateAcca()" style="background:var(--value); color:#fff; border:none; padding:0 20px; border-radius:12px; font-weight:900;">GENERATE</button>
+        <div class="acca-controls">
+            <select id="accaType" class="scroll-select">
+                <option value="1X2">ΣΗΜΕΙΑ (1X2)</option>
+                <option value="O25">OVER 2.5 GOALS</option>
+                <option value="O35">OVER 3.5 GOALS</option>
+            </select>
+            <select id="accaCount" class="scroll-select">
+                <option value="3">3-ΑΔΑ (TOP PROBABILITY)</option>
+                <option value="4">4-ΑΔΑ (STRATEGIC)</option>
+                <option value="5">5-ΑΔΑ (MAX YIELD)</option>
+            </select>
+            <button onclick="generateAcca()" class="btn-gen">GENERATE SMART ACCA</button>
         </div>
         <div id="accaResult"></div>
     </div>
 
     <div id="intelPanel">
-        <span style="position:absolute; top:20px; right:25px; font-size:2.5rem; color:var(--live-green); cursor:pointer;" onclick="this.parentElement.style.display='none'">×</span>
+        <span class="close-btn" onclick="this.parentElement.style.display='none'">×</span>
         <h2 id="mTitle" style="text-align:center; color:var(--gold);"></h2>
         <div id="timeContainer"></div>
         
@@ -66,8 +83,8 @@
             <tbody id="matrixBody"></tbody>
         </table>
 
-        <div id="adviceBox" style="background:rgba(191,64,191,0.2); border:3px solid var(--value); padding:25px; border-radius:20px; text-align:center; margin-top:30px; display:none;">
-            <div id="adviceText" style="font-size:1.5rem; font-weight:900; color:#fff;"></div>
+        <div id="adviceBox" style="background:rgba(191,64,191,0.25); border:3px solid var(--value); padding:25px; border-radius:20px; text-align:center; margin-top:30px; display:none;">
+            <div id="adviceText" style="font-size:1.5rem; font-weight:900; color:#fff; text-transform:uppercase;"></div>
         </div>
     </div>
 
@@ -111,7 +128,7 @@ function renderMOD() {
     const best = pool.sort((a,b) => parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0))[0];
     document.getElementById('modArea').innerHTML = `
         <div class="mod-box">
-            <div style="color:var(--gold); font-size:0.8rem; letter-spacing:2px;">MATCH OF THE DAY</div>
+            <div style="color:var(--gold); font-weight:900; font-size:0.8rem; letter-spacing:2px;">MATCH OF THE DAY</div>
             <div style="font-size:1.8rem; font-weight:900; margin:15px 0;">${best.fixture.teams.home.name} - ${best.fixture.teams.away.name}</div>
             <div style="color:var(--p); font-size:1.4rem; font-weight:900;">PICK: ${best.prediction?.predictions?.winner?.name} (${best.prediction?.predictions?.percent?.home}%)</div>
         </div>`;
@@ -121,15 +138,22 @@ function generateAcca() {
     const type = document.getElementById('accaType').value;
     const count = parseInt(document.getElementById('accaCount').value);
     const pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
-    let sorted = pool.sort((a,b) => (type === '1X2') ? (parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0)) : (parseFloat(b.prediction?.predictions?.goals?.over || 0) - parseFloat(a.prediction?.predictions?.goals?.over || 0)));
+    
+    let sorted = pool.sort((a,b) => {
+        if(type === '1X2') return parseInt(b.prediction?.predictions?.percent?.home || 0) - parseInt(a.prediction?.predictions?.percent?.home || 0);
+        return parseFloat(b.prediction?.predictions?.goals?.over || 0) - parseFloat(a.prediction?.predictions?.goals?.over || 0);
+    });
+
     const selected = sorted.slice(0, count);
-    let html = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:15px; border:2px solid var(--value);">`;
+    let html = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:20px; border:2px solid var(--value);">`;
     selected.forEach(s => {
-        const prob = type === '1X2' ? s.prediction?.predictions?.percent?.home : s.prediction?.predictions?.goals?.over;
+        const prob = type === '1X2' ? s.prediction?.predictions?.percent?.home : (type === 'O25' ? s.prediction?.predictions?.goals?.over : (parseFloat(s.prediction?.predictions?.goals?.over) * 0.75).toFixed(0));
         const xG = (parseFloat(s.prediction?.teams?.home?.last_5?.goals?.for?.average || 1.1) + parseFloat(s.prediction?.teams?.away?.last_5?.goals?.for?.average || 1.1)).toFixed(2);
-        html += `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #444;">
-            <span>${s.fixture.teams.home.name} - ${s.fixture.teams.away.name}</span>
-            <b style="color:var(--p);">${type === '1X2' ? s.prediction?.predictions?.winner?.name : 'OVER 2.5'} <span style="color:var(--gold)">(${prob}% | xG: ${xG})</span></b>
+        const pickText = type === '1X2' ? s.prediction?.predictions?.winner?.name : (type === 'O25' ? 'OVER 2.5' : 'OVER 3.5');
+        
+        html += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #444;">
+            <span style="font-weight:900;">${s.fixture.teams.home.name} - ${s.fixture.teams.away.name}</span>
+            <b style="color:var(--p);">${pickText} <span style="color:var(--gold)">(${prob}% | xG: ${xG})</span></b>
         </div>`;
     });
     document.getElementById('accaResult').innerHTML = html + "</div>";
@@ -148,14 +172,14 @@ async function showIntel(d) {
     const elapsed = m.fixture.status.elapsed || 0;
     
     document.getElementById('timeContainer').innerHTML = `
-        <div style="text-align:center; font-weight:900;">TIME: ${elapsed}'</div>
+        <div style="text-align:center; font-weight:900; font-size:1.2rem;">ELAPSED: ${elapsed}'</div>
         <div class="time-bar"><div class="time-fill" style="width:${(elapsed/90)*100}%"></div></div>`;
 
     let hG = m.goals.home, aG = m.goals.away, hC = 0, aC = 0, hK = 0, aK = 0, hDA = 0, aDA = 0;
     if(sData && sData.length > 1) {
         const hS = sData[0].statistics; const aS = sData[1].statistics;
         hC = hS.find(s=>s.type==="Corner Kicks")?.value || 0;
-        aC = aSt = aS.find(s=>s.type==="Corner Kicks")?.value || 0;
+        aC = aS.find(s=>s.type==="Corner Kicks")?.value || 0;
         hK = hS.find(s=>s.type==="Yellow Cards")?.value || 0;
         aK = aS.find(s=>s.type==="Yellow Cards")?.value || 0;
         hDA = hS.find(s=>s.type==="Dangerous Attacks")?.value || 0;
@@ -170,7 +194,7 @@ async function showIntel(d) {
         { label: "xG (ATTACK)", h: p?.teams?.home?.last_5?.goals?.for?.average || 1.1, a: p?.teams?.away?.last_5?.goals?.for?.average || 1.1, liveH: hG, liveA: aG, d: deltaG },
         { label: "xGA (DEFENSE)", h: p?.teams?.home?.last_5?.goals?.against?.average || 1.0, a: p?.teams?.away?.last_5?.goals?.against?.average || 1.0, liveH: aG, liveA: hG, d: "-" },
         { label: "xCORNERS", h: 4.5, a: 4.5, liveH: hC, liveA: aC, d: deltaC },
-        { label: "xCARDS / xCA", h: (p?.teams?.home?.last_5?.cards?.average || 2.2) + " / 2.1", a: (p?.teams?.away?.last_5?.cards?.average || 2.4) + " / 2.3", liveH: hK, liveA: aK, d: "-" }
+        { label: "D. ATTACKS", h: "-", a: "-", liveH: hDA, liveA: aDA, d: "-" }
     ];
 
     let html = "";
@@ -182,27 +206,28 @@ async function showIntel(d) {
 
     let adv = "";
     if(isL && elapsed > 20){
-        if(hDA > (aDA * 1.6) && hG <= aG) adv = `VALUE: Επόμενο Γκολ ${m.teams.home.name}`;
-        else if(deltaC < -1.5) adv = "VALUE: Over Κόρνερ (Πίεση)";
+        if(hDA > (aDA * 1.7) && hG <= aG) adv = `ΠΡΟΤΑΣΗ: ΕΠΟΜΕΝΟ ΓΚΟΛ ${m.teams.home.name.toUpperCase()}`;
+        else if(deltaG < -0.8) adv = "ΠΡΟΤΑΣΗ: OVER ΓΚΟΛ (ΣΤΑΤΙΣΤΙΚΗ ΑΠΟΚΛΙΣΗ)";
     }
     const adBox = document.getElementById('adviceBox');
     if(adv) { adBox.style.display='block'; document.getElementById('adviceText').innerText = adv; }
+    else adBox.style.display='none';
 }
 
 function renderMatches() {
     const list = document.getElementById('matchList'); list.innerHTML = "";
     const grouped = masterData.reduce((acc, d) => { acc[d.fixture.league.name] = acc[d.fixture.league.name] || []; acc[d.fixture.league.name].push(d); return acc; }, {});
     for(let league in grouped) {
-        const div = document.createElement('div'); div.className = 'league-group';
-        div.innerHTML = `<div style="color:var(--gold); font-weight:900; border-bottom:3px solid var(--border); text-transform:uppercase; font-size:1.3rem; margin:25px 0 15px 0; padding-bottom:10px;">${league}</div>`;
+        const div = document.createElement('div');
+        div.innerHTML = `<div style="color:var(--gold); font-weight:900; border-bottom:3px solid var(--border); text-transform:uppercase; font-size:1.3rem; margin:30px 0 15px 0; padding-bottom:10px;">${league}</div>`;
         grouped[league].forEach(d => {
             const isL = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
             const card = document.createElement('div');
             card.style = "background:var(--card); padding:25px; border-radius:20px; margin-top:12px; border-left:10px solid var(--border); cursor:pointer; display:flex; justify-content:space-between; align-items:center;";
             if(isL) card.style.borderLeftColor = "var(--live-green)";
             card.onclick = () => showIntel(d);
-            card.innerHTML = `<div><b style="font-size:1.2rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br><small class="${isL?'live-neon':''}" style="font-size:1rem;">${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' ('+d.fixture.fixture.status.elapsed+"')" : d.fixture.fixture.status.short}</small></div>`;
-            list.appendChild(card);
+            card.innerHTML = `<div><b style="font-size:1.3rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br><small class="${isL?'live-neon':''}" style="font-size:1.1rem;">${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away+' ('+d.fixture.fixture.status.elapsed+"')" : d.fixture.fixture.status.short}</small></div>`;
+            div.appendChild(card);
         });
         list.appendChild(div);
     }
