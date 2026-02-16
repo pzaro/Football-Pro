@@ -2,56 +2,65 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predictor Pro v225 - True Data</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Predictor Pro v227 - Absolute</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --gray: #2d333b; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 10px; margin: 0; font-size: 1rem; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        @keyframes neon { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        .live-neon { color: var(--live-green); font-weight: 900; animation: neon 1.5s infinite; }
-        .dashboard { background: #000; border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-        .match-card { background: var(--card); border-radius: 12px; margin-bottom: 12px; border-left: 6px solid var(--border); cursor: pointer; }
-        .card-header { padding: 15px; }
-        .card-footer { display: flex; background: rgba(0,0,0,0.3); padding: 8px; border-top: 1px solid var(--border); }
-        .mini-pred { flex: 1; text-align: center; font-weight: 900; font-size: 0.8rem; }
-        .big-score { font-size: 3rem; font-weight: 900; text-align: center; color: #fff; margin: 10px 0; }
-        .pred-box { display: flex; justify-content: space-around; background: #1c2128; padding: 15px; border-radius: 12px; border: 1px solid var(--gold); margin: 15px 0; }
-        .stat-bar-bg { background: #333; height: 10px; border-radius: 5px; overflow: hidden; display: flex; flex: 1; margin: 0 10px; }
-        .h2h-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: #111; }
-        .h2h-table td { padding: 5px; border-bottom: 1px solid #222; text-align: center; }
-        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .matrix-table td, th { padding: 8px; border-bottom: 1px solid #222; text-align: left; font-weight: 800; }
-        #intelPanel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 20px; box-sizing: border-box; }
-        .form-dot { width: 15px; height: 15px; border-radius: 50%; display: inline-block; text-align: center; font-size: 0.7rem; line-height: 15px; color: #000; margin: 0 2px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); padding: 15px; margin: 0; font-size: 1.1rem; line-height: 1.4; }
+        .container { width: 100%; max-width: 1050px; margin: 0 auto; }
+        @keyframes neonBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--live-green); } 50% { opacity: 0.4; } }
+        .live-neon { color: var(--live-green); font-weight: 900; animation: neonBlink 1.5s infinite; }
+        .sync-container { display: none; margin-bottom: 20px; background: #000; padding: 15px; border-radius: 12px; border: 1px solid var(--p); }
         .sync-fill { height: 100%; background: var(--p); width: 0%; transition: 0.3s; }
+        .dashboard { background: #000; border: 3px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 30px; }
+        .mod-box { background: linear-gradient(145deg, #1e2530, #000); border: 4px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; }
+        .match-card { background: var(--card); border-radius: 15px; margin-top: 15px; border-left: 8px solid var(--border); cursor: pointer; transition: 0.2s; }
+        .card-header { padding: 20px; }
+        .card-footer { background: rgba(0,0,0,0.3); border-top: 1px solid var(--border); padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .big-score { font-size: 3.5rem; font-weight: 900; color: #fff; text-align: center; margin: 10px 0; }
+        .ngp-box { background: linear-gradient(to right, rgba(0,255,136,0.15), rgba(255,62,62,0.15)); border: 1px solid #444; border-radius: 15px; padding: 20px; margin: 20px 0; }
+        .value-bet-alert { background: var(--value); color: #fff; padding: 10px; border-radius: 10px; text-align: center; font-weight: 900; margin-top: 10px; animation: neonBlink 1s infinite; }
+        #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        .form-dot { width: 18px; height: 18px; border-radius: 50%; display: inline-block; font-size: 0.7rem; text-align: center; line-height: 18px; color: #000; margin: 0 2px; font-weight: 900; }
+        .w { background: var(--live-green); } .d { background: #888; } .l { background: var(--alert); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="syncArea" style="margin-bottom:20px;">
+    <h1 style="text-align:center; color:var(--p); margin: 20px 0;">PREDICTOR PRO v227</h1>
+
+    <div id="syncCont" class="sync-container">
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--p)">ABSOLUTE SYNC...</span><span id="syncPerc">0%</span></div>
         <div style="background:#222; height:10px; border-radius:5px; overflow:hidden;"><div id="syncFill" class="sync-fill"></div></div>
-        <button onclick="globalSync()" style="width:100%; padding:15px; background:var(--p); border:none; border-radius:10px; font-weight:900; margin-top:10px;">🚀 START TRUE DATA SYNC</button>
     </div>
+
+    <button onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; cursor:pointer; font-size:1.3rem; margin-bottom:20px;">🚀 EXECUTE GLOBAL SYNC</button>
 
     <div id="dashboard" class="dashboard" style="display:none;">
         <div id="modArea"></div>
-        <button onclick="generateAcca()" style="width:100%; padding:15px; background:var(--value); border:none; color:#fff; font-weight:900; border-radius:10px;">GENERATE SOVEREIGN ACCA</button>
-        <div id="accaResult"></div>
+        <select id="accaType" style="width:100%; padding:15px; background:var(--card); color:#fff; border-radius:12px; border:1px solid var(--border); margin-bottom:15px; font-weight:800;">
+            <option value="BUILDER">BET BUILDER (1X2 + O1.5 | xG > 1.9)</option>
+            <option value="O25">OVER 2.5 GOALS (Min Prob 55%)</option>
+            <option value="O35">OVER 3.5 GOALS (Min Prob 50%)</option>
+            <option value="1X2">ΣΗΜΕΙΑ 1X2 (Min Prob 60%)</option>
+        </select>
+        <button onclick="generateAcca()" style="width:100%; padding:20px; background:var(--value); border:none; border-radius:12px; color:#fff; font-weight:900; cursor:pointer;">GENERATE HIGH-VALUE ACCA</button>
+        <div id="accaResult" style="margin-top:20px;"></div>
     </div>
 
     <div id="intelPanel">
-        <button onclick="document.getElementById('intelPanel').style.display='none'" style="float:right; background:var(--alert); color:#fff; border:none; padding:10px; border-radius:5px;">CLOSE</button>
-        <h2 id="mTitle" style="color:var(--gold)"></h2>
+        <button onclick="this.parentElement.style.display='none'" style="float:right; background:var(--alert); color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; cursor:pointer;">CLOSE</button>
+        <h2 id="mTitle" style="text-align:center; color:var(--gold);"></h2>
         <div id="bigScoreDisplay" class="big-score"></div>
-        <div id="statusBadge" style="text-align:center;"></div>
-        <div id="formGuide" style="text-align:center; margin:10px 0;"></div>
-        <div id="predBox" class="pred-box"></div>
+        <div id="statusBadge" style="text-align:center; font-weight:900; margin-bottom:15px;"></div>
+        <div id="formGuide" style="text-align:center; margin-bottom:20px;"></div>
+        
+        <div id="predBox" style="display:flex; justify-content:space-between; background:#161b22; padding:15px; border-radius:15px; border:1px solid var(--gold);"></div>
         <div id="momentumArea"></div>
-        <div id="h2hArea"></div>
-        <table class="matrix-table"><tbody id="matrixBody"></tbody></table>
-        <table class="matrix-table" style="margin-top:20px;"><tbody id="auditBody"></tbody></table>
+        <div id="h2hArea" style="margin-top:20px;"></div>
+
+        <table style="width:100%; border-collapse:collapse; margin-top:20px;" id="matrixTable"></table>
     </div>
 
     <div id="matchList"></div>
@@ -69,31 +78,42 @@ function getPoisson(lambda, k) {
 }
 
 function getMatchVerdict(p) {
-    const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 0);
-    const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 0);
+    const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
+    const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
     const tXG = hXG + aXG;
-    const finH = Math.round(hXG); const finA = Math.round(aXG);
-    
-    let sign = (finH > finA) ? "1" : (finA > finH ? "2" : "X");
     const winProb = parseInt(p.predictions.percent.home);
-    if(winProb < 40) sign = "NO BET";
+    const finH = Math.round(hXG); const finA = Math.round(aXG);
 
-    const o15P = Math.round((1 - (getPoisson(tXG,0)+getPoisson(tXG,1)))*100);
+    // MARKET SIMS
+    const sims = {
+        int: `${finH}-${finA}`,
+        fb: `${Math.round(hXG+0.1)}-${Math.round(aXG-0.1)}`,
+        zb: `${Math.round(hXG-0.1)}-${Math.round(aXG+0.1)}`,
+        pz: `${Math.max(0, Math.round(hXG-0.3))}-${Math.max(0, Math.round(aXG-0.3))}`,
+        vb: `${Math.round(hXG+0.2)}-${Math.round(aXG+0.2)}`
+    };
+
     const o25P = Math.round((1 - (getPoisson(tXG,0)+getPoisson(tXG,1)+getPoisson(tXG,2)))*100);
+    const o35P = Math.round((1 - (getPoisson(tXG,0)+getPoisson(tXG,1)+getPoisson(tXG,2)+getPoisson(tXG,3)))*100);
 
     return {
-        sign, signColor: winProb > 60 ? 'high-conf' : 'mid-conf',
-        o15: (finH+finA >= 2) ? "OVER" : "UNDER", o15Prob: o15P,
+        sign: winProb > 40 ? (finH > finA ? "1" : (finA > finH ? "2" : "X")) : "NO BET",
+        prob: winProb,
+        o15: (finH+finA >= 2) ? "OVER" : "UNDER",
         o25: (finH+finA >= 3) ? "OVER" : "UNDER", o25Prob: o25P,
-        score: `${finH}-${finA}`
+        o35: (finH+finA >= 4) ? "OVER" : "UNDER", o35Prob: o35P,
+        score: `${finH}-${finA}`, sims, totalXG: tXG
     };
 }
 
 async function globalSync() {
     masterData = [];
+    document.getElementById('syncCont').style.display = 'block';
     const today = new Date().toISOString().split('T')[0];
-    for(let i=0; i<LEAGUES.length; i++) {
-        document.getElementById('syncFill').style.width = ((i+1)/LEAGUES.length)*100 + "%";
+    for(let i=0; i<LEAGUES.length; i++){
+        const perc = Math.round(((i+1)/LEAGUES.length)*100);
+        document.getElementById('syncFill').style.width = perc+'%';
+        document.getElementById('syncPerc').innerText = perc+'%';
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {headers:{"x-rapidapi-key":KEY}});
             const d = await res.json();
@@ -106,101 +126,176 @@ async function globalSync() {
             }
         } catch(e){}
     }
+    document.getElementById('syncCont').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
+    renderMOD();
     renderMatches();
+}
+
+function renderMOD() {
+    const pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
+    if(pool.length === 0) return;
+    const best = pool.sort((a,b) => parseInt(b.prediction.predictions.percent.home) - parseInt(a.prediction.predictions.percent.home))[0];
+    document.getElementById('modArea').innerHTML = `
+        <div class="mod-box">
+            <div style="color:var(--gold); font-size:0.7rem; font-weight:900; letter-spacing:2px;">MATCH OF THE DAY</div>
+            <div style="font-size:1.6rem; font-weight:900; margin:10px 0;">${best.fixture.teams.home.name} - ${best.fixture.teams.away.name}</div>
+            <div style="color:var(--p); font-weight:900;">PICK: ${best.prediction.predictions.winner.name} (${best.prediction.predictions.percent.home}%)</div>
+        </div>`;
+}
+
+function generateAcca() {
+    const type = document.getElementById('accaType').value;
+    let pool = masterData.filter(d => d.fixture.fixture.status.short === "NS");
+    
+    const filtered = pool.filter(s => {
+        const v = getMatchVerdict(s.prediction);
+        if(type === '1X2') return v.prob >= 60;
+        if(type === 'O25') return v.o25 === "OVER" && v.o25Prob >= 55;
+        if(type === 'O35') return v.o35Prob >= 50;
+        if(type === 'BUILDER') return v.prob >= 55 && v.totalXG > 1.9;
+        return false;
+    });
+
+    if(filtered.length === 0) {
+        document.getElementById('accaResult').innerHTML = `<div style="text-align:center; color:var(--alert); border:1px dashed var(--alert); padding:15px; border-radius:10px;">NO HIGH-CONFIDENCE PICKS FOUND</div>`;
+        return;
+    }
+
+    let html = `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; border:1px solid var(--value);">`;
+    filtered.slice(0, 5).forEach(s => {
+        const v = getMatchVerdict(s.prediction);
+        let label = type === 'BUILDER' ? `${s.prediction.predictions.winner.name} & O1.5` : (type === '1X2' ? s.prediction.predictions.winner.name : (type === 'O25' ? 'Over 2.5' : 'Over 3.5'));
+        html += `<div style="display:flex; justify-content:space-between; margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:5px;">
+            <span>${s.fixture.teams.home.name}</span>
+            <b style="color:var(--p)">${label}</b>
+        </div>`;
+    });
+    document.getElementById('accaResult').innerHTML = html + "</div>";
 }
 
 async function showIntel(d) {
     const m = d.fixture; const p = d.prediction;
     const v = getMatchVerdict(p);
-    const panel = document.getElementById('intelPanel'); panel.style.display = 'block';
+    document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
     
-    // Status & Score
-    const isL = ["1H","HT","2H"].includes(m.fixture.status.short);
-    document.getElementById('bigScoreDisplay').innerText = (isL || m.fixture.status.short === "FT") ? `${m.goals.home}-${m.goals.away}` : "-";
-    document.getElementById('statusBadge').innerText = isL ? `REMAINING: ${90-m.fixture.status.elapsed}'` : m.fixture.status.long;
+    // Form Guide
+    const fH = p.teams.home.league.form || "?????"; const fA = p.teams.away.league.form || "?????";
+    const dot = (c) => `<span class="form-dot ${c.toLowerCase()}">${c}</span>`;
+    document.getElementById('formGuide').innerHTML = `
+        <div style="display:flex; justify-content:space-around; font-size:0.8rem; color:#888;">
+            <div>HOME: ${fH.split('').map(dot).join('')}</div>
+            <div>AWAY: ${fA.split('').map(dot).join('')}</div>
+        </div>`;
 
-    // TRUE DATA STATISTICS (FETCHING LIVE)
+    const status = m.fixture.status.short;
+    const isL = ["1H","HT","2H"].includes(status);
+    document.getElementById('bigScoreDisplay').innerText = (isL || status === "FT") ? `${m.goals.home}-${m.goals.away}` : "-";
+    document.getElementById('statusBadge').innerHTML = isL ? `<span class="live-neon">LIVE | REMAINING: ${90-m.fixture.status.elapsed}'</span>` : (status === "FT" ? "FINISHED" : "NOT STARTED");
+
+    // Dynamic Stats
     const sRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
     const sData = (await sRes.json()).response;
-    
     let hC=0, aC=0, hK=0, aK=0, hP=50, aP=50, hS=0, aS=0, hDA=0, aDA=0;
+
     if(sData && sData.length > 1) {
-        const stats0 = sData[0].statistics; const stats1 = sData[1].statistics;
-        const find = (arr, t) => parseInt(arr.find(x=>x.type===t)?.value?.toString().replace('%','') || 0);
-        hC = find(stats0, "Corner Kicks"); aC = find(stats1, "Corner Kicks");
-        hK = find(stats0, "Yellow Cards"); aK = find(stats1, "Yellow Cards");
-        hP = find(stats0, "Ball Possession"); aP = find(stats1, "Ball Possession");
-        hS = find(stats0, "Shots on Goal"); aS = find(stats1, "Shots on Goal");
-        hDA = find(stats0, "Dangerous Attacks"); aDA = find(stats1, "Dangerous Attacks");
+        const find = (t, i) => parseInt(sData[i].statistics.find(x=>x.type===t)?.value?.toString().replace('%','') || 0);
+        hC=find("Corner Kicks",0); aC=find("Corner Kicks",1);
+        hK=find("Yellow Cards",0); aK=find("Yellow Cards",1);
+        hP=find("Ball Possession",0); aP=find("Ball Possession",1);
+        hS=find("Shots on Goal",0); aS=find("Shots on Goal",1);
+        hDA=find("Dangerous Attacks",0); aDA=find("Dangerous Attacks",1);
     }
 
-    // Dynamic Corner/Card Prediction (If pre-match, use averages from Prediction API, NOT hardcoded)
-    const hCAvg = p.teams.home.last_5.goals.for.average; // Fallback to a logic-based stat
-    const aCAvg = p.teams.away.last_5.goals.for.average;
-
-    document.getElementById('matrixBody').innerHTML = `
-        <tr><th>QUANTUM MATRIX</th><th>HOME</th><th>AWAY</th></tr>
-        <tr><td>xG Attack</td><td>${p.teams.home.last_5.goals.for.average}</td><td>${p.teams.away.last_5.goals.for.average}</td></tr>
-        <tr><td>CORNERS (LIVE)</td><td>${hC}</td><td>${aC}</td></tr>
-        <tr><td>CARDS (LIVE)</td><td>${hK}</td><td>${aK}</td></tr>
-        <tr><td>POSSESSION</td><td>${hP}%</td><td>${aP}%</td></tr>
-    `;
-
-    // NGP Logic
+    // NGP & Value Bet Alert
     if(isL) {
-        let hM = (hDA*1.2) + (hS*5) + (hC*3); let aM = (aDA*1.2) + (aS*5) + (aC*3);
-        let hNgp = Math.round((hM/(hM+aM||1))*100);
+        let hM = (hDA*1.5) + (hS*8) + (hC*4) + (hP*0.5);
+        let aM = (aDA*1.5) + (aS*8) + (aC*4) + (aP*0.5);
+        let hProb = Math.round((hM/(hM+aM||1))*100);
+        let alertHtml = hProb >= 70 ? `<div class="value-bet-alert">🎯 VALUE BET: ${m.teams.home.name} NEXT GOAL</div>` : (100-hProb >= 70 ? `<div class="value-bet-alert">🎯 VALUE BET: ${m.teams.away.name} NEXT GOAL</div>` : "");
+        
         document.getElementById('momentumArea').innerHTML = `
-            <div style="text-align:center; padding:10px; background:rgba(0,212,255,0.1); border-radius:10px;">
-                <div style="font-size:0.8rem;">NEXT GOAL PROBABILITY</div>
-                <b style="font-size:1.5rem; color:var(--live-green)">${hNgp}%</b> - <b style="font-size:1.5rem; color:var(--alert)">${100-hNgp}%</b>
+            <div class="ngp-box">
+                <div style="text-align:center; font-size:0.75rem; color:var(--cyan); margin-bottom:10px;">NEXT GOAL PROBABILITY (NGP)</div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <b style="color:var(--live-green)">${hProb}%</b>
+                    <div style="flex:1; height:8px; background:#222; margin:0 15px; border-radius:4px; display:flex; overflow:hidden;">
+                        <div style="width:${hProb}%; background:var(--live-green)"></div>
+                        <div style="width:${100-hProb}%; background:var(--alert)"></div>
+                    </div>
+                    <b style="color:var(--alert)">${100-hProb}%</b>
+                </div>
+                ${alertHtml}
             </div>`;
     }
 
-    // H2H Strict Filter
+    // Prediction Box
+    document.getElementById('predBox').innerHTML = `
+        <div class="pred-item"><small>1X2</small><br><b style="color:var(--p)">${v.sign}</b></div>
+        <div class="pred-item"><small>O1.5</small><br><b>${v.o15}</b></div>
+        <div class="pred-item"><small>O2.5</small><br><b>${v.o25} (${v.o25Prob}%)</b></div>
+    `;
+
+    // H2H Strict Venue
     const h2hRes = await fetch(`https://v3.football.api-sports.io/fixtures/headtohead?h2h=${m.teams.home.id}-${m.teams.away.id}`, {headers:{"x-rapidapi-key":KEY}});
     const h2hData = (await h2hRes.json()).response || [];
     const strictH2H = h2hData.filter(g => g.teams.home.id === m.teams.home.id).slice(0,5);
-    let h2hHtml = '<b>H2H (Same Venue)</b><table class="h2h-table">';
+    let h2hHtml = '<div style="color:#888; font-size:0.7rem; text-align:center; margin-bottom:5px;">STRICT HOME VENUE HISTORY</div><table style="width:100%; font-size:0.8rem;">';
     strictH2H.forEach(g => {
-        h2hHtml += `<tr><td>${new Date(g.fixture.date).getFullYear()}</td><td>${g.goals.home}-${g.goals.away}</td></tr>`;
+        h2hHtml += `<tr style="border-bottom:1px solid #222"><td style="padding:5px;">${new Date(g.fixture.date).getFullYear()}</td><td style="text-align:right">${g.teams.home.name}</td><td style="font-weight:900; color:var(--gold); text-align:center;">${g.goals.home}-${g.goals.away}</td><td>${g.teams.away.name}</td></tr>`;
     });
     document.getElementById('h2hArea').innerHTML = h2hHtml + '</table>';
+
+    // Matrix
+    document.getElementById('matrixTable').innerHTML = `
+        <tr style="color:var(--gold)"><th>MATRIX</th><th>HOME</th><th>AWAY</th></tr>
+        <tr><td>xG Attack</td><td>${p.teams.home.last_5.goals.for.average}</td><td>${p.teams.away.last_5.goals.for.average}</td></tr>
+        <tr><td>Corners (Live)</td><td>${hC || 'No Data'}</td><td>${aC || 'No Data'}</td></tr>
+        <tr><td>Cards (Live)</td><td>${hK || 'No Data'}</td><td>${aK || 'No Data'}</td></tr>
+        <tr><td>Possession</td><td>${hP}%</td><td>${aP}%</td></tr>
+    `;
 }
 
 function renderMatches() {
     const list = document.getElementById('matchList'); list.innerHTML = "";
-    
-    // Sort: Live Top, NS Middle, FT Bottom
-    masterData.sort((a,b) => {
-        const score = (s) => ["1H","HT","2H"].includes(s) ? 3 : (s === "NS" ? 2 : 1);
-        return score(b.fixture.fixture.status.short) - score(a.fixture.fixture.status.short);
-    });
+    const lives = masterData.filter(d => ['1H','HT','2H','ET','P','BT','LIVE'].includes(d.fixture.fixture.status.short));
+    const others = masterData.filter(d => !['1H','HT','2H','ET','P','BT','LIVE'].includes(d.fixture.fixture.status.short));
 
-    masterData.forEach(d => {
-        const v = getMatchVerdict(d.prediction);
-        const card = document.createElement('div');
-        card.className = "match-card";
-        const isL = ["1H","HT","2H"].includes(d.fixture.fixture.status.short);
-        if(isL) card.style.borderLeftColor = "var(--live-green)";
-        
-        card.onclick = () => showIntel(d);
-        card.innerHTML = `
-            <div class="card-header">
-                <small style="color:var(--gold)">${d.fixture.league.name}</small><br>
-                <b>${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b>
-                <span style="float:right" class="${isL?'live-neon':''}">${isL ? d.fixture.goals.home+'-'+d.fixture.goals.away : d.fixture.fixture.status.short}</span>
-            </div>
-            <div class="card-footer">
-                <div class="mini-pred"><span style="color:#888">1X2:</span> ${v.sign}</div>
-                <div class="mini-pred"><span style="color:#888">O1.5:</span> ${v.o15}</div>
-                <div class="mini-pred"><span style="color:#888">O2.5:</span> ${v.o25}</div>
-            </div>
-        `;
-        list.appendChild(card);
-    });
+    if(lives.length > 0) {
+        const div = document.createElement('div');
+        div.innerHTML = `<div style="text-align:center; padding:15px; color:var(--live-green); font-weight:900; border:1px solid var(--live-green); border-radius:10px; margin-bottom:20px;">⚡ GLOBAL LIVE ACTION</div>`;
+        lives.forEach(d => div.appendChild(createCard(d, true)));
+        list.appendChild(div);
+    }
+
+    const grouped = others.reduce((acc, d) => { acc[d.fixture.league.name] = acc[d.fixture.league.name] || []; acc[d.fixture.league.name].push(d); return acc; }, {});
+    for(let l in grouped) {
+        const div = document.createElement('div');
+        div.innerHTML = `<div style="color:var(--gold); font-weight:900; padding:10px 0; border-bottom:1px solid #333; margin-top:20px;">${l}</div>`;
+        grouped[l].forEach(d => div.appendChild(createCard(d, false)));
+        list.appendChild(div);
+    }
+}
+
+function createCard(d, isL) {
+    const v = getMatchVerdict(d.prediction);
+    const card = document.createElement('div');
+    card.className = "match-card";
+    if(isL) card.style.borderLeftColor = "var(--live-green)";
+    card.onclick = () => showIntel(d);
+    card.innerHTML = `
+        <div class="card-header">
+            <small style="color:var(--gold)">${d.fixture.league.name}</small><br>
+            <b>${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b>
+            <span style="float:right;" class="${isL?'live-neon':''}">${isL || d.fixture.fixture.status.short === 'FT' ? d.fixture.goals.home+'-'+d.fixture.goals.away : 'NS'}</span>
+        </div>
+        <div class="card-footer">
+            <div class="mini-pred">1X2: ${v.sign}</div>
+            <div class="mini-pred">O1.5: ${v.o15}</div>
+            <div class="mini-pred">O2.5: ${v.o25}</div>
+        </div>`;
+    return card;
 }
 </script>
 </body>
