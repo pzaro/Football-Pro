@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v256 - Sovereign Omega</title>
+    <title>Predictor Pro v257 - Final Sovereign</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -17,7 +17,8 @@
         /* Sync & Tools */
         .btn-sync { width: 100%; padding: 22px; background: var(--p); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-bottom: 20px; }
         .tools-box { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 20px; display: none; }
-        select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #000; color: #fff; font-weight: 700; margin-bottom: 10px; }
+        select, .btn-gen { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #000; color: #fff; font-weight: 700; margin-bottom: 10px; }
+        .btn-gen { background: var(--value); border: none; cursor: pointer; height: 50px; text-transform: uppercase; }
         
         /* Badges */
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 900; letter-spacing: 0.5px; }
@@ -54,8 +55,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2rem;">PREDICTOR PRO <span style="color:#fff">v256</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900;">PRO PLAN • ULTIMATE DASHBOARD</small>
+        <h1 style="color:var(--p); margin:0; font-size:2rem;">PREDICTOR PRO <span style="color:#fff">v257</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900;">PRO PLAN • FINAL MASTERPIECE</small>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
@@ -67,8 +68,22 @@
         <select id="leagueFilter" onchange="renderMatches()">
             <option value="ALL">Όλα τα Πρωταθλήματα</option>
         </select>
+        
+        <label style="color:var(--gold); font-size:0.8rem; font-weight:900; margin-top:10px; display:block;">ACCA GENERATOR</label>
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
+            <select id="accaMarket">
+                <option value="1X2">ΣΗΜΕΙΑ (1-X-2)</option>
+                <option value="GOALS">GOALS (O2.5)</option>
+                <option value="COMBO">1X/X2 + OVER 1.5</option>
+            </select>
+            <select id="accaSize">
+                <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
+            </select>
+        </div>
+        <button class="btn-gen" onclick="generateAcca()">🎯 ΔΗΜΙΟΥΡΓΙΑ ΔΕΛΤΙΟΥ</button>
     </div>
 
+    <div id="accaDisplay" style="display:none; background:rgba(191,64,191,0.1); border:2px solid var(--value); border-radius:15px; padding:20px; margin-bottom:20px;"></div>
     <div id="matchList"></div>
 
     <div id="intelPanel">
@@ -77,6 +92,8 @@
         <div id="bigScoreDisplay" style="font-size:4rem; font-weight:900; text-align:center; margin:10px 0;"></div>
         <div id="mStatus" style="text-align:center; margin-bottom:20px;"></div>
         
+        <div id="builderBox" style="text-align:center; margin-bottom:15px;"></div>
+
         <table class="clean-table" id="statsTable"></table>
 
         <div class="section-title">🤖 Προβλεψεις Αλγοριθμου (Sovereign)</div>
@@ -124,12 +141,9 @@ async function globalSync() {
         } catch(e){}
     }
 
-    // Populate League Filter
     const filter = document.getElementById('leagueFilter');
     filter.innerHTML = '<option value="ALL">Όλα τα Πρωταθλήματα</option>';
-    availableLeagues.forEach(l => {
-        filter.innerHTML += `<option value="${l}">${l}</option>`;
-    });
+    availableLeagues.forEach(l => { filter.innerHTML += `<option value="${l}">${l}</option>`; });
 
     document.getElementById('syncCont').style.display = 'none';
     document.getElementById('dashboardTools').style.display = 'block';
@@ -143,7 +157,6 @@ function getStatusInfo(statusShort, date) {
     if (liveStatuses.includes(statusShort)) return { type: 'LIVE', class: 'badge-live', text: 'LIVE', sortOrder: 1 };
     if (finStatuses.includes(statusShort)) return { type: 'FINISHED', class: 'badge-ft', text: 'ΤΕΛΙΚΟ', sortOrder: 3 };
     
-    // Not Started
     const greekTime = new Date(date).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'});
     return { type: 'NS', class: 'badge-time', text: greekTime, sortOrder: 2 };
 }
@@ -155,13 +168,10 @@ function renderMatches() {
 
     let filteredData = masterData.filter(d => selectedLeague === 'ALL' || d.fixture.league.name === selectedLeague);
 
-    // SORTING: 1. League, 2. Status (Live -> NS -> Finished), 3. Time
     filteredData.sort((a, b) => {
         if (a.fixture.league.name !== b.fixture.league.name) return a.fixture.league.name.localeCompare(b.fixture.league.name);
-        
         const statusA = getStatusInfo(a.fixture.fixture.status.short, a.fixture.fixture.date);
         const statusB = getStatusInfo(b.fixture.fixture.status.short, b.fixture.fixture.date);
-        
         if (statusA.sortOrder !== statusB.sortOrder) return statusA.sortOrder - statusB.sortOrder;
         return new Date(a.fixture.fixture.date) - new Date(b.fixture.fixture.date);
     });
@@ -179,6 +189,10 @@ function renderMatches() {
         const goalsH = d.fixture.goals.home !== null ? d.fixture.goals.home : '-';
         const goalsA = d.fixture.goals.away !== null ? d.fixture.goals.away : '-';
 
+        const p = d.prediction;
+        const hP = parseInt(p.predictions.percent.home) || 0;
+        const aP = parseInt(p.predictions.percent.away) || 0;
+
         const card = document.createElement('div');
         card.className = "match-card";
         card.style.opacity = status.type === 'FINISHED' ? '0.6' : '1';
@@ -192,16 +206,62 @@ function renderMatches() {
                     <b style="font-size:1.2rem; color:${status.type === 'LIVE' ? 'var(--live)' : '#fff'};">${goalsH} - ${goalsA}</b>
                 </div>
             </div>
+            <div class="card-stats">
+                <div><span class="stat-label">1-X-2 %</span><span class="stat-value">${hP}-${100-hP-aP}-${aP}</span></div>
+                <div><span class="stat-label">VALUE</span><span class="stat-value" style="color:var(--p)">${Math.max(hP, aP) > 70 ? '🔥' : '---'}</span></div>
+                <div><span class="stat-label">xG TOT</span><span class="stat-value">${(parseFloat(p?.teams?.home?.last_5?.goals?.for?.average||0) + parseFloat(p?.teams?.away?.last_5?.goals?.for?.average||0)).toFixed(1)}</span></div>
+                <div><span class="stat-label">CARDS</span><span class="stat-value">~${(1.5 + parseFloat(p?.teams?.home?.last_5?.goals?.against?.average||0)*0.5).toFixed(1)}</span></div>
+            </div>
         `;
         list.appendChild(card);
     });
+}
+
+function generateAcca() {
+    const market = document.getElementById('accaMarket').value;
+    const size = parseInt(document.getElementById('accaSize').value);
+    const display = document.getElementById('accaDisplay');
+    
+    // Αποκλεισμός αγώνων που έχουν ήδη ξεκινήσει ή τελειώσει για το Acca
+    let eligibleData = masterData.filter(d => {
+        const statusShort = d.fixture.fixture.status.short;
+        return !['1H', '2H', 'HT', 'ET', 'P', 'LIVE', 'FT', 'AET', 'PEN'].includes(statusShort);
+    });
+
+    if (eligibleData.length < size) {
+        display.innerHTML = `<div style="color:var(--alert); font-weight:900; text-align:center;">Δεν υπάρχουν αρκετοί διαθέσιμοι (μη-ξεκινημένοι) αγώνες για ${size}-άδα.</div>`;
+        display.style.display = 'block';
+        return;
+    }
+
+    let pool = eligibleData.map(d => {
+        const p = d.prediction;
+        return { 
+            d, 
+            hP: parseInt(p.predictions.percent.home)||0, 
+            aP: parseInt(p.predictions.percent.away)||0, 
+            o25: parseInt(p.predictions.percent.over)||0 
+        };
+    });
+
+    pool.sort((a,b) => Math.max(b.hP, b.aP) - Math.max(a.hP, a.aP));
+    let selected = pool.slice(0, size);
+    
+    let html = `<h3 style="color:var(--p); margin-top:0; border-bottom:1px solid var(--value); padding-bottom:10px;">🎯 ΠΡΟΤΑΣΗ ${size}-ΑΔΑΣ</h3>`;
+    selected.forEach(item => {
+        let tip = market === '1X2' ? (item.hP > item.aP ? "Σημείο: 1" : "Σημείο: 2") : (market === 'GOALS' ? "Over 2.5" : (item.hP > item.aP ? "1X & O1.5" : "X2 & O1.5"));
+        html += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.9rem;"><span>${item.d.fixture.teams.home.name}</span><b style="color:var(--gold);">${tip}</b></div>`;
+    });
+    
+    display.innerHTML = html; 
+    display.style.display = 'block';
+    window.scrollTo({ top: display.offsetTop - 20, behavior: 'smooth' });
 }
 
 function showIntel(d, status) {
     const p = d.prediction;
     const isLive = status.type === 'LIVE';
     
-    // Βασικοί Υπολογισμοί
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
     const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average || 1.2);
@@ -211,8 +271,9 @@ function showIntel(d, status) {
     const aXcrn = (3.6 + aXG*0.8).toFixed(1);
     const hXcards = (1.5 + hXGA*0.5).toFixed(1);
     const aXcards = (1.7 + aXGA*0.6).toFixed(1);
+    
+    const totalXG = (hXG + aXG).toFixed(1);
 
-    // Προσομοίωση Live Στατιστικών αν είναι live (πράσινες παρενθέσεις)
     const elapsed = isLive ? (d.fixture.fixture.status.elapsed || 45) : 0;
     const liveMulti = elapsed / 90;
     const liveSpan = (val) => isLive ? `<span class="live-stat">(${(val * liveMulti).toFixed(2)})</span>` : '';
@@ -222,42 +283,44 @@ function showIntel(d, status) {
     document.getElementById('mStatus').innerHTML = `<span class="badge ${status.class}">${status.text} ${isLive ? elapsed+"'" : ''}</span>`;
     document.getElementById('bigScoreDisplay').innerText = d.fixture.goals.home !== null ? `${d.fixture.goals.home} - ${d.fixture.goals.away}` : "VS";
     
-    // 1. ΚΑΘΑΡΟΣ ΠΙΝΑΚΑΣ
+    const hP = parseInt(p.predictions.percent.home)||0;
+    const aP = parseInt(p.predictions.percent.away)||0;
+
+    document.getElementById('builderBox').innerHTML = `
+        <span style="font-weight:900; color:${totalXG > 1.9 ? 'var(--p)' : 'var(--alert)'};">BET BUILDER: ${totalXG > 1.9 ? 'READY ✅' : 'LOW xG ⚠️'}</span> | 
+        <span style="font-weight:900; color:${Math.max(hP, aP) > 70 ? 'var(--value)' : '#888'};">VALUE ALERT: ${Math.max(hP, aP) > 70 ? '🔥 '+Math.max(hP, aP)+'%' : 'NO SIGNAL'}</span>
+    `;
+
     document.getElementById('statsTable').innerHTML = `
         <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
         <tr><td>xG (Επίθεση)</td><td>${hXG} ${liveSpan(hXG)}</td><td>${aXG} ${liveSpan(aXG)}</td></tr>
         <tr><td>xGA (Άμυνα)</td><td>${hXGA}</td><td>${aXGA}</td></tr>
         <tr><td>xCorners</td><td>${hXcrn} ${liveSpan(hXcrn)}</td><td>${aXcrn} ${liveSpan(aXcrn)}</td></tr>
         <tr><td>xCards</td><td>${hXcards} ${liveSpan(hXcards)}</td><td>${aXcards} ${liveSpan(aXcards)}</td></tr>
+        <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ (Delta)</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
     `;
 
-    // 2. ΠΡΟΒΛΕΨΕΙΣ ΑΛΓΟΡΙΘΜΟΥ
-    const hP = parseInt(p.predictions.percent.home);
-    const aP = parseInt(p.predictions.percent.away);
     const algo1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
-    const totalXG = (hXG + aXG).toFixed(1);
     
     document.getElementById('algoPreds').innerHTML = `
         <div class="pred-row"><span>Σημείο (1X2):</span><b style="color:var(--p)">${algo1X2} (${Math.max(hP, aP)}%)</b></div>
         <div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(hXG)} - ${Math.round(aXG)}</b></div>
-        <div class="pred-row"><span>Κόρνερ (Σύνολο):</span><b>Over 8.5</b></div>
-        <div class="pred-row"><span>Κάρτες (Σύνολο):</span><b>Under 5.5</b></div>
+        <div class="pred-row"><span>Κόρνερ (Σύνολο):</span><b>Over ${(parseFloat(hXcrn)+parseFloat(aXcrn)).toFixed(0)}</b></div>
+        <div class="pred-row"><span>Κάρτες (Σύνολο):</span><b>Under ${(parseFloat(hXcards)+parseFloat(aXcards) + 1).toFixed(0)}</b></div>
         <div class="pred-row"><span>Γκολ (O/U):</span><b>${totalXG > 2.4 ? 'Over 2.5' : 'Under 2.5'}</b></div>
     `;
 
-    // 3. 4 ΣΤΑΤΙΣΤΙΚΑ SITES (Forebet type)
     document.getElementById('statsSites').innerHTML = `
-        <div class="pred-row"><span>Forebet:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | ${p.predictions.percent.over}% Over 2.5</b></div>
-        <div class="pred-row"><span>SoccerStats:</span><b>${hP>aP ? '2-1' : '1-2'} | ${totalXG > 2.5 ? 'O2.5' : 'U2.5'}</b></div>
-        <div class="pred-row"><span>FCStats:</span><b>${hP>aP ? '1-0' : '0-1'} | U2.5</b></div>
+        <div class="pred-row"><span>Forebet:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | ${p.predictions.percent.over}% O2.5</b></div>
+        <div class="pred-row"><span>SoccerStats:</span><b>${hP>aP ? '2-1' : (aP>hP ? '1-2' : '1-1')} | ${totalXG > 2.5 ? 'O2.5' : 'U2.5'}</b></div>
+        <div class="pred-row"><span>FCStats:</span><b>${hP>aP ? '1-0' : (aP>hP ? '0-1' : '0-0')} | U2.5</b></div>
         <div class="pred-row"><span>Statarea:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | O1.5</b></div>
     `;
 
-    // 4. 4 BETTING SITES
     document.getElementById('bettingSites').innerHTML = `
         <div class="pred-row"><span>BettingExpert:</span><b style="color:var(--gold)">${p.predictions.advice}</b></div>
         <div class="pred-row"><span>Vitibet:</span><b style="color:var(--gold)">${algo1X2}</b></div>
-        <div class="pred-row"><span>WindrawWin:</span><b style="color:var(--gold)">${hP > 40 && aP > 40 ? 'BTTS - Yes' : 'Home/Away Win'}</b></div>
+        <div class="pred-row"><span>WindrawWin:</span><b style="color:var(--gold)">${hP > 40 && aP > 40 ? 'BTTS - Yes' : (hP>aP?'Home Win':'Away Win')}</b></div>
         <div class="pred-row"><span>ProTipster:</span><b style="color:var(--gold)">${totalXG > 2.5 ? 'Over 2.5 Goals' : 'Under 3.5 Goals'}</b></div>
     `;
 }
