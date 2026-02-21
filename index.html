@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v270 - Flawless Radar</title>
+    <title>Predictor Pro v271 - Smart Sync</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -101,8 +101,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 15px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v270</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • ZERO BUGS FIX</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v271</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • SMART SYNC ENGINE</small>
     </div>
 
     <div class="ticker-wrap" id="liveTickerWrap">
@@ -113,7 +113,7 @@
 
     <div id="syncCont">
         <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.9rem; font-weight:900;">
-            <span id="syncStep">INITIALIZING...</span><span id="syncPerc">0%</span>
+            <span id="syncStep">ΑΝΑΖΗΤΗΣΗ ΑΓΩΝΩΝ...</span><span id="syncPerc">0%</span>
         </div>
         <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
     </div>
@@ -212,7 +212,7 @@ function fireGoalAlert(title, message) {
     }
 }
 
-// --- LIVESCORE TICKER & RADAR ENGINE ---
+// --- LIVESCORE TICKER ---
 async function fetchLiveTicker() {
     try {
         const res = await fetch(`https://v3.football.api-sports.io/fixtures?live=${LEAGUES.join('-')}`, { headers: {"x-apisports-key": KEY} });
@@ -234,9 +234,7 @@ async function fetchLiveTicker() {
                 const fId = m.fixture.id;
                 if (trackedMatches[fId]) {
                     const trk = trackedMatches[fId];
-                    
                     if (trk.hGoals === -1) { trk.hGoals = safeHG; trk.aGoals = safeAG; }
-                    
                     if (safeHG > trk.hGoals || safeAG > trk.aGoals) {
                         let msg = `${trk.hName} ${safeHG} - ${safeAG} ${trk.aName}`;
                         fireGoalAlert(`ΓΚΟΛ ΣΤΟ ${min}!`, msg);
@@ -256,42 +254,71 @@ async function fetchLiveTicker() {
 fetchLiveTicker();
 setInterval(fetchLiveTicker, 60000); 
 
-// --- GLOBAL SYNC ENGINE (FIXED BUGS) ---
+// --- NEW SMART SYNC ENGINE ---
 async function globalSync() {
-    masterData = []; standingsMap = {};
+    masterData = []; 
+    standingsMap = {};
     document.getElementById('masterBtn').style.display = 'none';
     document.getElementById('syncCont').style.display = 'block';
+    
     const today = new Date().toISOString().split('T')[0];
     let availableLeagues = new Set();
-
-    for(let i=0; i<LEAGUES.length; i++){
-        let pPerc = Math.round(((i+1)/LEAGUES.length)*100);
-        document.getElementById('syncFill').style.width = pPerc+'%';
-        document.getElementById('syncPerc').innerText = pPerc+'%';
-        document.getElementById('syncStep').innerText = `SCANNING LEAGUE ${LEAGUES[i]}...`;
+    
+    try {
+        // ΒΗΜΑ 1: Φέρνουμε ΟΛΑ τα σημερινά ματς (1 ΜΟΝΟ API CALL)
+        document.getElementById('syncStep').innerText = `ΑΝΑΖΗΤΗΣΗ ΣΗΜΕΡΙΝΩΝ ΑΓΩΝΩΝ...`;
+        const fixRes = await fetch(`https://v3.football.api-sports.io/fixtures?date=${today}`, { headers: {"x-apisports-key": KEY} });
+        const fixData = await fixRes.json();
         
-        try {
-            // FIX 1: Ασφαλής ανάγνωση βαθμολογίας. Αν δεν υπάρχει βαθμολογία (όπως στο MLS τώρα), δεν κρασάρει.
-            const sRes = await fetch(`https://v3.football.api-sports.io/standings?league=${LEAGUES[i]}&season=2025`, { headers: {"x-apisports-key": KEY} });
-            const sData = await sRes.json();
-            if (sData.response && sData.response[0] && sData.response[0].league.standings && sData.response[0].league.standings[0]) {
-                sData.response[0].league.standings[0].forEach(team => standingsMap[team.team.id] = team.rank);
-            }
+        if (fixRes.headers.get('x-ratelimit-requests-remaining')) {
+            document.getElementById('creditDisplay').innerText = `API CREDITS: ${fixRes.headers.get('x-ratelimit-requests-remaining')}`;
+        }
 
-            // FIX 2: Αφαιρέθηκε το `&season=2025` για να βρίσκει ΠΑΝΤΑ τα σημερινά ματς ανεξαρτήτως σεζόν (MLS, Αργεντινή)
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}`, { headers: {"x-apisports-key": KEY} });
-            const d = await res.json();
-            if(d.response && d.response.length > 0) {
-                for(let m of d.response) {
-                    const pRes = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
-                    const pData = (await pRes.json()).response[0];
-                    if(pData) {
-                        masterData.push({ fixture: m, prediction: pData });
-                        availableLeagues.add(m.league.name);
-                    }
+        // Φιλτράρουμε μόνο τα πρωταθλήματα που μας ενδιαφέρουν
+        const myFixtures = (fixData.response || []).filter(m => LEAGUES.includes(m.league.id));
+        
+        if (myFixtures.length === 0) {
+            document.getElementById('syncStep').innerText = `ΔΕΝ ΥΠΑΡΧΟΥΝ ΑΓΩΝΕΣ ΣΗΜΕΡΑ ΓΙΑ ΑΥΤΑ ΤΑ ΠΡΩΤΑΘΛΗΜΑΤΑ.`;
+            setTimeout(() => { location.reload(); }, 3000);
+            return;
+        }
+
+        // ΒΗΜΑ 2: Βρίσκουμε δυναμικά την τρέχουσα ΣΕΖΟΝ για κάθε πρωτάθλημα που παίζει σήμερα
+        let activeLeaguesMap = {}; // Αποθηκεύει {league_id: current_season}
+        myFixtures.forEach(m => { activeLeaguesMap[m.league.id] = m.league.season; });
+
+        // ΒΗΜΑ 3: Φέρνουμε τις Βαθμολογίες (Standings) ΜΟΝΟ για τα πρωταθλήματα που έχουν ματς σήμερα
+        document.getElementById('syncStep').innerText = `ΦΟΡΤΩΣΗ ΒΑΘΜΟΛΟΓΙΩΝ...`;
+        for (const [lId, lSeason] of Object.entries(activeLeaguesMap)) {
+            try {
+                const sRes = await fetch(`https://v3.football.api-sports.io/standings?league=${lId}&season=${lSeason}`, { headers: {"x-apisports-key": KEY} });
+                const sData = await sRes.json();
+                if (sData.response && sData.response[0] && sData.response[0].league.standings && sData.response[0].league.standings[0]) {
+                    sData.response[0].league.standings[0].forEach(team => standingsMap[team.team.id] = team.rank);
                 }
-            }
-        } catch(e){}
+            } catch(e) {}
+        }
+
+        // ΒΗΜΑ 4: Φέρνουμε τα Predictions για το κάθε ματς (Ενημέρωση Progress Bar)
+        for (let i=0; i<myFixtures.length; i++) {
+            let m = myFixtures[i];
+            let pPerc = Math.round(((i+1)/myFixtures.length)*100);
+            document.getElementById('syncFill').style.width = pPerc+'%';
+            document.getElementById('syncPerc').innerText = pPerc+'%';
+            document.getElementById('syncStep').innerText = `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`;
+
+            try {
+                const pRes = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
+                const pData = (await pRes.json()).response[0];
+                if(pData) {
+                    masterData.push({ fixture: m, prediction: pData });
+                    availableLeagues.add(m.league.name);
+                }
+            } catch(e) {}
+        }
+
+    } catch(e) {
+        console.error("Σφάλμα Συγχρονισμού:", e);
     }
 
     const filter = document.getElementById('leagueFilter');
@@ -370,7 +397,6 @@ function renderMatches() {
     });
 }
 
-// FIX 3: Προστασία (Safety Nets `?.`) στο Acca Generator
 function generateAcca() {
     const market = document.getElementById('accaMarket').value;
     const size = parseInt(document.getElementById('accaSize').value);
