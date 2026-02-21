@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v250.2 - Sovereign Omega</title>
+    <title>Predictor Pro v250.3 - Emergency Fix</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -13,23 +13,20 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--txt); padding: 0; margin: 0; font-size: 16px; line-height: 1.4; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--txt); padding: 0; margin: 0; font-size: 16px; }
         .container { width: 100%; max-width: 850px; margin: 0 auto; padding: 20px 15px; }
 
-        /* Tools Box */
         .tools-box { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
         .tool-row { display: flex; gap: 10px; margin-bottom: 12px; }
         select { flex: 1; padding: 12px; border-radius: 12px; background: #000; color: #fff; border: 1px solid var(--border); font-weight: 700; font-size: 0.9rem; }
-        .btn-acca { width: 100%; padding: 16px; background: var(--value); color: #fff; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; font-size: 1rem; }
+        .btn-acca { width: 100%; padding: 16px; background: var(--value); color: #fff; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; }
         .acca-display { background: rgba(191, 64, 191, 0.15); border: 2px solid var(--value); border-radius: 15px; padding: 18px; margin-bottom: 25px; display: none; }
         .acca-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
 
-        /* Progress Bar */
         #syncCont { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
         .progress-track { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.4s; }
 
-        /* Match Cards */
         .league-header { background: var(--glass); padding: 12px 18px; border-radius: 12px; margin-top: 30px; border-left: 5px solid var(--gold); font-weight: 900; color: var(--gold); font-size: 0.9rem; text-transform: uppercase; }
         .match-card { background: var(--card); border-radius: 18px; margin-top: 15px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; transition: 0.2s; overflow: hidden; }
         .card-header { padding: 18px; display: flex; justify-content: space-between; align-items: flex-start; }
@@ -38,7 +35,6 @@
         .stat-label { font-size: 0.65rem; color: #888; text-transform: uppercase; display: block; margin-bottom: 3px; }
         .stat-value { font-size: 1rem; font-weight: 900; }
 
-        /* Intel Panel */
         #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: env(safe-area-inset-top) 20px 40px 20px; }
         .matrix-table { width: 100%; border-collapse: collapse; margin: 25px 0; background: var(--card); border-radius: 15px; overflow: hidden; }
         .matrix-table th { background: rgba(255,255,255,0.05); color: var(--gold); padding: 15px; text-align: left; font-size: 0.8rem; }
@@ -58,28 +54,23 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v250.2</span></h1>
-        <small style="color:var(--gold); font-weight:900; text-transform:uppercase;">SOVEREIGN OMEGA • FULL DATA SYNC</small>
+        <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v250.3</span></h1>
+        <small style="color:var(--gold); font-weight:900; text-transform:uppercase;">SOVEREIGN OMEGA • SATURDAY ELITE</small>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; font-size:1.1rem; cursor:pointer; margin-bottom:20px;">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΤΑΤΙΣΤΙΚΗΣ ΣΑΡΩΣΗΣ</button>
 
     <div id="syncCont">
         <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.85rem; font-weight:900; margin-bottom:8px;">
-            <span id="syncStep">INITIALIZING ANALYTICS...</span><span id="syncPerc">0%</span>
+            <span id="syncStep">SEARCHING MATCHES...</span><span id="syncPerc">0%</span>
         </div>
         <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
     </div>
 
     <div id="dashboardTools" class="tools-box" style="display:none;">
         <div class="tool-row">
-            <select id="filterLeague" onchange="renderMatches()">
-                <option value="ALL">ΟΛΑ ΤΑ ΠΡΩΤΑΘΛΗΜΑΤΑ</option>
-            </select>
-            <select id="sortType" onchange="changeSort(this.value)">
-                <option value="league">ΤΑΞΙΝΟΜΗΣΗ: ΠΡΩΤΑΘΛΗΜΑ</option>
-                <option value="time">ΤΑΞΙΝΟΜΗΣΗ: ΩΡΑ ΕΝΑΡΞΗΣ</option>
-            </select>
+            <select id="filterLeague" onchange="renderMatches()"><option value="ALL">ΟΛΑ ΤΑ ΠΡΩΤΑΘΛΗΜΑΤΑ</option></select>
+            <select id="sortType" onchange="changeSort(this.value)"><option value="league">ΤΑΞΙΝΟΜΗΣΗ: ΠΡΩΤΑΘΛΗΜΑ</option><option value="time">ΤΑΞΙΝΟΜΗΣΗ: ΩΡΑ ΕΝΑΡΞΗΣ</option></select>
         </div>
         <div class="tool-row">
             <select id="accaMarket">
@@ -88,9 +79,7 @@
                 <option value="CORNERS">ACCA: CORNERS</option>
                 <option value="CARDS">ACCA: CARDS</option>
             </select>
-            <select id="accaSize">
-                <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
-            </select>
+            <select id="accaSize"><option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option></select>
         </div>
         <button onclick="generateAcca()" class="btn-acca">🎯 ΔΗΜΙΟΥΡΓΙΑ ΠΙΘΑΝΟΤΕΡΗΣ ΕΠΙΛΟΓΗΣ</button>
     </div>
@@ -104,14 +93,8 @@
         <div id="bigScoreDisplay" style="font-size:4.5rem; font-weight:900; text-align:center; margin:10px 0;"></div>
         <div id="formContainer" style="display:flex; justify-content: space-around; background:rgba(0,0,0,0.3); padding:20px; border-radius:20px; border:1px solid var(--border);"></div>
         <table class="matrix-table" id="matrixTable"></table>
-        <div class="analysis-box">
-            <span style="color:var(--cyan); font-weight:900; font-size:0.85rem; text-transform:uppercase;">📝 Στρατηγική Σύνοψη (AI Analysis)</span>
-            <div id="textAnalysis" style="margin-top:10px; font-size:1rem; line-height:1.6;"></div>
-        </div>
-        <div class="value-picks-box">
-            <span style="color:var(--value); font-weight:900; font-size:0.85rem; text-transform:uppercase;">🎯 Value Betting Picks</span>
-            <div id="valuePicks" style="margin-top:15px;"></div>
-        </div>
+        <div class="analysis-box"><div id="textAnalysis" style="font-size:1rem; line-height:1.6;"></div></div>
+        <div class="value-picks-box"><div id="valuePicks" style="margin-top:15px;"></div></div>
     </div>
 </div>
 
@@ -161,27 +144,30 @@ async function globalSync() {
         const p = Math.round(((i+1)/ALL_LEAGUES.length)*100);
         document.getElementById('syncFill').style.width = p+'%';
         document.getElementById('syncPerc').innerText = p+'%';
-        document.getElementById('syncStep').innerText = `ANALYZING LEAGUE ${ALL_LEAGUES[i]}...`;
-        try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${ALL_LEAGUES[i]}&date=${today}&season=2025`, {headers:{"x-rapidapi-key":KEY}});
-            const d = await res.json();
-            if(d.response && d.response.length > 0) {
-                if(![...filterSelect.options].some(o => o.value == ALL_LEAGUES[i])) {
-                    filterSelect.add(new Option(d.response[0].fixture.league.name, ALL_LEAGUES[i]));
+        
+        // Δοκιμή και των δύο Seasons (2024 & 2025) για μέγιστη κάλυψη
+        for(let season of [2024, 2025]) {
+            try {
+                const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${ALL_LEAGUES[i]}&date=${today}&season=${season}`, {headers:{"x-rapidapi-key":KEY}});
+                const d = await res.json();
+                if(d.response && d.response.length > 0) {
+                    if(![...filterSelect.options].some(o => o.value == ALL_LEAGUES[i])) {
+                        filterSelect.add(new Option(d.response[0].fixture.league.name, ALL_LEAGUES[i]));
+                    }
+                    for(let m of d.response) {
+                        const pRes = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
+                        const pData = (await pRes.json()).response[0];
+                        if(pData) masterData.push({ fixture: m, prediction: pData });
+                    }
+                    break; // Αν βρει στην 2024, δεν χρειάζεται την 2025 για το ίδιο ματς
                 }
-                for(let m of d.response) {
-                    const pRes = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
-                    const pData = (await pRes.json()).response[0];
-                    if(pData) masterData.push({ fixture: m, prediction: pData });
-                }
-            }
-        } catch(e){}
+            } catch(e){}
+        }
     }
-    // Force Unlock UI
     document.getElementById('syncCont').style.display = 'none';
     document.getElementById('dashboardTools').style.display = 'block';
     if(masterData.length > 0) renderMatches();
-    else document.getElementById('matchList').innerHTML = `<div style="text-align:center; padding:40px; color:var(--alert);">Δεν βρέθηκαν αγώνες για σήμερα.</div>`;
+    else document.getElementById('matchList').innerHTML = `<div style="text-align:center; padding:40px; color:var(--alert);">Δεν βρέθηκαν αγώνες. Ελέγξτε το API Key.</div>`;
 }
 
 function changeSort(val) { currentSort = val; renderMatches(); }
@@ -202,8 +188,7 @@ function renderMatches() {
             }
         });
     } else {
-        data.sort((a,b) => new Date(a.fixture.fixture.date) - new Date(b.fixture.fixture.date))
-            .forEach(d => list.appendChild(createCard(d)));
+        data.sort((a,b) => new Date(a.fixture.fixture.date) - new Date(b.fixture.fixture.date)).forEach(d => list.appendChild(createCard(d)));
     }
 }
 
@@ -238,6 +223,7 @@ function generateAcca() {
     else if(market === 'CORNERS') selected = pool.sort((a,b) => b.c.totalXC - a.c.totalXC);
     else selected = pool.sort((a,b) => (parseFloat(b.c.hCrds)+parseFloat(b.c.aCrds)) - (parseFloat(a.c.hCrds)+parseFloat(a.c.aCrds)));
     selected = selected.slice(0, size);
+    if(selected.length < size) return alert("Ανεπαρκή δεδομένα για αυτό το μέγεθος Acca!");
     let html = `<h4 style="margin:0 0 10px 0; color:var(--p);">🛡️ ELITE ${size}-FOLD (${market})</h4>`;
     selected.forEach(item => {
         let tip = market==='1X2' ? (item.c.hP > item.c.aP ? '1':'2') : (market==='GOALS' ? 'O2.5' : (market==='CORNERS' ? 'O8.5 Crn':'O3.5 Crd'));
@@ -263,12 +249,12 @@ function showIntel(d) {
         <tr><td>xCorners</td><td>${c.hXC}</td><td>${c.aXC}</td></tr>
         <tr><td>xCards</td><td>${c.hCrds}</td><td>${c.aCrds}</td></tr>
     `;
-    document.getElementById('textAnalysis').innerText = (c.hXG > c.aXGA && c.hP > 65) ? `Κυριαρχία γηπεδούχου. Η επίθεση (${c.hXG}) υπερκαλύπτει την άμυνα του αντιπάλου.` : `Ισορροπημένο παιχνίδι. Τα metrics δείχνουν μάχη τακτικής.`;
+    document.getElementById('textAnalysis').innerText = (c.hXG > c.aXGA && c.hP > 65) ? `Ισχυρή υπεροχή γηπεδούχου. Η επίθεση (${c.hXG}) υπερκαλύπτει την άμυνα.` : `Ισορροπημένο παιχνίδι τακτικής.`;
     let picks = "";
-    if(parseFloat(c.totalXG) > 2.7) picks += `<div class="acca-item"><span>Goals Option</span><b style="color:var(--p)">Over 2.5</b></div>`;
-    if(parseFloat(c.totalXC) > 10) picks += `<div class="acca-item"><span>Corner Option</span><b style="color:var(--cyan)">Over 9.5</b></div>`;
-    if(parseFloat(c.hCrds)+parseFloat(c.aCrds) > 5) picks += `<div class="acca-item"><span>Cards Option</span><b style="color:var(--alert)">Over 4.5</b></div>`;
-    document.getElementById('valuePicks').innerHTML = picks || "No high value detected.";
+    if(parseFloat(c.totalXG) > 2.7) picks += `<div class="acca-item"><span>Goals</span><b style="color:var(--p)">Over 2.5</b></div>`;
+    if(parseFloat(c.totalXC) > 10) picks += `<div class="acca-item"><span>Corners</span><b style="color:var(--cyan)">Over 9.5</b></div>`;
+    if(parseFloat(c.hCrds)+parseFloat(c.aCrds) > 5) picks += `<div class="acca-item"><span>Cards</span><b style="color:var(--alert)">Over 4.5</b></div>`;
+    document.getElementById('valuePicks').innerHTML = picks || "Χαμηλή αξία σε ειδικά στοιχήματα.";
 }
 </script>
 </body>
