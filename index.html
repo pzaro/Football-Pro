@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v258 - Sovereign Responsive</title>
+    <title>Predictor Pro v259 - Sovereign Responsive</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -12,28 +12,28 @@
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* Βασική Γραμματοσειρά (Μεγαλύτερη & Καθαρή) */
         body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; line-height: 1.4; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 15px; }
 
-        /* Sync & Tools */
         .btn-sync { width: 100%; padding: 22px; background: var(--p); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 1.2rem; cursor: pointer; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2); transition: transform 0.2s; }
         .btn-sync:active { transform: scale(0.98); }
         .tools-box { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 25px; display: none; }
         
-        /* Dropdowns & Buttons */
         .controls-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px; }
         select, .btn-gen { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: #000; color: #fff; font-weight: 800; font-size: 1rem; }
         .btn-gen { background: var(--value); border: none; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(191, 64, 191, 0.3); }
 
-        /* Badges */
         .badge { padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 900; letter-spacing: 0.5px; display: inline-block; }
         .badge-live { background: rgba(0,255,65,0.15); color: var(--live); border: 1px solid var(--live); animation: pulse 2s infinite; }
         .badge-ft { background: rgba(136,136,136,0.15); color: var(--finished); border: 1px solid var(--finished); }
         .badge-time { background: rgba(0,212,255,0.15); color: var(--cyan); border: 1px solid var(--cyan); }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
 
-        /* Match Cards */
+        /* Μπάρα Προόδου */
+        #syncCont { display: none; margin-bottom: 25px; background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); }
+        .progress-track { background: #222; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.3s; }
+
         .match-card { background: var(--card); border-radius: 20px; margin-top: 18px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
         .match-card:hover { border-color: #444; }
         .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -44,14 +44,15 @@
         .stat-label { font-size: 0.7rem; color: #999; text-transform: uppercase; display: block; margin-bottom: 4px; font-weight: 700; letter-spacing: 0.5px; }
         .stat-value { font-size: 1.1rem; font-weight: 900; color: #fff; }
 
-        /* Intel Panel */
         #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; padding-bottom: 40px; }
         
         .clean-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
         .clean-table th { background: rgba(0,0,0,0.4); color: var(--gold); padding: 15px 10px; text-align: center; font-size: 0.8rem; border-bottom: 2px solid var(--border); }
         .clean-table td { padding: 15px 10px; text-align: center; border-bottom: 1px solid var(--border); font-weight: 800; font-size: 1rem; }
         .clean-table td:first-child { text-align: left; color: #bbb; font-size: 0.9rem; font-weight: 700; }
-        .live-stat { color: var(--live); font-size: 0.8rem; margin-left: 6px; }
+        
+        /* Live Στατιστικά σε Πράσινη Παρένθεση */
+        .live-stat { color: var(--live); font-size: 0.9rem; font-weight: 900; margin-left: 6px; }
 
         .section-title { color: var(--p); font-size: 1rem; font-weight: 900; margin: 30px 0 15px 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
         .pred-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); font-size: 0.95rem; border-radius: 8px; margin-bottom: 4px; }
@@ -60,28 +61,17 @@
 
         .btn-close { background: var(--alert); color: #fff; border: none; padding: 18px 35px; border-radius: 14px; font-weight: 900; font-size: 1rem; float: right; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 62, 62, 0.3); }
 
-        /* ========================================= */
-        /* MEDIA QUERIES (ΒΕΛΤΙΣΤΟΠΟΙΗΣΗ ΓΙΑ ΚΙΝΗΤΑ) */
-        /* ========================================= */
         @media (max-width: 650px) {
             .container { padding: 15px 10px; }
             .team-names { font-size: 1.1rem; }
             .score-display { font-size: 1.3rem; }
-            
-            /* Το Grid των στατιστικών γίνεται 2x2 για να είναι τεράστια τα νούμερα */
             .card-stats { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px 15px; }
-            .stat-value { font-size: 1.25rem; } /* Πολύ μεγάλα νούμερα στο κινητό */
-            
-            /* Τα Dropdowns μπαίνουν το ένα κάτω από το άλλο */
+            .stat-value { font-size: 1.25rem; } 
             .controls-grid { grid-template-columns: 1fr; gap: 10px; }
             select, .btn-gen { padding: 18px; font-size: 1.1rem; }
-            
-            /* Μεγάλα γράμματα στο εσωτερικό πάνελ */
             #bigScoreDisplay { font-size: 3.5rem !important; }
             .clean-table td { font-size: 0.95rem; padding: 12px 8px; }
             .clean-table th { font-size: 0.75rem; padding: 12px 8px; }
-            
-            /* Στοιβάζουμε τις προβλέψεις αν δεν χωράνε */
             .pred-row { flex-direction: column; align-items: flex-start; gap: 6px; padding: 15px; }
             .pred-row b { align-self: flex-end; font-size: 1.15rem; }
         }
@@ -91,14 +81,17 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v258</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • RESPONSIVE UI</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v259</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • LIVE STATS SYNC</small>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
 
-    <div id="syncCont" style="display:none; text-align:center; color:var(--p); font-weight:900; font-size:1.1rem; padding:30px 10px; background:var(--card); border-radius:20px; border:1px solid var(--border);">
-        ΣΥΓΧΡΟΝΙΣΜΟΣ ΔΕΔΟΜΕΝΩΝ... ΠΑΡΑΚΑΛΩ ΠΕΡΙΜΕΝΕΤΕ.
+    <div id="syncCont">
+        <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.9rem; font-weight:900;">
+            <span id="syncStep">INITIALIZING...</span><span id="syncPerc">0%</span>
+        </div>
+        <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
     </div>
 
     <div id="dashboardTools" class="tools-box">
@@ -159,6 +152,12 @@ async function globalSync() {
     let availableLeagues = new Set();
 
     for(let i=0; i<LEAGUES.length; i++){
+        // Ενημέρωση Μπάρας Προόδου
+        let pPerc = Math.round(((i+1)/LEAGUES.length)*100);
+        document.getElementById('syncFill').style.width = pPerc+'%';
+        document.getElementById('syncPerc').innerText = pPerc+'%';
+        document.getElementById('syncStep').innerText = `ΣΑΡΩΣΗ LEAGUE ${LEAGUES[i]}...`;
+        
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {
                 headers: {"x-apisports-key": KEY}
@@ -229,8 +228,8 @@ function renderMatches() {
         const goalsA = d.fixture.goals.away !== null ? d.fixture.goals.away : '-';
 
         const p = d.prediction;
-        const hP = parseInt(p.predictions.percent.home) || 0;
-        const aP = parseInt(p.predictions.percent.away) || 0;
+        const hP = parseInt(p?.predictions?.percent?.home) || 0;
+        const aP = parseInt(p?.predictions?.percent?.away) || 0;
 
         const card = document.createElement('div');
         card.className = "match-card";
@@ -276,9 +275,9 @@ function generateAcca() {
         const p = d.prediction;
         return { 
             d, 
-            hP: parseInt(p.predictions.percent.home)||0, 
-            aP: parseInt(p.predictions.percent.away)||0, 
-            o25: parseInt(p.predictions.percent.over)||0 
+            hP: parseInt(p?.predictions?.percent?.home)||0, 
+            aP: parseInt(p?.predictions?.percent?.away)||0, 
+            o25: parseInt(p?.predictions?.percent?.over)||0 
         };
     });
 
@@ -303,45 +302,52 @@ function showIntel(d, status) {
     const p = d.prediction;
     const isLive = status.type === 'LIVE';
     
+    // Safety Net Calculations (?.)
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
     const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average || 1.2);
     const aXGA = parseFloat(p?.teams?.away?.last_5?.goals?.against?.average || 1.2);
     
-    const hXcrn = (4.1 + hXG*0.9).toFixed(1);
-    const aXcrn = (3.6 + aXG*0.8).toFixed(1);
-    const hXcards = (1.5 + hXGA*0.5).toFixed(1);
-    const aXcards = (1.7 + aXGA*0.6).toFixed(1);
+    const hXcrn = parseFloat((4.1 + hXG*0.9).toFixed(1));
+    const aXcrn = parseFloat((3.6 + aXG*0.8).toFixed(1));
+    const hXcards = parseFloat((1.5 + hXGA*0.5).toFixed(1));
+    const aXcards = parseFloat((1.7 + aXGA*0.6).toFixed(1));
     
     const totalXG = (hXG + aXG).toFixed(1);
 
+    // Υπολογισμός Live Τιμών ΑΝΑ ΟΜΑΔΑ
     const elapsed = isLive ? (d.fixture.fixture.status.elapsed || 45) : 0;
     const liveMulti = elapsed / 90;
-    const liveSpan = (val) => isLive ? `<span class="live-stat">(${(val * liveMulti).toFixed(2)})</span>` : '';
+    
+    const lSpan = (val) => isLive ? ` <span class="live-stat">(${(val * liveMulti).toFixed(2)})</span>` : '';
 
     document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name}`;
     document.getElementById('mStatus').innerHTML = `<span class="badge ${status.class}" style="font-size:0.9rem; padding:8px 15px;">${status.text} ${isLive ? elapsed+"'" : ''}</span>`;
     document.getElementById('bigScoreDisplay').innerText = d.fixture.goals.home !== null ? `${d.fixture.goals.home} - ${d.fixture.goals.away}` : "VS";
     
-    const hP = parseInt(p.predictions.percent.home)||0;
-    const aP = parseInt(p.predictions.percent.away)||0;
+    const hP = parseInt(p?.predictions?.percent?.home) || 0;
+    const aP = parseInt(p?.predictions?.percent?.away) || 0;
 
     document.getElementById('builderBox').innerHTML = `
         <div style="margin-bottom:8px;"><span style="font-weight:900; color:${totalXG > 1.9 ? 'var(--p)' : 'var(--alert)'};">BET BUILDER: ${totalXG > 1.9 ? 'READY ✅' : 'LOW xG ⚠️'}</span></div>
         <div><span style="font-weight:900; color:${Math.max(hP, aP) > 70 ? 'var(--value)' : '#aaa'};">VALUE ALERT: ${Math.max(hP, aP) > 70 ? '🔥 '+Math.max(hP, aP)+'%' : 'NO SIGNAL'}</span></div>
     `;
 
+    // Καθαρός Πίνακας με ενσωματωμένες Live τιμές ανά ομάδα
     document.getElementById('statsTable').innerHTML = `
         <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
-        <tr><td>xG (Επίθεση)</td><td>${hXG} ${liveSpan(hXG)}</td><td>${aXG} ${liveSpan(aXG)}</td></tr>
-        <tr><td>xGA (Άμυνα)</td><td>${hXGA}</td><td>${aXGA}</td></tr>
-        <tr><td>xCorners</td><td>${hXcrn} ${liveSpan(hXcrn)}</td><td>${aXcrn} ${liveSpan(aXcrn)}</td></tr>
-        <tr><td>xCards</td><td>${hXcards} ${liveSpan(hXcards)}</td><td>${aXcards} ${liveSpan(aXcards)}</td></tr>
+        <tr><td>xG (Επίθεση)</td><td>${hXG.toFixed(2)}${lSpan(hXG)}</td><td>${aXG.toFixed(2)}${lSpan(aXG)}</td></tr>
+        <tr><td>xGA (Άμυνα)</td><td>${hXGA.toFixed(2)}</td><td>${aXGA.toFixed(2)}</td></tr>
+        <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${lSpan(hXcrn)}</td><td>${aXcrn.toFixed(1)}${lSpan(aXcrn)}</td></tr>
+        <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(hXcards)}</td><td>${aXcards.toFixed(1)}${lSpan(aXcards)}</td></tr>
         <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ (Delta)</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
     `;
 
     const algo1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
+    const overPerc = p?.predictions?.percent?.over || "N/A";
+    const advice = p?.predictions?.advice || "No Data";
+    const winnerName = p?.predictions?.winner?.name || "No Data";
     
     document.getElementById('algoPreds').innerHTML = `
         <div class="pred-row"><span>Σημείο (1X2):</span><b style="color:var(--p)">${algo1X2} (${Math.max(hP, aP)}%)</b></div>
@@ -352,16 +358,16 @@ function showIntel(d, status) {
     `;
 
     document.getElementById('statsSites').innerHTML = `
-        <div class="pred-row"><span>Forebet:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | ${p.predictions.percent.over}% O2.5</b></div>
+        <div class="pred-row"><span>Forebet:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | ${overPerc}% O2.5</b></div>
         <div class="pred-row"><span>SoccerStats:</span><b>${hP>aP ? '2-1' : (aP>hP ? '1-2' : '1-1')} | ${totalXG > 2.5 ? 'O2.5' : 'U2.5'}</b></div>
         <div class="pred-row"><span>FCStats:</span><b>${hP>aP ? '1-0' : (aP>hP ? '0-1' : '0-0')} | U2.5</b></div>
         <div class="pred-row"><span>Statarea:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | O1.5</b></div>
     `;
 
     document.getElementById('bettingSites').innerHTML = `
-        <div class="pred-row"><span>BettingExpert:</span><b style="color:var(--gold)">${p.predictions.advice}</b></div>
+        <div class="pred-row"><span>BettingExpert:</span><b style="color:var(--gold)">${advice}</b></div>
         <div class="pred-row"><span>Vitibet:</span><b style="color:var(--gold)">${algo1X2}</b></div>
-        <div class="pred-row"><span>WindrawWin:</span><b style="color:var(--gold)">${hP > 40 && aP > 40 ? 'BTTS - Yes' : (hP>aP?'Home Win':'Away Win')}</b></div>
+        <div class="pred-row"><span>WindrawWin:</span><b style="color:var(--gold)">${hP > 40 && aP > 40 ? 'BTTS - Yes' : winnerName}</b></div>
         <div class="pred-row"><span>ProTipster:</span><b style="color:var(--gold)">${totalXG > 2.5 ? 'Over 2.5 Goals' : 'Under 3.5 Goals'}</b></div>
     `;
     
