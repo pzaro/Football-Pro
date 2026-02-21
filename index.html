@@ -3,123 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v250.7 - Debug Edition</title>
+    <title>Predictor Pro v248 - Strategic Intel (Credit Monitor)</title>
     <style>
-        :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --alert: #ff3e3e; --cyan: #00d4ff; --value: #bf40bf; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; }
+        :root { 
+            --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
+            --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; 
+            --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; 
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--txt); padding: 0; margin: 0; font-size: 16px; }
         .container { width: 100%; max-width: 850px; margin: 0 auto; padding: 20px 15px; }
-        .btn-sync { width: 100%; padding: 20px; background: var(--p); color: #000; border: none; border-radius: 15px; font-weight: 900; font-size: 1.1rem; cursor: pointer; }
-        #syncCont { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin: 20px 0; }
+
+        /* Credits & Progress UI */
+        #syncCont { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
         .progress-track { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.3s; }
-        .error-log { background: rgba(255, 62, 62, 0.1); border: 1px solid var(--alert); color: var(--alert); padding: 15px; border-radius: 10px; margin-top: 10px; display: none; font-size: 0.85rem; }
-        .match-card { background: var(--card); border-radius: 15px; margin-top: 12px; border-left: 6px solid var(--border); padding: 15px; }
-        .stat-label { font-size: 0.65rem; color: #888; text-transform: uppercase; }
-        .stat-value { font-weight: 800; }
-        #dashboardTools { display: none; margin-top: 20px; background: var(--card); padding: 15px; border-radius: 15px; border: 1px solid var(--border); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.4s; }
+        .credit-badge { background: rgba(0, 212, 255, 0.1); color: var(--cyan); padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.75rem; }
+
+        .btn-sync { width: 100%; padding: 20px; background: var(--p); color: #000; border: none; border-radius: 12px; font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-bottom: 20px; }
+        .sort-controls { display: flex; gap: 8px; margin-bottom: 20px; }
+        .sort-btn { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); color: #fff; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .sort-btn.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
+
+        /* Match Cards */
+        .league-header { background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 10px; margin-top: 25px; border-left: 5px solid var(--gold); font-weight: 900; color: var(--gold); font-size: 0.9rem; }
+        .match-card { background: var(--card); border-radius: 15px; margin-top: 12px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; overflow: hidden; }
+        .card-header { padding: 15px; display: flex; justify-content: space-between; }
+        .card-main-stats { padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.2); text-align: center; border-top: 1px solid var(--border); }
+        .stat-label { font-size: 0.65rem; color: #888; text-transform: uppercase; display: block; }
+        .stat-value { font-size: 0.95rem; font-weight: 800; }
+
+        /* Intel Panel */
+        #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; }
+        .matrix-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--card); border-radius: 12px; overflow: hidden; }
+        .matrix-table th { background: rgba(255,255,255,0.05); color: var(--gold); padding: 12px; text-align: left; font-size: 0.8rem; }
+        .matrix-table td { padding: 12px; border-bottom: 1px solid var(--border); font-weight: 700; }
+        
+        .analysis-box { background: #1c2128; border-radius: 15px; padding: 20px; border-left: 5px solid var(--cyan); margin-top: 20px; }
+        .value-picks-box { background: rgba(191, 64, 191, 0.1); border: 1px solid var(--value); border-radius: 15px; padding: 18px; margin-top: 15px; }
+        .pick-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        
+        .form-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin: 0 2px; }
+        .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
+        .btn-close { background: var(--alert); color: #fff; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; float: right; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 20px;">
-        <h1 style="color:var(--p); margin:0;">PREDICTOR PRO v250.7</h1>
-        <small style="color:var(--gold); font-weight:900;">DEBUG & STABILITY MODE</small>
+        <h1 style="color:var(--p); margin:0; font-size:1.8rem;">PREDICTOR PRO <span style="color:#fff">v248</span></h1>
+        <small style="color:var(--gold); font-weight:900;">STRATEGIC INTEL + CREDIT MONITOR</small>
     </div>
 
-    <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 START MASTER SYNC</button>
-
     <div id="syncCont">
-        <div style="display:flex; justify-content:space-between; color:var(--p); font-weight:900; font-size:0.85rem;">
-            <span id="syncStep">STATUS: WAITING...</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; color:var(--p); font-size:0.8rem; font-weight:900; margin-bottom:8px;">
+            <span id="syncStep">INITIALIZING SYNC...</span>
+            <span id="creditDisplay" class="credit-badge">CREDITS: --</span>
             <span id="syncPerc">0%</span>
         </div>
         <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
-        <div id="errorLog" class="error-log"></div>
     </div>
 
-    <div id="dashboardTools">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-            <select id="filterLeague" style="padding:10px; border-radius:8px; background:#000; color:#fff; border:1px solid #333;"><option value="ALL">ALL LEAGUES</option></select>
-            <select id="accaSize" style="padding:10px; border-radius:8px; background:#000; color:#fff; border:1px solid #333;"><option value="3">3-ΑΔΑ</option></select>
-        </div>
-        <button onclick="alert('Acca logic ready!')" style="width:100%; padding:12px; background:var(--value); border:none; border-radius:8px; color:#fff; font-weight:900;">GENERATE ACCA</button>
+    <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΣΤΑΤΙΣΤΙΚΗΣ ΑΝΑΛΥΣΗΣ</button>
+
+    <div id="controls" class="sort-controls" style="display:none;">
+        <button id="btnLeague" class="sort-btn active" onclick="changeSort('league')">ΑΝΑ ΠΡΩΤΑΘΛΗΜΑ</button>
+        <button id="btnTime" class="sort-btn" onclick="changeSort('time')">ΑΝΑ ΩΡΑ</button>
     </div>
 
     <div id="matchList"></div>
+
+    <div id="intelPanel">
+        <button onclick="this.parentElement.style.display='none'" class="btn-close">ΠΙΣΩ</button>
+        <h2 id="mTitle" style="text-align:center; margin-top:60px; font-size:1.2rem; color:var(--gold);"></h2>
+        <div id="bigScoreDisplay" style="font-size:3.5rem; font-weight:900; text-align:center; margin:10px 0;"></div>
+        
+        <div id="formContainer" style="display:flex; justify-content: space-around; padding:15px; background:rgba(0,0,0,0.2); border-radius:15px;"></div>
+
+        <table class="matrix-table" id="matrixTable"></table>
+
+        <div class="analysis-box">
+            <span style="color:var(--cyan); font-weight:900; font-size:0.85rem; text-transform:uppercase;">📝 Στρατηγική Σύνοψη</span>
+            <div id="textAnalysis" style="font-size: 0.95rem; margin-top:10px; line-height:1.5;"></div>
+        </div>
+
+        <div class="value-picks-box">
+            <span style="color:var(--value); font-weight:900; font-size:0.85rem; text-transform:uppercase;">🎯 Value Betting Picks</span>
+            <div id="valuePicks" style="margin-top:12px;"></div>
+        </div>
+    </div>
 </div>
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [140, 135, 39, 61, 78, 94, 141, 318, 319, 320, 197];
+const LEAGUE_MAP = {
+    ELITE: [140, 135, 39, 61, 78, 94],
+    SECONDARY: [141, 318, 319, 320, 197],
+    OTHER: [262, 128, 40, 136]
+};
+const ALL_LEAGUES = [...LEAGUE_MAP.ELITE, ...LEAGUE_MAP.SECONDARY, ...LEAGUE_MAP.OTHER];
 let masterData = [];
+let currentSort = 'league';
+
+function getCalculations(p) {
+    const hP = parseInt(p?.predictions?.percent?.home) || 0;
+    const dP = parseInt(p?.predictions?.percent?.draw) || 0;
+    const aP = parseInt(p?.predictions?.percent?.away) || 0;
+    const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.3);
+    const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
+    const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average || 1.1);
+    const aXGA = parseFloat(p?.teams?.away?.last_5?.goals?.against?.average || 1.3);
+    
+    return { 
+        hP, dP, aP, hXG, aXG, hXGA, aXGA,
+        totalXG: (hXG + aXG).toFixed(2),
+        totalXC: (4.0 + (hXG * 0.9) + 3.5 + (aXG * 0.8)).toFixed(1),
+        hXC: (4.0 + (hXG * 0.9)).toFixed(1),
+        aXC: (3.5 + (aXG * 0.8)).toFixed(1),
+        hCards: (1.6 + (hXGA * 0.6)).toFixed(1),
+        aCards: (1.8 + (aXGA * 0.7)).toFixed(1),
+        hForm: p?.teams?.home?.league?.form || "DDDDDD",
+        aForm: p?.teams?.away?.league?.form || "DDDDDD"
+    };
+}
 
 async function globalSync() {
     masterData = [];
     document.getElementById('masterBtn').style.display = 'none';
     document.getElementById('syncCont').style.display = 'block';
-    const log = document.getElementById('errorLog');
-    log.style.display = 'none';
-    
     const today = new Date().toISOString().split('T')[0];
-
-    for(let i=0; i<LEAGUES.length; i++){
-        const perc = Math.round(((i+1)/LEAGUES.length)*100);
-        document.getElementById('syncFill').style.width = perc+'%';
-        document.getElementById('syncPerc').innerText = perc+'%';
+    
+    for(let i=0; i<ALL_LEAGUES.length; i++){
+        const p = Math.round(((i+1)/ALL_LEAGUES.length)*100);
+        document.getElementById('syncFill').style.width = p+'%';
+        document.getElementById('syncPerc').innerText = p+'%';
+        document.getElementById('syncStep').innerText = `ANALYZING LEAGUE ${ALL_LEAGUES[i]}...`;
         
         try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}`, {
-                headers:{"x-rapidapi-key":KEY}
-            });
-
-            // ΕΔΩ ΒΛΕΠΕΙΣ ΤΑ CREDITS ΣΟΥ
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${ALL_LEAGUES[i]}&date=${today}`, {headers:{"x-rapidapi-key":KEY}});
+            
+            // Credit Monitoring Logic
             const remaining = res.headers.get('x-ratelimit-requests-remaining');
-            document.getElementById('syncStep').innerText = `CREDITS LEFT: ${remaining} | LEAGUE: ${LEAGUES[i]}`;
+            if(remaining) document.getElementById('creditDisplay').innerText = `CREDITS: ${remaining}`;
 
-            if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-            
             const d = await res.json();
-            
-            if(d.errors && Object.keys(d.errors).length > 0) {
-                log.innerText = `API Error: ${JSON.stringify(d.errors)}`;
-                log.style.display = 'block';
-                break;
-            }
-
             if(d.response && d.response.length > 0) {
                 for(let m of d.response) {
                     const pRes = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
-                    const pData = await pRes.json();
-                    if(pData.response && pData.response[0]) {
-                        masterData.push({ fixture: m, prediction: pData.response[0] });
-                    }
+                    const pData = (await pRes.json()).response[0];
+                    if(pData) masterData.push({ fixture: m, prediction: pData });
                 }
             }
-        } catch(e) {
-            log.innerText = `System Error: ${e.message}`;
-            log.style.display = 'block';
-        }
+        } catch(e){}
     }
-    
     document.getElementById('syncCont').style.display = 'none';
-    document.getElementById('dashboardTools').style.display = 'block';
+    document.getElementById('controls').style.display = 'flex';
+    renderMatches();
+}
+
+function changeSort(type) {
+    currentSort = type;
+    document.getElementById('btnLeague').classList.toggle('active', type === 'league');
+    document.getElementById('btnTime').classList.toggle('active', type === 'time');
     renderMatches();
 }
 
 function renderMatches() {
-    const list = document.getElementById('matchList');
-    list.innerHTML = "";
-    if(masterData.length === 0) {
-        list.innerHTML = "<div style='text-align:center; padding:30px;'>No matches found. Check your API Limit.</div>";
-        return;
+    const list = document.getElementById('matchList'); list.innerHTML = "";
+    if (currentSort === 'league') {
+        ["ELITE", "SECONDARY", "OTHER"].forEach(cat => {
+            let filtered = masterData.filter(d => LEAGUE_MAP[cat].includes(d.fixture.league.id));
+            if (filtered.length > 0) {
+                const h = document.createElement('div'); h.className = "league-header"; h.innerText = cat + " ΠΡΩΤΑΘΛΗΜΑΤΑ";
+                list.appendChild(h);
+                filtered.forEach(d => list.appendChild(createCard(d)));
+            }
+        });
+    } else {
+        let sorted = [...masterData].sort((a,b) => new Date(a.fixture.fixture.date) - new Date(b.fixture.fixture.date));
+        sorted.forEach(d => list.appendChild(createCard(d)));
     }
-    masterData.forEach(d => {
-        const card = document.createElement('div');
-        card.className = 'match-card';
-        card.innerHTML = `<b>${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b><br><small>${d.fixture.league.name}</small>`;
-        list.appendChild(card);
-    });
+}
+
+function createCard(d) {
+    const c = getCalculations(d.prediction);
+    const time = new Date(d.fixture.fixture.date).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'});
+    const card = document.createElement('div');
+    card.className = "match-card";
+    card.onclick = () => showIntel(d);
+    card.innerHTML = `
+        <div class="card-header">
+            <div><small style="color:#888; font-weight:800; text-transform:uppercase;">${d.fixture.league.name}</small><div style="font-weight:800;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</div></div>
+            <div style="text-align:right;"><div style="color:var(--cyan); font-size:0.7rem; font-weight:900;">${time}</div><div style="font-weight:900; color:var(--p);">${d.fixture.goals.home!==null?d.fixture.goals.home+'-'+d.fixture.goals.away:'NS'}</div></div>
+        </div>
+        <div class="card-main-stats">
+            <div><span class="stat-label">1-X-2 %</span><span class="stat-value">${c.hP}-${c.dP}-${c.aP}</span></div>
+            <div><span class="stat-label">Total xG</span><span class="stat-value">${c.totalXG}</span></div>
+            <div><span class="stat-label">Total xCrn</span><span class="stat-value">${c.totalXC}</span></div>
+        </div>
+    `;
+    return card;
+}
+
+function showIntel(d) {
+    const c = getCalculations(d.prediction);
+    document.getElementById('intelPanel').style.display = 'block';
+    document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}`;
+    document.getElementById('bigScoreDisplay').innerText = d.fixture.goals.home!==null?`${d.fixture.goals.home}-${d.fixture.goals.away}` : "VS";
+    
+    const dotter = (f) => f.split('').slice(-6).map(char => `<span class="form-dot ${char}"></span>`).join('');
+    document.getElementById('formContainer').innerHTML = `
+        <div style="text-align:center;"><span class="stat-label">ΦΟΡΜΑ ΓΗΠ.</span><div style="margin-top:5px;">${dotter(c.hForm)}</div></div>
+        <div style="text-align:center;"><span class="stat-label">ΦΟΡΜΑ ΦΙΛ.</span><div style="margin-top:5px;">${dotter(c.aForm)}</div></div>
+    `;
+
+    document.getElementById('matrixTable').innerHTML = `
+        <tr><th>TACTICAL MATRIX</th><th>HOME</th><th>AWAY</th></tr>
+        <tr><td>xG Attack (Ικανότητα)</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr>
+        <tr><td>xGA Defend (Αδυναμία)</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
+        <tr><td>xCorners (Πίεση)</td><td>${c.hXC}</td><td>${c.aXC}</td></tr>
+        <tr><td>xCards (Επιθετικότητα)</td><td>${c.hCards}</td><td>${c.aCards}</td></tr>
+    `;
+
+    let picksHtml = "";
+    if (parseFloat(c.totalXG) > 2.7) picksHtml += `<div class="pick-item"><span>⚽ Total Goals</span><b style="color:var(--p)">Over 2.5</b></div>`;
+    if (parseFloat(c.totalXC) > 10.5) picksHtml += `<div class="pick-item"><span>🚩 Corners (Match)</span><b style="color:var(--p)">Over 9.5</b></div>`;
+    const totalCards = parseFloat(c.hCards) + parseFloat(c.aCards);
+    if (totalCards > 5.0) picksHtml += `<div class="pick-item"><span>🟨 Cards (Match)</span><b style="color:var(--alert)">Over 4.5</b></div>`;
+
+    document.getElementById('textAnalysis').innerText = (c.hXG > c.aXGA && c.hP > 60) ? `Κυριαρχία της ${d.fixture.teams.home.name}. Η επίθεση της "τρυπάει" την άμυνα των φιλοξενούμενων.` : `Ισορροπημένο παιχνίδι τακτικής.`;
+    document.getElementById('valuePicks').innerHTML = picksHtml || "No High Value detected.";
 }
 </script>
 </body>
