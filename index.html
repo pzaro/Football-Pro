@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v250.5 - Ultimate Fix</title>
+    <title>Predictor Pro v250.6 - Sovereign Omega</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
             --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; 
             --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; 
+            --glass: rgba(255, 255, 255, 0.05); 
         }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--txt); padding: 0; margin: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--txt); padding: 0; margin: 0; font-size: 16px; line-height: 1.4; }
         .container { width: 100%; max-width: 850px; margin: 0 auto; padding: 20px 15px; }
 
-        /* Tools Box */
         .tools-box { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
         .tool-row { display: flex; gap: 10px; margin-bottom: 12px; }
         select { flex: 1; padding: 12px; border-radius: 12px; background: #000; color: #fff; border: 1px solid var(--border); font-weight: 700; font-size: 0.9rem; }
         .btn-acca { width: 100%; padding: 16px; background: var(--value); color: #fff; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; }
+        
         .acca-display { background: rgba(191, 64, 191, 0.15); border: 2px solid var(--value); border-radius: 15px; padding: 18px; margin-bottom: 25px; display: none; }
         .acca-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
 
-        /* Progress Bar */
         #syncCont { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
         .progress-track { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.2s; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.4s; }
 
-        /* Match Cards */
-        .league-header { background: rgba(255,255,255,0.05); padding: 12px 18px; border-radius: 12px; margin-top: 30px; border-left: 5px solid var(--gold); font-weight: 900; color: var(--gold); font-size: 0.9rem; text-transform: uppercase; }
+        .league-header { background: var(--glass); padding: 12px 18px; border-radius: 12px; margin-top: 30px; border-left: 5px solid var(--gold); font-weight: 900; color: var(--gold); font-size: 0.9rem; text-transform: uppercase; }
         .match-card { background: var(--card); border-radius: 18px; margin-top: 15px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; transition: 0.2s; overflow: hidden; }
         .card-header { padding: 18px; display: flex; justify-content: space-between; align-items: flex-start; }
         .card-teams { font-weight: 900; font-size: 1.1rem; flex: 1; }
@@ -36,7 +36,6 @@
         .stat-label { font-size: 0.65rem; color: #888; text-transform: uppercase; display: block; margin-bottom: 3px; }
         .stat-value { font-size: 1rem; font-weight: 900; }
 
-        /* Intel Panel */
         #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: env(safe-area-inset-top) 20px 40px 20px; }
         .matrix-table { width: 100%; border-collapse: collapse; margin: 25px 0; background: var(--card); border-radius: 15px; overflow: hidden; }
         .matrix-table th { background: rgba(255,255,255,0.05); color: var(--gold); padding: 15px; text-align: left; font-size: 0.8rem; }
@@ -48,23 +47,21 @@
         .form-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin: 0 3px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
         .btn-close { background: var(--alert); color: #fff; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 900; float: right; cursor: pointer; margin-bottom: 20px; }
-        
-        @media (min-width: 600px) { .card-main-stats { grid-template-columns: repeat(6, 1fr); } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v250.5</span></h1>
-        <small style="color:var(--gold); font-weight:900; text-transform:uppercase;">SOVEREIGN OMEGA • MASTER STABILITY</small>
+        <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v250.6</span></h1>
+        <small style="color:var(--gold); font-weight:900; text-transform:uppercase;">SOVEREIGN OMEGA • MASTER SPEC</small>
     </div>
 
-    <button id="masterBtn" onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; font-size:1.1rem; cursor:pointer; margin-bottom:20px; box-shadow: 0 10px 25px rgba(0,255,136,0.2);">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΤΑΤΙΣΤΙΚΗΣ ΣΑΡΩΣΗΣ</button>
+    <button id="masterBtn" onclick="globalSync()" style="width:100%; padding:22px; background:var(--p); color:#000; border:none; border-radius:18px; font-weight:900; font-size:1.1rem; cursor:pointer; margin-bottom:20px;">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΤΑΤΙΣΤΙΚΗΣ ΣΑΡΩΣΗΣ</button>
 
     <div id="syncCont">
         <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.85rem; font-weight:900; margin-bottom:8px;">
-            <span id="syncStep">SEARCHING DATA...</span><span id="syncPerc">0%</span>
+            <span id="syncStep">CREDITS: CHECKING...</span><span id="syncPerc">0%</span>
         </div>
         <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
     </div>
@@ -79,6 +76,7 @@
                 <option value="1X2">ACCA: ΣΗΜΕΙΑ (1-X-2)</option>
                 <option value="GOALS">ACCA: GOALS (O/U)</option>
                 <option value="CORNERS">ACCA: CORNERS</option>
+                <option value="CARDS">ACCA: CARDS</option>
             </select>
             <select id="accaSize"><option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option></select>
         </div>
@@ -109,9 +107,6 @@ const LEAGUE_MAP = {
 const ALL_LEAGUES = [...LEAGUE_MAP.ELITE, ...LEAGUE_MAP.SECONDARY, ...LEAGUE_MAP.OTHER];
 let masterData = [];
 let currentSort = 'league';
-
-// Helper function to wait between calls (Rate Limit prevention)
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 function getCalculations(p) {
     const hP = parseInt(p?.predictions?.percent?.home) || 0;
@@ -148,34 +143,29 @@ async function globalSync() {
         const p = Math.round(((i+1)/ALL_LEAGUES.length)*100);
         document.getElementById('syncFill').style.width = p+'%';
         document.getElementById('syncPerc').innerText = p+'%';
-        document.getElementById('syncStep').innerText = `SEARCHING LEAGUE ${ALL_LEAGUES[i]}...`;
         
         try {
-            // Δοκιμάζουμε χωρίς season parameter για να βρει αυτόματα την ενεργή (2025/26)
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${ALL_LEAGUES[i]}&date=${today}`, {
-                headers:{"x-rapidapi-key":KEY},
-                method: 'GET'
-            });
-            const d = await res.json();
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${ALL_LEAGUES[i]}&date=${today}`, {headers:{"x-rapidapi-key":KEY}});
+            const remaining = res.headers.get('x-ratelimit-requests-remaining');
+            document.getElementById('syncStep').innerText = `CREDITS: ${remaining || 'N/A'} | LEAGUE: ${ALL_LEAGUES[i]}`;
             
+            const d = await res.json();
             if(d.response && d.response.length > 0) {
                 if(![...filterSelect.options].some(o => o.value == ALL_LEAGUES[i])) {
                     filterSelect.add(new Option(d.response[0].fixture.league.name, ALL_LEAGUES[i]));
                 }
                 for(let m of d.response) {
-                    await sleep(150); // Μικρή παύση για αποφυγή 429 Error
                     const pRes = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-rapidapi-key":KEY}});
                     const pData = (await pRes.json()).response[0];
                     if(pData) masterData.push({ fixture: m, prediction: pData });
                 }
             }
-        } catch(e) { console.error(e); }
+        } catch(e){}
     }
-    
     document.getElementById('syncCont').style.display = 'none';
     document.getElementById('dashboardTools').style.display = 'block';
     if(masterData.length > 0) renderMatches();
-    else document.getElementById('matchList').innerHTML = `<div style="text-align:center; padding:40px; color:var(--alert);">Δεν βρέθηκαν αγώνες. Ίσως εξαντλήθηκε το API Key σας.</div>`;
+    else document.getElementById('matchList').innerHTML = `<div style="text-align:center; padding:40px; color:var(--alert);">Δεν βρέθηκαν αγώνες.</div>`;
 }
 
 function changeSort(val) { currentSort = val; renderMatches(); }
@@ -229,12 +219,12 @@ function generateAcca() {
     if(market === '1X2') selected = pool.filter(x => Math.max(x.c.hP, x.c.aP) >= 70).sort((a,b) => Math.max(b.c.hP, b.c.aP) - Math.max(a.c.hP, a.c.aP));
     else if(market === 'GOALS') selected = pool.sort((a,b) => b.c.o25 - a.c.o25);
     else if(market === 'CORNERS') selected = pool.sort((a,b) => b.c.totalXC - a.c.totalXC);
+    else selected = pool.sort((a,b) => (parseFloat(b.c.hCrds)+parseFloat(b.c.aCrds)) - (parseFloat(a.c.hCrds)+parseFloat(a.c.aCrds)));
     
     selected = selected.slice(0, size);
-    if(selected.length < size) return alert("Ανεπαρκή δεδομένα!");
     let html = `<h4 style="margin:0 0 10px 0; color:var(--p);">🛡️ ELITE ${size}-FOLD (${market})</h4>`;
     selected.forEach(item => {
-        let tip = market==='1X2' ? (item.c.hP > item.c.aP ? '1':'2') : (market==='GOALS' ? 'O2.5' : 'O8.5 Crn');
+        let tip = market==='1X2' ? (item.c.hP > item.c.aP ? '1':'2') : (market==='GOALS' ? 'O2.5' : (market==='CORNERS'?'O8.5 Crn':'O3.5 Crd'));
         html += `<div class="acca-item"><span>${item.d.fixture.teams.home.name}</span><b>${tip}</b></div>`;
     });
     document.getElementById('accaDisplay').innerHTML = html; document.getElementById('accaDisplay').style.display = 'block';
@@ -261,7 +251,8 @@ function showIntel(d) {
     let picks = "";
     if(parseFloat(c.totalXG) > 2.7) picks += `<div class="acca-item"><span>Goals</span><b style="color:var(--p)">Over 2.5</b></div>`;
     if(parseFloat(c.totalXC) > 10) picks += `<div class="acca-item"><span>Corners</span><b style="color:var(--cyan)">Over 9.5</b></div>`;
-    document.getElementById('valuePicks').innerHTML = picks || "Χαμηλή αξία.";
+    if(parseFloat(c.hCrds)+parseFloat(c.aCrds) > 5) picks += `<div class="acca-item"><span>Cards</span><b style="color:var(--alert)">Over 4.5</b></div>`;
+    document.getElementById('valuePicks').innerHTML = picks || "Χαμηλή αξία σε ειδικά στοιχήματα.";
 }
 </script>
 </body>
