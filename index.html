@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v263 - Sovereign Context</title>
+    <title>Predictor Pro v264 - Sovereign Standings</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -83,8 +83,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v263</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • ULTIMATE CONTEXT</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v264</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • STANDINGS & H2H</small>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
@@ -151,9 +151,11 @@
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [140, 135, 39, 61, 78, 94, 141, 318, 319, 320, 197, 262, 128, 40, 136];
 let masterData = [];
+let standingsMap = {}; // Αποθήκευση της βαθμολογίας
 
 async function globalSync() {
     masterData = [];
+    standingsMap = {}; 
     document.getElementById('masterBtn').style.display = 'none';
     document.getElementById('syncCont').style.display = 'block';
     const today = new Date().toISOString().split('T')[0];
@@ -166,6 +168,18 @@ async function globalSync() {
         document.getElementById('syncStep').innerText = `ΣΑΡΩΣΗ LEAGUE ${LEAGUES[i]}...`;
         
         try {
+            // 1. Τράβηγμα Βαθμολογίας (Standings) για το συγκεκριμένο Πρωτάθλημα
+            const sRes = await fetch(`https://v3.football.api-sports.io/standings?league=${LEAGUES[i]}&season=2025`, { headers: {"x-apisports-key": KEY} });
+            const sData = await sRes.json();
+            if (sData.response && sData.response[0]) {
+                sData.response[0].league.standings.forEach(group => {
+                    group.forEach(team => {
+                        standingsMap[team.team.id] = team.rank;
+                    });
+                });
+            }
+
+            // 2. Τράβηγμα Αγώνων & Προβλέψεων
             const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {
                 headers: {"x-apisports-key": KEY}
             });
@@ -353,6 +367,9 @@ async function openIntel(fixId) {
     const p = d.prediction;
     const isLive = status.type === 'LIVE';
     
+    // Αναγνώριση της Τωρινής Γηπεδούχου για την Προϊστορία
+    const currentHomeId = d.fixture.teams.home.id;
+
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
     const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average || 1.2);
@@ -364,16 +381,15 @@ async function openIntel(fixId) {
     const aXcards = parseFloat((1.7 + aXGA*0.6).toFixed(1));
     const totalXG = (hXG + aXG).toFixed(1);
 
-    // Εξαγωγή Θέσης Βαθμολογίας (League Position)
-    const hRank = p?.teams?.home?.league?.position || "-";
-    const aRank = p?.teams?.away?.league?.position || "-";
+    // Ασφαλής Εξαγωγή Βαθμολογίας από τον Standings Χάρτη
+    const hRank = standingsMap[d.fixture.teams.home.id] || "-";
+    const aRank = standingsMap[d.fixture.teams.away.id] || "-";
 
     const elapsed = isLive ? (d.fixture.fixture.status.elapsed || 45) : 0;
     const lSpan = (id) => isLive ? ` <span id="${id}" class="live-stat">(🔄)</span>` : '';
 
     document.getElementById('intelPanel').style.display = 'block';
-    // Προσθήκη Βαθμολογίας στον κεντρικό τίτλο
-    document.getElementById('mTitle').innerHTML = `<span style="font-size:0.9rem; color:#aaa;">(${hRank})</span> ${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name} <span style="font-size:0.9rem; color:#aaa;">(${aRank})</span>`;
+    document.getElementById('mTitle').innerHTML = `<span style="font-size:0.9rem; color:#888;">(${hRank})</span> ${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name} <span style="font-size:0.9rem; color:#888;">(${aRank})</span>`;
     document.getElementById('mStatus').innerHTML = `<span class="badge ${status.class}" style="font-size:0.9rem; padding:8px 15px;">${status.text} ${isLive ? elapsed+"'" : ''}</span>`;
     document.getElementById('bigScoreDisplay').innerText = d.fixture.goals.home !== null ? `${d.fixture.goals.home} - ${d.fixture.goals.away}` : "VS";
     
@@ -400,11 +416,11 @@ async function openIntel(fixId) {
 
     document.getElementById('formContainer').innerHTML = `
         <div style="text-align:center; width:48%;">
-            <span class="stat-label" style="color:#fff;">HOME FORM & xG <br><span style="color:var(--cyan); font-weight:800; font-size:0.8rem;">ΘΕΣΗ: ${hRank}</span></span>
+            <span class="stat-label" style="color:#fff;">HOME FORM <br><span style="color:var(--cyan); font-weight:800; font-size:0.85rem; letter-spacing:1px;">ΘΕΣΗ: ${hRank}</span></span>
             <div style="margin-top:10px;">${renderFormWithXG(p?.teams?.home?.league?.form, hXG)}</div>
         </div>
         <div style="text-align:center; width:48%; border-left:1px solid var(--border);">
-            <span class="stat-label" style="color:#fff;">AWAY FORM & xG <br><span style="color:var(--cyan); font-weight:800; font-size:0.8rem;">ΘΕΣΗ: ${aRank}</span></span>
+            <span class="stat-label" style="color:#fff;">AWAY FORM <br><span style="color:var(--cyan); font-weight:800; font-size:0.85rem; letter-spacing:1px;">ΘΕΣΗ: ${aRank}</span></span>
             <div style="margin-top:10px;">${renderFormWithXG(p?.teams?.away?.league?.form, aXG)}</div>
         </div>
     `;
@@ -417,17 +433,36 @@ async function openIntel(fixId) {
         <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(`live-crd-h-${fixId}`)}</td><td>${aXcards.toFixed(1)}${lSpan(`live-crd-a-${fixId}`)}</td></tr>
     `;
 
-    // Απόδοση H2H (Προϊστορία)
+    // Απόδοση Προϊστορίας (H2H) με Έξυπνα Χρώματα
     let h2hHtml = '';
     const h2hData = p?.h2h || [];
     if (h2hData.length > 0) {
         h2hData.slice(0, 5).forEach(m => {
+            // Έλεγχος αν η ομάδα του H2H είναι η Τωρινή Γηπεδούχος
+            const isHomeCurrHome = m.teams.home.id === currentHomeId;
+            const isAwayCurrHome = m.teams.away.id === currentHomeId;
+            
+            // Λευκό για την Τωρινή Γηπεδούχο, Χρυσό/Γκρι για την Φιλοξενούμενη
+            const hNameColor = isHomeCurrHome ? '#ffffff' : '#888888';
+            const aNameColor = isAwayCurrHome ? '#ffffff' : '#888888';
+            const hGoalColor = isHomeCurrHome ? '#ffffff' : 'var(--gold)';
+            const aGoalColor = isAwayCurrHome ? '#ffffff' : 'var(--gold)';
+
             const hN = m.teams.home.name;
             const aN = m.teams.away.name;
             const hG = m.goals.home !== null ? m.goals.home : '-';
             const aG = m.goals.away !== null ? m.goals.away : '-';
             const yr = new Date(m.fixture.date).getFullYear();
-            h2hHtml += `<div class="pred-row"><span>${yr} | ${hN} - ${aN}</span><b style="color:var(--gold)">${hG} - ${aG}</b></div>`;
+
+            h2hHtml += `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.9rem;">
+                    <span style="font-size:0.75rem; color:#666; width:40px;">${yr}</span>
+                    <span style="flex:1; text-align:right; color:${hNameColor}; font-weight:${isHomeCurrHome?'900':'500'}; padding-right:10px;">${hN}</span>
+                    <span style="background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:6px;">
+                        <b style="color:${hGoalColor}; font-size:1.1rem;">${hG}</b> <span style="color:#555;">-</span> <b style="color:${aGoalColor}; font-size:1.1rem;">${aG}</b>
+                    </span>
+                    <span style="flex:1; text-align:left; color:${aNameColor}; font-weight:${isAwayCurrHome?'900':'500'}; padding-left:10px;">${aN}</span>
+                </div>`;
         });
     } else {
         h2hHtml = `<div class="pred-row"><span style="text-align:center; width:100%;">Δεν βρέθηκε πρόσφατη προϊστορία</span></div>`;
