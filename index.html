@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v259 - Sovereign Responsive</title>
+    <title>Predictor Pro v260 - True Live Data</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -29,7 +29,6 @@
         .badge-time { background: rgba(0,212,255,0.15); color: var(--cyan); border: 1px solid var(--cyan); }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
 
-        /* Μπάρα Προόδου */
         #syncCont { display: none; margin-bottom: 25px; background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); }
         .progress-track { background: #222; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.3s; }
@@ -51,7 +50,6 @@
         .clean-table td { padding: 15px 10px; text-align: center; border-bottom: 1px solid var(--border); font-weight: 800; font-size: 1rem; }
         .clean-table td:first-child { text-align: left; color: #bbb; font-size: 0.9rem; font-weight: 700; }
         
-        /* Live Στατιστικά σε Πράσινη Παρένθεση */
         .live-stat { color: var(--live); font-size: 0.9rem; font-weight: 900; margin-left: 6px; }
 
         .section-title { color: var(--p); font-size: 1rem; font-weight: 900; margin: 30px 0 15px 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
@@ -81,8 +79,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v259</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • LIVE STATS SYNC</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v260</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • TRUE LIVE DATA</small>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
@@ -152,7 +150,6 @@ async function globalSync() {
     let availableLeagues = new Set();
 
     for(let i=0; i<LEAGUES.length; i++){
-        // Ενημέρωση Μπάρας Προόδου
         let pPerc = Math.round(((i+1)/LEAGUES.length)*100);
         document.getElementById('syncFill').style.width = pPerc+'%';
         document.getElementById('syncPerc').innerText = pPerc+'%';
@@ -298,11 +295,11 @@ function generateAcca() {
     window.scrollTo({ top: display.offsetTop - 20, behavior: 'smooth' });
 }
 
-function showIntel(d, status) {
+async function showIntel(d, status) {
     const p = d.prediction;
     const isLive = status.type === 'LIVE';
+    const fixId = d.fixture.fixture.id;
     
-    // Safety Net Calculations (?.)
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
     const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average || 1.2);
@@ -312,14 +309,12 @@ function showIntel(d, status) {
     const aXcrn = parseFloat((3.6 + aXG*0.8).toFixed(1));
     const hXcards = parseFloat((1.5 + hXGA*0.5).toFixed(1));
     const aXcards = parseFloat((1.7 + aXGA*0.6).toFixed(1));
-    
     const totalXG = (hXG + aXG).toFixed(1);
 
-    // Υπολογισμός Live Τιμών ΑΝΑ ΟΜΑΔΑ
     const elapsed = isLive ? (d.fixture.fixture.status.elapsed || 45) : 0;
-    const liveMulti = elapsed / 90;
     
-    const lSpan = (val) => isLive ? ` <span class="live-stat">(${(val * liveMulti).toFixed(2)})</span>` : '';
+    // Προετοιμασία των placeholders για τα πραγματικά Live δεδομένα (Σύμβολο φόρτωσης)
+    const lSpan = (id) => isLive ? ` <span id="${id}" class="live-stat">(🔄)</span>` : '';
 
     document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name}`;
@@ -334,13 +329,12 @@ function showIntel(d, status) {
         <div><span style="font-weight:900; color:${Math.max(hP, aP) > 70 ? 'var(--value)' : '#aaa'};">VALUE ALERT: ${Math.max(hP, aP) > 70 ? '🔥 '+Math.max(hP, aP)+'%' : 'NO SIGNAL'}</span></div>
     `;
 
-    // Καθαρός Πίνακας με ενσωματωμένες Live τιμές ανά ομάδα
     document.getElementById('statsTable').innerHTML = `
         <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
-        <tr><td>xG (Επίθεση)</td><td>${hXG.toFixed(2)}${lSpan(hXG)}</td><td>${aXG.toFixed(2)}${lSpan(aXG)}</td></tr>
+        <tr><td>xG (Επίθεση)</td><td>${hXG.toFixed(2)}${lSpan(`live-xg-h-${fixId}`)}</td><td>${aXG.toFixed(2)}${lSpan(`live-xg-a-${fixId}`)}</td></tr>
         <tr><td>xGA (Άμυνα)</td><td>${hXGA.toFixed(2)}</td><td>${aXGA.toFixed(2)}</td></tr>
-        <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${lSpan(hXcrn)}</td><td>${aXcrn.toFixed(1)}${lSpan(aXcrn)}</td></tr>
-        <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(hXcards)}</td><td>${aXcards.toFixed(1)}${lSpan(aXcards)}</td></tr>
+        <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${lSpan(`live-crn-h-${fixId}`)}</td><td>${aXcrn.toFixed(1)}${lSpan(`live-crn-a-${fixId}`)}</td></tr>
+        <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(`live-crd-h-${fixId}`)}</td><td>${aXcards.toFixed(1)}${lSpan(`live-crd-a-${fixId}`)}</td></tr>
         <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ (Delta)</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
     `;
 
@@ -372,6 +366,48 @@ function showIntel(d, status) {
     `;
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // ΑΝ ΕΙΝΑΙ LIVE: Τραβάμε τα πραγματικά δεδομένα από το API
+    if (isLive) {
+        try {
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixId}`, {
+                headers: {"x-apisports-key": KEY}
+            });
+            const statData = await res.json();
+            
+            if (statData.response && statData.response.length > 0) {
+                const getStat = (stats, type) => {
+                    const s = stats.find(x => x.type === type);
+                    return s && s.value !== null ? s.value : 0;
+                };
+
+                const hStats = statData.response[0].statistics;
+                const aStats = statData.response[1].statistics;
+
+                // Εξαγωγή Πραγματικών Τιμών
+                const h_xG = getStat(hStats, "Expected Goals");
+                const a_xG = getStat(aStats, "Expected Goals");
+                const h_crn = getStat(hStats, "Corner Kicks");
+                const a_crn = getStat(aStats, "Corner Kicks");
+                const h_cards = parseInt(getStat(hStats, "Yellow Cards")) + parseInt(getStat(hStats, "Red Cards"));
+                const a_cards = parseInt(getStat(aStats, "Yellow Cards")) + parseInt(getStat(aStats, "Red Cards"));
+
+                // Ενημέρωση του πίνακα
+                document.getElementById(`live-xg-h-${fixId}`).innerText = `(L: ${h_xG})`;
+                document.getElementById(`live-xg-a-${fixId}`).innerText = `(L: ${a_xG})`;
+                document.getElementById(`live-crn-h-${fixId}`).innerText = `(L: ${h_crn})`;
+                document.getElementById(`live-crn-a-${fixId}`).innerText = `(L: ${a_crn})`;
+                document.getElementById(`live-crd-h-${fixId}`).innerText = `(L: ${h_cards})`;
+                document.getElementById(`live-crd-a-${fixId}`).innerText = `(L: ${a_cards})`;
+            } else {
+                // Δεν υπάρχουν live stats για αυτή τη λίγκα
+                const blanks = document.querySelectorAll(`[id^='live-']`);
+                blanks.forEach(b => b.innerText = "(-)");
+            }
+        } catch (e) {
+            console.error("Σφάλμα Live δεδομένων:", e);
+        }
+    }
 }
 </script>
 </body>
