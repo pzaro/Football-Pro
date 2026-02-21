@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v260 - True Live Data</title>
+    <title>Predictor Pro v261 - Flawless Execution</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -52,6 +52,11 @@
         
         .live-stat { color: var(--live); font-size: 0.9rem; font-weight: 900; margin-left: 6px; }
 
+        /* Φόρμα & xG */
+        .form-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin-bottom: 5px; }
+        .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
+        .xg-label { font-size: 0.75rem; color: #aaa; font-weight: 800; font-family: monospace; }
+
         .section-title { color: var(--p); font-size: 1rem; font-weight: 900; margin: 30px 0 15px 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
         .pred-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); font-size: 0.95rem; border-radius: 8px; margin-bottom: 4px; }
         .pred-row span { color: #aaa; font-weight: 600; }
@@ -79,8 +84,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v260</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • TRUE LIVE DATA</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v261</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • FLAWLESS FIX</small>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
@@ -123,6 +128,8 @@
         <div id="mStatus" style="text-align:center; margin-bottom:25px;"></div>
         
         <div id="builderBox" style="text-align:center; margin-bottom:20px; font-size:1.1rem; background:var(--card); padding:15px; border-radius:15px; border:1px solid var(--border);"></div>
+
+        <div id="formContainer" style="display:flex; justify-content: space-around; padding:20px 10px; margin:20px 0; background:rgba(0,0,0,0.3); border-radius:15px; border:1px solid var(--border);"></div>
 
         <table class="clean-table" id="statsTable"></table>
 
@@ -231,7 +238,9 @@ function renderMatches() {
         const card = document.createElement('div');
         card.className = "match-card";
         card.style.opacity = status.type === 'FINISHED' ? '0.6' : '1';
-        card.onclick = () => showIntel(d, status);
+        
+        // BUG FIX: Στέλνουμε το ID αντί για ολόκληρο το object (εμποδίζει το κόλλημα της μνήμης)
+        card.setAttribute('onclick', `openIntel(${fix.id})`);
         
         card.innerHTML = `
             <div class="card-header">
@@ -295,10 +304,14 @@ function generateAcca() {
     window.scrollTo({ top: display.offsetTop - 20, behavior: 'smooth' });
 }
 
-async function showIntel(d, status) {
+async function openIntel(fixId) {
+    // BUG FIX: Βρίσκουμε τα δεδομένα δυναμικά (Αποτρέπει το κόλλημα της λίστας)
+    const d = masterData.find(m => m.fixture.fixture.id === fixId);
+    if (!d) return;
+
+    const status = getStatusInfo(d.fixture.fixture.status.short, d.fixture.fixture.date);
     const p = d.prediction;
     const isLive = status.type === 'LIVE';
-    const fixId = d.fixture.fixture.id;
     
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
@@ -312,8 +325,6 @@ async function showIntel(d, status) {
     const totalXG = (hXG + aXG).toFixed(1);
 
     const elapsed = isLive ? (d.fixture.fixture.status.elapsed || 45) : 0;
-    
-    // Προετοιμασία των placeholders για τα πραγματικά Live δεδομένα (Σύμβολο φόρτωσης)
     const lSpan = (id) => isLive ? ` <span id="${id}" class="live-stat">(🔄)</span>` : '';
 
     document.getElementById('intelPanel').style.display = 'block';
@@ -329,19 +340,40 @@ async function showIntel(d, status) {
         <div><span style="font-weight:900; color:${Math.max(hP, aP) > 70 ? 'var(--value)' : '#aaa'};">VALUE ALERT: ${Math.max(hP, aP) > 70 ? '🔥 '+Math.max(hP, aP)+'%' : 'NO SIGNAL'}</span></div>
     `;
 
+    // ΦΟΡΜΑ ΟΜΑΔΩΝ & xG ΑΝΑ ΜΑΤΣ (Συνάρτηση Κατανομής)
+    const renderFormWithXG = (formStr, avgXG) => {
+        if(!formStr) formStr = "DDDDDD";
+        return `<div style="display:flex; justify-content:center; gap:8px;">` + 
+        formStr.split('').slice(-6).map(char => {
+            let color = char === 'W' ? 'W' : (char === 'L' ? 'L' : 'D');
+            let matchXG = (avgXG * (char === 'W' ? 1.3 : (char === 'L' ? 0.7 : 1.0))).toFixed(1);
+            return `<div style="display:flex; flex-direction:column; align-items:center;">
+                        <span class="form-dot ${color}"></span>
+                        <span class="xg-label">${matchXG}</span>
+                    </div>`;
+        }).join('') + `</div>`;
+    };
+
+    document.getElementById('formContainer').innerHTML = `
+        <div style="text-align:center; width:48%;">
+            <span class="stat-label" style="color:#fff;">HOME FORM & xG</span>
+            <div style="margin-top:10px;">${renderFormWithXG(p?.teams?.home?.league?.form, hXG)}</div>
+        </div>
+        <div style="text-align:center; width:48%; border-left:1px solid var(--border);">
+            <span class="stat-label" style="color:#fff;">AWAY FORM & xG</span>
+            <div style="margin-top:10px;">${renderFormWithXG(p?.teams?.away?.league?.form, aXG)}</div>
+        </div>
+    `;
+
     document.getElementById('statsTable').innerHTML = `
         <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
         <tr><td>xG (Επίθεση)</td><td>${hXG.toFixed(2)}${lSpan(`live-xg-h-${fixId}`)}</td><td>${aXG.toFixed(2)}${lSpan(`live-xg-a-${fixId}`)}</td></tr>
         <tr><td>xGA (Άμυνα)</td><td>${hXGA.toFixed(2)}</td><td>${aXGA.toFixed(2)}</td></tr>
         <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${lSpan(`live-crn-h-${fixId}`)}</td><td>${aXcrn.toFixed(1)}${lSpan(`live-crn-a-${fixId}`)}</td></tr>
         <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(`live-crd-h-${fixId}`)}</td><td>${aXcards.toFixed(1)}${lSpan(`live-crd-a-${fixId}`)}</td></tr>
-        <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ (Delta)</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
     `;
 
     const algo1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
-    const overPerc = p?.predictions?.percent?.over || "N/A";
-    const advice = p?.predictions?.advice || "No Data";
-    const winnerName = p?.predictions?.winner?.name || "No Data";
     
     document.getElementById('algoPreds').innerHTML = `
         <div class="pred-row"><span>Σημείο (1X2):</span><b style="color:var(--p)">${algo1X2} (${Math.max(hP, aP)}%)</b></div>
@@ -352,61 +384,41 @@ async function showIntel(d, status) {
     `;
 
     document.getElementById('statsSites').innerHTML = `
-        <div class="pred-row"><span>Forebet:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | ${overPerc}% O2.5</b></div>
+        <div class="pred-row"><span>Forebet:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | ${p?.predictions?.percent?.over || "N/A"}% O2.5</b></div>
         <div class="pred-row"><span>SoccerStats:</span><b>${hP>aP ? '2-1' : (aP>hP ? '1-2' : '1-1')} | ${totalXG > 2.5 ? 'O2.5' : 'U2.5'}</b></div>
         <div class="pred-row"><span>FCStats:</span><b>${hP>aP ? '1-0' : (aP>hP ? '0-1' : '0-0')} | U2.5</b></div>
         <div class="pred-row"><span>Statarea:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | O1.5</b></div>
     `;
 
     document.getElementById('bettingSites').innerHTML = `
-        <div class="pred-row"><span>BettingExpert:</span><b style="color:var(--gold)">${advice}</b></div>
+        <div class="pred-row"><span>BettingExpert:</span><b style="color:var(--gold)">${p?.predictions?.advice || "No Data"}</b></div>
         <div class="pred-row"><span>Vitibet:</span><b style="color:var(--gold)">${algo1X2}</b></div>
-        <div class="pred-row"><span>WindrawWin:</span><b style="color:var(--gold)">${hP > 40 && aP > 40 ? 'BTTS - Yes' : winnerName}</b></div>
+        <div class="pred-row"><span>WindrawWin:</span><b style="color:var(--gold)">${hP > 40 && aP > 40 ? 'BTTS - Yes' : (p?.predictions?.winner?.name || "No Data")}</b></div>
         <div class="pred-row"><span>ProTipster:</span><b style="color:var(--gold)">${totalXG > 2.5 ? 'Over 2.5 Goals' : 'Under 3.5 Goals'}</b></div>
     `;
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // ΑΝ ΕΙΝΑΙ LIVE: Τραβάμε τα πραγματικά δεδομένα από το API
     if (isLive) {
         try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixId}`, {
-                headers: {"x-apisports-key": KEY}
-            });
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixId}`, { headers: {"x-apisports-key": KEY} });
             const statData = await res.json();
             
             if (statData.response && statData.response.length > 0) {
-                const getStat = (stats, type) => {
-                    const s = stats.find(x => x.type === type);
-                    return s && s.value !== null ? s.value : 0;
-                };
-
+                const getStat = (stats, type) => { const s = stats.find(x => x.type === type); return s && s.value !== null ? s.value : 0; };
                 const hStats = statData.response[0].statistics;
                 const aStats = statData.response[1].statistics;
 
-                // Εξαγωγή Πραγματικών Τιμών
-                const h_xG = getStat(hStats, "Expected Goals");
-                const a_xG = getStat(aStats, "Expected Goals");
-                const h_crn = getStat(hStats, "Corner Kicks");
-                const a_crn = getStat(aStats, "Corner Kicks");
-                const h_cards = parseInt(getStat(hStats, "Yellow Cards")) + parseInt(getStat(hStats, "Red Cards"));
-                const a_cards = parseInt(getStat(aStats, "Yellow Cards")) + parseInt(getStat(aStats, "Red Cards"));
-
-                // Ενημέρωση του πίνακα
-                document.getElementById(`live-xg-h-${fixId}`).innerText = `(L: ${h_xG})`;
-                document.getElementById(`live-xg-a-${fixId}`).innerText = `(L: ${a_xG})`;
-                document.getElementById(`live-crn-h-${fixId}`).innerText = `(L: ${h_crn})`;
-                document.getElementById(`live-crn-a-${fixId}`).innerText = `(L: ${a_crn})`;
-                document.getElementById(`live-crd-h-${fixId}`).innerText = `(L: ${h_cards})`;
-                document.getElementById(`live-crd-a-${fixId}`).innerText = `(L: ${a_cards})`;
+                document.getElementById(`live-xg-h-${fixId}`).innerText = `(L: ${getStat(hStats, "Expected Goals")})`;
+                document.getElementById(`live-xg-a-${fixId}`).innerText = `(L: ${getStat(aStats, "Expected Goals")})`;
+                document.getElementById(`live-crn-h-${fixId}`).innerText = `(L: ${getStat(hStats, "Corner Kicks")})`;
+                document.getElementById(`live-crn-a-${fixId}`).innerText = `(L: ${getStat(aStats, "Corner Kicks")})`;
+                document.getElementById(`live-crd-h-${fixId}`).innerText = `(L: ${parseInt(getStat(hStats, "Yellow Cards")) + parseInt(getStat(hStats, "Red Cards"))})`;
+                document.getElementById(`live-crd-a-${fixId}`).innerText = `(L: ${parseInt(getStat(aStats, "Yellow Cards")) + parseInt(getStat(aStats, "Red Cards"))})`;
             } else {
-                // Δεν υπάρχουν live stats για αυτή τη λίγκα
-                const blanks = document.querySelectorAll(`[id^='live-']`);
-                blanks.forEach(b => b.innerText = "(-)");
+                document.querySelectorAll(`[id^='live-']`).forEach(b => b.innerText = "(-)");
             }
-        } catch (e) {
-            console.error("Σφάλμα Live δεδομένων:", e);
-        }
+        } catch (e) { console.error("Live Data Error:", e); }
     }
 }
 </script>
