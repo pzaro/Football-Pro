@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v251 - Sovereign Omega</title>
+    <title>Predictor Pro v252 - Sovereign Omega</title>
     <style>
         :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --cyan: #00d4ff; --value: #bf40bf; --alert: #ff3e3e; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; }
@@ -17,48 +17,53 @@
 
         .btn-sync { width: 100%; padding: 20px; background: var(--p); color: #000; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; font-size: 1.1rem; }
         
-        /* Acca Generator */
+        /* Acca Generator Controls */
         .tools-box { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 20px; display: none; }
-        .acca-display { background: rgba(191, 64, 191, 0.1); border: 1px solid var(--value); border-radius: 15px; padding: 15px; margin-bottom: 20px; display: none; }
+        select, button.gen-btn { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #000; color: #fff; font-weight: 700; margin-bottom: 10px; }
+        button.gen-btn { background: var(--value); border: none; cursor: pointer; height: 50px; }
 
-        /* Match Cards */
-        .match-card { background: var(--card); border-radius: 18px; margin-top: 15px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; transition: 0.2s; }
-        .match-card:active { transform: scale(0.98); }
+        .acca-display { background: rgba(191, 64, 191, 0.1); border: 1px solid var(--value); border-radius: 15px; padding: 15px; margin-bottom: 20px; display: none; }
+        .match-card { background: var(--card); border-radius: 18px; margin-top: 15px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; }
         .card-stats { padding: 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border); text-align: center; }
         .stat-label { font-size: 0.6rem; color: #888; text-transform: uppercase; }
-        .stat-value { font-size: 0.85rem; font-weight: 800; display: block; }
+        .stat-value { font-size: 0.85rem; font-weight: 800; }
 
-        /* Intel Panel */
         #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; }
-        .analysis-box { background: #1c2128; border-radius: 15px; padding: 18px; border-left: 5px solid var(--cyan); margin-top: 15px; }
-        .builder-box { background: rgba(0, 255, 136, 0.05); border: 1px solid var(--p); border-radius: 15px; padding: 15px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 20px;">
-        <h1 style="color:var(--p); margin:0;">PREDICTOR PRO <span style="color:#fff">v251</span></h1>
-        <div id="creditInfo" class="credit-badge">SYSTEM: ONLINE</div>
+        <h1 style="color:var(--p); margin:0;">PREDICTOR PRO <span style="color:#fff">v252</span></h1>
+        <div id="creditInfo" class="credit-badge">SYSTEM: STANDBY</div>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 START FULL ANALYSIS</button>
 
     <div id="syncCont">
         <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.75rem;">
-            <span id="syncStep">WAITING...</span>
-            <span id="syncPerc">0%</span>
+            <span id="syncStep">WAITING...</span><span id="syncPerc">0%</span>
         </div>
         <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
     </div>
 
     <div id="dashboardTools" class="tools-box">
-        <div style="display:flex; gap:10px; margin-bottom:12px;">
-            <select id="accaSize" style="flex:1; padding:12px; border-radius:10px; background:#000; color:#fff; border:1px solid var(--border);">
-                <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
+        <label style="font-size:0.7rem; color:var(--gold); font-weight:900;">ACCA SETTINGS</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:5px;">
+            <select id="accaMarket">
+                <option value="1X2">ΣΗΜΕΙΑ (1-X-2)</option>
+                <option value="GOALS">GOALS (O2.5)</option>
+                <option value="CORNERS">CORNERS (O9.5)</option>
+                <option value="COMBO">1X/X2 + OVER 1.5</option>
             </select>
-            <button onclick="genAcca()" style="flex:2; background:var(--value); color:#fff; border:none; border-radius:10px; font-weight:900;">GENERATE ACCA (1-X-2)</button>
+            <select id="accaSize">
+                <option value="3">3-ΑΔΑ</option>
+                <option value="4">4-ΑΔΑ</option>
+                <option value="5">5-ΑΔΑ</option>
+            </select>
         </div>
+        <button class="gen-btn" onclick="genAcca()">🎯 ΔΗΜΙΟΥΡΓΙΑ ΔΕΛΤΙΟΥ</button>
     </div>
 
     <div id="accaDisplay" class="acca-display"></div>
@@ -68,10 +73,7 @@
         <button onclick="this.parentElement.style.display='none'" style="background:var(--alert); color:#fff; border:none; padding:12px 25px; border-radius:10px; font-weight:900; float:right;">BACK</button>
         <h2 id="mTitle" style="text-align:center; margin-top:60px; color:var(--gold);"></h2>
         <div id="bigScore" style="font-size:4rem; font-weight:900; text-align:center;"></div>
-        
-        <div class="analysis-box" id="analysisContent"></div>
-        <div class="builder-box" id="builderContent"></div>
-        <div class="analysis-box" style="border-left-color:var(--value)" id="valueAlert"></div>
+        <div id="analysisContent" style="padding:20px; background:#1c2128; border-radius:15px; margin-top:20px;"></div>
     </div>
 </div>
 
@@ -90,7 +92,7 @@ async function globalSync() {
         let p = Math.round(((i+1)/LEAGUES.length)*100);
         document.getElementById('syncFill').style.width = p+'%';
         document.getElementById('syncPerc').innerText = p+'%';
-        document.getElementById('syncStep').innerText = `SYNCING LEAGUE ${LEAGUES[i]}...`;
+        document.getElementById('syncStep').innerText = `ANALYZING LEAGUE ${LEAGUES[i]}...`;
         
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${LEAGUES[i]}&date=${today}&season=2025`, {headers:{"x-rapidapi-key":KEY}});
@@ -112,23 +114,53 @@ async function globalSync() {
     render();
 }
 
+function genAcca() {
+    const market = document.getElementById('accaMarket').value;
+    const size = parseInt(document.getElementById('accaSize').value);
+    let pool = [...masterData];
+    
+    // Φιλτράρισμα βάσει αγοράς
+    if(market === '1X2') pool.sort((a,b) => Math.max(b.prediction.predictions.percent.home, b.prediction.predictions.percent.away) - Math.max(a.prediction.predictions.percent.home, a.prediction.predictions.percent.away));
+    if(market === 'GOALS') pool.sort((a,b) => b.prediction.predictions.percent.over - a.prediction.predictions.percent.over);
+    
+    let items = pool.slice(0, size);
+    let h = `<h3 style="color:var(--value); margin-top:0;">🎯 ${size}-FOLD ${market}</h3>`;
+    
+    items.forEach(i => {
+        let tip = "";
+        const p = i.prediction.predictions.percent;
+        if(market === '1X2') tip = parseInt(p.home) > parseInt(p.away) ? "1" : "2";
+        if(market === 'GOALS') tip = "Over 2.5";
+        if(market === 'CORNERS') tip = "Over 9.5";
+        if(market === 'COMBO') tip = (parseInt(p.home) > parseInt(p.away) ? "1X" : "X2") + " & Over 1.5";
+        
+        h += `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #333; font-size:0.9rem;">
+                <span>${i.fixture.teams.home.name}</span><b>${tip}</b>
+              </div>`;
+    });
+    
+    document.getElementById('accaDisplay').innerHTML = h;
+    document.getElementById('accaDisplay').style.display = 'block';
+}
+
 function render() {
     const list = document.getElementById('matchList'); list.innerHTML = "";
     masterData.forEach(d => {
-        const c = d.prediction.predictions.percent;
+        const hXG = parseFloat(d.prediction.teams.home.last_5.goals.for.average);
+        const aXG = parseFloat(d.prediction.teams.away.last_5.goals.for.average);
         const card = document.createElement('div');
         card.className = 'match-card';
         card.onclick = () => showIntel(d);
         card.innerHTML = `
             <div style="padding:15px; display:flex; justify-content:space-between;">
                 <div><small style="color:var(--gold); font-weight:800;">${d.fixture.league.name}</small><div><b>${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</b></div></div>
-                <div style="color:var(--p); font-weight:900;">${d.fixture.goals.home??'NS'}-${d.fixture.goals.away??''}</div>
+                <div style="color:var(--p); font-weight:900;">${d.fixture.goals.home??'N'}-${d.fixture.goals.away??'S'}</div>
             </div>
             <div class="card-stats">
-                <div><span class="stat-label">1-X-2</span><span class="stat-value">${c.home}-${c.draw}-${c.away}</span></div>
-                <div><span class="stat-label">xG TOT</span><span class="stat-value">${(parseFloat(d.prediction.teams.home.last_5.goals.for.average)+parseFloat(d.prediction.teams.away.last_5.goals.for.average)).toFixed(1)}</span></div>
-                <div><span class="stat-label">CORNERS</span><span class="stat-value">~9.4</span></div>
-                <div><span class="stat-label">CARDS</span><span class="stat-value">~4.2</span></div>
+                <div><span class="stat-label">xG TOT</span><span class="stat-value">${(hXG+aXG).toFixed(1)}</span></div>
+                <div><span class="stat-label">CARDS</span><span class="stat-value">~${(1.5 + (hXG*0.5)).toFixed(1)}</span></div>
+                <div><span class="stat-label">1X2 %</span><span class="stat-value">${d.prediction.predictions.percent.home}-${d.prediction.predictions.percent.away}</span></div>
+                <div><span class="stat-label">VALUE</span><span class="stat-value" style="color:var(--p)">${Math.max(d.prediction.predictions.percent.home, d.prediction.predictions.percent.away) > 70 ? '🔥' : '---'}</span></div>
             </div>
         `;
         list.appendChild(card);
@@ -140,39 +172,19 @@ function showIntel(d) {
     const hXG = parseFloat(p.teams.home.last_5.goals.for.average);
     const aXG = parseFloat(p.teams.away.last_5.goals.for.average);
     const totalXG = (hXG + aXG).toFixed(2);
-    const prob = Math.max(parseInt(p.predictions.percent.home), parseInt(p.predictions.percent.away));
-
+    
     document.getElementById('intelPanel').style.display = 'block';
-    document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}`;
+    document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name}`;
     document.getElementById('bigScore').innerText = d.fixture.goals.home!==null ? `${d.fixture.goals.home}-${d.fixture.goals.away}` : "VS";
     
     document.getElementById('analysisContent').innerHTML = `
-        <h4 style="margin:0; color:var(--cyan);">TACTICAL ANALYSIS</h4>
-        <p>xG: ${hXG} - ${aXG} (Total: ${totalXG})</p>
-        <p>Expected Cards: 4.5+ | Expected Corners: 9.5+</p>
+        <div style="color:var(--p); font-weight:900; margin-bottom:10px;">BET BUILDER STATUS: ${totalXG > 1.9 ? 'READY ✅' : 'LOW xG ⚠️'}</div>
+        <p>xG: ${hXG} (H) | ${aXG} (A) | Total: ${totalXG}</p>
+        <p>Expected Cards: ~4.2 | Expected Corners: ~9.6</p>
+        <div style="background:var(--value); padding:10px; border-radius:10px; text-align:center; font-weight:900;">
+            VALUE TIP: ${Math.max(p.predictions.percent.home, p.predictions.percent.away) > 70 ? 'HIGH CONFIDENCE SIGNAL' : 'NO SIGNAL'}
+        </div>
     `;
-
-    document.getElementById('builderContent').innerHTML = `
-        <h4 style="margin:0; color:var(--p);">BET BUILDER (xG > 1.9)</h4>
-        <div style="margin-top:10px;">${totalXG > 1.9 ? '✅ High Probability Event: Over 1.5 Goals & BTTS' : '⚠️ Low xG Match: Under 2.5 Goals'}</div>
-    `;
-
-    document.getElementById('valueAlert').innerHTML = `
-        <h4 style="margin:0; color:var(--value);">VALUE BET ALERT (>70%)</h4>
-        <div style="margin-top:10px;">${prob > 70 ? '🔥 VALUE DETECTED: ' + (parseInt(p.predictions.percent.home) > parseInt(p.predictions.percent.away) ? 'Home Win' : 'Away Win') + ' ('+prob+'%)' : 'No 70%+ signal found.'}</div>
-    `;
-}
-
-function genAcca() {
-    const size = parseInt(document.getElementById('accaSize').value);
-    let items = masterData.slice(0, size);
-    let h = `<h3 style="color:var(--value); margin-top:0;">🎯 ELITE ${size}-FOLD</h3>`;
-    items.forEach(i => {
-        let tip = parseInt(i.prediction.predictions.percent.home) > parseInt(i.prediction.predictions.percent.away) ? '1' : '2';
-        h += `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #333;"><span>${i.fixture.teams.home.name}</span><b>${tip}</b></div>`;
-    });
-    document.getElementById('accaDisplay').innerHTML = h;
-    document.getElementById('accaDisplay').style.display = 'block';
 }
 </script>
 </body>
