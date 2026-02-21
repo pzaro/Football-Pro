@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v267 - Ultimate Zenith</title>
+    <title>Predictor Pro v268 - Sovereign Live Ticker</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -14,6 +14,17 @@
         
         body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; line-height: 1.4; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 15px; }
+
+        /* --- LIVESCORE TICKER CSS --- */
+        .ticker-wrap {
+            width: 100%; background: rgba(0, 255, 65, 0.05); border-top: 1px solid rgba(0, 255, 65, 0.3); border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+            overflow: hidden; white-space: nowrap; box-sizing: border-box; padding: 10px 0; margin-bottom: 25px; display: none;
+        }
+        .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2.5rem; font-size: 1rem; font-weight: 800; color: #fff; }
+        .ticker-item .min { color: var(--live); font-size: 0.85rem; margin-right: 8px; animation: pulse 1.5s infinite; }
+        .ticker-item .score { color: var(--gold); font-size: 1.2rem; margin: 0 8px; font-weight: 900; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
         .btn-sync { width: 100%; padding: 22px; background: var(--p); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 1.2rem; cursor: pointer; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2); }
         .tools-box { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 25px; display: none; }
@@ -75,9 +86,14 @@
 <body>
 
 <div class="container">
-    <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v267</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • ULTIMATE ZENITH</small>
+    <div style="text-align:center; padding-bottom: 15px;">
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v268</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • FASTEST LIVESCORE</small>
+    </div>
+
+    <div class="ticker-wrap" id="liveTickerWrap">
+        <div class="ticker-move" id="tickerContent">
+            </div>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
@@ -146,6 +162,34 @@ const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [140, 135, 39, 61, 78, 94, 141, 318, 319, 320, 197, 262, 128, 40, 136];
 let masterData = [];
 let standingsMap = {};
+
+// --- LIVESCORE TICKER ENGINE ---
+async function fetchLiveTicker() {
+    try {
+        const res = await fetch(`https://v3.football.api-sports.io/fixtures?live=${LEAGUES.join('-')}`, { headers: {"x-apisports-key": KEY} });
+        const d = await res.json();
+        const wrap = document.getElementById('liveTickerWrap');
+        const content = document.getElementById('tickerContent');
+        
+        if (d.response && d.response.length > 0) {
+            let html = '';
+            d.response.forEach(m => {
+                let min = m.fixture.status.elapsed + "'";
+                if (m.fixture.status.short === 'HT') min = 'HT';
+                html += `<div class="ticker-item"><span class="min">🔴 ${min}</span> ${m.teams.home.name} <span class="score">${m.goals.home}-${m.goals.away}</span> ${m.teams.away.name}</div>`;
+            });
+            content.innerHTML = html;
+            wrap.style.display = 'block';
+        } else {
+            wrap.style.display = 'none';
+        }
+    } catch(e) {}
+}
+
+// Εκκίνηση Ticker με το άνοιγμα της σελίδας & Ανανέωση κάθε 60 δευτερόλεπτα
+fetchLiveTicker();
+setInterval(fetchLiveTicker, 60000); 
+// -------------------------------
 
 async function globalSync() {
     masterData = []; standingsMap = {};
@@ -256,7 +300,7 @@ function generateAcca() {
     const size = parseInt(document.getElementById('accaSize').value);
     const display = document.getElementById('accaDisplay');
     
-    let eligibleData = masterData.filter(d => !['1H', '2H', 'HT', 'FT'].includes(d.fixture.fixture.status.short));
+    let eligibleData = masterData.filter(d => !['1H', '2H', 'HT', 'FT', 'LIVE'].includes(d.fixture.fixture.status.short));
     
     let pool = eligibleData.map(d => {
         const p = d.prediction;
@@ -383,7 +427,6 @@ async function openIntel(fixId) {
         <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ (Delta)</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
     `;
 
-    // PROISTORIA (H2H) ΜΕ ΧΡΩΜΑΤΑ (ΛΕΥΚΟ ΓΙΑ ΣΗΜΕΡΙΝΟ ΓΗΠΕΔΟΥΧΟ)
     let h2hHtml = '';
     const h2hData = p?.h2h || [];
     if (h2hData.length > 0) {
@@ -436,7 +479,6 @@ async function openIntel(fixId) {
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // TRUE LIVE DATA FETCH
     if (isLive) {
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixId}`, { headers: {"x-apisports-key": KEY} });
