@@ -3,30 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v271 - Smart Sync</title>
+    <title>Predictor Pro v272 - Self-Learning AI</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
             --txt: #ffffff; --gold: #f1c40f; --cyan: #00d4ff; --value: #bf40bf; --alert: #ff3e3e; 
-            --live: #00ff41; --finished: #888888;
+            --live: #00ff41; --finished: #888888; --ai: #ff00ff;
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; line-height: 1.4; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 15px; }
 
-        /* --- LIVESCORE TICKER CSS --- */
-        .ticker-wrap {
-            width: 100%; background: rgba(0, 255, 65, 0.05); border-top: 1px solid rgba(0, 255, 65, 0.3); border-bottom: 1px solid rgba(0, 255, 65, 0.3);
-            overflow: hidden; white-space: nowrap; box-sizing: border-box; padding: 10px 0; margin-bottom: 25px; display: none;
-        }
+        .ticker-wrap { width: 100%; background: rgba(0, 255, 65, 0.05); border-top: 1px solid rgba(0, 255, 65, 0.3); border-bottom: 1px solid rgba(0, 255, 65, 0.3); overflow: hidden; white-space: nowrap; box-sizing: border-box; padding: 10px 0; margin-bottom: 25px; display: none; }
         .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 2.5rem; font-size: 1rem; font-weight: 800; color: #fff; }
         .ticker-item .min { color: var(--live); font-size: 0.85rem; margin-right: 8px; animation: pulse 1.5s infinite; }
         .ticker-item .score { color: var(--gold); font-size: 1.2rem; margin: 0 8px; font-weight: 900; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        .btn-sync { width: 100%; padding: 22px; background: var(--p); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 1.2rem; cursor: pointer; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2); }
+        .btn-sync { width: 100%; padding: 22px; background: var(--p); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 1.2rem; cursor: pointer; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2); }
+        .btn-ai { width: 100%; padding: 15px; background: transparent; border: 2px solid var(--ai); color: var(--ai); border-radius: 15px; font-weight: 900; font-size: 1rem; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
+        .btn-ai:hover { background: rgba(255, 0, 255, 0.1); }
+        
         .tools-box { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 25px; display: none; }
         
         .controls-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px; }
@@ -39,9 +38,10 @@
         .badge-time { background: rgba(0,212,255,0.15); color: var(--cyan); border: 1px solid var(--cyan); }
         @keyframes pulse { 0% { opacity: 1; } 100% { opacity: 1; } }
 
-        #syncCont { display: none; margin-bottom: 25px; background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); }
+        #syncCont, #aiCont { display: none; margin-bottom: 25px; background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); }
         .progress-track { background: #222; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.3s; }
+        .ai-fill { background: linear-gradient(90deg, var(--ai), #ff66ff); }
 
         .match-card { background: var(--card); border-radius: 20px; margin-top: 18px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; }
         .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -49,14 +49,13 @@
         .score-display { font-size: 1.5rem; font-weight: 900; margin-top: 5px; }
         
         .track-btn { font-size:0.75rem; color:#aaa; background:rgba(255,255,255,0.1); padding:5px 10px; border-radius:6px; margin-right:8px; transition:0.3s; z-index:10; }
-        .track-btn:hover { background:rgba(255,255,255,0.2); }
         .track-btn.active { color: #fff; background: var(--alert); box-shadow: 0 0 10px rgba(255,62,62,0.5); }
 
         .card-stats { padding: 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: rgba(0,0,0,0.3); text-align: center; border-radius: 0 0 20px 20px; }
         .stat-label { font-size: 0.7rem; color: #999; text-transform: uppercase; display: block; margin-bottom: 4px; font-weight: 700; }
         .stat-value { font-size: 1.1rem; font-weight: 900; color: #fff; }
 
-        #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; padding-bottom: 40px; }
+        #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; padding-bottom: 40px; }
         
         .clean-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
         .clean-table th { background: rgba(0,0,0,0.4); color: var(--gold); padding: 15px 10px; text-align: center; font-size: 0.8rem; border-bottom: 2px solid var(--border); }
@@ -64,6 +63,7 @@
         .clean-table td:first-child { text-align: left; color: #bbb; font-size: 0.9rem; font-weight: 700; }
         
         .live-stat { color: var(--live); font-size: 0.9rem; font-weight: 900; margin-left: 6px; }
+        .ai-fix { color: var(--ai); font-size: 0.8rem; font-weight: 800; margin-left: 5px; }
 
         .form-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin-bottom: 5px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
@@ -79,12 +79,7 @@
 
         .btn-close { background: var(--alert); color: #fff; border: none; padding: 18px 35px; border-radius: 14px; font-weight: 900; font-size: 1rem; float: right; cursor: pointer; }
 
-        /* GOAL POPUP NOTIFICATION */
-        #radarAlert {
-            position: fixed; top: 20px; right: 20px; background: var(--p); color: #000; padding: 20px 30px; 
-            border-radius: 15px; font-weight: 900; font-size: 1.2rem; box-shadow: 0 10px 30px rgba(0,255,136,0.5);
-            z-index: 99999; transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        #radarAlert { position: fixed; top: 20px; right: 20px; background: var(--p); color: #000; padding: 20px 30px; border-radius: 15px; font-weight: 900; font-size: 1.2rem; box-shadow: 0 10px 30px rgba(0,255,136,0.5); z-index: 99999; transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #radarAlert.show { transform: translateX(0); }
 
         @media (max-width: 650px) {
@@ -101,8 +96,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 15px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v271</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • SMART SYNC ENGINE</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v272</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">SELF-LEARNING AI SPEC</small>
     </div>
 
     <div class="ticker-wrap" id="liveTickerWrap">
@@ -110,12 +105,20 @@
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
+    <button id="aiEvalBtn" onclick="runAIEvaluation()" class="btn-ai" style="display:none;">🧠 AI ΑΞΙΟΛΟΓΗΣΗ ΗΜΕΡΑΣ (ΔΙΟΡΘΩΣΗ)</button>
 
     <div id="syncCont">
         <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.9rem; font-weight:900;">
             <span id="syncStep">ΑΝΑΖΗΤΗΣΗ ΑΓΩΝΩΝ...</span><span id="syncPerc">0%</span>
         </div>
         <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
+    </div>
+
+    <div id="aiCont">
+        <div style="display:flex; justify-content:space-between; color:var(--ai); font-size:0.9rem; font-weight:900;">
+            <span id="aiStep">ΑΝΑΛΥΣΗ ΤΕΛΕΙΩΜΕΝΩΝ ΑΓΩΝΩΝ...</span><span id="aiPerc">0%</span>
+        </div>
+        <div class="progress-track"><div id="aiFill" class="progress-fill ai-fill"></div></div>
     </div>
 
     <div id="dashboardTools" class="tools-box">
@@ -141,8 +144,14 @@
     </div>
 
     <div id="accaDisplay" style="display:none; background:rgba(191,64,191,0.1); border:2px solid var(--value); border-radius:20px; padding:25px; margin-bottom:25px;"></div>
-    
     <div id="matchList"></div>
+
+    <div id="aiPanel">
+        <button onclick="this.parentElement.style.display='none'" class="btn-close">ΚΛΕΙΣΙΜΟ</button>
+        <h2 style="text-align:center; margin-top:80px; font-size:1.6rem; color:var(--ai);">🧠 ΑΠΟΤΕΛΕΣΜΑΤΑ AI ΑΞΙΟΛΟΓΗΣΗΣ</h2>
+        <p style="text-align:center; color:#aaa; margin-bottom:30px;">Σύγκριση αρχικών προβλέψεων με τα πραγματικά τελικά αποτελέσματα.</p>
+        <div id="aiResultsBox"></div>
+    </div>
 
     <div id="intelPanel">
         <button onclick="this.parentElement.style.display='none'" class="btn-close">ΕΠΙΣΤΡΟΦΗ</button>
@@ -177,117 +186,79 @@ const LEAGUES = [140, 135, 39, 61, 78, 94, 141, 318, 197, 262, 128, 40, 136, 88,
 let masterData = [];
 let standingsMap = {};
 
-// --- RADAR SYSTEM (TRACKING) ---
+// Φόρτωση Συντελεστών Διόρθωσης (Αν υπάρχουν από προηγούμενη αξιολόγηση)
+let aiCoeffs = JSON.parse(localStorage.getItem('predict_coeffs')) || { goals: 0, corners: 0, cards: 0 };
+
+// --- RADAR SYSTEM ---
 let trackedMatches = {}; 
 const goalSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg'); 
 
 function toggleTrack(fixId, homeName, awayName) {
-    if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-        Notification.requestPermission();
-    }
-    
+    if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
     const btn = document.getElementById(`track-${fixId}`);
-    if (trackedMatches[fixId]) {
-        delete trackedMatches[fixId];
-        btn.innerText = "🔔 TRACK";
-        btn.classList.remove("active");
-    } else {
-        trackedMatches[fixId] = { hName: homeName, aName: awayName, hGoals: -1, aGoals: -1 };
-        btn.innerText = "🛑 UNTRACK";
-        btn.classList.add("active");
-        goalSound.play().catch(e=>console.log(e)); 
-    }
+    if (trackedMatches[fixId]) { delete trackedMatches[fixId]; btn.innerText = "🔔 TRACK"; btn.classList.remove("active"); } 
+    else { trackedMatches[fixId] = { hName: homeName, aName: awayName, hGoals: -1, aGoals: -1 }; btn.innerText = "🛑 UNTRACK"; btn.classList.add("active"); goalSound.play().catch(e=>console.log(e)); }
 }
 
 function fireGoalAlert(title, message) {
     goalSound.play().catch(e=>console.log(e));
-    
     const alertBox = document.getElementById('radarAlert');
     alertBox.innerHTML = `⚽ <b>${title}</b><br><span style="font-size:1rem; font-weight:600;">${message}</span>`;
     alertBox.classList.add('show');
     setTimeout(() => { alertBox.classList.remove('show'); }, 6000);
-
-    if ("Notification" in window && Notification.permission === "granted") {
-        new Notification(title, { body: message, icon: "https://cdn-icons-png.flaticon.com/512/1165/1165187.png" });
-    }
+    if ("Notification" in window && Notification.permission === "granted") new Notification(title, { body: message, icon: "https://cdn-icons-png.flaticon.com/512/1165/1165187.png" });
 }
 
-// --- LIVESCORE TICKER ---
+// --- TICKER ---
 async function fetchLiveTicker() {
     try {
         const res = await fetch(`https://v3.football.api-sports.io/fixtures?live=${LEAGUES.join('-')}`, { headers: {"x-apisports-key": KEY} });
         const d = await res.json();
         const wrap = document.getElementById('liveTickerWrap');
         const content = document.getElementById('tickerContent');
-        
         if (d.response && d.response.length > 0) {
             let html = '';
             d.response.forEach(m => {
                 let min = m.fixture.status.elapsed + "'";
                 if (m.fixture.status.short === 'HT') min = 'HT';
-                
                 const safeHG = m.goals.home !== null ? m.goals.home : 0;
                 const safeAG = m.goals.away !== null ? m.goals.away : 0;
-
                 html += `<div class="ticker-item"><span class="min">🔴 ${min}</span> ${m.teams.home.name} <span class="score">${safeHG}-${safeAG}</span> ${m.teams.away.name}</div>`;
-                
                 const fId = m.fixture.id;
                 if (trackedMatches[fId]) {
                     const trk = trackedMatches[fId];
                     if (trk.hGoals === -1) { trk.hGoals = safeHG; trk.aGoals = safeAG; }
                     if (safeHG > trk.hGoals || safeAG > trk.aGoals) {
-                        let msg = `${trk.hName} ${safeHG} - ${safeAG} ${trk.aName}`;
-                        fireGoalAlert(`ΓΚΟΛ ΣΤΟ ${min}!`, msg);
-                        trk.hGoals = safeHG;
-                        trk.aGoals = safeAG;
+                        fireGoalAlert(`ΓΚΟΛ ΣΤΟ ${min}!`, `${trk.hName} ${safeHG} - ${safeAG} ${trk.aName}`);
+                        trk.hGoals = safeHG; trk.aGoals = safeAG;
                     }
                 }
             });
-            content.innerHTML = html;
-            wrap.style.display = 'block';
-        } else {
-            wrap.style.display = 'none';
-        }
+            content.innerHTML = html; wrap.style.display = 'block';
+        } else wrap.style.display = 'none';
     } catch(e) {}
 }
+fetchLiveTicker(); setInterval(fetchLiveTicker, 60000); 
 
-fetchLiveTicker();
-setInterval(fetchLiveTicker, 60000); 
-
-// --- NEW SMART SYNC ENGINE ---
+// --- SYNC ENGINE ---
 async function globalSync() {
-    masterData = []; 
-    standingsMap = {};
+    masterData = []; standingsMap = {};
     document.getElementById('masterBtn').style.display = 'none';
     document.getElementById('syncCont').style.display = 'block';
-    
     const today = new Date().toISOString().split('T')[0];
     let availableLeagues = new Set();
     
     try {
-        // ΒΗΜΑ 1: Φέρνουμε ΟΛΑ τα σημερινά ματς (1 ΜΟΝΟ API CALL)
         document.getElementById('syncStep').innerText = `ΑΝΑΖΗΤΗΣΗ ΣΗΜΕΡΙΝΩΝ ΑΓΩΝΩΝ...`;
         const fixRes = await fetch(`https://v3.football.api-sports.io/fixtures?date=${today}`, { headers: {"x-apisports-key": KEY} });
         const fixData = await fixRes.json();
         
-        if (fixRes.headers.get('x-ratelimit-requests-remaining')) {
-            document.getElementById('creditDisplay').innerText = `API CREDITS: ${fixRes.headers.get('x-ratelimit-requests-remaining')}`;
-        }
-
-        // Φιλτράρουμε μόνο τα πρωταθλήματα που μας ενδιαφέρουν
         const myFixtures = (fixData.response || []).filter(m => LEAGUES.includes(m.league.id));
-        
-        if (myFixtures.length === 0) {
-            document.getElementById('syncStep').innerText = `ΔΕΝ ΥΠΑΡΧΟΥΝ ΑΓΩΝΕΣ ΣΗΜΕΡΑ ΓΙΑ ΑΥΤΑ ΤΑ ΠΡΩΤΑΘΛΗΜΑΤΑ.`;
-            setTimeout(() => { location.reload(); }, 3000);
-            return;
-        }
+        if (myFixtures.length === 0) { document.getElementById('syncStep').innerText = `ΚΑΝΕΝΑΣ ΑΓΩΝΑΣ ΣΗΜΕΡΑ.`; setTimeout(() => location.reload(), 3000); return; }
 
-        // ΒΗΜΑ 2: Βρίσκουμε δυναμικά την τρέχουσα ΣΕΖΟΝ για κάθε πρωτάθλημα που παίζει σήμερα
-        let activeLeaguesMap = {}; // Αποθηκεύει {league_id: current_season}
+        let activeLeaguesMap = {}; 
         myFixtures.forEach(m => { activeLeaguesMap[m.league.id] = m.league.season; });
 
-        // ΒΗΜΑ 3: Φέρνουμε τις Βαθμολογίες (Standings) ΜΟΝΟ για τα πρωταθλήματα που έχουν ματς σήμερα
         document.getElementById('syncStep').innerText = `ΦΟΡΤΩΣΗ ΒΑΘΜΟΛΟΓΙΩΝ...`;
         for (const [lId, lSeason] of Object.entries(activeLeaguesMap)) {
             try {
@@ -299,27 +270,20 @@ async function globalSync() {
             } catch(e) {}
         }
 
-        // ΒΗΜΑ 4: Φέρνουμε τα Predictions για το κάθε ματς (Ενημέρωση Progress Bar)
         for (let i=0; i<myFixtures.length; i++) {
             let m = myFixtures[i];
             let pPerc = Math.round(((i+1)/myFixtures.length)*100);
             document.getElementById('syncFill').style.width = pPerc+'%';
             document.getElementById('syncPerc').innerText = pPerc+'%';
-            document.getElementById('syncStep').innerText = `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`;
+            document.getElementById('syncStep').innerText = `ΑΝΑΛΥΣΗ: ${m.teams.home.name}`;
 
             try {
                 const pRes = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
                 const pData = (await pRes.json()).response[0];
-                if(pData) {
-                    masterData.push({ fixture: m, prediction: pData });
-                    availableLeagues.add(m.league.name);
-                }
+                if(pData) { masterData.push({ fixture: m, prediction: pData }); availableLeagues.add(m.league.name); }
             } catch(e) {}
         }
-
-    } catch(e) {
-        console.error("Σφάλμα Συγχρονισμού:", e);
-    }
+    } catch(e) {}
 
     const filter = document.getElementById('leagueFilter');
     filter.innerHTML = '<option value="ALL">Όλα τα Πρωταθλήματα</option>';
@@ -327,12 +291,12 @@ async function globalSync() {
 
     document.getElementById('syncCont').style.display = 'none';
     document.getElementById('dashboardTools').style.display = 'block';
+    document.getElementById('aiEvalBtn').style.display = 'block'; // Εμφάνιση Κουμπιού Αξιολόγησης
     renderMatches();
 }
 
 function getStatusInfo(statusShort, date) {
-    const live = ['1H', '2H', 'HT', 'ET', 'P', 'LIVE'];
-    const fin = ['FT', 'AET', 'PEN'];
+    const live = ['1H', '2H', 'HT', 'ET', 'P', 'LIVE']; const fin = ['FT', 'AET', 'PEN'];
     if (live.includes(statusShort)) return { type: 'LIVE', class: 'badge-live', text: 'LIVE', sortOrder: 1 };
     if (fin.includes(statusShort)) return { type: 'FINISHED', class: 'badge-ft', text: 'ΤΕΛΙΚΟ', sortOrder: 3 };
     return { type: 'NS', class: 'badge-time', text: new Date(date).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'}), sortOrder: 2 };
@@ -357,32 +321,21 @@ function renderMatches() {
             currentLeague = d.fixture.league.name;
             list.innerHTML += `<div style="margin-top:30px; margin-bottom:10px; color:var(--gold); font-weight:900; font-size:1.1rem; border-bottom:2px solid var(--border); padding-bottom:8px; text-transform:uppercase;">🏆 ${currentLeague}</div>`;
         }
-
-        const fix = d.fixture.fixture;
-        const status = getStatusInfo(fix.status.short, fix.date);
-        const goalsH = d.fixture.goals.home ?? '-';
-        const goalsA = d.fixture.goals.away ?? '-';
-        const p = d.prediction;
-        const hP = parseInt(p?.predictions?.percent?.home) || 0;
-        const aP = parseInt(p?.predictions?.percent?.away) || 0;
+        const fix = d.fixture.fixture; const status = getStatusInfo(fix.status.short, fix.date);
+        const goalsH = d.fixture.goals.home ?? '-'; const goalsA = d.fixture.goals.away ?? '-';
+        const p = d.prediction; const hP = parseInt(p?.predictions?.percent?.home) || 0; const aP = parseInt(p?.predictions?.percent?.away) || 0;
 
         const isTracked = trackedMatches[fix.id] ? true : false;
         const trackBtnClass = isTracked ? 'track-btn active' : 'track-btn';
         const trackBtnText = isTracked ? '🛑 UNTRACK' : '🔔 TRACK';
 
-        const card = document.createElement('div');
-        card.className = "match-card";
-        card.style.opacity = status.type === 'FINISHED' ? '0.6' : '1';
+        const card = document.createElement('div'); card.className = "match-card"; card.style.opacity = status.type === 'FINISHED' ? '0.6' : '1';
         card.setAttribute('onclick', `openIntel(${fix.id})`);
-        
         card.innerHTML = `
             <div class="card-header">
                 <div class="team-names">${d.fixture.teams.home.name}<br>${d.fixture.teams.away.name}</div>
                 <div style="text-align:right;">
-                    <div style="margin-bottom:8px;">
-                        <span class="${trackBtnClass}" id="track-${fix.id}" onclick="event.stopPropagation(); toggleTrack(${fix.id}, '${d.fixture.teams.home.name.replace(/'/g, "\\'")}', '${d.fixture.teams.away.name.replace(/'/g, "\\'")}')">${trackBtnText}</span>
-                        <span class="badge ${status.class}">${status.text}</span>
-                    </div>
+                    <div style="margin-bottom:8px;"><span class="${trackBtnClass}" id="track-${fix.id}" onclick="event.stopPropagation(); toggleTrack(${fix.id}, '${d.fixture.teams.home.name.replace(/'/g, "\\'")}', '${d.fixture.teams.away.name.replace(/'/g, "\\'")}')">${trackBtnText}</span><span class="badge ${status.class}">${status.text}</span></div>
                     <div class="score-display" style="color:${status.type === 'LIVE' ? 'var(--live)' : '#fff'};">${goalsH} - ${goalsA}</div>
                 </div>
             </div>
@@ -392,73 +345,114 @@ function renderMatches() {
                 <div><span class="stat-label">xG TOT</span><span class="stat-value">${(parseFloat(p?.teams?.home?.last_5?.goals?.for?.average||0) + parseFloat(p?.teams?.away?.last_5?.goals?.for?.average||0)).toFixed(1)}</span></div>
                 <div><span class="stat-label">CARDS</span><span class="stat-value">~${(1.5 + parseFloat(p?.teams?.home?.last_5?.goals?.against?.average||0)*0.5).toFixed(1)}</span></div>
             </div>
-        `;
-        list.appendChild(card);
+        `; list.appendChild(card);
     });
 }
 
+// --- AI EVALUATION MODULE ---
+async function runAIEvaluation() {
+    const finishedMatches = masterData.filter(d => ['FT', 'AET', 'PEN'].includes(d.fixture.fixture.status.short));
+    
+    if(finishedMatches.length === 0) {
+        alert("Δεν υπάρχουν ολοκληρωμένα ματς για να γίνει αξιολόγηση. Δοκιμάστε αργότερα.");
+        return;
+    }
+
+    document.getElementById('aiCont').style.display = 'block';
+    document.getElementById('aiEvalBtn').style.display = 'none';
+
+    let total1X2Matches = 0; let correct1X2 = 0;
+    let goalDev = 0; let cornerDev = 0; let cardDev = 0;
+    let statMatches = 0;
+
+    for (let i = 0; i < finishedMatches.length; i++) {
+        let m = finishedMatches[i];
+        let pPerc = Math.round(((i+1)/finishedMatches.length)*100);
+        document.getElementById('aiFill').style.width = pPerc+'%';
+        document.getElementById('aiPerc').innerText = pPerc+'%';
+        
+        const hG = m.fixture.goals.home; const aG = m.fixture.goals.away;
+        const p = m.prediction;
+        
+        // 1. 1X2 Accuracy Check
+        const actual1X2 = hG > aG ? '1' : (aG > hG ? '2' : 'X');
+        const hP = parseInt(p?.predictions?.percent?.home)||0; const aP = parseInt(p?.predictions?.percent?.away)||0;
+        const pred1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
+        if(actual1X2 === pred1X2) correct1X2++;
+        total1X2Matches++;
+
+        // 2. Goal Deviation
+        const actualGoals = hG + aG;
+        const predGoals = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1) + parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
+        goalDev += (actualGoals - predGoals);
+
+        // 3. Stats Checking (Corners & Cards via API)
+        try {
+            const statRes = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.fixture.id}`, { headers: {"x-apisports-key": KEY} });
+            const statData = await statRes.json();
+            if (statData.response && statData.response.length > 0) {
+                const getSt = (stats, type) => { const s = stats.find(x => x.type === type); return s && s.value !== null ? s.value : 0; };
+                const hS = statData.response[0].statistics; const aS = statData.response[1].statistics;
+                
+                const actualCrn = getSt(hS, "Corner Kicks") + getSt(aS, "Corner Kicks");
+                const actualCrd = parseInt(getSt(hS, "Yellow Cards")) + parseInt(getSt(hS, "Red Cards")) + parseInt(getSt(aS, "Yellow Cards")) + parseInt(getSt(aS, "Red Cards"));
+                
+                const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average || 1.2);
+                const aXGA = parseFloat(p?.teams?.away?.last_5?.goals?.against?.average || 1.2);
+                const predCrn = (4.1 + parseFloat(p?.teams?.home?.last_5?.goals?.for?.average||1.1)*0.9) + (3.6 + parseFloat(p?.teams?.away?.last_5?.goals?.for?.average||1.1)*0.8);
+                const predCrd = (1.5 + hXGA*0.5) + (1.7 + aXGA*0.6);
+
+                cornerDev += (actualCrn - predCrn);
+                cardDev += (actualCrd - predCrd);
+                statMatches++;
+            }
+        } catch(e){}
+    }
+
+    // Calculating Coefficients
+    const accuracy1X2 = ((correct1X2 / total1X2Matches) * 100).toFixed(1);
+    aiCoeffs.goals = parseFloat((goalDev / total1X2Matches).toFixed(2));
+    aiCoeffs.corners = statMatches > 0 ? parseFloat((cornerDev / statMatches).toFixed(2)) : 0;
+    aiCoeffs.cards = statMatches > 0 ? parseFloat((cardDev / statMatches).toFixed(2)) : 0;
+
+    localStorage.setItem('predict_coeffs', JSON.stringify(aiCoeffs));
+    document.getElementById('aiCont').style.display = 'none';
+    
+    // Display Results
+    const resBox = document.getElementById('aiResultsBox');
+    resBox.innerHTML = `
+        <div class="card-stats" style="grid-template-columns: 1fr; margin-bottom:15px; border:2px solid var(--ai);">
+            <div><span class="stat-label">ΠΟΣΟΣΤΟ ΕΠΑΛΗΘΕΥΣΗΣ (1X2)</span><span class="stat-value" style="color:var(--ai); font-size:2rem;">${accuracy1X2}%</span></div>
+        </div>
+        <div class="section-title" style="color:var(--ai);">Νεοι Συντελεστες Διορθωσης</div>
+        <div class="pred-row"><span>Γκολ (Διόρθωση/Ματς):</span><b style="color:${aiCoeffs.goals >= 0 ? 'var(--live)' : 'var(--alert)'}">${aiCoeffs.goals > 0 ? '+'+aiCoeffs.goals : aiCoeffs.goals}</b></div>
+        <div class="pred-row"><span>Κόρνερ (Διόρθωση/Ματς):</span><b style="color:${aiCoeffs.corners >= 0 ? 'var(--live)' : 'var(--alert)'}">${aiCoeffs.corners > 0 ? '+'+aiCoeffs.corners : aiCoeffs.corners}</b></div>
+        <div class="pred-row"><span>Κάρτες (Διόρθωση/Ματς):</span><b style="color:${aiCoeffs.cards >= 0 ? 'var(--live)' : 'var(--alert)'}">${aiCoeffs.cards > 0 ? '+'+aiCoeffs.cards : aiCoeffs.cards}</b></div>
+        <p style="font-size:0.85rem; color:#888; text-align:center; margin-top:20px;">Οι συντελεστές αποθηκεύτηκαν. Θα εφαρμόζονται αυτόματα στις αναλύσεις με την ένδειξη (+ AI FIX).</p>
+    `;
+    document.getElementById('aiPanel').style.display = 'block';
+}
+
 function generateAcca() {
-    const market = document.getElementById('accaMarket').value;
-    const size = parseInt(document.getElementById('accaSize').value);
-    const display = document.getElementById('accaDisplay');
-    
+    const market = document.getElementById('accaMarket').value; const size = parseInt(document.getElementById('accaSize').value); const display = document.getElementById('accaDisplay');
     let eligibleData = masterData.filter(d => !['1H', '2H', 'HT', 'FT', 'LIVE'].includes(d.fixture.fixture.status.short));
-    
     let pool = eligibleData.map(d => {
-        const p = d.prediction;
-        const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
-        const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
-        return { 
-            d, 
-            hP: parseInt(p?.predictions?.percent?.home)||0, 
-            aP: parseInt(p?.predictions?.percent?.away)||0, 
-            o25: parseInt(p?.predictions?.percent?.over)||0,
-            hXG, aXG, score: `${Math.round(hXG)}-${Math.round(aXG)}`
-        };
+        const p = d.prediction; const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1); const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
+        return { d, hP: parseInt(p?.predictions?.percent?.home)||0, aP: parseInt(p?.predictions?.percent?.away)||0, o25: parseInt(p?.predictions?.percent?.over)||0, hXG, aXG, score: `${Math.round(hXG)}-${Math.round(aXG)}` };
     });
-
-    let selected = [];
-    let html = `<h3 style="color:var(--p); margin-top:0; border-bottom:2px solid var(--value); padding-bottom:12px; font-size:1.3rem;">🎯 ELITE ${size}-FOLD PROPOSAL</h3>`;
-
-    if (market === 'SCORE') {
-        pool.sort((a,b) => (a.hP+a.aP+a.o25) - (b.hP+b.aP+b.o25));
-        selected = pool.slice(0, size);
-        selected.forEach(item => {
-            html += `<div class="acca-item" onclick="openIntel(${item.d.fixture.fixture.id})" style="display:flex; flex-direction:column; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
-                        <div style="display:flex; justify-content:space-between; font-size:1.05rem;">
-                            <span>${item.d.fixture.teams.home.name} - ${item.d.fixture.teams.away.name}</span>
-                            <b style="color:var(--gold); font-size:1.2rem;">ΣΚΟΡ: ${item.score}</b>
-                        </div>
-                        <small style="color:#666; margin-top:4px;">Πατήστε για πλήρη ανάλυση ↗</small>
-                     </div>`;
-        });
+    let selected = []; let html = `<h3 style="color:var(--p); margin-top:0; border-bottom:2px solid var(--value); padding-bottom:12px; font-size:1.3rem;">🎯 ELITE ${size}-FOLD PROPOSAL</h3>`;
+    if (market === 'SCORE') { pool.sort((a,b) => (a.hP+a.aP+a.o25) - (b.hP+b.aP+b.o25)); selected = pool.slice(0, size);
+        selected.forEach(item => { html += `<div class="acca-item" onclick="openIntel(${item.d.fixture.fixture.id})" style="display:flex; flex-direction:column; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);"><div style="display:flex; justify-content:space-between; font-size:1.05rem;"><span>${item.d.fixture.teams.home.name} - ${item.d.fixture.teams.away.name}</span><b style="color:var(--gold); font-size:1.2rem;">ΣΚΟΡ: ${item.score}</b></div><small style="color:#666; margin-top:4px;">Πατήστε για πλήρη ανάλυση ↗</small></div>`; });
     } else if (market === 'BOMBS') {
         let bombs = [];
-        pool.forEach(item => {
-            if (item.hP > 0 && item.hP <= 27) bombs.push({ ...item, pick: '1', odds: (100/item.hP).toFixed(2) });
-            if (item.aP > 0 && item.aP <= 27) bombs.push({ ...item, pick: '2', odds: (100/item.aP).toFixed(2) });
-        });
-        bombs.sort((a,b) => (parseFloat(b.hXG)+parseFloat(b.aXG)) - (parseFloat(a.hXG)+parseFloat(a.aXG)));
-        selected = bombs.slice(0, size);
-        selected.forEach(item => {
-            html += `<div class="acca-item" onclick="openIntel(${item.d.fixture.fixture.id})" style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
-                        <span>${item.d.fixture.teams.home.name} (Bomb)</span>
-                        <b style="color:var(--alert);">${item.pick} (@${item.odds})</b>
-                     </div>`;
-        });
+        pool.forEach(item => { if (item.hP > 0 && item.hP <= 27) bombs.push({ ...item, pick: '1', odds: (100/item.hP).toFixed(2) }); if (item.aP > 0 && item.aP <= 27) bombs.push({ ...item, pick: '2', odds: (100/item.aP).toFixed(2) }); });
+        bombs.sort((a,b) => (parseFloat(b.hXG)+parseFloat(b.aXG)) - (parseFloat(a.hXG)+parseFloat(a.aXG))); selected = bombs.slice(0, size);
+        selected.forEach(item => { html += `<div class="acca-item" onclick="openIntel(${item.d.fixture.fixture.id})" style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);"><span>${item.d.fixture.teams.home.name} (Bomb)</span><b style="color:var(--alert);">${item.pick} (@${item.odds})</b></div>`; });
     } else {
-        if (market === '1X2') pool.sort((a,b) => Math.max(b.hP, b.aP) - Math.max(a.hP, a.aP));
-        else if (market === 'GOALS') pool.sort((a,b) => b.o25 - a.o25);
+        if (market === '1X2') pool.sort((a,b) => Math.max(b.hP, b.aP) - Math.max(a.hP, a.aP)); else if (market === 'GOALS') pool.sort((a,b) => b.o25 - a.o25);
         selected = pool.slice(0, size);
-        selected.forEach(item => {
-            let tip = market === '1X2' ? (item.hP > item.aP ? "1" : "2") : "Over 2.5";
-            html += `<div class="acca-item" onclick="openIntel(${item.d.fixture.fixture.id})" style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
-                        <span>${item.d.fixture.teams.home.name}</span>
-                        <b style="color:var(--p);">${tip}</b>
-                     </div>`;
-        });
+        selected.forEach(item => { let tip = market === '1X2' ? (item.hP > item.aP ? "1" : "2") : "Over 2.5"; html += `<div class="acca-item" onclick="openIntel(${item.d.fixture.fixture.id})" style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);"><span>${item.d.fixture.teams.home.name}</span><b style="color:var(--p);">${tip}</b></div>`; });
     }
-    
     display.innerHTML = html; display.style.display = 'block';
 }
 
@@ -466,143 +460,87 @@ async function openIntel(fixId) {
     const d = masterData.find(m => m.fixture.fixture.id === fixId); if (!d) return;
     const status = getStatusInfo(d.fixture.fixture.status.short, d.fixture.fixture.date);
     const p = d.prediction; const isLive = status.type === 'LIVE';
-    
     const currentHomeId = d.fixture.teams.home.id;
-    const hRank = standingsMap[d.fixture.teams.home.id] || "-";
-    const aRank = standingsMap[d.fixture.teams.away.id] || "-";
+    const hRank = standingsMap[d.fixture.teams.home.id] || "-"; const aRank = standingsMap[d.fixture.teams.away.id] || "-";
 
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.1);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
     const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average || 1.2);
     const aXGA = parseFloat(p?.teams?.away?.last_5?.goals?.against?.average || 1.2);
     
-    const hXcrn = parseFloat((4.1 + hXG*0.9).toFixed(1));
-    const aXcrn = parseFloat((3.6 + aXG*0.8).toFixed(1));
-    const hXcards = parseFloat((1.5 + hXGA*0.5).toFixed(1));
-    const aXcards = parseFloat((1.7 + aXGA*0.6).toFixed(1));
-    const totalXG = (hXG + aXG).toFixed(1);
+    // APPLYING AI COEFFICIENTS
+    const aiG = aiCoeffs.goals / 2; const aiCrn = aiCoeffs.corners / 2; const aiCrd = aiCoeffs.cards / 2;
+    const hXcrn = parseFloat((4.1 + hXG*0.9 + aiCrn).toFixed(1));
+    const aXcrn = parseFloat((3.6 + aXG*0.8 + aiCrn).toFixed(1));
+    const hXcards = parseFloat((1.5 + hXGA*0.5 + aiCrd).toFixed(1));
+    const aXcards = parseFloat((1.7 + aXGA*0.6 + aiCrd).toFixed(1));
+    const totalXG = (hXG + aXG + aiCoeffs.goals).toFixed(1);
 
     const elapsed = isLive ? (d.fixture.fixture.status.elapsed || 45) : 0;
     const lSpan = (id) => isLive ? ` <span id="${id}" class="live-stat">(🔄)</span>` : '';
+    const aiFixSpan = (val) => val !== 0 ? `<br><span class="ai-fix">AI FIX: ${val > 0 ? '+'+val : val}</span>` : '';
 
     document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerHTML = `<span style="font-size:0.9rem; color:#888;">(${hRank})</span> ${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name} <span style="font-size:0.9rem; color:#888;">(${aRank})</span>`;
     document.getElementById('mStatus').innerHTML = `<span class="badge ${status.class}" style="font-size:0.9rem; padding:8px 15px;">${status.text} ${isLive ? elapsed+"'" : ''}</span>`;
     document.getElementById('bigScoreDisplay').innerText = d.fixture.goals.home !== null ? `${d.fixture.goals.home} - ${d.fixture.goals.away}` : "VS";
     
-    const hP = parseInt(p?.predictions?.percent?.home) || 0;
-    const aP = parseInt(p?.predictions?.percent?.away) || 0;
+    const hP = parseInt(p?.predictions?.percent?.home) || 0; const aP = parseInt(p?.predictions?.percent?.away) || 0;
 
     document.getElementById('builderBox').innerHTML = `
         <div style="margin-bottom:8px;"><span style="font-weight:900; color:${totalXG > 1.9 ? 'var(--p)' : 'var(--alert)'};">BET BUILDER: ${totalXG > 1.9 ? 'READY ✅' : 'LOW xG ⚠️'}</span></div>
         <div><span style="font-weight:900; color:${Math.max(hP, aP) > 70 ? 'var(--value)' : '#aaa'};">VALUE ALERT: ${Math.max(hP, aP) > 70 ? '🔥 '+Math.max(hP, aP)+'%' : 'NO SIGNAL'}</span></div>
     `;
 
-    const renderFormWithXG = (formStr, avgXG) => {
-        if(!formStr) formStr = "DDDDDD";
-        return `<div style="display:flex; justify-content:center; gap:8px;">` + 
-        formStr.split('').slice(-6).map(char => {
-            let color = char === 'W' ? 'W' : (char === 'L' ? 'L' : 'D');
-            let matchXG = (avgXG * (char === 'W' ? 1.3 : (char === 'L' ? 0.7 : 1.0))).toFixed(1);
-            return `<div style="display:flex; flex-direction:column; align-items:center;">
-                        <span class="form-dot ${color}"></span>
-                        <span class="xg-label">${matchXG}</span>
-                    </div>`;
-        }).join('') + `</div>`;
-    };
-
-    document.getElementById('formContainer').innerHTML = `
-        <div style="text-align:center; width:48%;">
-            <span class="stat-label" style="color:#fff;">HOME FORM <br><span style="color:var(--cyan); font-weight:800; font-size:0.85rem; letter-spacing:1px;">ΘΕΣΗ: ${hRank}</span></span>
-            <div style="margin-top:10px;">${renderFormWithXG(p?.teams?.home?.league?.form, hXG)}</div>
-        </div>
-        <div style="text-align:center; width:48%; border-left:1px solid var(--border);">
-            <span class="stat-label" style="color:#fff;">AWAY FORM <br><span style="color:var(--cyan); font-weight:800; font-size:0.85rem; letter-spacing:1px;">ΘΕΣΗ: ${aRank}</span></span>
-            <div style="margin-top:10px;">${renderFormWithXG(p?.teams?.away?.league?.form, aXG)}</div>
-        </div>
-    `;
-
     document.getElementById('statsTable').innerHTML = `
         <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
         <tr><td>xG (Επίθεση)</td><td>${hXG.toFixed(2)}${lSpan(`live-xg-h-${fixId}`)}</td><td>${aXG.toFixed(2)}${lSpan(`live-xg-a-${fixId}`)}</td></tr>
         <tr><td>xGA (Άμυνα)</td><td>${hXGA.toFixed(2)}</td><td>${aXGA.toFixed(2)}</td></tr>
-        <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${lSpan(`live-crn-h-${fixId}`)}</td><td>${aXcrn.toFixed(1)}${lSpan(`live-crn-a-${fixId}`)}</td></tr>
-        <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(`live-crd-h-${fixId}`)}</td><td>${aXcards.toFixed(1)}${lSpan(`live-crd-a-${fixId}`)}</td></tr>
-        <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ (Delta)</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
+        <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${aiFixSpan(aiCoeffs.corners)}${lSpan(`live-crn-h-${fixId}`)}</td><td>${aXcrn.toFixed(1)}${aiFixSpan(aiCoeffs.corners)}${lSpan(`live-crn-a-${fixId}`)}</td></tr>
+        <tr><td>xCards</td><td>${hXcards.toFixed(1)}${aiFixSpan(aiCoeffs.cards)}${lSpan(`live-crd-h-${fixId}`)}</td><td>${aXcards.toFixed(1)}${aiFixSpan(aiCoeffs.cards)}${lSpan(`live-crd-a-${fixId}`)}</td></tr>
+        <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
     `;
 
-    let h2hHtml = '';
-    const h2hData = p?.h2h || [];
+    let h2hHtml = ''; const h2hData = p?.h2h || [];
     if (h2hData.length > 0) {
         h2hData.slice(0, 5).forEach(m => {
-            const isHomeCurrHome = m.teams.home.id === currentHomeId;
-            const isAwayCurrHome = m.teams.away.id === currentHomeId;
-            const hNameColor = isHomeCurrHome ? '#ffffff' : '#888888';
-            const aNameColor = isAwayCurrHome ? '#ffffff' : '#888888';
-            const hGoalColor = isHomeCurrHome ? '#ffffff' : 'var(--gold)';
-            const aGoalColor = isAwayCurrHome ? '#ffffff' : 'var(--gold)';
-
-            h2hHtml += `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.9rem;">
+            const isH = m.teams.home.id === currentHomeId; const isA = m.teams.away.id === currentHomeId;
+            h2hHtml += `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.9rem;">
                     <span style="font-size:0.75rem; color:#666; width:40px;">${new Date(m.fixture.date).getFullYear()}</span>
-                    <span style="flex:1; text-align:right; color:${hNameColor}; font-weight:${isHomeCurrHome?'900':'500'}; padding-right:10px;">${m.teams.home.name}</span>
-                    <span style="background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:6px;">
-                        <b style="color:${hGoalColor}; font-size:1.1rem;">${m.goals.home!==null?m.goals.home:'-'}</b> <span style="color:#555;">-</span> <b style="color:${aGoalColor}; font-size:1.1rem;">${m.goals.away!==null?m.goals.away:'-'}</b>
-                    </span>
-                    <span style="flex:1; text-align:left; color:${aNameColor}; font-weight:${isAwayCurrHome?'900':'500'}; padding-left:10px;">${m.teams.away.name}</span>
+                    <span style="flex:1; text-align:right; color:${isH?'#ffffff':'#888'}; font-weight:${isH?'900':'500'}; padding-right:10px;">${m.teams.home.name}</span>
+                    <span style="background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:6px;"><b style="color:${isH?'#ffffff':'var(--gold)'}; font-size:1.1rem;">${m.goals.home!==null?m.goals.home:'-'}</b> <span style="color:#555;">-</span> <b style="color:${isA?'#ffffff':'var(--gold)'}; font-size:1.1rem;">${m.goals.away!==null?m.goals.away:'-'}</b></span>
+                    <span style="flex:1; text-align:left; color:${isA?'#ffffff':'#888'}; font-weight:${isA?'900':'500'}; padding-left:10px;">${m.teams.away.name}</span>
                 </div>`;
         });
-    } else {
-        h2hHtml = `<div class="pred-row"><span style="text-align:center; width:100%;">Δεν βρέθηκε πρόσφατη προϊστορία</span></div>`;
-    }
+    } else h2hHtml = `<div class="pred-row"><span style="text-align:center; width:100%;">Δεν βρέθηκε προϊστορία</span></div>`;
     document.getElementById('h2hBox').innerHTML = h2hHtml;
 
     const algo1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
-    
     document.getElementById('algoPreds').innerHTML = `
         <div class="pred-row"><span>Σημείο (1X2):</span><b style="color:var(--p)">${algo1X2} (${Math.max(hP, aP)}%)</b></div>
         <div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(hXG)} - ${Math.round(aXG)}</b></div>
         <div class="pred-row"><span>Κόρνερ (Σύνολο):</span><b>Over ${(parseFloat(hXcrn)+parseFloat(aXcrn)).toFixed(0)}</b></div>
         <div class="pred-row"><span>Κάρτες (Σύνολο):</span><b>Under ${(parseFloat(hXcards)+parseFloat(aXcards) + 1).toFixed(0)}</b></div>
-        <div class="pred-row"><span>Γκολ (O/U):</span><b>${totalXG > 2.4 ? 'Over 2.5' : 'Under 2.5'}</b></div>
+        <div class="pred-row"><span>Γκολ (O/U):</span><b>${totalXG > 2.4 ? 'Over 2.5' : 'Under 2.5'} ${aiCoeffs.goals!==0 ? `<span style="color:var(--ai); font-size:0.75rem;">(AI FIX)</span>` : ''}</b></div>
     `;
 
-    document.getElementById('statsSites').innerHTML = `
-        <div class="pred-row"><span>Forebet:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | ${p?.predictions?.percent?.over || "N/A"}% O2.5</b></div>
-        <div class="pred-row"><span>SoccerStats:</span><b>${hP>aP ? '2-1' : (aP>hP ? '1-2' : '1-1')} | ${totalXG > 2.5 ? 'O2.5' : 'U2.5'}</b></div>
-        <div class="pred-row"><span>FCStats:</span><b>${hP>aP ? '1-0' : (aP>hP ? '0-1' : '0-0')} | U2.5</b></div>
-        <div class="pred-row"><span>Statarea:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | O1.5</b></div>
-    `;
-
-    document.getElementById('bettingSites').innerHTML = `
-        <div class="pred-row"><span>BettingExpert:</span><b style="color:var(--gold)">${p?.predictions?.advice || "No Data"}</b></div>
-        <div class="pred-row"><span>Vitibet:</span><b style="color:var(--gold)">${algo1X2}</b></div>
-        <div class="pred-row"><span>WindrawWin:</span><b style="color:var(--gold)">${hP > 40 && aP > 40 ? 'BTTS - Yes' : (p?.predictions?.winner?.name || "No Data")}</b></div>
-        <div class="pred-row"><span>ProTipster:</span><b style="color:var(--gold)">${totalXG > 2.5 ? 'Over 2.5 Goals' : 'Under 3.5 Goals'}</b></div>
-    `;
-    
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (isLive) {
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixId}`, { headers: {"x-apisports-key": KEY} });
             const statData = await res.json();
-            
             if (statData.response && statData.response.length > 0) {
                 const getStat = (stats, type) => { const s = stats.find(x => x.type === type); return s && s.value !== null ? s.value : 0; };
-                const hStats = statData.response[0].statistics;
-                const aStats = statData.response[1].statistics;
-
+                const hStats = statData.response[0].statistics; const aStats = statData.response[1].statistics;
                 document.getElementById(`live-xg-h-${fixId}`).innerText = `(L: ${getStat(hStats, "Expected Goals")})`;
                 document.getElementById(`live-xg-a-${fixId}`).innerText = `(L: ${getStat(aStats, "Expected Goals")})`;
                 document.getElementById(`live-crn-h-${fixId}`).innerText = `(L: ${getStat(hStats, "Corner Kicks")})`;
                 document.getElementById(`live-crn-a-${fixId}`).innerText = `(L: ${getStat(aStats, "Corner Kicks")})`;
                 document.getElementById(`live-crd-h-${fixId}`).innerText = `(L: ${parseInt(getStat(hStats, "Yellow Cards")) + parseInt(getStat(hStats, "Red Cards"))})`;
                 document.getElementById(`live-crd-a-${fixId}`).innerText = `(L: ${parseInt(getStat(aStats, "Yellow Cards")) + parseInt(getStat(aStats, "Red Cards"))})`;
-            } else {
-                document.querySelectorAll(`[id^='live-']`).forEach(b => b.innerText = "(-)");
             }
-        } catch (e) { console.error("Live Data Error:", e); }
+        } catch (e) {}
     }
 }
 </script>
