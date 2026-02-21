@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v262 - Sovereign Bombs</title>
+    <title>Predictor Pro v263 - Sovereign Context</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -83,8 +83,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v262</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • HIGH YIELD BOMBS</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v263</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • ULTIMATE CONTEXT</small>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
@@ -123,7 +123,7 @@
 
     <div id="intelPanel">
         <button onclick="this.parentElement.style.display='none'" class="btn-close">ΕΠΙΣΤΡΟΦΗ</button>
-        <h2 id="mTitle" style="text-align:center; margin-top:90px; font-size:1.6rem; color:var(--gold); line-height:1.2;"></h2>
+        <h2 id="mTitle" style="text-align:center; margin-top:90px; font-size:1.4rem; color:var(--gold); line-height:1.3;"></h2>
         <div id="bigScoreDisplay" style="font-size:5rem; font-weight:900; text-align:center; margin:10px 0; color:#fff;"></div>
         <div id="mStatus" style="text-align:center; margin-bottom:25px;"></div>
         
@@ -132,6 +132,9 @@
         <div id="formContainer" style="display:flex; justify-content: space-around; padding:20px 10px; margin:20px 0; background:rgba(0,0,0,0.3); border-radius:15px; border:1px solid var(--border);"></div>
 
         <table class="clean-table" id="statsTable"></table>
+
+        <div class="section-title">⚔️ Προϊστορια (H2H - Τελ. 5)</div>
+        <div id="h2hBox"></div>
 
         <div class="section-title">🤖 Προβλεψεις Αλγοριθμου (Sovereign)</div>
         <div id="algoPreds"></div>
@@ -286,17 +289,14 @@ function generateAcca() {
 
     if (market === 'BOMBS') {
         let bombs = [];
-        // Ψάχνουμε σημεία με πιθανότητα <= 27% (δηλαδή απόδοση > 3.70)
         pool.forEach(item => {
             if (item.hP > 0 && item.hP <= 27) bombs.push({ ...item, pick: '1', prob: item.hP, odds: (100/item.hP).toFixed(2), metric: item.hXG });
             if (item.aP > 0 && item.aP <= 27) bombs.push({ ...item, pick: '2', prob: item.aP, odds: (100/item.aP).toFixed(2), metric: item.aXG });
         });
-        
-        // Ταξινόμηση βάσει επιθετικής ικανότητας (xG) για να βρούμε τα πιο επικίνδυνα αουτσάιντερ
         bombs.sort((a,b) => b.metric - a.metric);
         
         if (bombs.length < size) {
-            display.innerHTML = `<div style="color:var(--alert); font-weight:900; text-align:center; font-size:1.1rem;">Δεν βρέθηκαν αρκετά αουτσάιντερ (>3.60) σήμερα. Βρέθηκαν μόνο ${bombs.length}.</div>`;
+            display.innerHTML = `<div style="color:var(--alert); font-weight:900; text-align:center; font-size:1.1rem;">Δεν βρέθηκαν αρκετά αουτσάιντερ (>3.60) σήμερα.</div>`;
             display.style.display = 'block';
             return;
         }
@@ -316,7 +316,7 @@ function generateAcca() {
         });
     } else {
         if (pool.length < size) {
-            display.innerHTML = `<div style="color:var(--alert); font-weight:900; text-align:center; font-size:1.1rem;">Δεν υπάρχουν αρκετοί διαθέσιμοι (μη-ξεκινημένοι) αγώνες για ${size}-άδα.</div>`;
+            display.innerHTML = `<div style="color:var(--alert); font-weight:900; text-align:center; font-size:1.1rem;">Δεν υπάρχουν αρκετοί διαθέσιμοι αγώνες.</div>`;
             display.style.display = 'block';
             return;
         }
@@ -364,11 +364,16 @@ async function openIntel(fixId) {
     const aXcards = parseFloat((1.7 + aXGA*0.6).toFixed(1));
     const totalXG = (hXG + aXG).toFixed(1);
 
+    // Εξαγωγή Θέσης Βαθμολογίας (League Position)
+    const hRank = p?.teams?.home?.league?.position || "-";
+    const aRank = p?.teams?.away?.league?.position || "-";
+
     const elapsed = isLive ? (d.fixture.fixture.status.elapsed || 45) : 0;
     const lSpan = (id) => isLive ? ` <span id="${id}" class="live-stat">(🔄)</span>` : '';
 
     document.getElementById('intelPanel').style.display = 'block';
-    document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name}`;
+    // Προσθήκη Βαθμολογίας στον κεντρικό τίτλο
+    document.getElementById('mTitle').innerHTML = `<span style="font-size:0.9rem; color:#aaa;">(${hRank})</span> ${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name} <span style="font-size:0.9rem; color:#aaa;">(${aRank})</span>`;
     document.getElementById('mStatus').innerHTML = `<span class="badge ${status.class}" style="font-size:0.9rem; padding:8px 15px;">${status.text} ${isLive ? elapsed+"'" : ''}</span>`;
     document.getElementById('bigScoreDisplay').innerText = d.fixture.goals.home !== null ? `${d.fixture.goals.home} - ${d.fixture.goals.away}` : "VS";
     
@@ -395,11 +400,11 @@ async function openIntel(fixId) {
 
     document.getElementById('formContainer').innerHTML = `
         <div style="text-align:center; width:48%;">
-            <span class="stat-label" style="color:#fff;">HOME FORM & xG</span>
+            <span class="stat-label" style="color:#fff;">HOME FORM & xG <br><span style="color:var(--cyan); font-weight:800; font-size:0.8rem;">ΘΕΣΗ: ${hRank}</span></span>
             <div style="margin-top:10px;">${renderFormWithXG(p?.teams?.home?.league?.form, hXG)}</div>
         </div>
         <div style="text-align:center; width:48%; border-left:1px solid var(--border);">
-            <span class="stat-label" style="color:#fff;">AWAY FORM & xG</span>
+            <span class="stat-label" style="color:#fff;">AWAY FORM & xG <br><span style="color:var(--cyan); font-weight:800; font-size:0.8rem;">ΘΕΣΗ: ${aRank}</span></span>
             <div style="margin-top:10px;">${renderFormWithXG(p?.teams?.away?.league?.form, aXG)}</div>
         </div>
     `;
@@ -411,6 +416,23 @@ async function openIntel(fixId) {
         <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${lSpan(`live-crn-h-${fixId}`)}</td><td>${aXcrn.toFixed(1)}${lSpan(`live-crn-a-${fixId}`)}</td></tr>
         <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(`live-crd-h-${fixId}`)}</td><td>${aXcards.toFixed(1)}${lSpan(`live-crd-a-${fixId}`)}</td></tr>
     `;
+
+    // Απόδοση H2H (Προϊστορία)
+    let h2hHtml = '';
+    const h2hData = p?.h2h || [];
+    if (h2hData.length > 0) {
+        h2hData.slice(0, 5).forEach(m => {
+            const hN = m.teams.home.name;
+            const aN = m.teams.away.name;
+            const hG = m.goals.home !== null ? m.goals.home : '-';
+            const aG = m.goals.away !== null ? m.goals.away : '-';
+            const yr = new Date(m.fixture.date).getFullYear();
+            h2hHtml += `<div class="pred-row"><span>${yr} | ${hN} - ${aN}</span><b style="color:var(--gold)">${hG} - ${aG}</b></div>`;
+        });
+    } else {
+        h2hHtml = `<div class="pred-row"><span style="text-align:center; width:100%;">Δεν βρέθηκε πρόσφατη προϊστορία</span></div>`;
+    }
+    document.getElementById('h2hBox').innerHTML = h2hHtml;
 
     const algo1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
     
