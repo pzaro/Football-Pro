@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v269.1 - Bulletproof Radar</title>
+    <title>Predictor Pro v269.2 - Ultimate Roster</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -101,8 +101,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 15px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v269.1</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • BULLETPROOF RADAR</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v269.2</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • ULTIMATE ROSTER</small>
     </div>
 
     <div class="ticker-wrap" id="liveTickerWrap">
@@ -172,7 +172,9 @@
 
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [140, 135, 39, 61, 78, 94, 141, 318, 319, 320, 197, 262, 128, 40, 136];
+// ΝΕΑ ΛΙΣΤΑ ΠΡΩΤΑΘΛΗΜΑΤΩΝ (Προστέθηκαν: Ολλανδία[88], Τουρκία 1[203], Τουρκία 2[204] - Αφαιρέθηκαν Κύπελλα Κύπρου)
+const LEAGUES = [140, 135, 39, 61, 78, 94, 141, 318, 197, 262, 128, 40, 136, 88, 203, 204];
+
 let masterData = [];
 let standingsMap = {};
 
@@ -211,7 +213,7 @@ function fireGoalAlert(title, message) {
     }
 }
 
-// --- LIVESCORE TICKER & RADAR ENGINE (BULLETPROOF FIX) ---
+// --- LIVESCORE TICKER & RADAR ENGINE ---
 async function fetchLiveTicker() {
     try {
         const res = await fetch(`https://v3.football.api-sports.io/fixtures?live=${LEAGUES.join('-')}`, { headers: {"x-apisports-key": KEY} });
@@ -225,7 +227,6 @@ async function fetchLiveTicker() {
                 let min = m.fixture.status.elapsed + "'";
                 if (m.fixture.status.short === 'HT') min = 'HT';
                 
-                // Διασφάλιση ότι τα γκολ είναι 0 αν το API στείλει null στο ξεκίνημα
                 const safeHG = m.goals.home !== null ? m.goals.home : 0;
                 const safeAG = m.goals.away !== null ? m.goals.away : 0;
 
@@ -256,6 +257,7 @@ async function fetchLiveTicker() {
 fetchLiveTicker();
 setInterval(fetchLiveTicker, 60000); 
 
+// --- GLOBAL SYNC ENGINE ---
 async function globalSync() {
     masterData = []; standingsMap = {};
     document.getElementById('masterBtn').style.display = 'none';
