@@ -3,85 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v244 - Sovereign Omega (Full Spec)</title>
+    <title>Predictor Pro v245 - Sovereign Omega</title>
     <style>
-        :root { --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
+        :root { 
+            --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
+            --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; 
+            --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; 
+            --glass: rgba(255, 255, 255, 0.05); 
+        }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--txt); padding: 0; margin: 0; }
-        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px 15px; }
-        
-        /* Progress & Acca */
-        #syncCont { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
-        .progress-track { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.4s; }
-        .acca-container { background: linear-gradient(145deg, #1e252e, #161b22); padding: 15px; border-radius: 15px; border: 2px solid var(--value); margin-bottom: 20px; }
-        .acca-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #333; font-size: 0.85rem; }
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background: var(--bg); color: var(--txt); padding: 0; margin: 0; 
+            font-size: 17px; line-height: 1.6;
+        }
+
+        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 25px 15px; }
+
+        /* UI Elements */
+        .btn-sync { 
+            width: 100%; padding: 22px; background: linear-gradient(135deg, var(--p), #00cc6a); 
+            color: #000; border: none; border-radius: 20px; font-weight: 900; 
+            font-size: 1.2rem; cursor: pointer; margin-bottom: 25px; 
+            box-shadow: 0 10px 25px rgba(0,255,136,0.3);
+        }
+
+        .sort-controls {
+            display: flex; gap: 10px; margin-bottom: 20px; background: var(--card);
+            padding: 10px; border-radius: 15px; border: 1px solid var(--border);
+        }
+        .sort-btn {
+            flex: 1; padding: 12px; border: none; border-radius: 10px;
+            background: var(--glass); color: #fff; font-weight: 700; cursor: pointer;
+            transition: 0.3s; font-size: 0.9rem;
+        }
+        .sort-btn.active { background: var(--cyan); color: #000; }
+
+        /* Progress Bar */
+        #syncCont { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
+        .progress-track { background: #222; height: 12px; border-radius: 6px; overflow: hidden; margin: 15px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--cyan)); width: 0%; transition: 0.5s; }
 
         /* Match Cards */
-        .league-header { background: var(--glass); padding: 8px 15px; border-radius: 8px; margin-top: 25px; border-left: 4px solid var(--gold); font-weight: 900; font-size: 0.75rem; color: var(--gold); text-transform: uppercase; }
-        .match-card { background: var(--card); border-radius: 18px; margin-top: 12px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; overflow: hidden; }
-        .card-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .card-main-stats { padding: 12px 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: rgba(0,0,0,0.1); text-align: center; border-bottom: 1px solid var(--border); }
-        .stat-label { display: block; font-size: 0.6rem; color: #888; text-transform: uppercase; }
-        .stat-value { font-size: 0.85rem; font-weight: 800; }
+        .league-header { 
+            background: linear-gradient(90deg, var(--glass), transparent); 
+            padding: 12px 18px; border-radius: 12px; margin-top: 35px; 
+            border-left: 5px solid var(--gold); font-weight: 900; 
+            font-size: 1rem; color: var(--gold); letter-spacing: 1px;
+        }
+
+        .match-card { 
+            background: var(--card); border-radius: 22px; margin-top: 15px; 
+            border: 1px solid var(--border); border-left: 8px solid var(--border); 
+            cursor: pointer; transition: 0.25s; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .match-card:hover { transform: scale(1.01); border-color: var(--p); }
+
+        .card-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; }
+        .time-badge { font-size: 0.85rem; color: var(--cyan); font-weight: 800; background: rgba(0,212,255,0.1); padding: 4px 10px; border-radius: 8px; }
+        .league-tag { font-size: 0.7rem; color: #888; display: block; margin-bottom: 5px; text-transform: uppercase; font-weight: 900; }
+        
+        .card-teams { font-weight: 900; font-size: 1.15rem; line-height: 1.2; }
+        .card-score { font-weight: 900; font-size: 1.4rem; color: var(--p); margin-left: 15px; }
+        
+        .card-main-stats { 
+            padding: 15px; display: grid; grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; background: rgba(0,0,0,0.15); text-align: center; 
+            border-top: 1px solid var(--border);
+        }
+        .stat-group { display: flex; flex-direction: column; }
+        .stat-label { font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
+        .stat-value { font-size: 1rem; font-weight: 900; color: #fff; }
 
         /* Intel Panel */
-        #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; }
-        .big-score { font-size: 3.5rem; font-weight: 900; text-align: center; margin: 20px 0; letter-spacing: -2px; }
-        .matrix-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--card); border-radius: 12px; overflow: hidden; }
-        .matrix-table th { background: var(--glass); color: var(--gold); padding: 12px; text-align: left; font-size: 0.75rem; }
-        .matrix-table td { padding: 12px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 0.9rem; }
+        #intelPanel { 
+            display: none; background: var(--bg); position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; z-index: 10000; overflow-y: auto; 
+            padding: 30px 20px; 
+        }
+        .btn-close { background: var(--alert); color: #fff; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 900; float: right; cursor: pointer; font-size: 1rem; }
 
-        /* Experts Grid */
-        .expert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .expert-box { background: #1c2128; padding: 12px; border-radius: 10px; border-left: 3px solid var(--cyan); }
-        .site-name { font-size: 0.65rem; color: var(--cyan); font-weight: 900; text-transform: uppercase; }
-        .site-pred { font-size: 0.85rem; font-weight: 800; margin-top: 4px; }
-
-        /* Form Dots */
-        .form-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; margin: 0 2px; }
+        .form-dot { width: 18px; height: 18px; border-radius: 50%; display: inline-block; margin: 0 3px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
 
-        .btn-sync { width: 100%; padding: 18px; background: var(--p); color: #000; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; margin-bottom: 20px; }
-        .btn-close { background: var(--alert); color: #fff; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 900; float: right; cursor: pointer; }
-        @media (min-width: 600px) { .card-main-stats { grid-template-columns: repeat(6, 1fr); } }
+        @media (min-width: 768px) {
+            .card-main-stats { grid-template-columns: repeat(6, 1fr); }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div style="text-align:center; padding-bottom: 20px;">
-        <h1 style="color:var(--p); margin:0; font-size:1.6rem;">PREDICTOR PRO v244</h1>
-        <small style="color:var(--gold)">SOVEREIGN OMEGA (FULL SPEC)</small>
+    <div style="text-align:center; padding-bottom: 25px;">
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR PRO <span style="color:#fff">v245</span></h1>
+        <div style="color:var(--gold); font-weight:900; font-size:0.9rem;">SOVEREIGN OMEGA • ELITE ANALYTICS</div>
     </div>
 
     <div id="syncCont">
-        <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.8rem; font-weight:800;">
+        <div style="display:flex; justify-content:space-between; color:var(--p); font-weight:900;">
             <span id="syncStep">INITIALIZING...</span><span id="syncPerc">0%</span>
         </div>
         <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
     </div>
 
-    <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 START MASTER SYNC & ANALYTICS</button>
+    <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΣΥΓΧΡΟΝΙΣΜΟΣ & ΑΝΑΛΥΣΗ ΑΓΩΝΩΝ</button>
 
-    <div id="accaSection" style="display:none;">
-        <div class="acca-container" id="accaResult"></div>
-    </div>
-
-    <div id="intelPanel">
-        <button onclick="this.parentElement.style.display='none'" class="btn-close">BACK</button>
-        <h2 id="mTitle" style="text-align:center; margin-top:60px; font-size:1.1rem; color:var(--gold);"></h2>
-        <div id="bigScoreDisplay" class="big-score"></div>
-        
-        <div id="formContainer" style="display:flex; justify-content: space-around; background:rgba(0,0,0,0.2); padding:15px; border-radius:15px; margin:15px 0;"></div>
-
-        <table class="matrix-table" id="matrixTable"></table>
-
-        <div style="color:var(--cyan); font-size:0.75rem; font-weight:900; text-transform:uppercase; margin-top:20px; border-left:3px solid var(--cyan); padding-left:10px;">Expert Computational Models</div>
-        <div class="expert-grid" id="expertGrid"></div>
+    <div id="controls" class="sort-controls" style="display:none;">
+        <button id="btnLeague" class="sort-btn active" onclick="changeSort('league')">ΑΝΑ ΠΡΩΤΑΘΛΗΜΑ</button>
+        <button id="btnTime" class="sort-btn" onclick="changeSort('time')">ΑΝΑ ΩΡΑ ΕΝΑΡΞΗΣ</button>
     </div>
 
     <div id="matchList"></div>
+
+    <div id="intelPanel">
+        <button onclick="this.parentElement.style.display='none'" class="btn-close">ΠΙΣΩ</button>
+        <h2 id="mTitle" style="text-align:center; margin-top:70px; font-size:1.5rem; color:var(--gold);"></h2>
+        <div id="bigScoreDisplay" style="font-size:4.5rem; font-weight:900; text-align:center; margin:20px 0;"></div>
+        <div id="formContainer" style="display:flex; justify-content: space-around; background:var(--glass); padding:20px; border-radius:20px; margin:25px 0;"></div>
+        <div id="expertGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:15px;"></div>
+    </div>
 </div>
 
 <script>
@@ -93,28 +135,29 @@ const LEAGUE_MAP = {
 };
 const ALL_LEAGUES = [...LEAGUE_MAP.ELITE, ...LEAGUE_MAP.SECONDARY, ...LEAGUE_MAP.OTHER];
 let masterData = [];
+let currentSort = 'league';
+
+function formatGreekTime(utcString) {
+    const date = new Date(utcString);
+    return date.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
+}
 
 function getCalculations(p) {
-    const hP = parseInt(p?.predictions?.percent?.home?.replace('%','')) || 0;
-    const dP = parseInt(p?.predictions?.percent?.draw?.replace('%','')) || 0;
-    const aP = parseInt(p?.predictions?.percent?.away?.replace('%','')) || 0;
+    const hP = parseInt(p?.predictions?.percent?.home) || 0;
+    const dP = parseInt(p?.predictions?.percent?.draw) || 0;
+    const aP = parseInt(p?.predictions?.percent?.away) || 0;
     const hXG = parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 1.3);
     const aXG = parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 1.1);
-    const hXGA = parseFloat(p?.teams?.home?.last_5?.goals?.against?.average || 1.1);
-    const aXGA = parseFloat(p?.teams?.away?.last_5?.goals?.against?.average || 1.3);
     
-    // Safety Combo Logic (DC + Over 1.5)
-    const dcProb = hP > aP ? (hP + dP) : (aP + dP);
-    const o15Prob = parseInt(p?.predictions?.percent?.over) + 15; // Adjusted Over 1.5
-    const comboProb = Math.round((dcProb * 0.7) + (o15Prob * 0.3));
+    // Safety Combo Logic
+    const combo = Math.round(((hP > aP ? hP + dP : aP + dP) * 0.7) + (parseInt(p?.predictions?.percent?.over) * 0.3));
 
     return { 
-        hP, dP, aP, hXG, aXG, hXGA, aXGA, dcProb, o15Prob, comboProb,
+        hP, dP, aP, hXG, aXG, combo,
         totalXG: (hXG + aXG).toFixed(2),
         totalXC: (4.0 + (hXG * 0.9) + 3.5 + (aXG * 0.8)).toFixed(1),
         hForm: p?.teams?.home?.league?.form || "DDDDDD",
-        aForm: p?.teams?.away?.league?.form || "DDDDDD",
-        o25: p?.predictions?.percent?.over || "50%"
+        aForm: p?.teams?.away?.league?.form || "DDDDDD"
     };
 }
 
@@ -123,11 +166,13 @@ async function globalSync() {
     document.getElementById('masterBtn').style.display = 'none';
     document.getElementById('syncCont').style.display = 'block';
     const today = new Date().toISOString().split('T')[0];
+
     for(let i=0; i<ALL_LEAGUES.length; i++){
         const perc = Math.round(((i+1)/ALL_LEAGUES.length)*100);
         document.getElementById('syncFill').style.width = perc+'%';
         document.getElementById('syncPerc').innerText = perc+'%';
-        document.getElementById('syncStep').innerText = `ANALYZING LEAGUE ID: ${ALL_LEAGUES[i]}...`;
+        document.getElementById('syncStep').innerText = `ΑΝΑΛΥΣΗ LEAGUE ID: ${ALL_LEAGUES[i]}`;
+        
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${ALL_LEAGUES[i]}&date=${today}&season=2025`, {headers:{"x-rapidapi-key":KEY}});
             const d = await res.json();
@@ -141,86 +186,90 @@ async function globalSync() {
         } catch(e){}
     }
     document.getElementById('syncCont').style.display = 'none';
-    generateTripleLockAcca();
+    document.getElementById('controls').style.display = 'flex';
     renderMatches();
 }
 
-function generateTripleLockAcca() {
-    let pool = masterData.filter(d => {
-        const c = getCalculations(d.prediction);
-        return d.fixture.fixture.status.short === "NS" && Math.max(c.hP, c.aP) >= 75 && c.hXGA < 1.1;
-    }).slice(0, 3);
+function changeSort(type) {
+    currentSort = type;
+    document.getElementById('btnLeague').classList.toggle('active', type === 'league');
+    document.getElementById('btnTime').classList.toggle('active', type === 'time');
+    renderMatches();
+}
 
-    if(pool.length >= 3) {
-        document.getElementById('accaSection').style.display = 'block';
-        let html = `<h4 style="color:var(--p); margin:0 0 10px 0; font-size:0.8rem;">🛡️ TRIPLE-LOCK ELITE 3-FOLD</h4>`;
-        pool.forEach(s => {
-            const c = getCalculations(s.prediction);
-            const side = c.hP >= 75 ? '1' : '2';
-            html += `<div class="acca-item"><span>${s.fixture.teams.home.name}</span> <b style="color:var(--p)">${side} (${Math.max(c.hP, c.aP)}%)</b></div>`;
+function renderMatches() {
+    const list = document.getElementById('matchList');
+    list.innerHTML = "";
+
+    if (currentSort === 'league') {
+        ["ELITE", "SECONDARY", "OTHER"].forEach(cat => {
+            let filtered = masterData.filter(d => LEAGUE_MAP[cat].includes(d.fixture.league.id));
+            if (filtered.length > 0) {
+                const h = document.createElement('div');
+                h.className = "league-header";
+                h.innerText = cat + " ΠΡΩΤΑΘΛΗΜΑΤΑ";
+                list.appendChild(h);
+                filtered.forEach(d => list.appendChild(createCard(d)));
+            }
         });
-        document.getElementById('accaResult').innerHTML = html;
+    } else {
+        let sorted = [...masterData].sort((a,b) => new Date(a.fixture.fixture.date) - new Date(b.fixture.fixture.date));
+        sorted.forEach(d => list.appendChild(createCard(d)));
     }
+}
+
+function createCard(d) {
+    const c = getCalculations(d.prediction);
+    const card = document.createElement('div');
+    card.className = "match-card";
+    card.onclick = () => showIntel(d);
+    
+    card.innerHTML = `
+        <div class="card-header">
+            <div>
+                <span class="league-tag">${d.fixture.league.name}</span>
+                <div class="card-teams">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</div>
+            </div>
+            <div style="text-align:right">
+                <span class="time-badge">${formatGreekTime(d.fixture.fixture.date)}</span>
+                <div class="card-score">${d.fixture.goals.home !== null ? d.fixture.goals.home+'-'+d.fixture.goals.away : 'NS'}</div>
+            </div>
+        </div>
+        <div class="card-main-stats">
+            <div class="stat-group"><span class="stat-label">ΠΙΘ. 1-X-2</span><span class="stat-value">${c.hP}-${c.dP}-${c.aP}</span></div>
+            <div class="stat-group"><span class="stat-label">TOTAL xG</span><span class="stat-value">${c.totalXG}</span></div>
+            <div class="stat-group"><span class="stat-label">TOTAL xCRN</span><span class="stat-value">${c.totalXC}</span></div>
+            <div class="stat-group"><span class="stat-label">SAFETY %</span><span class="stat-value" style="color:var(--p)">${c.combo}%</span></div>
+        </div>
+    `;
+    return card;
 }
 
 function showIntel(d) {
     const c = getCalculations(d.prediction);
     document.getElementById('intelPanel').style.display = 'block';
-    document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}`;
+    document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name}`;
     document.getElementById('bigScoreDisplay').innerText = d.fixture.goals.home !== null ? `${d.fixture.goals.home}-${d.fixture.goals.away}` : "VS";
     
     const dotter = (f) => f.split('').slice(-6).map(char => `<span class="form-dot ${char}"></span>`).join('');
     document.getElementById('formContainer').innerHTML = `
-        <div style="text-align:center;"><span class="stat-label">HOME FORM</span><div style="margin-top:5px;">${dotter(c.hForm)}</div></div>
-        <div style="text-align:center;"><span class="stat-label">AWAY FORM</span><div style="margin-top:5px;">${dotter(c.aForm)}</div></div>
+        <div style="text-align:center;"><span class="stat-label">HOME FORM</span><div style="margin-top:10px;">${dotter(c.hForm)}</div></div>
+        <div style="text-align:center;"><span class="stat-label">AWAY FORM</span><div style="margin-top:10px;">${dotter(c.aForm)}</div></div>
     `;
-
-    document.getElementById('matrixTable').innerHTML = `
-        <tr><th>SOVEREIGN METRICS</th><th>HOME</th><th>AWAY</th></tr>
-        <tr><td>xGoals (Attack)</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr>
-        <tr><td>xGoals (Against)</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
-        <tr><td>xCorners</td><td>${(4.0 + (c.hXG * 0.9)).toFixed(1)}</td><td>${(3.5 + (c.aXG * 0.8)).toFixed(1)}</td></tr>
-    `;
-
-    const side = c.hP > c.aP ? "1X" : "X2";
+    
+    // Expert Grid Simulation
     const experts = [
-        { n: "Forebet Master", p: c.hP > c.aP ? "Home Win (1)" : "Away Win (2)" },
-        { n: "Soccerway AI", p: "Total xG: " + c.totalXG },
-        { n: "Safety Choice", p: `${side} & Over 1.5 (${c.comboProb}%)` },
-        { n: "Betting Consensus", p: "Confidence: " + Math.max(c.hP, c.aP) + "%" }
+        { n: "Forebet Analytics", v: c.hP > c.aP ? "Σημείο 1" : "Σημείο 2" },
+        { n: "Soccerway AI", v: "xG Προβ: " + c.totalXG },
+        { n: "Safety Combo", v: (c.hP > c.aP ? "1X" : "X2") + " & O1.5" },
+        { n: "Confidence", v: Math.max(c.hP, c.aP) + "%" }
     ];
     document.getElementById('expertGrid').innerHTML = experts.map(e => `
-        <div class="expert-box"><div class="site-name">${e.n}</div><div class="site-pred">${e.p}</div></div>
+        <div style="background:var(--card); padding:15px; border-radius:15px; border:1px solid var(--border);">
+            <div class="stat-label" style="color:var(--cyan)">${e.n}</div>
+            <div class="stat-value">${e.v}</div>
+        </div>
     `).join('');
-}
-
-function renderMatches() {
-    const list = document.getElementById('matchList'); list.innerHTML = "";
-    ["ELITE", "SECONDARY", "OTHER"].forEach(cat => {
-        let filtered = masterData.filter(d => LEAGUE_MAP[cat].includes(d.fixture.league.id));
-        if(filtered.length > 0) {
-            const h = document.createElement('div');
-            h.className = "league-header";
-            h.innerText = cat + " LEAGUES";
-            list.appendChild(h);
-            filtered.forEach(d => {
-                const c = getCalculations(d.prediction);
-                const card = document.createElement('div');
-                card.className = "match-card";
-                card.onclick = () => showIntel(d);
-                card.innerHTML = `
-                    <div class="card-header"><div class="card-teams">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</div><div class="card-score">${d.fixture.goals.home !== null ? d.fixture.goals.home+'-'+d.fixture.goals.away : 'NS'}</div></div>
-                    <div class="card-main-stats">
-                        <div class="stat-item"><span class="stat-label">1-X-2 %</span><span class="stat-value">${c.hP}-${c.dP}-${c.aP}</span></div>
-                        <div class="stat-item"><span class="stat-label">Total xG</span><span class="stat-value">${c.totalXG}</span></div>
-                        <div class="stat-item"><span class="stat-label">Total xCrn</span><span class="stat-value">${c.totalXC}</span></div>
-                        <div class="stat-item"><span class="stat-label">Safety Combo</span><span class="stat-value">${c.comboProb}%</span></div>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        }
-    });
 }
 </script>
 </body>
