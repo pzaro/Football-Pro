@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v261 - Flawless Execution</title>
+    <title>Predictor Pro v262 - Sovereign Bombs</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -52,7 +52,6 @@
         
         .live-stat { color: var(--live); font-size: 0.9rem; font-weight: 900; margin-left: 6px; }
 
-        /* Φόρμα & xG */
         .form-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin-bottom: 5px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
         .xg-label { font-size: 0.75rem; color: #aaa; font-weight: 800; font-family: monospace; }
@@ -84,8 +83,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 25px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v261</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • FLAWLESS FIX</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v262</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • HIGH YIELD BOMBS</small>
     </div>
 
     <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
@@ -107,6 +106,7 @@
         <div class="controls-grid">
             <select id="accaMarket">
                 <option value="1X2">ΣΗΜΕΙΑ (1-X-2)</option>
+                <option value="BOMBS">💣 ΜΠΟΜΠΕΣ (Απόδοση > 3.60)</option>
                 <option value="GOALS">GOALS (O2.5)</option>
                 <option value="COMBO">1X/X2 + OVER 1.5</option>
             </select>
@@ -238,8 +238,6 @@ function renderMatches() {
         const card = document.createElement('div');
         card.className = "match-card";
         card.style.opacity = status.type === 'FINISHED' ? '0.6' : '1';
-        
-        // BUG FIX: Στέλνουμε το ID αντί για ολόκληρο το object (εμποδίζει το κόλλημα της μνήμης)
         card.setAttribute('onclick', `openIntel(${fix.id})`);
         
         card.innerHTML = `
@@ -271,33 +269,76 @@ function generateAcca() {
         return !['1H', '2H', 'HT', 'ET', 'P', 'LIVE', 'FT', 'AET', 'PEN'].includes(statusShort);
     });
 
-    if (eligibleData.length < size) {
-        display.innerHTML = `<div style="color:var(--alert); font-weight:900; text-align:center; font-size:1.1rem;">Δεν υπάρχουν αρκετοί διαθέσιμοι (μη-ξεκινημένοι) αγώνες για ${size}-άδα.</div>`;
-        display.style.display = 'block';
-        return;
-    }
-
     let pool = eligibleData.map(d => {
         const p = d.prediction;
         return { 
             d, 
             hP: parseInt(p?.predictions?.percent?.home)||0, 
             aP: parseInt(p?.predictions?.percent?.away)||0, 
-            o25: parseInt(p?.predictions?.percent?.over)||0 
+            o25: parseInt(p?.predictions?.percent?.over)||0,
+            hXG: parseFloat(p?.teams?.home?.last_5?.goals?.for?.average || 0),
+            aXG: parseFloat(p?.teams?.away?.last_5?.goals?.for?.average || 0)
         };
     });
 
-    pool.sort((a,b) => Math.max(b.hP, b.aP) - Math.max(a.hP, a.aP));
-    let selected = pool.slice(0, size);
-    
+    let selected = [];
     let html = `<h3 style="color:var(--p); margin-top:0; border-bottom:2px solid var(--value); padding-bottom:12px; font-size:1.3rem;">🎯 ΠΡΟΤΑΣΗ ${size}-ΑΔΑΣ</h3>`;
-    selected.forEach(item => {
-        let tip = market === '1X2' ? (item.hP > item.aP ? "Σημείο: 1" : "Σημείο: 2") : (market === 'GOALS' ? "Over 2.5" : (item.hP > item.aP ? "1X & O1.5" : "X2 & O1.5"));
-        html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:1.05rem;">
-                    <span style="font-weight:600;">${item.d.fixture.teams.home.name}</span>
-                    <b style="color:var(--gold); font-size:1.15rem;">${tip}</b>
-                 </div>`;
-    });
+
+    if (market === 'BOMBS') {
+        let bombs = [];
+        // Ψάχνουμε σημεία με πιθανότητα <= 27% (δηλαδή απόδοση > 3.70)
+        pool.forEach(item => {
+            if (item.hP > 0 && item.hP <= 27) bombs.push({ ...item, pick: '1', prob: item.hP, odds: (100/item.hP).toFixed(2), metric: item.hXG });
+            if (item.aP > 0 && item.aP <= 27) bombs.push({ ...item, pick: '2', prob: item.aP, odds: (100/item.aP).toFixed(2), metric: item.aXG });
+        });
+        
+        // Ταξινόμηση βάσει επιθετικής ικανότητας (xG) για να βρούμε τα πιο επικίνδυνα αουτσάιντερ
+        bombs.sort((a,b) => b.metric - a.metric);
+        
+        if (bombs.length < size) {
+            display.innerHTML = `<div style="color:var(--alert); font-weight:900; text-align:center; font-size:1.1rem;">Δεν βρέθηκαν αρκετά αουτσάιντερ (>3.60) σήμερα. Βρέθηκαν μόνο ${bombs.length}.</div>`;
+            display.style.display = 'block';
+            return;
+        }
+        selected = bombs.slice(0, size);
+        
+        selected.forEach(item => {
+            html += `<div style="display:flex; flex-direction:column; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <div style="display:flex; justify-content:space-between; font-size:1.05rem; margin-bottom:8px;">
+                            <span style="font-weight:600;">${item.d.fixture.teams.home.name} - ${item.d.fixture.teams.away.name}</span>
+                            <b style="color:var(--alert); font-size:1.15rem;">Σημείο: ${item.pick}</b>
+                        </div>
+                        <div style="font-size:0.9rem; color:#aaa; display:flex; justify-content:space-between;">
+                            <span>Πιθανότητα: <b>${item.prob}%</b></span>
+                            <span>Εκτ. Απόδοση: <b style="color:var(--gold); font-size:1.1rem;">${item.odds}</b></span>
+                        </div>
+                     </div>`;
+        });
+    } else {
+        if (pool.length < size) {
+            display.innerHTML = `<div style="color:var(--alert); font-weight:900; text-align:center; font-size:1.1rem;">Δεν υπάρχουν αρκετοί διαθέσιμοι (μη-ξεκινημένοι) αγώνες για ${size}-άδα.</div>`;
+            display.style.display = 'block';
+            return;
+        }
+
+        if (market === '1X2') pool.sort((a,b) => Math.max(b.hP, b.aP) - Math.max(a.hP, a.aP));
+        else if (market === 'GOALS') pool.sort((a,b) => b.o25 - a.o25);
+        else pool.sort((a,b) => (Math.max(b.hP, b.aP) + b.o25) - (Math.max(a.hP, a.aP) + a.o25));
+
+        selected = pool.slice(0, size);
+        
+        selected.forEach(item => {
+            let tip = market === '1X2' ? (item.hP > item.aP ? "Σημείο: 1" : "Σημείο: 2") : (market === 'GOALS' ? "Over 2.5" : (item.hP > item.aP ? "1X & O1.5" : "X2 & O1.5"));
+            let probShow = market === '1X2' ? Math.max(item.hP, item.aP) : (market === 'GOALS' ? item.o25 : Math.max(item.hP, item.aP));
+            html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:1.05rem;">
+                        <span style="font-weight:600;">${item.d.fixture.teams.home.name}</span>
+                        <div style="text-align:right;">
+                            <b style="color:var(--gold); font-size:1.15rem; display:block;">${tip}</b>
+                            <small style="color:#aaa;">Πιθανότητα: ${probShow}%</small>
+                        </div>
+                     </div>`;
+        });
+    }
     
     display.innerHTML = html; 
     display.style.display = 'block';
@@ -305,7 +346,6 @@ function generateAcca() {
 }
 
 async function openIntel(fixId) {
-    // BUG FIX: Βρίσκουμε τα δεδομένα δυναμικά (Αποτρέπει το κόλλημα της λίστας)
     const d = masterData.find(m => m.fixture.fixture.id === fixId);
     if (!d) return;
 
@@ -340,7 +380,6 @@ async function openIntel(fixId) {
         <div><span style="font-weight:900; color:${Math.max(hP, aP) > 70 ? 'var(--value)' : '#aaa'};">VALUE ALERT: ${Math.max(hP, aP) > 70 ? '🔥 '+Math.max(hP, aP)+'%' : 'NO SIGNAL'}</span></div>
     `;
 
-    // ΦΟΡΜΑ ΟΜΑΔΩΝ & xG ΑΝΑ ΜΑΤΣ (Συνάρτηση Κατανομής)
     const renderFormWithXG = (formStr, avgXG) => {
         if(!formStr) formStr = "DDDDDD";
         return `<div style="display:flex; justify-content:center; gap:8px;">` + 
