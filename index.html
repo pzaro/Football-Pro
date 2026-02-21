@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v269 - Sovereign Radar</title>
+    <title>Predictor Pro v269.1 - Bulletproof Radar</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
@@ -101,8 +101,8 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 15px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v269</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • LIVE RADAR SYSTEM</small>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v269.1</span></h1>
+        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • BULLETPROOF RADAR</small>
     </div>
 
     <div class="ticker-wrap" id="liveTickerWrap">
@@ -178,10 +178,9 @@ let standingsMap = {};
 
 // --- RADAR SYSTEM (TRACKING) ---
 let trackedMatches = {}; 
-const goalSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg'); // Σύντομος ήχος
+const goalSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg'); 
 
 function toggleTrack(fixId, homeName, awayName) {
-    // Ζητάμε άδεια για Notifications στον Browser
     if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
         Notification.requestPermission();
     }
@@ -195,29 +194,24 @@ function toggleTrack(fixId, homeName, awayName) {
         trackedMatches[fixId] = { hName: homeName, aName: awayName, hGoals: -1, aGoals: -1 };
         btn.innerText = "🛑 UNTRACK";
         btn.classList.add("active");
-        
-        // Προαιρετικό μικρό sound test για να ξέρει ότι δουλεύει
         goalSound.play().catch(e=>console.log(e)); 
     }
 }
 
 function fireGoalAlert(title, message) {
-    // Παίζει τον Ήχο
     goalSound.play().catch(e=>console.log(e));
     
-    // Εμφανίζει το In-App PopUp
     const alertBox = document.getElementById('radarAlert');
     alertBox.innerHTML = `⚽ <b>${title}</b><br><span style="font-size:1rem; font-weight:600;">${message}</span>`;
     alertBox.classList.add('show');
     setTimeout(() => { alertBox.classList.remove('show'); }, 6000);
 
-    // Στέλνει Web Push Notification (αν το έχει ελαχιστοποιήσει)
     if ("Notification" in window && Notification.permission === "granted") {
         new Notification(title, { body: message, icon: "https://cdn-icons-png.flaticon.com/512/1165/1165187.png" });
     }
 }
 
-// --- LIVESCORE TICKER & RADAR ENGINE ---
+// --- LIVESCORE TICKER & RADAR ENGINE (BULLETPROOF FIX) ---
 async function fetchLiveTicker() {
     try {
         const res = await fetch(`https://v3.football.api-sports.io/fixtures?live=${LEAGUES.join('-')}`, { headers: {"x-apisports-key": KEY} });
@@ -230,25 +224,24 @@ async function fetchLiveTicker() {
             d.response.forEach(m => {
                 let min = m.fixture.status.elapsed + "'";
                 if (m.fixture.status.short === 'HT') min = 'HT';
-                html += `<div class="ticker-item"><span class="min">🔴 ${min}</span> ${m.teams.home.name} <span class="score">${m.goals.home}-${m.goals.away}</span> ${m.teams.away.name}</div>`;
                 
-                // RADAR CHECK: Ελέγχουμε αν το ματς παρακολουθείται
+                // Διασφάλιση ότι τα γκολ είναι 0 αν το API στείλει null στο ξεκίνημα
+                const safeHG = m.goals.home !== null ? m.goals.home : 0;
+                const safeAG = m.goals.away !== null ? m.goals.away : 0;
+
+                html += `<div class="ticker-item"><span class="min">🔴 ${min}</span> ${m.teams.home.name} <span class="score">${safeHG}-${safeAG}</span> ${m.teams.away.name}</div>`;
+                
                 const fId = m.fixture.id;
                 if (trackedMatches[fId]) {
                     const trk = trackedMatches[fId];
-                    const curHG = m.goals.home;
-                    const curAG = m.goals.away;
                     
-                    // Αρχικοποίηση αν είναι η πρώτη φορά που το βλέπει το Ticker
-                    if (trk.hGoals === -1) { trk.hGoals = curHG; trk.aGoals = curAG; }
+                    if (trk.hGoals === -1) { trk.hGoals = safeHG; trk.aGoals = safeAG; }
                     
-                    // Αν μπήκε γκολ!
-                    if (curHG > trk.hGoals || curAG > trk.aGoals) {
-                        let msg = `${trk.hName} ${curHG} - ${curAG} ${trk.aName}`;
+                    if (safeHG > trk.hGoals || safeAG > trk.aGoals) {
+                        let msg = `${trk.hName} ${safeHG} - ${safeAG} ${trk.aName}`;
                         fireGoalAlert(`ΓΚΟΛ ΣΤΟ ${min}!`, msg);
-                        // Ενημέρωση του νέου σκορ
-                        trk.hGoals = curHG;
-                        trk.aGoals = curAG;
+                        trk.hGoals = safeHG;
+                        trk.aGoals = safeAG;
                     }
                 }
             });
@@ -262,7 +255,6 @@ async function fetchLiveTicker() {
 
 fetchLiveTicker();
 setInterval(fetchLiveTicker, 60000); 
-// -------------------------------
 
 async function globalSync() {
     masterData = []; standingsMap = {};
@@ -346,4 +338,13 @@ function renderMatches() {
 
         const isTracked = trackedMatches[fix.id] ? true : false;
         const trackBtnClass = isTracked ? 'track-btn active' : 'track-btn';
-        const trackBtnText
+        const trackBtnText = isTracked ? '🛑 UNTRACK' : '🔔 TRACK';
+
+        const card = document.createElement('div');
+        card.className = "match-card";
+        card.style.opacity = status.type === 'FINISHED' ? '0.6' : '1';
+        card.setAttribute('onclick', `openIntel(${fix.id})`);
+        
+        card.innerHTML = `
+            <div class="card-header">
+                <div cl
