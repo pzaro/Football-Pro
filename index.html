@@ -3,38 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v246 - Absolute Spec</title>
+    <title>Predictor Pro v247 - Tactical Clean</title>
     <style>
         :root { 
             --p: #00ff88; --bg: #0d1117; --card: #161b22; --border: #30363d; 
             --txt: #ffffff; --gold: #f1c40f; --live-green: #00ff41; 
             --value: #bf40bf; --alert: #ff3e3e; --cyan: #00d4ff; 
-            --glass: rgba(255, 255, 255, 0.05); 
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            background: var(--bg); color: var(--txt); padding: 0; margin: 0; 
-            font-size: 16px;
-        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--txt); padding: 0; margin: 0; font-size: 16px; }
+        .container { width: 100%; max-width: 850px; margin: 0 auto; padding: 20px 15px; }
 
-        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 15px; }
-
-        /* UI Controls */
-        .btn-sync { 
-            width: 100%; padding: 20px; background: linear-gradient(135deg, var(--p), #00cc6a); 
-            color: #000; border: none; border-radius: 15px; font-weight: 900; 
-            font-size: 1.1rem; cursor: pointer; margin-bottom: 20px; 
-        }
-
-        .sort-controls {
-            display: flex; gap: 8px; margin-bottom: 20px;
-        }
-        .sort-btn {
-            flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 10px;
-            background: var(--card); color: #fff; font-weight: 700; cursor: pointer; font-size: 0.8rem;
-        }
+        /* Sync & Controls */
+        .btn-sync { width: 100%; padding: 20px; background: var(--p); color: #000; border: none; border-radius: 12px; font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-bottom: 20px; }
+        .sort-controls { display: flex; gap: 8px; margin-bottom: 20px; }
+        .sort-btn { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); color: #fff; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         .sort-btn.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
 
         /* Progress Bar */
@@ -43,45 +27,23 @@
         .progress-fill { height: 100%; background: var(--p); width: 0%; transition: 0.4s; }
 
         /* Match Cards */
-        .league-header { 
-            background: var(--glass); padding: 10px 15px; border-radius: 10px; margin-top: 25px; 
-            border-left: 5px solid var(--gold); font-weight: 900; font-size: 0.9rem; color: var(--gold);
-        }
-
-        .match-card { 
-            background: var(--card); border-radius: 15px; margin-top: 12px; 
-            border: 1px solid var(--border); border-left: 6px solid var(--border); 
-            cursor: pointer; overflow: hidden;
-        }
-        
-        .card-header { padding: 15px; display: flex; justify-content: space-between; align-items: flex-start; }
-        .card-teams { font-weight: 800; font-size: 1.1rem; flex: 1; }
-        .card-score { font-weight: 900; font-size: 1.3rem; color: var(--p); margin-left: 10px; }
-        
-        .card-main-stats { 
-            padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; background: rgba(0,0,0,0.2); text-align: center; border-top: 1px solid var(--border);
-        }
+        .league-header { background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 10px; margin-top: 25px; border-left: 5px solid var(--gold); font-weight: 900; color: var(--gold); font-size: 0.9rem; }
+        .match-card { background: var(--card); border-radius: 15px; margin-top: 12px; border: 1px solid var(--border); border-left: 6px solid var(--border); cursor: pointer; overflow: hidden; }
+        .card-header { padding: 15px; display: flex; justify-content: space-between; }
+        .card-main-stats { padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.2); text-align: center; border-top: 1px solid var(--border); }
         .stat-label { font-size: 0.65rem; color: #888; text-transform: uppercase; display: block; }
         .stat-value { font-size: 0.95rem; font-weight: 800; }
 
-        /* Intel Panel Full (Modal) */
-        #intelPanel { 
-            display: none; background: var(--bg); position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; 
-        }
+        /* Intel Panel */
+        #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; }
         .matrix-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--card); border-radius: 12px; overflow: hidden; }
-        .matrix-table th { background: var(--glass); color: var(--gold); padding: 12px; text-align: left; font-size: 0.75rem; }
-        .matrix-table td { padding: 12px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 0.95rem; }
-
-        .section-title { color: var(--cyan); font-size: 0.8rem; font-weight: 900; text-transform: uppercase; margin: 25px 0 10px 0; border-left: 3px solid var(--cyan); padding-left: 10px; }
+        .matrix-table th { background: rgba(255,255,255,0.05); color: var(--gold); padding: 12px; text-align: left; font-size: 0.8rem; }
+        .matrix-table td { padding: 12px; border-bottom: 1px solid var(--border); font-weight: 700; }
         
-        .grid-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .info-card { background: #1c2128; padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
-        
+        .analysis-box { background: #1c2128; border-radius: 15px; padding: 20px; border-left: 5px solid var(--cyan); margin-top: 20px; line-height: 1.6; }
+        .analysis-title { color: var(--cyan); font-weight: 900; margin-bottom: 10px; display: block; font-size: 0.9rem; text-transform: uppercase; }
         .form-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin: 0 2px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
-        
         .btn-close { background: var(--alert); color: #fff; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; float: right; cursor: pointer; }
     </style>
 </head>
@@ -89,40 +51,39 @@
 
 <div class="container">
     <div style="text-align:center; padding-bottom: 20px;">
-        <h1 style="color:var(--p); margin:0; font-size:1.8rem;">PREDICTOR PRO v246</h1>
-        <small style="color:var(--gold); font-weight:900;">ABSOLUTE OMEGA SPEC</small>
+        <h1 style="color:var(--p); margin:0; font-size:1.8rem;">PREDICTOR PRO v247</h1>
+        <small style="color:var(--gold); font-weight:900;">TACTICAL ANALYSIS EDITION</small>
     </div>
 
     <div id="syncCont">
         <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.8rem; font-weight:900;">
-            <span id="syncStep">INITIALIZING...</span><span id="syncPerc">0%</span>
+            <span id="syncStep">SYNCING DATA...</span><span id="syncPerc">0%</span>
         </div>
         <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
     </div>
 
-    <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 START DEEP ANALYTICS SYNC</button>
+    <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΣΤΡΑΤΗΓΙΚΗΣ ΑΝΑΛΥΣΗΣ</button>
 
     <div id="controls" class="sort-controls" style="display:none;">
-        <button id="btnLeague" class="sort-btn active" onclick="changeSort('league')">ΚΑΤΑ ΠΡΩΤΑΘΛΗΜΑ</button>
-        <button id="btnTime" class="sort-btn" onclick="changeSort('time')">ΚΑΤΑ ΩΡΑ</button>
+        <button id="btnLeague" class="sort-btn active" onclick="changeSort('league')">ΑΝΑ ΠΡΩΤΑΘΛΗΜΑ</button>
+        <button id="btnTime" class="sort-btn" onclick="changeSort('time')">ΑΝΑ ΩΡΑ</button>
     </div>
 
     <div id="matchList"></div>
 
     <div id="intelPanel">
-        <button onclick="this.parentElement.style.display='none'" class="btn-close">ΚΛΕΙΣΙΜΟ</button>
+        <button onclick="this.parentElement.style.display='none'" class="btn-close">ΠΙΣΩ</button>
         <h2 id="mTitle" style="text-align:center; margin-top:60px; font-size:1.2rem; color:var(--gold);"></h2>
         <div id="bigScoreDisplay" style="font-size:3.5rem; font-weight:900; text-align:center; margin:10px 0;"></div>
         
-        <div id="formContainer" style="display:flex; justify-content: space-around; background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin:20px 0;"></div>
+        <div id="formContainer" style="display:flex; justify-content: space-around; padding:15px; background:rgba(0,0,0,0.2); border-radius:15px;"></div>
 
         <table class="matrix-table" id="matrixTable"></table>
 
-        <div class="section-title">Στατιστικές Προβλέψεις (Top 3 Sites)</div>
-        <div class="grid-box" id="statSites"></div>
-
-        <div class="section-title">Εκτιμήσεις Αγοράς (Top 4 Global Betting)</div>
-        <div class="grid-box" id="bettingSites"></div>
+        <div class="analysis-box">
+            <span class="analysis-title">🔍 Στρατηγική Ανάλυση & Εκτίμηση</span>
+            <div id="textAnalysis" style="font-size: 0.95rem;"></div>
+        </div>
     </div>
 </div>
 
@@ -152,11 +113,10 @@ function getCalculations(p) {
         totalXC: (4.0 + (hXG * 0.9) + 3.5 + (aXG * 0.8)).toFixed(1),
         hXC: (4.0 + (hXG * 0.9)).toFixed(1),
         aXC: (3.5 + (aXG * 0.8)).toFixed(1),
-        hCards: (1.6 + (hXGA * 0.6)).toFixed(1),
-        aCards: (1.8 + (aXGA * 0.7)).toFixed(1),
+        hCards: (1.6 + (hXGA * 0.5)).toFixed(1),
+        aCards: (1.8 + (aXGA * 0.6)).toFixed(1),
         hForm: p?.teams?.home?.league?.form || "DDDDDD",
-        aForm: p?.teams?.away?.league?.form || "DDDDDD",
-        o15: parseInt(p?.predictions?.percent?.over) + 10
+        aForm: p?.teams?.away?.league?.form || "DDDDDD"
     };
 }
 
@@ -170,8 +130,6 @@ async function globalSync() {
         const p = Math.round(((i+1)/ALL_LEAGUES.length)*100);
         document.getElementById('syncFill').style.width = p+'%';
         document.getElementById('syncPerc').innerText = p+'%';
-        document.getElementById('syncStep').innerText = `FETCHING LEAGUE ${ALL_LEAGUES[i]}...`;
-        
         try {
             const res = await fetch(`https://v3.football.api-sports.io/fixtures?league=${ALL_LEAGUES[i]}&date=${today}&season=2025`, {headers:{"x-rapidapi-key":KEY}});
             const d = await res.json();
@@ -221,8 +179,8 @@ function createCard(d) {
     card.onclick = () => showIntel(d);
     card.innerHTML = `
         <div class="card-header">
-            <div><small style="color:#888; font-weight:800; text-transform:uppercase;">${d.fixture.league.name}</small><div class="card-teams">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</div></div>
-            <div style="text-align:right;"><div style="color:var(--cyan); font-size:0.75rem; font-weight:900;">${time}</div><div class="card-score">${d.fixture.goals.home!==null?d.fixture.goals.home+'-'+d.fixture.goals.away:'NS'}</div></div>
+            <div><small style="color:#888; font-weight:800; text-transform:uppercase;">${d.fixture.league.name}</small><div style="font-weight:800; font-size:1rem;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</div></div>
+            <div style="text-align:right;"><div style="color:var(--cyan); font-size:0.7rem; font-weight:900;">${time}</div><div style="font-weight:900; color:var(--p); font-size:1.2rem;">${d.fixture.goals.home!==null?d.fixture.goals.home+'-'+d.fixture.goals.away:'NS'}</div></div>
         </div>
         <div class="card-main-stats">
             <div><span class="stat-label">1-X-2 %</span><span class="stat-value">${c.hP}-${c.dP}-${c.aP}</span></div>
@@ -241,36 +199,31 @@ function showIntel(d) {
     
     const dotter = (f) => f.split('').slice(-6).map(char => `<span class="form-dot ${char}"></span>`).join('');
     document.getElementById('formContainer').innerHTML = `
-        <div style="text-align:center;"><span class="stat-label">HOME FORM</span><div style="margin-top:5px;">${dotter(c.hForm)}</div></div>
-        <div style="text-align:center;"><span class="stat-label">AWAY FORM</span><div style="margin-top:5px;">${dotter(c.aForm)}</div></div>
+        <div style="text-align:center;"><span class="stat-label">ΦΟΡΜΑ ΓΗΠ.</span><div style="margin-top:5px;">${dotter(c.hForm)}</div></div>
+        <div style="text-align:center;"><span class="stat-label">ΦΟΡΜΑ ΦΙΛ.</span><div style="margin-top:5px;">${dotter(c.aForm)}</div></div>
     `;
 
     document.getElementById('matrixTable').innerHTML = `
-        <tr><th>ADVANCED DATA</th><th>HOME</th><th>AWAY</th></tr>
-        <tr><td>xGoals (Attack)</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr>
-        <tr><td>xGoals (Against)</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
-        <tr><td>xCorners</td><td>${c.hXC}</td><td>${c.aXC}</td></tr>
-        <tr><td>xCards</td><td>${c.hCards}</td><td>${c.aCards}</td></tr>
+        <tr><th>TACTICAL MATRIX</th><th>HOME</th><th>AWAY</th></tr>
+        <tr><td>xG Attack (Ικανότητα)</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr>
+        <tr><td>xGA Defend (Αδυναμία)</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
+        <tr><td>xCorners (Πίεση)</td><td>${c.hXC}</td><td>${c.aXC}</td></tr>
+        <tr><td>xCards (Επιθετικότητα)</td><td>${c.hCards}</td><td>${c.aCards}</td></tr>
     `;
 
-    const statSites = [
-        { n: "Forebet AI", v: c.hP > c.aP ? "Home Win (1)" : "Away Win (2)" },
-        { n: "PredictZ", v: "Score: " + (c.hXG > c.aXG ? "2-1" : "1-2") },
-        { n: "Vitibet", v: "Over 1.5: " + c.o15 + "%" }
-    ];
-    document.getElementById('statSites').innerHTML = statSites.map(s => `
-        <div class="info-card"><div class="stat-label" style="color:var(--cyan)">${s.n}</div><div class="stat-value">${s.v}</div></div>
-    `).join('');
-
-    const betSites = [
-        { n: "Bet365", v: c.hP > 55 ? "Strong 1 Trend" : "Market Equilibrium" },
-        { n: "Pinnacle", v: c.totalXG > 2.5 ? "Over 2.5 Logic" : "Under 2.5 Logic" },
-        { n: "Betfair", v: "Back " + (c.hP > c.aP ? "Home" : "Away") },
-        { n: "888Sport", v: "BTTS: YES @ " + (c.hXG > 1.1 && c.aXG > 1.1 ? "80%" : "40%") }
-    ];
-    document.getElementById('bettingSites').innerHTML = betSites.map(b => `
-        <div class="info-card"><div class="stat-label" style="color:var(--gold)">${b.n}</div><div class="stat-value">${b.v}</div></div>
-    `).join('');
+    // AUTOMATED TEXT ANALYSIS
+    let analysis = "";
+    if (c.hXG > c.aXGA && c.hP > 60) {
+        analysis = `Η ${d.fixture.teams.home.name} έχει **ξεκάθαρο πλεονέκτημα**. Η επιθετική της ισχύς (${c.hXG}) υπερβαίνει την αμυντική ικανότητα του αντιπάλου, καθιστώντας τον άσσο (1) την πιο λογική επιλογή.`;
+    } else if (c.hXG > 1.4 && c.aXG > 1.2) {
+        analysis = `Και οι δύο ομάδες παράγουν φάσεις με ευκολία. Η στατιστική δείχνει **υψηλή πιθανότητα γκολ** και από τις δύο πλευρές (Goal/Goal ή Over 2.5).`;
+    } else if (c.hP < 50 && c.aP < 50) {
+        analysis = `Το παιχνίδι αναμένεται **πολύ κλειστό**. Οι πιθανότητες είναι μοιρασμένες και το Under 2.5 ή η ισοπαλία (X) έχουν το προβάδισμα λόγω χαμηλής παραγωγικότητας xG.`;
+    } else {
+        analysis = `Η στατιστική εικόνα είναι μικτή. Προτείνεται η αποφυγή σημείου ή η επιλογή **Διπλής Ευκαιρίας** υπέρ του φαβορί για μεγαλύτερη ασφάλεια.`;
+    }
+    
+    document.getElementById('textAnalysis').innerText = analysis;
 }
 </script>
 </body>
