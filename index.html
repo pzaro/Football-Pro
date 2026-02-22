@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v365 - Perfectionist Spec</title>
+    <title>Predictor Pro v370 - Sovereign Transparent</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -12,7 +12,7 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; overflow-x: hidden; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 15px; }
 
-        /* AUTH - PIN 106014 */
+        /* AUTH - INSTANT PIN 106014 */
         #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; justify-content: center; align-items: center; }
         .auth-box { background: var(--card); border: 1px solid var(--border); border-radius: 32px; padding: 45px 25px; text-align: center; width: 90%; max-width: 380px; }
         .auth-input { width: 100%; padding: 22px; margin: 25px 0; border-radius: 16px; border: 2px solid var(--border); background: #000; color: var(--p); font-size: 2.2rem; text-align: center; font-weight: 900; letter-spacing: 12px; -webkit-text-security: disc; }
@@ -25,32 +25,33 @@
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         @keyframes blink { 50% { opacity: 0.3; } }
 
-        /* UI ELEMENTS */
+        /* BUTTONS & UI */
         .btn-sync { width: 100%; padding: 24px; background: linear-gradient(135deg, var(--p), #00cc6e); color: #000; border: none; border-radius: 20px; font-weight: 900; font-size: 1.3rem; margin-bottom: 25px; cursor: pointer; }
         .ai-controls { display:flex; gap:12px; margin-bottom: 25px; }
         .date-picker { padding: 16px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); color: #fff; flex: 1; text-align:center; font-weight: 900; }
         .btn-ai { padding: 16px; border: 1px solid var(--ai); color: var(--ai); border-radius: 16px; background: rgba(255,0,255,0.05); font-weight: 900; flex: 1.5; cursor: pointer; }
 
-        /* MATCH CARDS */
-        .league-header { background: linear-gradient(90deg, #1a202c, #0b0e14); color: var(--gold); padding: 14px 20px; border-radius: 14px; font-weight: 900; margin: 30px 0 15px 0; border-left: 6px solid var(--gold); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
-        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; margin-bottom: 18px; cursor: pointer; position: relative; overflow: hidden; transition: 0.2s; }
+        /* CARDS */
+        .league-header { background: linear-gradient(90deg, #1a202c, #0b0e14); color: var(--gold); padding: 14px 20px; border-radius: 14px; font-weight: 900; margin: 30px 0 12px 0; border-left: 6px solid var(--gold); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; margin-bottom: 18px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.2s; }
         .match-card.finished { opacity: 0.6; filter: grayscale(0.5); }
         .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
         .team-names { font-weight: 900; font-size: 1.1rem; line-height: 1.4; }
         .rank { color: var(--cyan); font-size: 0.75rem; background: rgba(0,212,255,0.1); padding: 2px 6px; border-radius: 5px; margin-right: 6px; font-weight: 900; }
         .score-display { font-size: 1.9rem; font-weight: 900; color: #fff; }
         .progress-bar { width: 100%; background: rgba(0,0,0,0.4); height: 6px; }
-        .progress-fill { height: 100%; background: var(--p); box-shadow: 0 0 10px var(--p); }
+        .progress-fill { height: 100%; background: var(--p); }
         .card-stats { display: grid; grid-template-columns: repeat(4, 1fr); background: rgba(0,0,0,0.25); padding: 15px; text-align: center; gap: 8px; border-top: 1px solid var(--border); }
-        .stat-label { font-size: 0.65rem; color: #8b949e; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
+        .stat-label { font-size: 0.65rem; color: #8b949e; text-transform: uppercase; font-weight: 800; }
         .stat-value { font-size: 0.95rem; font-weight: 900; }
 
         /* 🏆 ELITE ACCA DISPLAY */
         #accaDisplay { display:none; background: linear-gradient(165deg, rgba(11, 14, 20, 0.95), rgba(30, 30, 40, 0.95)); border: 2px solid var(--gold); border-radius: 30px; padding: 25px; margin-bottom: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); backdrop-filter: blur(15px); }
-        .acca-title { color: var(--gold); font-weight: 900; font-size: 1.4rem; margin-bottom: 20px; text-align: center; border-bottom: 1px solid rgba(241,196,15,0.2); padding-bottom: 15px; }
+        .acca-title { color: var(--gold); font-weight: 900; font-size: 1.4rem; margin-bottom: 20px; text-align: center; border-bottom: 1px solid rgba(241,196,15,0.2); padding-bottom: 15px; text-transform: uppercase; }
         .acca-item-elite { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 18px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .acca-match-name { font-weight: 900; font-size: 0.95rem; color: #fff; }
-        .acca-pick-label { font-size: 1.1rem; font-weight: 900; color: var(--p); }
+        .acca-match-name { font-weight: 900; font-size: 0.95rem; color: #fff; flex: 1; }
+        .acca-pick-label { font-size: 1.1rem; font-weight: 900; color: var(--p); text-align: right; }
+        .acca-error { color: var(--alert); text-align: center; font-weight: 800; padding: 20px; background: rgba(255, 77, 77, 0.1); border-radius: 15px; }
 
         /* PANELS */
         #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
@@ -59,11 +60,10 @@
         .clean-table th { background: #000; color: var(--gold); padding: 15px; font-size: 0.8rem; }
         .clean-table td { padding: 18px 10px; border-bottom: 1px solid var(--border); font-weight: 800; text-align: center; }
         .section-title { color: var(--p); font-size: 1.1rem; font-weight: 900; margin: 35px 0 15px 0; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-        .pred-row { display: flex; justify-content: space-between; padding: 16px; background: rgba(255,255,255,0.04); margin-bottom: 10px; border-radius: 16px; font-size: 1rem; }
+        .pred-row { display: flex; justify-content: space-between; padding: 16px; background: rgba(255,255,255,0.04); margin-bottom: 10px; border-radius: 16px; font-size: 0.95rem; }
         .sub-row { display: flex; justify-content: space-between; padding: 12px 18px; border-bottom: 1px dashed #333; font-size: 0.95rem; }
         .section-separator { text-align: center; padding: 50px 0 20px 0; color: var(--finished); font-weight: 900; letter-spacing: 4px; font-size: 0.9rem; }
         
-        /* DATA AREA */
         #rawDataOutput { width: 100%; height: 180px; background: #000; color: var(--p); font-family: monospace; font-size: 0.7rem; border: 1px solid var(--border); border-radius: 15px; padding: 15px; margin-top: 25px; display: none; }
     </style>
 </head>
@@ -72,7 +72,7 @@
 <div id="authScreen">
     <div class="auth-box">
         <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-        <p style="color:#8b949e; font-weight:bold; font-size:0.8rem; margin-top:10px;">V365 PERFECTIONIST SPEC</p>
+        <p style="color:#8b949e; font-weight:bold; font-size:0.8rem; margin-top:10px;">V370 TRANSPARENT GENERATOR</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)">
         <div id="authMsg" style="color:var(--alert); font-weight:900; font-size:0.85rem; height:20px;"></div>
     </div>
@@ -83,7 +83,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.5rem; letter-spacing:-2px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--gold); font-weight:900; letter-spacing:3px;">STATISTICAL MASTER ENGINE</small>
+            <small style="color:var(--gold); font-weight:900; letter-spacing:3px;">SOVEREIGN SMART ENGINE</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -93,7 +93,7 @@
         </div>
 
         <div id="syncCont" style="display:none; margin-bottom:25px; background:var(--card); padding:20px; border-radius:20px;">
-            <div id="syncStep" style="color:var(--p); font-weight:900; margin-bottom:10px; font-size:0.9rem;">CALIBRATING ADAPTIVE ENGINE...</div>
+            <div id="syncStep" style="color:var(--p); font-weight:900; margin-bottom:10px; font-size:0.9rem;">ADAPTING ENGINE...</div>
             <div style="background:#000; height:10px; border-radius:5px; overflow:hidden;"><div id="syncFill" style="background:var(--p); height:100%; width:0%; transition:0.3s;"></div></div>
         </div>
 
@@ -140,7 +140,7 @@
                 <button onclick="closePanel('aiPanel')" class="btn-close-p" style="flex:0.5; margin:0;">Χ</button>
             </div>
             <div id="pdfExportArea" style="background:#0b0e14; padding:25px; border-radius:25px; border:1px solid var(--border);">
-                <h2 style="text-align:center; color:var(--ai);">🧠 DATA EFFECTIVENESS REPORT</h2>
+                <h2 style="text-align:center; color:var(--ai);">🧠 DATA LAB REPORT</h2>
                 <div id="aiMsg" style="text-align:center; font-weight:bold; color:var(--gold); margin-bottom:20px;"></div>
                 <div id="aiResultsBox"></div>
                 <textarea id="rawDataOutput" readonly></textarea>
@@ -150,7 +150,7 @@
 </div>
 
 <script>
-// --- ENGINE CONFIG & ADAPTIVE WEIGHTS ---
+// --- ENGINE CONFIG & MATH ---
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [
     {id: 39, name: "Premier League", type: 'attack'}, {id: 40, name: "Championship", type: 'balanced'},
@@ -189,13 +189,13 @@ function calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv, w) {
 // --- AUTH ---
 function instantAuth(input) {
     if (input.value === "106014") {
-        sessionStorage.setItem("p_auth_v365", "1");
+        sessionStorage.setItem("p_auth_v370", "1");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
     }
 }
-window.onload = () => { if(sessionStorage.getItem("p_auth_v365")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
+window.onload = () => { if(sessionStorage.getItem("p_auth_v370")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
 
 function startSystem() { fetchLiveTicker(); setInterval(fetchLiveTicker, 60000); document.getElementById('evalDate').value = new Date().toISOString().split('T')[0]; }
 
@@ -213,8 +213,7 @@ async function globalSync() {
             if(sD.response?.[0]?.league?.standings?.[0]) sD.response[0].league.standings[0].forEach(t => standingsMap[t.team.id] = t.rank);
         }
         for (let i=0; i<myFix.length; i++) {
-            let m = i === 0 ? myFix[0] : myFix[i]; 
-            document.getElementById('syncFill').style.width = Math.round(((i+1)/myFix.length)*100)+'%';
+            let m = myFix[i]; document.getElementById('syncFill').style.width = Math.round(((i+1)/myFix.length)*100)+'%';
             document.getElementById('syncStep').innerText = `ANALYZING: ${m.teams.home.name}`;
             await new Promise(r => setTimeout(r, 250));
             const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
@@ -267,7 +266,9 @@ function openIntel(id) {
 
 function generateAcca() {
     const market = document.getElementById('accaMarket').value, size = parseInt(document.getElementById('accaSize').value);
-    let pool = masterData.filter(d => d.fixture.fixture.status.short === 'NS').map(d => {
+    
+    // SMART FILTER: NS = Not Started, TBD = To Be Defined
+    let pool = masterData.filter(d => ['NS', 'TBD'].includes(d.fixture.fixture.status.short)).map(d => {
         const c = d.calc, w = d.weights, totXG = c.hXG + c.aXG;
         let bProb = 0, bTip = '';
         if(market === 'WILDCARD') {
@@ -277,21 +278,28 @@ function generateAcca() {
         } else if(market === 'SCORE') { bProb = 90; bTip = `${Math.round(c.hXG)}-${Math.round(c.aXG)}`;
         } else if(market === 'CORNERS') { bProb = 50 + (c.hXG*w.hCrn + c.aXG*w.aCrn - 8.5)*15; bTip = `Over ${Math.floor(c.hXG*w.hCrn + c.aXG*w.aCrn - 0.5)}.5`;
         } else if(market === 'BOMBS') { if(c.tProbs.h <= 25) { bProb = 100-c.tProbs.h; bTip = '1 (BOMB)'; } if(c.tProbs.a <= 25) { bProb = 100-c.tProbs.a; bTip = '2 (BOMB)'; }
+        } else if(market === 'GOALS') { bProb = 50 + (totXG-2.5)*20; bTip = totXG > 2.5 ? 'Over 2.5' : 'Under 2.5';
         } else { bProb = Math.max(c.tProbs.h, c.tProbs.a); bTip = c.tProbs.h > c.tProbs.a ? '1' : '2'; }
         return { name: `${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}`, bProb, bTip };
     }).sort((a,b) => b.bProb - a.bProb);
-    if(pool.length < size) return;
+
+    const display = document.getElementById('accaDisplay');
+    if(pool.length < size) { 
+        display.innerHTML = `<div class="acca-error">⚠️ Βρέθηκαν μόνο ${pool.length} επερχόμενοι αγώνες. Χρειάζονται τουλάχιστον ${size}.</div>`;
+        display.style.display = 'block';
+        return; 
+    }
+
     let h = `<div class="acca-title">🏆 ELITE ${size}-FOLD PREDICTION</div>`;
     pool.slice(0,size).forEach(i => h += `<div class="acca-item-elite"><div><div class="acca-match-name">${i.name}</div></div><div class="acca-pick-label">${i.bTip}</div></div>`);
-    document.getElementById('accaDisplay').innerHTML = h; document.getElementById('accaDisplay').style.display = 'block';
-    window.scrollTo({ top: document.getElementById('accaDisplay').offsetTop - 20, behavior: 'smooth' });
+    display.innerHTML = h; display.style.display = 'block';
+    window.scrollTo({ top: display.offsetTop - 20, behavior: 'smooth' });
 }
 
-// --- DATA LAB V365 ---
 async function runDeepEvaluation() {
     const tD = document.getElementById('evalDate').value; if(!tD) return;
     document.getElementById('aiCont').style.display='block'; lastAnalyzedMatches = [];
-    let s = { pts:{'70+':{t:0,w:0},'60-69':{t:0,w:0}}, bombs:{t:0,w:0}, o25:{t:0,w:0}, scores:{t:0,w:0}, crn:{'>10.5':{t:0,w:0},'9.5-10.5':{t:0,w:0},'<9.5':{t:0,w:0}} };
+    let s = { pts:{'70+':{t:0,w:0},'60-69':{t:0,w:0}}, bombs:{t:0,w:0}, o25:{t:0,w:0}, scores:{t:0,w:0} };
     try {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
         const tFix = (await fR.json()).response.filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
@@ -300,26 +308,20 @@ async function runDeepEvaluation() {
             await new Promise(r => setTimeout(r, 250));
             const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
             const pD = (await pR.json()).response?.[0];
-            const sR = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, { headers: {"x-apisports-key": KEY} });
-            const sD = (await sR.json()).response?.[0];
-            if(pD && sD) {
+            if(pD) {
                 const w = getWeights(m.league.id), hXG = advXG(pD.teams.home,'for'), aXG = advXG(pD.teams.away,'for');
                 const hXGA = advXG(pD.teams.home,'against'), aXGA = advXG(pD.teams.away,'against'), tP = calcTrueProbs(hXG, hXGA, aXG, aXGA, 0.15, w);
                 const actH = m.goals.home, actA = m.goals.away, totG = actH + actA, act = actH > actA ? 'h' : (actA > actH ? 'a' : 'd');
-                const actC = (sD.statistics.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.statistics.find(x=>x.type==="Corner Kicks")?.value||0);
-                const predC = (hXG*w.hCrn + aXG*w.aCrn + 7.7);
                 lastAnalyzedMatches.push({ match: m.teams.home.name+'-'+m.teams.away.name, score: actH+'-'+actA, hXG, aXG, hXGA, aXGA });
                 if(Math.max(tP.h, tP.a) >= 70) { s.pts['70+'].t++; if((tP.h>tP.a&&act==='h')||(tP.a>tP.h&&act==='a')) s.pts['70+'].w++; }
                 else if(Math.max(tP.h, tP.a) >= 60) { s.pts['60-69'].t++; if((tP.h>tP.a&&act==='h')||(tP.a>tP.h&&act==='a')) s.pts['60-69'].w++; }
                 if(Math.min(tP.h, tP.a) <= 25) { s.bombs.t++; if((tP.h<tP.a&&act==='h')||(tP.a<tP.h&&act==='a')) s.bombs.w++; }
                 if(hXG+aXG >= w.o25) { s.o25.t++; if(totG >= 3) s.o25.w++; }
                 s.scores.t++; if(Math.round(hXG) === actH && Math.round(aXG) === actA) s.scores.w++;
-                let cTier = predC > 10.5 ? '>10.5' : (predC >= 9.5 ? '9.5-10.5' : '<9.5');
-                s.crn[cTier].t++; if(actC >= Math.floor(predC-0.5)) s.crn[cTier].w++;
             }
         }
         const pct = (o) => o.t > 0 ? Math.round(o.w/o.t*100) : 0;
-        document.getElementById('aiResultsBox').innerHTML = `<div class="section-title">📊 ΣΗΜΕΙΑ & ΜΠΟΜΠΕΣ</div><div class="sub-row"><span>True Prob 60-69%:</span><b>${pct(s.pts['60-69'])}%</b></div><div class="sub-row"><span>Value Bombs (<25%):</span><b>${pct(s.bombs)}%</b></div><div class="section-title">⚽ ΓΚΟΛ & ΣΚΟΡ</div><div class="sub-row"><span>Over 2.5 Hit Rate:</span><b>${pct(s.o25)}%</b></div><div class="sub-row"><span>Exact Scores:</span><b>${pct(s.scores)}%</b></div><div class="section-title" style="color:var(--ai)">🤖 AI OPTIMIZER</div><div class="alert-wall">✅ Calibration Complete. Exact Score logic verified at 10% accuracy. Over 2.5 filter remains optimal at 2.95 xG.</div>`;
+        document.getElementById('aiResultsBox').innerHTML = `<div class="sub-row"><span>Value Bombs:</span><b>${pct(s.bombs)}%</b></div><div class="sub-row"><span>Over 2.5:</span><b>${pct(s.o25)}%</b></div><div class="sub-row"><span>Exact Scores:</span><b>${pct(s.scores)}%</b></div>`;
         document.getElementById('aiPanel').style.display='block';
     } catch(e) {} document.getElementById('aiCont').style.display='none';
 }
