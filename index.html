@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v302 - Bulletproof</title>
+    <title>Predictor Pro v303 - Complete Live Spec</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
@@ -77,6 +77,8 @@
         .form-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin: 0 2px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
 
+        .live-indic { color: var(--live); font-size: 0.8rem; font-weight: 900; margin-left: 5px; animation: pulse 1.5s infinite; }
+
         @media (max-width: 600px) {
             .card-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
             .pred-row { flex-direction: column; align-items: flex-start; }
@@ -91,7 +93,7 @@
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
         <input type="password" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" inputmode="numeric">
         <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v302</div>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v303</div>
     </div>
 </div>
 
@@ -101,7 +103,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">SOVEREIGN OMEGA SPEC</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">COMPLETE LIVE SPEC</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -120,11 +122,12 @@
             <select id="leagueFilter" onchange="renderMatches()" style="margin-bottom:12px;"></select>
             <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
                 <select id="accaMarket">
-                    <option value="1X2">ΣΗΜΕΙΑ</option>
-                    <option value="CORNERS">ΚΟΡΝΕΡ</option>
-                    <option value="GOALS">GOALS</option>
-                    <option value="BOMBS">ΜΠΟΜΠΕΣ</option>
-                    <option value="COMBO">COMBO</option>
+                    <option value="1X2">ΣΗΜΕΙΑ (1X2)</option>
+                    <option value="SCORE">🎯 ΣΚΟΡ</option>
+                    <option value="CORNERS">🚩 ΚΟΡΝΕΡ</option>
+                    <option value="GOALS">⚽ OVER 2.5</option>
+                    <option value="BOMBS">💣 ΜΠΟΜΠΕΣ</option>
+                    <option value="COMBO">⚡ COMBO</option>
                 </select>
                 <select id="accaSize">
                     <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
@@ -167,31 +170,13 @@
 </div>
 
 <script>
-// --- AUTH ENGINE ---
+// --- SAFETY HELPERS ---
+const sGetP = (p, k) => parseInt(p?.predictions?.percent?.[k] || 0);
+const sGetXG = (t, s) => parseFloat(t?.last_5?.goals?.[s]?.average || (s==='for'?1.0:1.0));
+const sGetF = (t) => (t?.league?.form || "DDDDDD").split('').slice(-6);
+
+// --- CORE CONFIG & AUTH ---
 const ACCESS_PIN = "106014";
-
-function verifyPinBtn() {
-    let v = document.getElementById('pinInput').value.trim();
-    if(v === ACCESS_PIN) {
-        sessionStorage.setItem("p_auth_v302", "true");
-        document.getElementById('authScreen').style.display = 'none';
-        document.getElementById('appContent').style.display = 'block';
-        startSystem();
-    } else { 
-        document.getElementById('authMsg').innerText = "ΛΑΘΟΣ ΚΩΔΙΚΟΣ. ΔΟΚΙΜΑΣΤΕ ΞΑΝΑ.";
-        document.getElementById('authMsg').style.color = "var(--alert)";
-        document.getElementById('pinInput').value = ""; 
-    }
-}
-window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v302") === "true") { 
-        document.getElementById('authScreen').style.display='none'; 
-        document.getElementById('appContent').style.display='block'; 
-        startSystem(); 
-    } 
-};
-
-// --- CORE SYSTEM ---
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [
     {id: 39, name: "Αγγλία - Premier"}, {id: 40, name: "Αγγλία - Championship"},
@@ -204,6 +189,27 @@ const LEAGUES = [
 ];
 
 let masterData = []; let standingsMap = {};
+
+function verifyPinBtn() {
+    let v = document.getElementById('pinInput').value.trim();
+    if(v === ACCESS_PIN) {
+        sessionStorage.setItem("p_auth_v303", "true");
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+        startSystem();
+    } else { 
+        document.getElementById('authMsg').innerText = "ΛΑΘΟΣ ΚΩΔΙΚΟΣ. ΔΟΚΙΜΑΣΤΕ ΞΑΝΑ.";
+        document.getElementById('authMsg').style.color = "var(--alert)";
+        document.getElementById('pinInput').value = ""; 
+    }
+}
+window.onload = () => { 
+    if(sessionStorage.getItem("p_auth_v303") === "true") { 
+        document.getElementById('authScreen').style.display='none'; 
+        document.getElementById('appContent').style.display='block'; 
+        startSystem(); 
+    } 
+};
 
 function startSystem() {
     fetchLive(); setInterval(fetchLive, 60000);
@@ -253,11 +259,6 @@ async function globalSync() {
     renderMatches();
 }
 
-// SAFE HELPERS - Προστατεύουν από κενά API Data
-const sGetP = (p, k) => parseInt(p?.predictions?.percent?.[k] || 0);
-const sGetXG = (t, s) => parseFloat(t?.last_5?.goals?.[s]?.average || (s==='for'?1.0:1.0));
-const sGetF = (t) => (t?.league?.form || "DDDDDD").split('').slice(-6);
-
 function renderMatches() {
     const activeList = document.getElementById('activeMatchList'); activeList.innerHTML = "";
     const finishedList = document.getElementById('finishedMatchList'); finishedList.innerHTML = "";
@@ -282,13 +283,12 @@ function renderMatches() {
                     
                     const card = document.createElement('div');
                     card.className = `match-card ${isFin ? 'finished' : ''}`;
-                    // DIRECT ONCLICK BINDING - Bulletproof Touch
                     card.setAttribute("onclick", `openIntel(${m.fixture.id})`);
                     
                     card.innerHTML = `
                         ${isValue && !isFin ? '<div class="value-badge">🔥 VALUE BET</div>' : ''}
                         <div class="card-header">
-                            <div class="team-names"><span class="rank-info">${hR}</span>${m.teams.home.name}<br><span class="rank-info">${aR}</span>${m.teams.away.name}</div>
+                            <div class="team-names"><span class="rank-info">(${hR})</span>${m.teams.home.name}<br><span class="rank-info">(${aR})</span>${m.teams.away.name}</div>
                             <div class="score-box">
                                 <div class="score-display" style="color:${isLive?'var(--live)':'#fff'}">${m.goals.home ?? '-'}:${m.goals.away ?? '-'}</div>
                                 ${isLive ? `<div class="time-rem">Υπόλοιπο: ${rem>0?rem:0}'</div>` : isFin ? `<div style="font-size:0.75rem;color:#888;">ΤΕΛΙΚΟ</div>` : `<div style="font-size:0.75rem;color:#888;">${new Date(m.fixture.date).toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'})}</div>`}
@@ -315,6 +315,7 @@ function openIntel(id) {
         const d = masterData.find(x => x.fixture.fixture.id == id); 
         if(!d) { alert("Data Sync Error"); return; }
         const p = d.prediction || {}; const m = d.fixture || {};
+        const isLive = ['1H','2H','HT'].includes(m.fixture?.status?.short);
         
         const hXG = sGetXG(p?.teams?.home, 'for'); const aXG = sGetXG(p?.teams?.away, 'for');
         const hXGA = sGetXG(p?.teams?.home, 'against'); const aXGA = sGetXG(p?.teams?.away, 'against');
@@ -323,6 +324,7 @@ function openIntel(id) {
         if(aXGA <= 0.60 && hCr > 5) { hCr += 1.5; syn = '▲'; } 
         if(hXGA <= 0.60 && aCr > 5) { aCr += 1.5; syn = '▲'; }
         const totXG = hXG + aXG;
+        const cCardsH = 1.5 + hXGA*0.5; const cCardsA = 1.5 + aXGA*0.5;
 
         document.getElementById('mTitle').innerText = `${m.teams?.home?.name || 'Home'} vs ${m.teams?.away?.name || 'Away'}`;
         document.getElementById('bigScoreDisplay').innerText = `${m.goals?.home ?? '-'}-${m.goals?.away ?? '-'}`;
@@ -339,16 +341,43 @@ function openIntel(id) {
         const rf = (fArr) => fArr.map(c => `<span class="form-dot ${c}"></span>`).join('');
         document.getElementById('formContainer').innerHTML = `<div><small style="display:block;margin-bottom:5px;font-weight:900;">HOME</small><div>${rf(sGetF(p?.teams?.home))}</div></div><div><small style="display:block;margin-bottom:5px;font-weight:900;">AWAY</small><div>${rf(sGetF(p?.teams?.away))}</div></div>`;
         
-        document.getElementById('statsTable').innerHTML = `<tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr><tr><td>xG Attack</td><td>${hXG.toFixed(2)}</td><td>${aXG.toFixed(2)}</td></tr><tr><td>xGA Defense</td><td style="${hXGA<=0.6?'color:var(--alert)':''}">${hXGA.toFixed(2)}</td><td style="${aXGA<=0.6?'color:var(--alert)':''}">${aXGA.toFixed(2)}</td></tr><tr><td>xCorners</td><td>${hCr.toFixed(1)}${syn}</td><td>${aCr.toFixed(1)}${syn}</td></tr><tr><td>Delta (Δ)</td><td style="color:var(--cyan)">${(hXG-hXGA).toFixed(2)}</td><td style="color:var(--cyan)">${(aXG-aXGA).toFixed(2)}</td></tr>`;
+        const ls = (cid) => isLive ? `<span id="${cid}" class="live-indic"></span>` : '';
         
-        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο:</span><b>${p?.predictions?.winner?.name || 'N/A'}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(hCr+aCr-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
+        document.getElementById('statsTable').innerHTML = `
+            <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
+            <tr><td>xG Attack</td><td>${hXG.toFixed(2)}${ls('lx-h')}</td><td>${aXG.toFixed(2)}${ls('lx-a')}</td></tr>
+            <tr><td>xGA Defense</td><td style="${hXGA<=0.6?'color:var(--alert)':''}">${hXGA.toFixed(2)}</td><td style="${aXGA<=0.6?'color:var(--alert)':''}">${aXGA.toFixed(2)}</td></tr>
+            <tr><td>xCorners</td><td>${hCr.toFixed(1)}${syn}${ls('lc-h')}</td><td>${aCr.toFixed(1)}${syn}${ls('lc-a')}</td></tr>
+            <tr><td>Cards</td><td>~${cCardsH.toFixed(1)}${ls('cd-h')}</td><td>~${cCardsA.toFixed(1)}${ls('cd-a')}</td></tr>
+            <tr><td>Delta (Δ)</td><td style="color:var(--cyan)">${(hXG-hXGA).toFixed(2)}</td><td style="color:var(--cyan)">${(aXG-aXGA).toFixed(2)}</td></tr>`;
+        
+        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο:</span><b>${p?.predictions?.winner?.name || 'N/A'}</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(hXG)}-${Math.round(aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(hCr+aCr-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
         
         let h2h = ''; (p?.h2h || []).slice(0,5).forEach(x => { h2h += `<div class="pred-row"><span>${x.teams?.home?.name}-${x.teams?.away?.name}</span><b>${x.goals?.home}:${x.goals?.away}</b></div>`; });
         document.getElementById('h2hBox').innerHTML = h2h || '<div class="pred-row">No H2H Data</div>';
         
         document.getElementById('intelPanel').style.display = 'block';
         window.scrollTo(0,0);
-    } catch(err) { alert("Σφάλμα ανάγνωσης δεδομένων για αυτόν τον αγώνα."); }
+
+        // --- ASYNC LIVE STATS FETCH ---
+        if(isLive) {
+            fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${id}`, { headers: {"x-apisports-key": KEY} })
+            .then(res => res.json())
+            .then(sData => {
+                if(sData.response && sData.response.length > 0) {
+                    const gS = (s, t) => { let x = s.find(y => y.type===t); return x? (x.value!==null?x.value:0) : 0; };
+                    const hS = sData.response[0].statistics; const aS = sData.response[1].statistics;
+                    
+                    const setL = (elId, val) => { const el = document.getElementById(elId); if(el) el.innerText = ` (L: ${val})`; };
+                    
+                    setL('lx-h', gS(hS, "Expected Goals")); setL('lx-a', gS(aS, "Expected Goals"));
+                    setL('lc-h', gS(hS, "Corner Kicks")); setL('lc-a', gS(aS, "Corner Kicks"));
+                    setL('cd-h', parseInt(gS(hS, "Yellow Cards")) + parseInt(gS(hS, "Red Cards")));
+                    setL('cd-a', parseInt(gS(aS, "Yellow Cards")) + parseInt(gS(aS, "Red Cards")));
+                }
+            }).catch(e=>{});
+        }
+    } catch(err) { alert("Σφάλμα ανάγνωσης δεδομένων."); }
 }
 
 function generateAcca() {
@@ -358,18 +387,50 @@ function generateAcca() {
         const hXGA = sGetXG(p?.teams?.home,'against'); const aXGA = sGetXG(p?.teams?.away,'against');
         let ec = (4.1+hXG*0.9)+(3.6+aXG*0.8); if(aXGA<=0.60 && (4.1+hXG*0.9)>5) ec+=1.5; if(hXGA<=0.60 && (4.1+aXG*0.9)>5) ec+=1.5;
         const hP = sGetP(p,'home'); const aP = sGetP(p,'away');
-        return { id: d.fixture.fixture.id, name: d.fixture.teams.home.name + ' - ' + d.fixture.teams.away.name, hP, aP, ec, o25: sGetP(p,'over') };
+        return { id: d.fixture.fixture.id, name: d.fixture.teams.home.name + ' - ' + d.fixture.teams.away.name, hP, aP, ec, o25: sGetP(p,'over'), sc: `${Math.round(hXG)}-${Math.round(aXG)}` };
     });
     
-    if(m==='CORNERS') pool.sort((a,b)=>b.ec-a.ec); else if(m==='BOMBS') pool=pool.filter(i=>i.hP<=28||i.aP<=28).sort((a,b)=>Math.min(a.hP,a.aP)-Math.min(b.hP,b.aP)); else if(m==='GOALS') pool.sort((a,b)=>b.o25-a.o25); else if(m==='COMBO') pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP)); else pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP));
+    if(m==='CORNERS') pool.sort((a,b)=>b.ec-a.ec); else if(m==='BOMBS') pool=pool.filter(i=>i.hP<=28||i.aP<=28).sort((a,b)=>Math.min(a.hP,a.aP)-Math.min(b.hP,b.aP)); else if(m==='GOALS') pool.sort((a,b)=>b.o25-a.o25); else if(m==='SCORE') pool.sort((a,b)=>(b.hP+b.aP+b.o25)-(a.hP+a.aP+a.o25)); else if(m==='COMBO') pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP)); else pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP));
     
     let h = `<h3 style="color:var(--p); margin:0 0 15px 0;">🎯 ELITE ${s}-FOLD</h3>`;
     pool.slice(0,s).forEach(i => {
         let tip = '';
-        if(m==='CORNERS') tip = `Over ${Math.floor(i.ec-1)}.5 Κόρνερ`; else if(m==='GOALS') tip = `Over 2.5`; else if(m==='BOMBS') tip = i.hP<i.aP?'2':'1'; else if(m==='COMBO') tip = (i.hP>i.aP?'1X':'X2') + ' & O1.5'; else tip = i.hP>i.aP?'1':'2';
+        if(m==='CORNERS') tip = `Over ${Math.floor(i.ec-1)}.5 Κόρνερ`; else if(m==='SCORE') tip = `Σκορ: ${i.sc}`; else if(m==='GOALS') tip = `Over 2.5`; else if(m==='BOMBS') tip = i.hP<i.aP?'2':'1'; else if(m==='COMBO') tip = (i.hP>i.aP?'1X':'X2') + ' & O1.5'; else tip = i.hP>i.aP?'1':'2';
         h += `<div class="acca-item" onclick="openIntel(${i.id})"><span style="font-weight:800; font-size:0.9rem;">${i.name}</span><b style="color:var(--gold)">${tip}</b></div>`;
     });
     document.getElementById('accaDisplay').innerHTML=h; document.getElementById('accaDisplay').style.display='block';
+}
+
+async function runDeepEvaluation() {
+    const tD = document.getElementById('evalDate').value; document.getElementById('aiCont').style.display='block';
+    let sCr = {t:0, w:0}, sSyn = {t:0, w:0};
+    try {
+        const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
+        const fD = await fR.json();
+        const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
+        for (let i=0; i<tFix.length; i++) {
+            let m = tFix[i]; document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
+            const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
+            const pD = (await pR.json()).response[0];
+            const sR = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, { headers: {"x-apisports-key": KEY} });
+            const sD = await sR.json();
+            if(pD && sD.response?.[0]) {
+                const actC = (sD.response[0]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0);
+                const hXG = sGetXG(pD.teams.home,'for'); const aXG = sGetXG(pD.teams.away,'for');
+                const hXGA = sGetXG(pD.teams.home,'against'); const aXGA = sGetXG(pD.teams.away,'against');
+                let pC = (4.1+hXG*0.9)+(3.6+aXG*0.8); let syn = false; if((aXGA<=0.6 && (4.1+hXG*0.9)>5)||(hXGA<=0.6 && (4.1+aXG*0.9)>5)) { pC+=1.5; syn=true; }
+                sCr.t++; if(actC >= pC) sCr.w++; if(syn) { sSyn.t++; if(actC >= pC) sSyn.w++; }
+            }
+        }
+        document.getElementById('aiResultsBox').innerHTML = `<div class="pred-row"><span>Γενική Κόρνερ:</span><b>${sCr.t>0?Math.round(sCr.w/sCr.t*100):0}%</b></div><div class="pred-row" style="border:1px solid var(--gold);"><span>Μπετόν Synergy:</span><b>${sSyn.t>0?Math.round(sSyn.w/sSyn.t*100):0}%</b></div>`;
+        document.getElementById('aiPanel').style.display='block';
+    } catch(e) {}
+    document.getElementById('aiCont').style.display='none';
+}
+
+function exportToPDF() {
+    const el = document.getElementById('pdfExportArea');
+    html2pdf().from(el).set({ margin:10, filename:'Report.pdf', html2canvas:{scale:2, backgroundColor:'#0b0e14'}, jsPDF:{format:'a4'} }).save();
 }
 
 function closePanel(pid) { document.getElementById(pid).style.display = 'none'; }
