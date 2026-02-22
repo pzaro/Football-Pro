@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v274 - PDF Data Lab</title>
+    <title>Predictor Pro v275 - Secured Lab</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { 
@@ -16,6 +16,14 @@
         body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; line-height: 1.4; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 15px; }
 
+        /* --- AUTH SCREEN CSS --- */
+        #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .auth-box { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 40px 20px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .auth-input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 12px; border: 1px solid var(--cyan); background: #000; color: var(--cyan); font-size: 1.5rem; text-align: center; letter-spacing: 10px; font-weight: 900; }
+        .btn-auth { width: 100%; padding: 18px; background: var(--p); color: #000; border: none; border-radius: 12px; font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2); }
+        .btn-auth:active { transform: scale(0.98); }
+
+        /* --- MAIN APP CSS --- */
         .ticker-wrap { width: 100%; background: rgba(0, 255, 65, 0.05); border-top: 1px solid rgba(0, 255, 65, 0.3); border-bottom: 1px solid rgba(0, 255, 65, 0.3); overflow: hidden; white-space: nowrap; box-sizing: border-box; padding: 10px 0; margin-bottom: 25px; display: none; }
         .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 2.5rem; font-size: 1rem; font-weight: 800; color: #fff; }
@@ -80,13 +88,11 @@
         .acca-item:hover { background: rgba(255,255,255,0.05); }
 
         .btn-close { background: var(--alert); color: #fff; border: none; padding: 18px 35px; border-radius: 14px; font-weight: 900; font-size: 1rem; float: right; cursor: pointer; }
-        
         .btn-pdf { background: var(--cyan); color: #000; border: none; padding: 18px 35px; border-radius: 14px; font-weight: 900; font-size: 1rem; float: left; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3); }
 
         #radarAlert { position: fixed; top: 20px; right: 20px; background: var(--p); color: #000; padding: 20px 30px; border-radius: 15px; font-weight: 900; font-size: 1.2rem; box-shadow: 0 10px 30px rgba(0,255,136,0.5); z-index: 99999; transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #radarAlert.show { transform: translateX(0); }
 
-        /* DATA SCIENCE BARS */
         .ds-bar-wrap { width: 100%; background: #222; height: 8px; border-radius: 4px; margin-top: 5px; overflow: hidden;}
         .ds-bar-fill { height: 100%; background: var(--ai); border-radius: 4px; }
 
@@ -102,135 +108,173 @@
 </head>
 <body>
 
-<div id="radarAlert">⚽ ΓΚΟΛ!</div>
-
-<div class="container">
-    <div style="text-align:center; padding-bottom: 15px;">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v274</span></h1>
-        <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • PDF DATA LAB</small>
-    </div>
-
-    <div class="ticker-wrap" id="liveTickerWrap">
-        <div class="ticker-move" id="tickerContent"></div>
-    </div>
-
-    <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
-    
-    <div class="ai-controls">
-        <input type="date" id="evalDate" class="date-picker">
-        <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DEEP SCAN I.ΣΤΟΡΙΚΟΥ</button>
-    </div>
-
-    <div id="syncCont">
-        <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.9rem; font-weight:900;">
-            <span id="syncStep">ΑΝΑΖΗΤΗΣΗ ΑΓΩΝΩΝ...</span><span id="syncPerc">0%</span>
-        </div>
-        <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
-    </div>
-
-    <div id="aiCont">
-        <div style="display:flex; justify-content:space-between; color:var(--ai); font-size:0.9rem; font-weight:900;">
-            <span id="aiStep">ΕΞΑΓΩΓΗ ΙΣΤΟΡΙΚΩΝ ΔΕΔΟΜΕΝΩΝ...</span><span id="aiPerc">0%</span>
-        </div>
-        <div class="progress-track"><div id="aiFill" class="progress-fill ai-fill"></div></div>
-    </div>
-
-    <div id="dashboardTools" class="tools-box">
-        <label style="color:var(--gold); font-size:0.85rem; font-weight:900; display:block; margin-bottom:8px;">ΦΙΛΤΡΟ ΠΡΩΤΑΘΛΗΜΑΤΟΣ</label>
-        <select id="leagueFilter" onchange="renderMatches()" style="margin-bottom:25px;">
-            <option value="ALL">Όλα τα Πρωταθλήματα</option>
-        </select>
-        
-        <label style="color:var(--gold); font-size:0.85rem; font-weight:900; display:block; margin-bottom:8px;">ACCA GENERATOR</label>
-        <div class="controls-grid">
-            <select id="accaMarket">
-                <option value="1X2">ΣΗΜΕΙΑ (1-X-2)</option>
-                <option value="SCORE">🎯 ΑΚΡΙΒΕΣ ΣΚΟΡ (3,4,5-άδα)</option>
-                <option value="BOMBS">💣 ΜΠΟΜΠΕΣ (>3.60)</option>
-                <option value="GOALS">GOALS (O2.5)</option>
-                <option value="COMBO">1X/X2 + OVER 1.5</option>
-            </select>
-            <select id="accaSize">
-                <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
-            </select>
-        </div>
-        <button class="btn-gen" onclick="generateAcca()">🎯 ΔΗΜΙΟΥΡΓΙΑ ΔΕΛΤΙΟΥ</button>
-    </div>
-
-    <div id="accaDisplay" style="display:none; background:rgba(191,64,191,0.1); border:2px solid var(--value); border-radius:20px; padding:25px; margin-bottom:25px;"></div>
-    <div id="matchList"></div>
-
-    <div id="aiPanel">
-        <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
-            <button onclick="exportToPDF()" class="btn-pdf">📥 ΕΞΑΓΩΓΗ PDF</button>
-            <button onclick="this.parentElement.parentElement.style.display='none'" class="btn-close">ΚΛΕΙΣΙΜΟ</button>
-        </div>
-        
-        <div id="pdfExportArea" style="background:var(--bg); padding:20px; border-radius:15px; margin-top:20px; border:1px solid var(--border);">
-            <h2 style="text-align:center; margin-top:10px; font-size:1.6rem; color:var(--ai);">🧠 DATA SCIENCE REPORT</h2>
-            <p id="aiReportDate" style="text-align:center; color:#aaa; margin-bottom:30px; font-weight:bold;"></p>
-            <div id="aiResultsBox"></div>
-            <div style="text-align:center; margin-top:30px; font-size:0.7rem; color:#666;">Generated by Predictor Pro v274 Sovereign Engine</div>
-        </div>
-    </div>
-
-    <div id="intelPanel">
-        <button onclick="this.parentElement.style.display='none'" class="btn-close">ΕΠΙΣΤΡΟΦΗ</button>
-        <h2 id="mTitle" style="text-align:center; margin-top:90px; font-size:1.4rem; color:var(--gold); line-height:1.3;"></h2>
-        <div id="bigScoreDisplay" style="font-size:5rem; font-weight:900; text-align:center; margin:10px 0; color:#fff;"></div>
-        <div id="mStatus" style="text-align:center; margin-bottom:25px;"></div>
-        
-        <div id="builderBox" style="text-align:center; margin-bottom:20px; font-size:1.1rem; background:var(--card); padding:15px; border-radius:15px; border:1px solid var(--border);"></div>
-
-        <div id="formContainer" style="display:flex; justify-content: space-around; padding:20px 10px; margin:20px 0; background:rgba(0,0,0,0.3); border-radius:15px; border:1px solid var(--border);"></div>
-
-        <table class="clean-table" id="statsTable"></table>
-
-        <div class="section-title">⚔️ Προϊστορια (H2H - Τελ. 5)</div>
-        <div id="h2hBox"></div>
-
-        <div class="section-title">🤖 Προβλεψεις Αλγοριθμου (Sovereign)</div>
-        <div id="algoPreds"></div>
-
-        <div class="section-title">📊 Στατιστικα Sites (Σκορ & O/U)</div>
-        <div id="statsSites"></div>
-
-        <div class="section-title">🎯 Κορυφαια Sites Προγνωστικων</div>
-        <div id="bettingSites"></div>
+<div id="authScreen">
+    <div class="auth-box">
+        <h1 style="color:var(--p); margin-top:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff;">PRO</span></h1>
+        <p style="color:#aaa; font-size:0.9rem;">Secured Access Area</p>
+        <input type="password" id="pinInput" class="auth-input" placeholder="****" maxlength="8">
+        <button onclick="verifyPin()" class="btn-auth">🔓 UNLOCK SYSTEM</button>
+        <div id="authError" style="color:var(--alert); margin-top:15px; font-weight:bold; height:20px;"></div>
     </div>
 </div>
 
-<script>
+<div id="appContent" style="display:none;">
+
+    <div id="radarAlert">⚽ ΓΚΟΛ!</div>
+
+    <div class="container">
+        <div style="text-align:center; padding-bottom: 15px;">
+            <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR PRO <span style="color:#fff">v275</span></h1>
+            <small id="creditDisplay" style="color:var(--cyan); font-weight:900; font-size:0.85rem; letter-spacing:1px;">PRO PLAN • SECURED LAB</small>
+        </div>
+
+        <div class="ticker-wrap" id="liveTickerWrap">
+            <div class="ticker-move" id="tickerContent"></div>
+        </div>
+
+        <button id="masterBtn" onclick="globalSync()" class="btn-sync">🚀 ΕΝΑΡΞΗ ΠΛΗΡΟΥΣ ΣΑΡΩΣΗΣ</button>
+        
+        <div class="ai-controls">
+            <input type="date" id="evalDate" class="date-picker">
+            <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DEEP SCAN I.ΣΤΟΡΙΚΟΥ</button>
+        </div>
+
+        <div id="syncCont">
+            <div style="display:flex; justify-content:space-between; color:var(--p); font-size:0.9rem; font-weight:900;">
+                <span id="syncStep">ΑΝΑΖΗΤΗΣΗ ΑΓΩΝΩΝ...</span><span id="syncPerc">0%</span>
+            </div>
+            <div class="progress-track"><div id="syncFill" class="progress-fill"></div></div>
+        </div>
+
+        <div id="aiCont">
+            <div style="display:flex; justify-content:space-between; color:var(--ai); font-size:0.9rem; font-weight:900;">
+                <span id="aiStep">ΕΞΑΓΩΓΗ ΙΣΤΟΡΙΚΩΝ ΔΕΔΟΜΕΝΩΝ...</span><span id="aiPerc">0%</span>
+            </div>
+            <div class="progress-track"><div id="aiFill" class="progress-fill ai-fill"></div></div>
+        </div>
+
+        <div id="dashboardTools" class="tools-box">
+            <label style="color:var(--gold); font-size:0.85rem; font-weight:900; display:block; margin-bottom:8px;">ΦΙΛΤΡΟ ΠΡΩΤΑΘΛΗΜΑΤΟΣ</label>
+            <select id="leagueFilter" onchange="renderMatches()" style="margin-bottom:25px;">
+                <option value="ALL">Όλα τα Πρωταθλήματα</option>
+            </select>
+            
+            <label style="color:var(--gold); font-size:0.85rem; font-weight:900; display:block; margin-bottom:8px;">ACCA GENERATOR</label>
+            <div class="controls-grid">
+                <select id="accaMarket">
+                    <option value="1X2">ΣΗΜΕΙΑ (1-X-2)</option>
+                    <option value="SCORE">🎯 ΑΚΡΙΒΕΣ ΣΚΟΡ (3,4,5-άδα)</option>
+                    <option value="BOMBS">💣 ΜΠΟΜΠΕΣ (>3.60)</option>
+                    <option value="GOALS">GOALS (O2.5)</option>
+                    <option value="COMBO">1X/X2 + OVER 1.5</option>
+                </select>
+                <select id="accaSize">
+                    <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
+                </select>
+            </div>
+            <button class="btn-gen" onclick="generateAcca()">🎯 ΔΗΜΙΟΥΡΓΙΑ ΔΕΛΤΙΟΥ</button>
+        </div>
+
+        <div id="accaDisplay" style="display:none; background:rgba(191,64,191,0.1); border:2px solid var(--value); border-radius:20px; padding:25px; margin-bottom:25px;"></div>
+        <div id="matchList"></div>
+
+        <div id="aiPanel">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
+                <button onclick="exportToPDF()" class="btn-pdf">📥 ΕΞΑΓΩΓΗ PDF</button>
+                <button onclick="this.parentElement.parentElement.style.display='none'" class="btn-close">ΚΛΕΙΣΙΜΟ</button>
+            </div>
+            <div id="pdfExportArea" style="background:var(--bg); padding:20px; border-radius:15px; margin-top:20px; border:1px solid var(--border);">
+                <h2 style="text-align:center; margin-top:10px; font-size:1.6rem; color:var(--ai);">🧠 DATA SCIENCE REPORT</h2>
+                <p id="aiReportDate" style="text-align:center; color:#aaa; margin-bottom:30px; font-weight:bold;"></p>
+                <div id="aiResultsBox"></div>
+                <div style="text-align:center; margin-top:30px; font-size:0.7rem; color:#666;">Generated by Predictor Pro v275 Sovereign Engine</div>
+            </div>
+        </div>
+
+        <div id="intelPanel">
+            <button onclick="this.parentElement.style.display='none'" class="btn-close">ΕΠΙΣΤΡΟΦΗ</button>
+            <h2 id="mTitle" style="text-align:center; margin-top:90px; font-size:1.4rem; color:var(--gold); line-height:1.3;"></h2>
+            <div id="bigScoreDisplay" style="font-size:5rem; font-weight:900; text-align:center; margin:10px 0; color:#fff;"></div>
+            <div id="mStatus" style="text-align:center; margin-bottom:25px;"></div>
+            
+            <div id="builderBox" style="text-align:center; margin-bottom:20px; font-size:1.1rem; background:var(--card); padding:15px; border-radius:15px; border:1px solid var(--border);"></div>
+            <div id="formContainer" style="display:flex; justify-content: space-around; padding:20px 10px; margin:20px 0; background:rgba(0,0,0,0.3); border-radius:15px; border:1px solid var(--border);"></div>
+
+            <table class="clean-table" id="statsTable"></table>
+
+            <div class="section-title">⚔️ Προϊστορια (H2H - Τελ. 5)</div>
+            <div id="h2hBox"></div>
+            <div class="section-title">🤖 Προβλεψεις Αλγοριθμου (Sovereign)</div>
+            <div id="algoPreds"></div>
+            <div class="section-title">📊 Στατιστικα Sites (Σκορ & O/U)</div>
+            <div id="statsSites"></div>
+            <div class="section-title">🎯 Κορυφαια Sites Προγνωστικων</div>
+            <div id="bettingSites"></div>
+        </div>
+    </div>
+</div> <script>
+// ==========================================
+// ⚙️ SYSTEM SETTINGS & AUTHENTICATION
+// ==========================================
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [140, 135, 39, 61, 78, 94, 141, 318, 197, 262, 128, 40, 136, 88, 203, 204, 253];
+
+// 🔑 ΑΛΛΑΞΕ ΤΟΝ ΚΩΔΙΚΟ ΣΟΥ ΕΔΩ:
+const ACCESS_PIN = "2026"; 
+
+let tickerInterval;
+
+function verifyPin() {
+    const input = document.getElementById('pinInput').value;
+    if(input === ACCESS_PIN) {
+        // Αποθήκευση πρόσβασης μόνο για το τρέχον Tab (κλείνοντας το Tab, κλειδώνει ξανά)
+        sessionStorage.setItem("pro_auth", "true");
+        unlockSystem();
+    } else {
+        document.getElementById('authError').innerText = "ΛΑΘΟΣ ΚΩΔΙΚΟΣ!";
+        document.getElementById('pinInput').value = "";
+    }
+}
+
+function unlockSystem() {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+    
+    // Εκκίνηση του API Ticker ΜΟΝΟ αφού μπει σωστός κωδικός
+    fetchLiveTicker(); 
+    tickerInterval = setInterval(fetchLiveTicker, 60000);
+}
+
+// Έλεγχος κατά την ανανέωση της σελίδας
+window.onload = () => {
+    if(sessionStorage.getItem("pro_auth") === "true") {
+        unlockSystem();
+    }
+    // Αλλιώς παραμένει κλειδωμένο
+};
+
+// Επιτρέπει το Login πατώντας το 'Enter'
+document.getElementById("pinInput").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    verifyPin();
+  }
+});
+// ==========================================
 
 let masterData = [];
 let standingsMap = {};
 
 document.getElementById('evalDate').value = new Date().toISOString().split('T')[0];
 
-// --- PDF EXPORT ENGINE ---
 function exportToPDF() {
     const element = document.getElementById('pdfExportArea');
     const targetDate = document.getElementById('evalDate').value || 'Report';
-    const opt = {
-        margin:       10,
-        filename:     `PredictorPro_Data_${targetDate}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#0d1117' },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    
-    // Αλλάζουμε το background προσωρινά για το PDF ώστε να βγει σωστά με το Dark Mode
+    const opt = { margin: 10, filename: `PredictorPro_Data_${targetDate}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0d1117' }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
     element.style.backgroundColor = '#0d1117';
-    
-    html2pdf().set(opt).from(element).save().then(() => {
-        // Επαναφορά χρώματος μετά την αποθήκευση
-        element.style.backgroundColor = 'var(--bg)';
-    });
+    html2pdf().set(opt).from(element).save().then(() => { element.style.backgroundColor = 'var(--bg)'; });
 }
 
-// --- RADAR SYSTEM ---
 let trackedMatches = {}; 
 const goalSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg'); 
 
@@ -250,7 +294,6 @@ function fireGoalAlert(title, message) {
     if ("Notification" in window && Notification.permission === "granted") new Notification(title, { body: message, icon: "https://cdn-icons-png.flaticon.com/512/1165/1165187.png" });
 }
 
-// --- TICKER ---
 async function fetchLiveTicker() {
     try {
         const res = await fetch(`https://v3.football.api-sports.io/fixtures?live=${LEAGUES.join('-')}`, { headers: {"x-apisports-key": KEY} });
@@ -279,9 +322,7 @@ async function fetchLiveTicker() {
         } else wrap.style.display = 'none';
     } catch(e) {}
 }
-fetchLiveTicker(); setInterval(fetchLiveTicker, 60000); 
 
-// --- DEEP BACKTESTING MODULE (DATA SCIENCE LAB) ---
 async function runDeepEvaluation() {
     const targetDate = document.getElementById('evalDate').value;
     if(!targetDate) { alert("Παρακαλώ επιλέξτε ημερομηνία."); return; }
@@ -290,9 +331,7 @@ async function runDeepEvaluation() {
     
     let stats1X2 = { "70+": {t:0, w:0}, "60-69": {t:0, w:0}, "50-59": {t:0, w:0}, "40-49": {t:0, w:0}, "<40": {t:0, w:0} };
     let statsBombs = { t:0, w:0 }; 
-    let statsCrn = {}; 
-    let statsCrd = {}; 
-    let totalAnalyzed = 0;
+    let statsCrn = {}; let statsCrd = {}; let totalAnalyzed = 0;
 
     try {
         document.getElementById('aiStep').innerText = `ΑΝΑΖΗΤΗΣΗ ΑΓΩΝΩΝ ΣΤΙΣ ${targetDate}...`;
@@ -308,10 +347,8 @@ async function runDeepEvaluation() {
         }
 
         for (let i = 0; i < targetFixtures.length; i++) {
-            let m = targetFixtures[i];
-            let pPerc = Math.round(((i+1)/targetFixtures.length)*100);
-            document.getElementById('aiFill').style.width = pPerc+'%';
-            document.getElementById('aiPerc').innerText = pPerc+'%';
+            let m = targetFixtures[i]; let pPerc = Math.round(((i+1)/targetFixtures.length)*100);
+            document.getElementById('aiFill').style.width = pPerc+'%'; document.getElementById('aiPerc').innerText = pPerc+'%';
             document.getElementById('aiStep').innerText = `DS EXTRACT: ${m.teams.home.name}`;
 
             try {
@@ -327,20 +364,11 @@ async function runDeepEvaluation() {
                     const hG = m.goals.home; const aG = m.goals.away;
                     const actual1X2 = hG > aG ? '1' : (aG > hG ? '2' : 'X');
                     
-                    const hP = parseInt(pData.predictions.percent.home)||0; 
-                    const aP = parseInt(pData.predictions.percent.away)||0;
-                    
-                    const pred1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
-                    const maxProb = Math.max(hP, aP);
+                    const hP = parseInt(pData.predictions.percent.home)||0; const aP = parseInt(pData.predictions.percent.away)||0;
+                    const pred1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X'); const maxProb = Math.max(hP, aP);
 
-                    let bucket = "<40";
-                    if(maxProb >= 70) bucket = "70+";
-                    else if(maxProb >= 60) bucket = "60-69";
-                    else if(maxProb >= 50) bucket = "50-59";
-                    else if(maxProb >= 40) bucket = "40-49";
-                    
-                    stats1X2[bucket].t++;
-                    if(actual1X2 === pred1X2) stats1X2[bucket].w++;
+                    let bucket = "<40"; if(maxProb >= 70) bucket = "70+"; else if(maxProb >= 60) bucket = "60-69"; else if(maxProb >= 50) bucket = "50-59"; else if(maxProb >= 40) bucket = "40-49";
+                    stats1X2[bucket].t++; if(actual1X2 === pred1X2) stats1X2[bucket].w++;
 
                     if (hP > 0 && hP <= 27) { statsBombs.t++; if(actual1X2 === '1') statsBombs.w++; }
                     if (aP > 0 && aP <= 27) { statsBombs.t++; if(actual1X2 === '2') statsBombs.w++; }
@@ -351,93 +379,50 @@ async function runDeepEvaluation() {
                     const actualCrn = getSt(hS, "Corner Kicks") + getSt(aS, "Corner Kicks");
                     const actualCrd = parseInt(getSt(hS, "Yellow Cards")) + parseInt(getSt(hS, "Red Cards")) + parseInt(getSt(aS, "Yellow Cards")) + parseInt(getSt(aS, "Red Cards"));
                     
-                    const hXG = parseFloat(pData.teams.home.last_5.goals.for.average || 1.1);
-                    const aXG = parseFloat(pData.teams.away.last_5.goals.for.average || 1.1);
-                    const hXGA = parseFloat(pData.teams.home.last_5.goals.against.average || 1.2);
-                    const aXGA = parseFloat(pData.teams.away.last_5.goals.against.average || 1.2);
+                    const hXG = parseFloat(pData.teams.home.last_5.goals.for.average || 1.1); const aXG = parseFloat(pData.teams.away.last_5.goals.for.average || 1.1);
+                    const hXGA = parseFloat(pData.teams.home.last_5.goals.against.average || 1.2); const aXGA = parseFloat(pData.teams.away.last_5.goals.against.average || 1.2);
                     
-                    const predCrn = Math.round((4.1 + hXG*0.9) + (3.6 + aXG*0.8));
-                    const predCrd = Math.round((1.5 + hXGA*0.5) + (1.7 + aXGA*0.6));
+                    const predCrn = Math.round((4.1 + hXG*0.9) + (3.6 + aXG*0.8)); const predCrd = Math.round((1.5 + hXGA*0.5) + (1.7 + aXGA*0.6));
 
-                    if(!statsCrn[predCrn]) statsCrn[predCrn] = {t:0, w:0};
-                    statsCrn[predCrn].t++;
-                    if(actualCrn >= predCrn) statsCrn[predCrn].w++; 
-
-                    if(!statsCrd[predCrd]) statsCrd[predCrd] = {t:0, w:0};
-                    statsCrd[predCrd].t++;
-                    if(actualCrd >= predCrd) statsCrd[predCrd].w++; 
+                    if(!statsCrn[predCrn]) statsCrn[predCrn] = {t:0, w:0}; statsCrn[predCrn].t++; if(actualCrn >= predCrn) statsCrn[predCrn].w++; 
+                    if(!statsCrd[predCrd]) statsCrd[predCrd] = {t:0, w:0}; statsCrd[predCrd].t++; if(actualCrd >= predCrd) statsCrd[predCrd].w++; 
                 }
             } catch(e) {}
         }
-
         renderDSReport(targetDate, totalAnalyzed, stats1X2, statsBombs, statsCrn, statsCrd);
-
-    } catch(e) {
-        alert("Σφάλμα σύνδεσης με το API.");
-        document.getElementById('aiCont').style.display = 'none';
-    }
+    } catch(e) { alert("Σφάλμα σύνδεσης με το API."); document.getElementById('aiCont').style.display = 'none'; }
 }
 
 function renderDSReport(date, total, s1X2, sBomb, sCrn, sCrd) {
     document.getElementById('aiCont').style.display = 'none';
     document.getElementById('aiReportDate').innerText = `ΑΝΑΛΥΘΗΚΑΝ ${total} ΑΓΩΝΕΣ ΣΤΙΣ ${date}`;
-
     const calcPct = (w, t) => t > 0 ? Math.round((w/t)*100) : 0;
     const renderBar = (pct) => `<div class="ds-bar-wrap"><div class="ds-bar-fill" style="width:${pct}%; background:${pct>=65?'var(--p)':(pct>=45?'var(--gold)':'var(--alert)')};"></div></div>`;
-
     let html = ``;
 
-    // 1X2 STATS
     html += `<div class="section-title">📊 ΣΗΜΕΙΑ 1X2 (Ανα Ποσοστο Εκτιμησης)</div>`;
     ["70+", "60-69", "50-59", "40-49", "<40"].forEach(b => {
-        if(s1X2[b].t > 0) {
-            let p = calcPct(s1X2[b].w, s1X2[b].t);
-            html += `<div class="pred-row" style="flex-direction:column; align-items:stretch;">
-                        <div style="display:flex; justify-content:space-between;"><span>Eκτίμηση ${b}%:</span><b>${s1X2[b].w} / ${s1X2[b].t} (${p}%)</b></div>
-                        ${renderBar(p)}
-                     </div>`;
-        }
+        if(s1X2[b].t > 0) { let p = calcPct(s1X2[b].w, s1X2[b].t); html += `<div class="pred-row" style="flex-direction:column; align-items:stretch;"><div style="display:flex; justify-content:space-between;"><span>Eκτίμηση ${b}%:</span><b>${s1X2[b].w} / ${s1X2[b].t} (${p}%)</b></div>${renderBar(p)}</div>`; }
     });
 
-    // BOMBS
     html += `<div class="section-title">💣 BOMBS (Αουτσαιντερ < 28%)</div>`;
-    if (sBomb.t > 0) {
-        let p = calcPct(sBomb.w, sBomb.t);
-        html += `<div class="pred-row" style="flex-direction:column; align-items:stretch;">
-                    <div style="display:flex; justify-content:space-between;"><span>Επιτυχία Μπόμπας:</span><b style="color:var(--value);">${sBomb.w} / ${sBomb.t} (${p}%)</b></div>
-                    ${renderBar(p)}
-                 </div>`;
-    } else html += `<div class="pred-row"><span>Δεν υπήρξαν εκτιμήσεις Μπόμπας.</span></div>`;
+    if (sBomb.t > 0) { let p = calcPct(sBomb.w, sBomb.t); html += `<div class="pred-row" style="flex-direction:column; align-items:stretch;"><div style="display:flex; justify-content:space-between;"><span>Επιτυχία Μπόμπας:</span><b style="color:var(--value);">${sBomb.w} / ${sBomb.t} (${p}%)</b></div>${renderBar(p)}</div>`; } 
+    else html += `<div class="pred-row"><span>Δεν υπήρξαν εκτιμήσεις Μπόμπας.</span></div>`;
 
-    // CORNERS
     html += `<div class="section-title">🚩 ΚΟΡΝΕΡ (Επαληθευση OVER ανα Εκτιμηση)</div>`;
     Object.keys(sCrn).sort((a,b)=>a-b).forEach(k => {
-        if(sCrn[k].t > 0) {
-            let p = calcPct(sCrn[k].w, sCrn[k].t);
-            html += `<div class="pred-row" style="flex-direction:column; align-items:stretch;">
-                        <div style="display:flex; justify-content:space-between;"><span>Πρόβλεψη ${k}+ Κόρνερ:</span><b>${sCrn[k].w} / ${sCrn[k].t} (${p}%)</b></div>
-                        ${renderBar(p)}
-                     </div>`;
-        }
+        if(sCrn[k].t > 0) { let p = calcPct(sCrn[k].w, sCrn[k].t); html += `<div class="pred-row" style="flex-direction:column; align-items:stretch;"><div style="display:flex; justify-content:space-between;"><span>Πρόβλεψη ${k}+ Κόρνερ:</span><b>${sCrn[k].w} / ${sCrn[k].t} (${p}%)</b></div>${renderBar(p)}</div>`; }
     });
 
-    // CARDS
     html += `<div class="section-title">🟨 ΚΑΡΤΕΣ (Επαληθευση OVER ανα Εκτιμηση)</div>`;
     Object.keys(sCrd).sort((a,b)=>a-b).forEach(k => {
-        if(sCrd[k].t > 0) {
-            let p = calcPct(sCrd[k].w, sCrd[k].t);
-            html += `<div class="pred-row" style="flex-direction:column; align-items:stretch;">
-                        <div style="display:flex; justify-content:space-between;"><span>Πρόβλεψη ${k}+ Κάρτες:</span><b>${sCrd[k].w} / ${sCrd[k].t} (${p}%)</b></div>
-                        ${renderBar(p)}
-                     </div>`;
-        }
+        if(sCrd[k].t > 0) { let p = calcPct(sCrd[k].w, sCrd[k].t); html += `<div class="pred-row" style="flex-direction:column; align-items:stretch;"><div style="display:flex; justify-content:space-between;"><span>Πρόβλεψη ${k}+ Κάρτες:</span><b>${sCrd[k].w} / ${sCrd[k].t} (${p}%)</b></div>${renderBar(p)}</div>`; }
     });
 
     document.getElementById('aiResultsBox').innerHTML = html;
     document.getElementById('aiPanel').style.display = 'block';
 }
 
-// --- STANDARD SYNC ---
 async function globalSync() {
     masterData = []; standingsMap = {};
     document.getElementById('masterBtn').style.display = 'none';
@@ -603,61 +588,4 @@ async function openIntel(fixId) {
     };
 
     document.getElementById('formContainer').innerHTML = `
-        <div style="text-align:center; width:48%;"><span class="stat-label" style="color:#fff;">HOME FORM <br><span style="color:var(--cyan); font-weight:800; font-size:0.85rem;">ΘΕΣΗ: ${hRank}</span></span><div style="margin-top:10px;">${renderFormWithXG(p?.teams?.home?.league?.form, hXG)}</div></div>
-        <div style="text-align:center; width:48%; border-left:1px solid var(--border);"><span class="stat-label" style="color:#fff;">AWAY FORM <br><span style="color:var(--cyan); font-weight:800; font-size:0.85rem;">ΘΕΣΗ: ${aRank}</span></span><div style="margin-top:10px;">${renderFormWithXG(p?.teams?.away?.league?.form, aXG)}</div></div>
-    `;
-
-    document.getElementById('statsTable').innerHTML = `
-        <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
-        <tr><td>xG (Επίθεση)</td><td>${hXG.toFixed(2)}${lSpan(`live-xg-h-${fixId}`)}</td><td>${aXG.toFixed(2)}${lSpan(`live-xg-a-${fixId}`)}</td></tr>
-        <tr><td>xGA (Άμυνα)</td><td>${hXGA.toFixed(2)}</td><td>${aXGA.toFixed(2)}</td></tr>
-        <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${lSpan(`live-crn-h-${fixId}`)}</td><td>${aXcrn.toFixed(1)}${lSpan(`live-crn-a-${fixId}`)}</td></tr>
-        <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(`live-crd-h-${fixId}`)}</td><td>${aXcards.toFixed(1)}${lSpan(`live-crd-a-${fixId}`)}</td></tr>
-        <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
-    `;
-
-    let h2hHtml = ''; const h2hData = p?.h2h || [];
-    if (h2hData.length > 0) {
-        h2hData.slice(0, 5).forEach(m => {
-            const isH = m.teams.home.id === currentHomeId; const isA = m.teams.away.id === currentHomeId;
-            h2hHtml += `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.9rem;">
-                    <span style="font-size:0.75rem; color:#666; width:40px;">${new Date(m.fixture.date).getFullYear()}</span>
-                    <span style="flex:1; text-align:right; color:${isH?'#ffffff':'#888'}; font-weight:${isH?'900':'500'}; padding-right:10px;">${m.teams.home.name}</span>
-                    <span style="background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:6px;"><b style="color:${isH?'#ffffff':'var(--gold)'}; font-size:1.1rem;">${m.goals.home!==null?m.goals.home:'-'}</b> <span style="color:#555;">-</span> <b style="color:${isA?'#ffffff':'var(--gold)'}; font-size:1.1rem;">${m.goals.away!==null?m.goals.away:'-'}</b></span>
-                    <span style="flex:1; text-align:left; color:${isA?'#ffffff':'#888'}; font-weight:${isA?'900':'500'}; padding-left:10px;">${m.teams.away.name}</span>
-                </div>`;
-        });
-    } else h2hHtml = `<div class="pred-row"><span style="text-align:center; width:100%;">Δεν βρέθηκε προϊστορία</span></div>`;
-    document.getElementById('h2hBox').innerHTML = h2hHtml;
-
-    const algo1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
-    document.getElementById('algoPreds').innerHTML = `
-        <div class="pred-row"><span>Σημείο (1X2):</span><b style="color:var(--p)">${algo1X2} (${Math.max(hP, aP)}%)</b></div>
-        <div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(hXG)} - ${Math.round(aXG)}</b></div>
-        <div class="pred-row"><span>Κόρνερ (Σύνολο):</span><b>Over ${(parseFloat(hXcrn)+parseFloat(aXcrn)).toFixed(0)}</b></div>
-        <div class="pred-row"><span>Κάρτες (Σύνολο):</span><b>Under ${(parseFloat(hXcards)+parseFloat(aXcards) + 1).toFixed(0)}</b></div>
-        <div class="pred-row"><span>Γκολ (O/U):</span><b>${totalXG > 2.4 ? 'Over 2.5' : 'Under 2.5'}</b></div>
-    `;
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    if (isLive) {
-        try {
-            const res = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixId}`, { headers: {"x-apisports-key": KEY} });
-            const statData = await res.json();
-            if (statData.response && statData.response.length > 0) {
-                const getStat = (stats, type) => { const s = stats.find(x => x.type === type); return s && s.value !== null ? s.value : 0; };
-                const hStats = statData.response[0].statistics; const aStats = statData.response[1].statistics;
-                document.getElementById(`live-xg-h-${fixId}`).innerText = `(L: ${getStat(hStats, "Expected Goals")})`;
-                document.getElementById(`live-xg-a-${fixId}`).innerText = `(L: ${getStat(aStats, "Expected Goals")})`;
-                document.getElementById(`live-crn-h-${fixId}`).innerText = `(L: ${getStat(hStats, "Corner Kicks")})`;
-                document.getElementById(`live-crn-a-${fixId}`).innerText = `(L: ${getStat(aStats, "Corner Kicks")})`;
-                document.getElementById(`live-crd-h-${fixId}`).innerText = `(L: ${parseInt(getStat(hStats, "Yellow Cards")) + parseInt(getStat(hStats, "Red Cards"))})`;
-                document.getElementById(`live-crd-a-${fixId}`).innerText = `(L: ${parseInt(getStat(aStats, "Yellow Cards")) + parseInt(getStat(aStats, "Red Cards"))})`;
-            }
-        } catch (e) {}
-    }
-}
-</script>
-</body>
-</html>
+        <div style="text-align:center; width:48%;"><span class="stat-label" style="color:#fff;">HOME FORM <br><span style="color:var(--cyan); font-
