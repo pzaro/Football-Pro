@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v301 - Bulletproof Spec</title>
+    <title>Predictor Pro v302 - Bulletproof</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.9); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
+        :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 15px; }
 
         /* AUTH */
         #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; justify-content: center; align-items: center; }
-        .auth-box { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 40px 20px; text-align: center; width: 90%; max-width: 400px; backdrop-filter: blur(10px); }
-        .auth-input { width: 100%; padding: 20px; margin: 25px 0; border-radius: 15px; border: 2px solid var(--border); background: #000; color: var(--p); font-size: 2rem; text-align: center; font-weight: 900; letter-spacing: 10px; }
+        .auth-box { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 40px 20px; text-align: center; width: 90%; max-width: 400px; backdrop-filter: blur(10px); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        .auth-input { width: 100%; padding: 20px; margin: 20px 0; border-radius: 15px; border: 2px solid var(--border); background: #000; color: var(--p); font-size: 2rem; text-align: center; font-weight: 900; letter-spacing: 10px; }
+        .btn-auth { width: 100%; padding: 18px; background: var(--p); color: #000; border: none; border-radius: 15px; font-weight: 900; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; }
 
         /* TICKER */
         .ticker-wrap { width: 100%; background: rgba(0, 255, 65, 0.05); border-y: 1px solid rgba(0, 255, 65, 0.2); overflow: hidden; white-space: nowrap; padding: 12px 0; margin-bottom: 20px; display: none; }
@@ -38,9 +39,9 @@
 
         /* MATCH CARDS */
         .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; margin-bottom: 16px; cursor: pointer; position: relative; overflow: hidden; }
-        .match-card.finished { opacity: 0.6; filter: grayscale(0.6); }
+        .match-card.finished { opacity: 0.6; filter: grayscale(0.6); border-color: var(--finished); }
         .match-card:active { transform: scale(0.98); }
-        .value-badge { position: absolute; top: 0; right: 20px; background: var(--value); color: #fff; padding: 3px 12px; border-radius: 0 0 10px 10px; font-size: 0.7rem; font-weight: 900; box-shadow: 0 4px 10px rgba(191,64,191,0.4); }
+        .value-badge { position: absolute; top: 0; right: 20px; background: var(--value); color: #fff; padding: 3px 12px; border-radius: 0 0 10px 10px; font-size: 0.7rem; font-weight: 900; box-shadow: 0 4px 10px rgba(191,64,191,0.4); z-index: 2; }
         
         .card-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
         .team-names { font-weight: 900; font-size: 1.15rem; line-height: 1.3; }
@@ -88,8 +89,9 @@
 <div id="authScreen">
     <div class="auth-box">
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-        <input type="password" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" inputmode="numeric" oninput="autoCheck()">
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem;">SECURE ENTRANCE v301</div>
+        <input type="password" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" inputmode="numeric">
+        <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v302</div>
     </div>
 </div>
 
@@ -99,7 +101,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">BULLETPROOF SPEC</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">SOVEREIGN OMEGA SPEC</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -127,7 +129,7 @@
                 <select id="accaSize">
                     <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
                 </select>
-                <button onclick="generateAcca()" class="btn-gen">GEN</button>
+                <button onclick="generateAcca()" class="btn-gen">GENERATE</button>
             </div>
         </div>
 
@@ -140,7 +142,7 @@
         </div>
 
         <div id="intelPanel">
-            <div style="position:sticky; top:0; background:var(--bg); padding-bottom:15px; z-index:100;"><button onclick="this.parentElement.parentElement.style.display='none'" class="btn-close">ΠΙΣΩ</button></div>
+            <div style="position:sticky; top:0; background:var(--bg); padding-bottom:15px; z-index:100;"><button onclick="closePanel('intelPanel')" class="btn-close">ΠΙΣΩ</button></div>
             <h2 id="mTitle" style="text-align:center; color:var(--gold); font-size:1.2rem; margin-top:10px;"></h2>
             <div id="bigScoreDisplay" style="text-align:center; font-size:4rem; font-weight:900; margin:5px 0;"></div>
             <div id="mStatus" style="text-align:center; margin-bottom:20px; font-weight:bold; color:var(--cyan);"></div>
@@ -154,7 +156,7 @@
         <div id="aiPanel">
             <div style="display:flex; justify-content:space-between; margin-bottom: 20px;">
                 <button onclick="exportToPDF()" class="btn-pdf">📥 EXPORT PDF</button>
-                <button onclick="this.parentElement.parentElement.style.display='none'" class="btn-close">ΚΛΕΙΣΙΜΟ</button>
+                <button onclick="closePanel('aiPanel')" class="btn-close">ΚΛΕΙΣΙΜΟ</button>
             </div>
             <div id="pdfExportArea" style="background:#0b0e14; padding:20px; border-radius:20px; border:1px solid var(--border);">
                 <h2 style="text-align:center; color:var(--ai);">🧠 DATA LAB REPORT</h2>
@@ -165,44 +167,43 @@
 </div>
 
 <script>
-// --- SAFETY HELPERS (Αποτρέπουν τα crash αν το API στείλει κενά δεδομένα) ---
-const getP = (p, k) => parseInt(p?.predictions?.percent?.[k] || 0);
-const getXG = (t, s) => parseFloat(t?.last_5?.goals?.[s]?.average || (s==='for'?1.1:1.2));
-const getF = (t) => (t?.league?.form || "DDDDDD").split('').slice(-6);
-
-// --- CORE CONFIG & AUTH ---
+// --- AUTH ENGINE ---
 const ACCESS_PIN = "106014";
-const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LEAGUES = [
-    {id: 39, name: "Αγγλία - Premier League"}, {id: 40, name: "Αγγλία - Championship"},
-    {id: 140, name: "Ισπανία - La Liga"}, {id: 141, name: "Ισπανία - Segunda"},
-    {id: 135, name: "Ιταλία - Serie A"}, {id: 136, name: "Ιταλία - Serie B"},
-    {id: 78, name: "Γερμανία - Bundesliga"}, {id: 61, name: "Γαλλία - Ligue 1"},
-    {id: 88, name: "Ολλανδία - Eredivisie"}, {id: 197, name: "Ελλάδα - Super League"},
-    {id: 318, name: "Κύπρος - 1η Κατηγορία"}, {id: 203, name: "Τουρκία - Süper Lig"},
-    {id: 253, name: "ΗΠΑ - MLS"}
-];
 
-let masterData = []; let standingsMap = {};
-
-function autoCheck() {
+function verifyPinBtn() {
     let v = document.getElementById('pinInput').value.trim();
-    if(v.length === 6) {
-        if(v === ACCESS_PIN) {
-            sessionStorage.setItem("p_auth_v301", "true");
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('appContent').style.display = 'block';
-            startSystem();
-        } else { document.getElementById('pinInput').value = ""; }
+    if(v === ACCESS_PIN) {
+        sessionStorage.setItem("p_auth_v302", "true");
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+        startSystem();
+    } else { 
+        document.getElementById('authMsg').innerText = "ΛΑΘΟΣ ΚΩΔΙΚΟΣ. ΔΟΚΙΜΑΣΤΕ ΞΑΝΑ.";
+        document.getElementById('authMsg').style.color = "var(--alert)";
+        document.getElementById('pinInput').value = ""; 
     }
 }
 window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v301") === "true") { 
+    if(sessionStorage.getItem("p_auth_v302") === "true") { 
         document.getElementById('authScreen').style.display='none'; 
         document.getElementById('appContent').style.display='block'; 
         startSystem(); 
     } 
 };
+
+// --- CORE SYSTEM ---
+const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
+const LEAGUES = [
+    {id: 39, name: "Αγγλία - Premier"}, {id: 40, name: "Αγγλία - Championship"},
+    {id: 140, name: "Ισπανία - La Liga"}, {id: 141, name: "Ισπανία - Segunda"},
+    {id: 135, name: "Ιταλία - Serie A"}, {id: 136, name: "Ιταλία - Serie B"},
+    {id: 78, name: "Γερμανία - Bundesliga"}, {id: 61, name: "Γαλλία - Ligue 1"},
+    {id: 88, name: "Ολλανδία - Eredivisie"}, {id: 197, name: "Ελλάδα - Super League"},
+    {id: 318, name: "Κύπρος - 1η"}, {id: 203, name: "Τουρκία - Süper Lig"},
+    {id: 253, name: "ΗΠΑ - MLS"}
+];
+
+let masterData = []; let standingsMap = {};
 
 function startSystem() {
     fetchLive(); setInterval(fetchLive, 60000);
@@ -245,12 +246,17 @@ async function globalSync() {
             const pD = (await pR.json()).response?.[0];
             if(pD) masterData.push({ fixture: m, prediction: pD });
         }
-    } catch(e) {}
+    } catch(e) { alert("API Error. Παρακαλώ ανανεώστε τη σελίδα."); }
     document.getElementById('syncCont').style.display = 'none'; document.getElementById('dashboardTools').style.display = 'block';
     const f = document.getElementById('leagueFilter');
     f.innerHTML = '<option value="ALL">ΟΛΑ ΤΑ ΠΡΩΤΑΘΛΗΜΑΤΑ</option>' + LEAGUES.map(l => masterData.some(d=>d.fixture.league.id===l.id) ? `<option value="${l.id}">${l.name}</option>` : '').join('');
     renderMatches();
 }
+
+// SAFE HELPERS - Προστατεύουν από κενά API Data
+const sGetP = (p, k) => parseInt(p?.predictions?.percent?.[k] || 0);
+const sGetXG = (t, s) => parseFloat(t?.last_5?.goals?.[s]?.average || (s==='for'?1.0:1.0));
+const sGetF = (t) => (t?.league?.form || "DDDDDD").split('').slice(-6);
 
 function renderMatches() {
     const activeList = document.getElementById('activeMatchList'); activeList.innerHTML = "";
@@ -271,12 +277,14 @@ function renderMatches() {
                     const isLive = ['1H','2H','HT'].includes(st);
                     const elapsed = m.fixture.status.elapsed || 0; const rem = 90 - elapsed;
                     
-                    const hP = getP(p,'home'); const aP = getP(p,'away');
+                    const hP = sGetP(p,'home'); const aP = sGetP(p,'away');
                     const isValue = Math.max(hP, aP) > 70;
                     
                     const card = document.createElement('div');
                     card.className = `match-card ${isFin ? 'finished' : ''}`;
-                    card.onclick = () => openIntel(m.fixture.id);
+                    // DIRECT ONCLICK BINDING - Bulletproof Touch
+                    card.setAttribute("onclick", `openIntel(${m.fixture.id})`);
+                    
                     card.innerHTML = `
                         ${isValue && !isFin ? '<div class="value-badge">🔥 VALUE BET</div>' : ''}
                         <div class="card-header">
@@ -288,10 +296,10 @@ function renderMatches() {
                         </div>
                         ${isLive ? `<div class="progress-bg"><div class="progress-fill" style="width:${(elapsed/90)*100}%;"></div></div>` : ''}
                         <div class="card-stats">
-                            <div><div class="stat-label">1X2</div><div class="stat-value">${hP}-${getP(p,'draw')}-${aP}</div></div>
-                            <div><div class="stat-label">O2.5</div><div class="stat-value">${getP(p,'over')}%</div></div>
-                            <div><div class="stat-label">xG TOT</div><div class="stat-value">${(getXG(p.teams.home,'for')+getXG(p.teams.away,'for')).toFixed(1)}</div></div>
-                            <div><div class="stat-label">CARDS</div><div class="stat-value">~${(1.5+getXG(p.teams.home,'against')*0.5).toFixed(1)}</div></div>
+                            <div><div class="stat-label">1X2</div><div class="stat-value">${hP}-${sGetP(p,'draw')}-${aP}</div></div>
+                            <div><div class="stat-label">O2.5</div><div class="stat-value">${sGetP(p,'over')}%</div></div>
+                            <div><div class="stat-label">xG TOT</div><div class="stat-value">${(sGetXG(p.teams.home,'for')+sGetXG(p.teams.away,'for')).toFixed(1)}</div></div>
+                            <div><div class="stat-label">CARDS</div><div class="stat-value">~${(1.5+sGetXG(p.teams.home,'against')*0.5).toFixed(1)}</div></div>
                         </div>`;
                     list.appendChild(card);
                 });
@@ -302,52 +310,55 @@ function renderMatches() {
     document.getElementById('finishedSection').style.display = finishedList.innerHTML === "" ? "none" : "block";
 }
 
-async function openIntel(id) {
+function openIntel(id) {
     try {
-        const d = masterData.find(x => x.fixture.fixture.id === id); if(!d) return;
-        const p = d.prediction; const m = d.fixture;
+        const d = masterData.find(x => x.fixture.fixture.id == id); 
+        if(!d) { alert("Data Sync Error"); return; }
+        const p = d.prediction || {}; const m = d.fixture || {};
         
-        const hXG = getXG(p.teams.home, 'for'); const aXG = getXG(p.teams.away, 'for');
-        const hXGA = getXG(p.teams.home, 'against'); const aXGA = getXG(p.teams.away, 'against');
+        const hXG = sGetXG(p?.teams?.home, 'for'); const aXG = sGetXG(p?.teams?.away, 'for');
+        const hXGA = sGetXG(p?.teams?.home, 'against'); const aXGA = sGetXG(p?.teams?.away, 'against');
         
         let hCr = 4.1 + hXG*0.9; let aCr = 3.6 + aXG*0.8; let syn = '';
-        if(aXGA <= 0.60 && hCr > 5) { hCr += 1.5; syn = '▲'; } if(hXGA <= 0.60 && aCr > 5) { aCr += 1.5; syn = '▲'; }
+        if(aXGA <= 0.60 && hCr > 5) { hCr += 1.5; syn = '▲'; } 
+        if(hXGA <= 0.60 && aCr > 5) { aCr += 1.5; syn = '▲'; }
         const totXG = hXG + aXG;
 
-        document.getElementById('intelPanel').style.display = 'block';
-        document.getElementById('mTitle').innerText = `${m.teams.home.name} vs ${m.teams.away.name}`;
-        document.getElementById('bigScoreDisplay').innerText = `${m.goals.home ?? ''}-${m.goals.away ?? ''}`;
-        document.getElementById('mStatus').innerText = m.fixture.status.long;
+        document.getElementById('mTitle').innerText = `${m.teams?.home?.name || 'Home'} vs ${m.teams?.away?.name || 'Away'}`;
+        document.getElementById('bigScoreDisplay').innerText = `${m.goals?.home ?? '-'}-${m.goals?.away ?? '-'}`;
+        document.getElementById('mStatus').innerText = m.fixture?.status?.long || '';
         
         let bHtml = ''; 
-        if(totXG > 1.9 && Math.max(getP(p,'home'), getP(p,'away')) > 60) {
+        if(totXG > 1.9 && Math.max(sGetP(p,'home'), sGetP(p,'away')) > 60) {
             bHtml += `<div class="builder-alert">🔥 BET BUILDER: Over 1.5 & ${p?.predictions?.winner?.name || 'Fav'}</div>`;
         }
-        if(hXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams.home.name} Wall:</b> (xGA ${hXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ του αντιπάλου.</div>`;
-        if(aXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams.away.name} Wall:</b> (xGA ${aXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ του αντιπάλου.</div>`;
+        if(hXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.home?.name} Wall:</b> (xGA ${hXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ.</div>`;
+        if(aXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.away?.name} Wall:</b> (xGA ${aXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ.</div>`;
         document.getElementById('builderBox').innerHTML = bHtml;
 
         const rf = (fArr) => fArr.map(c => `<span class="form-dot ${c}"></span>`).join('');
-        document.getElementById('formContainer').innerHTML = `<div><small style="display:block;margin-bottom:5px;font-weight:900;">HOME</small><div>${rf(getF(p.teams.home))}</div></div><div><small style="display:block;margin-bottom:5px;font-weight:900;">AWAY</small><div>${rf(getF(p.teams.away))}</div></div>`;
+        document.getElementById('formContainer').innerHTML = `<div><small style="display:block;margin-bottom:5px;font-weight:900;">HOME</small><div>${rf(sGetF(p?.teams?.home))}</div></div><div><small style="display:block;margin-bottom:5px;font-weight:900;">AWAY</small><div>${rf(sGetF(p?.teams?.away))}</div></div>`;
         
         document.getElementById('statsTable').innerHTML = `<tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr><tr><td>xG Attack</td><td>${hXG.toFixed(2)}</td><td>${aXG.toFixed(2)}</td></tr><tr><td>xGA Defense</td><td style="${hXGA<=0.6?'color:var(--alert)':''}">${hXGA.toFixed(2)}</td><td style="${aXGA<=0.6?'color:var(--alert)':''}">${aXGA.toFixed(2)}</td></tr><tr><td>xCorners</td><td>${hCr.toFixed(1)}${syn}</td><td>${aCr.toFixed(1)}${syn}</td></tr><tr><td>Delta (Δ)</td><td style="color:var(--cyan)">${(hXG-hXGA).toFixed(2)}</td><td style="color:var(--cyan)">${(aXG-aXGA).toFixed(2)}</td></tr>`;
         
         document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο:</span><b>${p?.predictions?.winner?.name || 'N/A'}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(hCr+aCr-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
         
-        let h2h = ''; (p.h2h || []).slice(0,5).forEach(x => { h2h += `<div class="pred-row"><span>${x.teams.home.name}-${x.teams.away.name}</span><b>${x.goals.home}:${x.goals.away}</b></div>`; });
-        document.getElementById('h2hBox').innerHTML = h2h || '<div class="pred-row">Δεν βρέθηκαν δεδομένα</div>';
+        let h2h = ''; (p?.h2h || []).slice(0,5).forEach(x => { h2h += `<div class="pred-row"><span>${x.teams?.home?.name}-${x.teams?.away?.name}</span><b>${x.goals?.home}:${x.goals?.away}</b></div>`; });
+        document.getElementById('h2hBox').innerHTML = h2h || '<div class="pred-row">No H2H Data</div>';
+        
+        document.getElementById('intelPanel').style.display = 'block';
         window.scrollTo(0,0);
-    } catch(err) { alert("Λείπουν δεδομένα API για αυτόν τον αγώνα."); }
+    } catch(err) { alert("Σφάλμα ανάγνωσης δεδομένων για αυτόν τον αγώνα."); }
 }
 
 function generateAcca() {
     const m = document.getElementById('accaMarket').value; const s = parseInt(document.getElementById('accaSize').value);
     let pool = masterData.filter(d=>!['FT','PEN'].includes(d.fixture.fixture.status.short)).map(d => {
-        const p = d.prediction; const hXG = getXG(p.teams.home,'for'); const aXG = getXG(p.teams.away,'for');
-        const hXGA = getXG(p.teams.home,'against'); const aXGA = getXG(p.teams.away,'against');
+        const p = d.prediction; const hXG = sGetXG(p?.teams?.home,'for'); const aXG = sGetXG(p?.teams?.away,'for');
+        const hXGA = sGetXG(p?.teams?.home,'against'); const aXGA = sGetXG(p?.teams?.away,'against');
         let ec = (4.1+hXG*0.9)+(3.6+aXG*0.8); if(aXGA<=0.60 && (4.1+hXG*0.9)>5) ec+=1.5; if(hXGA<=0.60 && (4.1+aXG*0.9)>5) ec+=1.5;
-        const hP = getP(p,'home'); const aP = getP(p,'away');
-        return { id: d.fixture.fixture.id, name: d.fixture.teams.home.name + ' - ' + d.fixture.teams.away.name, hP, aP, ec, o25: getP(p,'over') };
+        const hP = sGetP(p,'home'); const aP = sGetP(p,'away');
+        return { id: d.fixture.fixture.id, name: d.fixture.teams.home.name + ' - ' + d.fixture.teams.away.name, hP, aP, ec, o25: sGetP(p,'over') };
     });
     
     if(m==='CORNERS') pool.sort((a,b)=>b.ec-a.ec); else if(m==='BOMBS') pool=pool.filter(i=>i.hP<=28||i.aP<=28).sort((a,b)=>Math.min(a.hP,a.aP)-Math.min(b.hP,b.aP)); else if(m==='GOALS') pool.sort((a,b)=>b.o25-a.o25); else if(m==='COMBO') pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP)); else pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP));
@@ -361,37 +372,7 @@ function generateAcca() {
     document.getElementById('accaDisplay').innerHTML=h; document.getElementById('accaDisplay').style.display='block';
 }
 
-async function runDeepEvaluation() {
-    const tD = document.getElementById('evalDate').value; document.getElementById('aiCont').style.display='block';
-    let sCr = {t:0, w:0}, sSyn = {t:0, w:0};
-    try {
-        const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
-        const fD = await fR.json();
-        const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
-        for (let i=0; i<tFix.length; i++) {
-            let m = tFix[i]; document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
-            const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
-            const pD = (await pR.json()).response[0];
-            const sR = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, { headers: {"x-apisports-key": KEY} });
-            const sD = await sR.json();
-            if(pD && sD.response?.[0]) {
-                const actC = (sD.response[0]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0);
-                const hXG = getXG(pD.teams.home,'for'); const aXG = getXG(pD.teams.away,'for');
-                const hXGA = getXG(pD.teams.home,'against'); const aXGA = getXG(pD.teams.away,'against');
-                let pC = (4.1+hXG*0.9)+(3.6+aXG*0.8); let syn = false; if((aXGA<=0.6 && (4.1+hXG*0.9)>5)||(hXGA<=0.6 && (4.1+aXG*0.9)>5)) { pC+=1.5; syn=true; }
-                sCr.t++; if(actC >= pC) sCr.w++; if(syn) { sSyn.t++; if(actC >= pC) sSyn.w++; }
-            }
-        }
-        document.getElementById('aiResultsBox').innerHTML = `<div class="pred-row"><span>Γενική Κόρνερ:</span><b>${sCr.t>0?Math.round(sCr.w/sCr.t*100):0}%</b></div><div class="pred-row" style="border:1px solid var(--gold);"><span>Μπετόν Synergy:</span><b>${sSyn.t>0?Math.round(sSyn.w/sSyn.t*100):0}%</b></div>`;
-        document.getElementById('aiPanel').style.display='block';
-    } catch(e) {}
-    document.getElementById('aiCont').style.display='none';
-}
-
-function exportToPDF() {
-    const el = document.getElementById('pdfExportArea');
-    html2pdf().from(el).set({ margin:10, filename:'Report.pdf', html2canvas:{scale:2, backgroundColor:'#0b0e14'}, jsPDF:{format:'a4'} }).save();
-}
+function closePanel(pid) { document.getElementById(pid).style.display = 'none'; }
 </script>
 </body>
 </html>
