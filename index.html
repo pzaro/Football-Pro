@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v308 - Advanced Analytics</title>
+    <title>Predictor Pro v309 - Tiered Backtest</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
@@ -41,7 +41,7 @@
         .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; margin-bottom: 16px; cursor: pointer; position: relative; overflow: hidden; }
         .match-card.finished { opacity: 0.6; filter: grayscale(0.6); border-color: var(--finished); }
         .match-card:active { transform: scale(0.98); }
-        .value-badge { position: absolute; top: 0; right: 20px; background: var(--value); color: #fff; padding: 3px 12px; border-radius: 0 0 10px 10px; font-size: 0.7rem; font-weight: 900; box-shadow: 0 4px 10px rgba(191,64,191,0.4); z-index: 2; }
+        .value-badge { position: absolute; top: 0; right: 20px; background: var(--value); color: #fff; padding: 3px 12px; border-radius: 0 0 10px 10px; font-size: 0.7rem; font-weight: 900; z-index: 2; }
         
         .card-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
         .team-names { font-weight: 900; font-size: 1.15rem; line-height: 1.3; }
@@ -71,12 +71,13 @@
         .clean-table td { padding: 15px 10px; border-bottom: 1px solid var(--border); font-weight: 800; text-align: center; font-size: 0.95rem; }
         .section-title { color: var(--p); font-size: 0.95rem; font-weight: 900; margin: 30px 0 10px 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; text-transform: uppercase; }
         .pred-row { display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.03); margin-bottom: 6px; border-radius: 12px; font-size: 1rem; }
+        .sub-row { display: flex; justify-content: space-between; padding: 10px 15px; background: transparent; border-bottom: 1px dashed #333; font-size: 0.85rem; color:#ccc; }
+        .sub-row b { color: #fff; font-size: 0.9rem; }
         
         .alert-wall { background: rgba(0,212,255,0.1); border-left: 5px solid var(--cyan); padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 0.9rem; font-weight: 600; }
         .builder-alert { background: rgba(0,255,136,0.1); border: 1px solid var(--p); padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 0.9rem; font-weight: 900; color: var(--p); text-align: center; }
         .form-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin: 0 2px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
-
         .live-indic { color: var(--live); font-size: 0.8rem; font-weight: 900; margin-left: 5px; animation: pulse 1.5s infinite; }
 
         @media (max-width: 600px) {
@@ -93,7 +94,7 @@
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
         <input type="password" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" inputmode="numeric">
         <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v308</div>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v309</div>
     </div>
 </div>
 
@@ -103,7 +104,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">ADVANCED ANALYTICS SPEC</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">TIERED BACKTEST SPEC</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -163,7 +164,7 @@
                 <button onclick="closePanel('aiPanel')" class="btn-close">ΚΛΕΙΣΙΜΟ</button>
             </div>
             <div id="pdfExportArea" style="background:#0b0e14; padding:20px; border-radius:20px; border:1px solid var(--border);">
-                <h2 style="text-align:center; color:var(--ai);">🧠 EFFECTIVENESS REPORT</h2>
+                <h2 style="text-align:center; color:var(--ai);">🧠 TIERED EFFECTIVENESS REPORT</h2>
                 <div id="aiResultsBox"></div>
             </div>
         </div>
@@ -204,7 +205,7 @@ let masterData = []; let standingsMap = {};
 function verifyPinBtn() {
     let v = document.getElementById('pinInput').value.trim();
     if(v === ACCESS_PIN) {
-        sessionStorage.setItem("p_auth_v308", "true");
+        sessionStorage.setItem("p_auth_v309", "true");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
@@ -215,7 +216,7 @@ function verifyPinBtn() {
     }
 }
 window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v308") === "true") { 
+    if(sessionStorage.getItem("p_auth_v309") === "true") { 
         document.getElementById('authScreen').style.display='none'; 
         document.getElementById('appContent').style.display='block'; 
         startSystem(); 
@@ -272,7 +273,7 @@ async function globalSync() {
                 masterData.push({ fixture: m, prediction: pD, calc: { hXG, aXG, hXGA, aXGA, hCr, aCr, tProbs, hPres, aPres } });
             }
         }
-    } catch(e) { alert("API Error. Παρακαλώ ανανεώστε τη σελίδα."); }
+    } catch(e) { alert("API Error."); }
     document.getElementById('syncCont').style.display = 'none'; document.getElementById('dashboardTools').style.display = 'block';
     const f = document.getElementById('leagueFilter');
     f.innerHTML = '<option value="ALL">ΟΛΑ ΤΑ ΠΡΩΤΑΘΛΗΜΑΤΑ</option>' + LEAGUES.map(l => masterData.some(d=>d.fixture.league.id===l.id) ? `<option value="${l.id}">${l.name}</option>` : '').join('');
@@ -319,7 +320,7 @@ function renderMatches() {
                             <div><div class="stat-label">1X2 (T)</div><div class="stat-value" style="color:var(--gold)">${tProbs.h}-${tProbs.d}-${tProbs.a}</div></div>
                             <div><div class="stat-label">O2.5</div><div class="stat-value">${sGetP(d.prediction,'over')}%</div></div>
                             <div><div class="stat-label">xG TOT</div><div class="stat-value">${(d.calc.hXG + d.calc.aXG).toFixed(1)}</div></div>
-                            <div><div class="stat-label">PRES (H:A)</div><div class="stat-value" style="color:var(--cyan)">${d.calc.hPres.toFixed(0)}:${d.calc.aPres.toFixed(0)}</div></div>
+                            <div><div class="stat-label">CARDS</div><div class="stat-value">~${(1.5+d.calc.hXGA*0.5).toFixed(1)}</div></div>
                         </div>`;
                     list.appendChild(card);
                 });
@@ -333,7 +334,7 @@ function renderMatches() {
 function openIntel(id) {
     try {
         const d = masterData.find(x => x.fixture.fixture.id == id); 
-        if(!d) { alert("Data Sync Error"); return; }
+        if(!d) return;
         const p = d.prediction || {}; const m = d.fixture || {}; const c = d.calc;
         const isLive = ['1H','2H','HT'].includes(m.fixture?.status?.short);
         
@@ -352,8 +353,8 @@ function openIntel(id) {
         if(totXG > 1.9 && Math.max(c.tProbs.h, c.tProbs.a) > 55) {
             bHtml += `<div class="builder-alert">🔥 BET BUILDER: Over 1.5 & Σημείο ${bestPick}</div>`;
         }
-        if(c.hXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.home?.name} Wall:</b> (xGA ${c.hXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ.</div>`;
-        if(c.aXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.away?.name} Wall:</b> (xGA ${c.aXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ.</div>`;
+        if(c.hXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.home?.name} Wall:</b> (xGA ${c.hXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ του αντιπάλου.</div>`;
+        if(c.aXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.away?.name} Wall:</b> (xGA ${c.aXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ του αντιπάλου.</div>`;
         document.getElementById('builderBox').innerHTML = bHtml;
 
         const rf = (fArr) => fArr.map(chr => `<span class="form-dot ${chr}"></span>`).join('');
@@ -392,7 +393,7 @@ function openIntel(id) {
                 }
             }).catch(e=>{});
         }
-    } catch(err) { alert("Σφάλμα ανάγνωσης δεδομένων."); }
+    } catch(err) {}
 }
 
 function generateAcca() {
@@ -407,7 +408,6 @@ function generateAcca() {
         let ec = (4.1+c.hXG*0.9)+(3.6+c.aXG*0.8); if(c.aXGA<=0.60 && (4.1+c.hXG*0.9)>5) ec+=1.5; if(c.hXGA<=0.60 && (4.1+c.aXG*0.9)>5) ec+=1.5;
         const totXG = c.hXG + c.aXG;
         
-        // WILDCARD NEW LOGIC (Advanced Stats driven)
         let bProb = 0; let bTip = '';
         if(c.tProbs.h > bProb) { bProb = c.tProbs.h; bTip = '1'; }
         if(c.tProbs.a > bProb) { bProb = c.tProbs.a; bTip = '2'; }
@@ -418,7 +418,6 @@ function generateAcca() {
         if(o25Prob > bProb) { bProb = o25Prob; bTip = 'Over 2.5'; }
         if(u25Prob > bProb) { bProb = u25Prob; bTip = 'Under 2.5'; }
         
-        // BOMB LOGIC
         let bombVal = 0; let bombTip = '';
         if(c.tProbs.h <= 27.7) { bombVal = c.hPres / (c.tProbs.h||1); bombTip = '1'; }
         if(c.tProbs.a <= 27.7) { let aV = c.aPres / (c.tProbs.a||1); if(aV > bombVal) { bombVal = aV; bombTip = '2'; } }
@@ -451,13 +450,19 @@ function generateAcca() {
     document.getElementById('accaDisplay').innerHTML=h; document.getElementById('accaDisplay').style.display='block';
 }
 
-// --- FULL DATA LAB (BACKTEST) ---
+// --- TIERED EVALUATION REPORT (v309) ---
 async function runDeepEvaluation() {
     const tD = document.getElementById('evalDate').value; 
     if(!tD) return;
     document.getElementById('aiCont').style.display='block';
     
-    let s = { tVal:0, wVal:0, tBomb:0, wBomb:0, tCrn:0, wCrn:0, tSyn:0, wSyn:0, tO25:0, wO25:0, tCard:0, wCard:0 };
+    let stats = {
+        pts: { '70+': {t:0, w:0}, '60-69': {t:0, w:0}, '50-59': {t:0, w:0} },
+        bombs: { '<20': {t:0, w:0}, '20-28': {t:0, w:0} },
+        crn: { '>10.5': {t:0, w:0}, '9.5-10.5': {t:0, w:0}, '<9.5': {t:0, w:0} },
+        o25: { '>3.0': {t:0, w:0}, '2.5-3.0': {t:0, w:0}, '<2.5': {t:0, w:0} }
+    };
+    let topPicks = [];
     
     try {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
@@ -479,53 +484,78 @@ async function runDeepEvaluation() {
                 const hG = m.goals.home; const aG = m.goals.away; const totG = hG + aG;
                 const act1X2 = hG > aG ? 'h' : (aG > hG ? 'a' : 'd');
                 
-                // 1. Value Bets (>70%)
-                if(Math.max(tProbs.h, tProbs.a) >= 70) {
-                    s.tVal++;
-                    if((tProbs.h >= 70 && act1X2 === 'h') || (tProbs.a >= 70 && act1X2 === 'a')) s.wVal++;
-                }
+                const maxP = Math.max(tProbs.h, tProbs.a); const minP = Math.min(tProbs.h, tProbs.a);
+                const pick = tProbs.h > tProbs.a ? 'h' : 'a'; const bPick = tProbs.h < tProbs.a ? 'h' : 'a';
+                const isWin = pick === act1X2; const isBWin = bPick === act1X2;
 
-                // 2. Bombs (<28% & Pres)
-                if(tProbs.h <= 28 || tProbs.a <= 28) {
-                    s.tBomb++;
-                    if((tProbs.h <= 28 && act1X2 === 'h') || (tProbs.a <= 28 && act1X2 === 'a')) s.wBomb++;
-                }
-
-                // 3 & 4. Corners & Synergy
-                const actC = (sD.response[0]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0);
-                let pC = (4.1+hXG*0.9)+(3.6+aXG*0.8); let syn = false; 
-                if((aXGA<=0.6 && (4.1+hXG*0.9)>5)||(hXGA<=0.6 && (4.1+aXG*0.9)>5)) { pC+=1.5; syn=true; }
+                // Points Tiers
+                if(maxP >= 70) { stats.pts['70+'].t++; if(isWin) stats.pts['70+'].w++; }
+                else if(maxP >= 60) { stats.pts['60-69'].t++; if(isWin) stats.pts['60-69'].w++; }
+                else if(maxP >= 50) { stats.pts['50-59'].t++; if(isWin) stats.pts['50-59'].w++; }
                 
-                s.tCrn++; if(actC >= Math.floor(pC-1)) s.wCrn++; 
-                if(syn) { s.tSyn++; if(actC >= Math.floor(pC-1)) s.wSyn++; }
+                // Track for Daily 3-Fold
+                topPicks.push({ prob: maxP, win: isWin });
 
-                // 5. Goals
-                if((hXG+aXG) > 2.5) { s.tO25++; if(totG >= 3) s.wO25++; }
+                // Bombs Tiers
+                if(minP <= 28) {
+                    if(minP < 20) { stats.bombs['<20'].t++; if(isBWin) stats.bombs['<20'].w++; }
+                    else { stats.bombs['20-28'].t++; if(isBWin) stats.bombs['20-28'].w++; }
+                }
 
-                // 6. Cards
-                const actCard = (sD.response[0]?.statistics?.find(x=>x.type==="Yellow Cards")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Yellow Cards")?.value||0);
-                let pCard = (1.5+hXGA*0.5) + (1.5+aXGA*0.5);
-                s.tCard++; if(actCard >= Math.floor(pCard-1)) s.wCard++;
+                // Corners Tiers
+                const actC = (sD.response[0]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0);
+                let pC = (4.1+hXG*0.9)+(3.6+aXG*0.8);
+                if(aXGA<=0.6 && (4.1+hXG*0.9)>5) pC+=1.5; if(hXGA<=0.6 && (4.1+aXG*0.9)>5) pC+=1.5;
+                
+                let cB = pC > 10.5 ? '>10.5' : (pC >= 9.5 ? '9.5-10.5' : '<9.5');
+                stats.crn[cB].t++; if(actC >= Math.floor(pC-1)) stats.crn[cB].w++;
+
+                // Goals Tiers
+                let tXG = hXG + aXG;
+                let gB = tXG > 3.0 ? '>3.0' : (tXG >= 2.5 ? '2.5-3.0' : '<2.5');
+                stats.o25[gB].t++; if(totG >= 3) stats.o25[gB].w++;
             }
         }
         
         const pct = (w,t) => t>0 ? Math.round((w/t)*100) : 0;
+        const row = (lbl, o, k) => `<div class="sub-row"><span>${lbl}</span><b>${o[k].w}/${o[k].t} (${pct(o[k].w, o[k].t)}%)</b></div>`;
+        
+        // 3-Fold Calculation
+        topPicks.sort((a,b)=>b.prob-a.prob);
+        let t3 = topPicks.slice(0,3); let t3wins = t3.filter(x=>x.win).length;
+        let t3Res = t3.length === 3 ? (t3wins === 3 ? '<b style="color:var(--p)">ΕΠΑΛΗΘΕΥΤΗΚΕ (3/3)</b>' : `<b style="color:var(--alert)">ΧΑΘΗΚΕ (${t3wins}/3)</b>`) : 'N/A';
+
         document.getElementById('aiResultsBox').innerHTML = `
-            <div class="pred-row"><span>Σημεία Value (>70%):</span><b>${s.wVal}/${s.tVal} (${pct(s.wVal, s.tVal)}%)</b></div>
-            <div class="pred-row"><span>Μπόμπες (Outsiders):</span><b style="color:var(--value);">${s.wBomb}/${s.tBomb} (${pct(s.wBomb, s.tBomb)}%)</b></div>
-            <div class="pred-row"><span>Γενικά Κόρνερ:</span><b>${s.wCrn}/${s.tCrn} (${pct(s.wCrn, s.tCrn)}%)</b></div>
-            <div class="pred-row" style="border:1px solid var(--gold);"><span>Κόρνερ Μπετόν (xGA <0.60):</span><b style="color:var(--gold);">${s.wSyn}/${s.tSyn} (${pct(s.wSyn, s.tSyn)}%)</b></div>
-            <div class="pred-row"><span>Over 2.5 Γκολ:</span><b>${s.wO25}/${s.tO25} (${pct(s.wO25, s.tO25)}%)</b></div>
-            <div class="pred-row"><span>Κάρτες:</span><b>${s.wCard}/${s.tCard} (${pct(s.wCard, s.tCard)}%)</b></div>
+            <div class="section-title">📊 ΣΗΜΕΙΑ (ΑΝΑ ΠΙΘΑΝΟΤΗΤΑ)</div>
+            ${row('True Prob > 70%:', stats.pts, '70+')}
+            ${row('True Prob 60-69%:', stats.pts, '60-69')}
+            ${row('True Prob 50-59%:', stats.pts, '50-59')}
+            
+            <div class="section-title">💣 ΜΠΟΜΠΕΣ (ΑΝΑ ΠΙΘΑΝΟΤΗΤΑ)</div>
+            ${row('Ακραία (< 20%):', stats.bombs, '<20')}
+            ${row('Value (20 - 28%):', stats.bombs, '20-28')}
+            
+            <div class="section-title">🚩 ΚΟΡΝΕΡ (ΑΝΑ TOTAL xCRN)</div>
+            ${row('Υψηλό (> 10.5):', stats.crn, '>10.5')}
+            ${row('Μεσαίο (9.5 - 10.5):', stats.crn, '9.5-10.5')}
+            ${row('Χαμηλό (< 9.5):', stats.crn, '<9.5')}
+            
+            <div class="section-title">⚽ OVER 2.5 (ΑΝΑ TOTAL xG)</div>
+            ${row('Υψηλό xG (> 3.0):', stats.o25, '>3.0')}
+            ${row('Οριακό xG (2.5 - 3.0):', stats.o25, '2.5-3.0')}
+            ${row('Χαμηλό xG (< 2.5):', stats.o25, '<2.5')}
+
+            <div class="section-title" style="color:var(--gold);">🎯 ΚΟΡΥΦΑΙΑ ΤΡΙΑΔΑ ΗΜΕΡΑΣ</div>
+            <div class="pred-row" style="border:1px solid var(--gold);"><span>Αποτέλεσμα 3-άδας:</span>${t3Res}</div>
         `;
         document.getElementById('aiPanel').style.display='block';
-    } catch(e) {}
+    } catch(e) { alert("Σφάλμα ανάλυσης"); }
     document.getElementById('aiCont').style.display='none';
 }
 
 function exportToPDF() {
     const el = document.getElementById('pdfExportArea');
-    html2pdf().from(el).set({ margin:10, filename:'Data_Report.pdf', html2canvas:{scale:2, backgroundColor:'#0b0e14'}, jsPDF:{format:'a4'} }).save();
+    html2pdf().from(el).set({ margin:10, filename:'Tiered_Data_Report.pdf', html2canvas:{scale:2, backgroundColor:'#0b0e14'}, jsPDF:{format:'a4'} }).save();
 }
 
 function closePanel(pid) { document.getElementById(pid).style.display = 'none'; }
