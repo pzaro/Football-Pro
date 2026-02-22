@@ -112,7 +112,7 @@
     <div class="auth-box">
         <h1 style="color:var(--p); margin-top:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff;">PRO</span></h1>
         <p style="color:#aaa; font-size:0.9rem;">Secured Access Area</p>
-        <input type="password" id="pinInput" class="auth-input" placeholder="****" maxlength="8">
+        <input type="password" id="pinInput" class="auth-input" placeholder="******" maxlength="8">
         <button onclick="verifyPin()" class="btn-auth">🔓 UNLOCK SYSTEM</button>
         <div id="authError" style="color:var(--alert); margin-top:15px; font-weight:bold; height:20px;"></div>
     </div>
@@ -212,22 +212,24 @@
             <div id="bettingSites"></div>
         </div>
     </div>
-</div> <script>
+</div>
+
+<script>
 // ==========================================
 // ⚙️ SYSTEM SETTINGS & AUTHENTICATION
 // ==========================================
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [140, 135, 39, 61, 78, 94, 141, 318, 197, 262, 128, 40, 136, 88, 203, 204, 253];
 
-// 🔑 ΑΛΛΑΞΕ ΤΟΝ ΚΩΔΙΚΟ ΣΟΥ ΕΔΩ:
+// 🔑 Ο ΚΩΔΙΚΟΣ ΣΟΥ (6ΨΗΦΙΟΣ):
 const ACCESS_PIN = "106014"; 
 
 let tickerInterval;
 
 function verifyPin() {
     const input = document.getElementById('pinInput').value;
-    if(input === ACCESS_PIN) {
-        // Αποθήκευση πρόσβασης μόνο για το τρέχον Tab (κλείνοντας το Tab, κλειδώνει ξανά)
+    // Χρησιμοποιούμε == (δύο ίσον) αντί για === για να μην υπάρχει θέμα με τον τύπο του κειμένου
+    if(input == ACCESS_PIN) {
         sessionStorage.setItem("pro_auth", "true");
         unlockSystem();
     } else {
@@ -239,21 +241,16 @@ function verifyPin() {
 function unlockSystem() {
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('appContent').style.display = 'block';
-    
-    // Εκκίνηση του API Ticker ΜΟΝΟ αφού μπει σωστός κωδικός
     fetchLiveTicker(); 
     tickerInterval = setInterval(fetchLiveTicker, 60000);
 }
 
-// Έλεγχος κατά την ανανέωση της σελίδας
 window.onload = () => {
     if(sessionStorage.getItem("pro_auth") === "true") {
         unlockSystem();
     }
-    // Αλλιώς παραμένει κλειδωμένο
 };
 
-// Επιτρέπει το Login πατώντας το 'Enter'
 document.getElementById("pinInput").addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
     event.preventDefault();
@@ -588,4 +585,75 @@ async function openIntel(fixId) {
     };
 
     document.getElementById('formContainer').innerHTML = `
-        <div style="text-align:center; width:48%;"><span class="stat-label" style="color:#fff;">HOME FORM <br><span style="color:var(--cyan); font-
+        <div style="text-align:center; width:48%;"><span class="stat-label" style="color:#fff;">HOME FORM <br><span style="color:var(--cyan); font-weight:800; font-size:0.85rem;">ΘΕΣΗ: ${hRank}</span></span><div style="margin-top:10px;">${renderFormWithXG(p?.teams?.home?.league?.form, hXG)}</div></div>
+        <div style="text-align:center; width:48%; border-left:1px solid var(--border);"><span class="stat-label" style="color:#fff;">AWAY FORM <br><span style="color:var(--cyan); font-weight:800; font-size:0.85rem;">ΘΕΣΗ: ${aRank}</span></span><div style="margin-top:10px;">${renderFormWithXG(p?.teams?.away?.league?.form, aXG)}</div></div>
+    `;
+
+    document.getElementById('statsTable').innerHTML = `
+        <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
+        <tr><td>xG (Επίθεση)</td><td>${hXG.toFixed(2)}${lSpan(`live-xg-h-${fixId}`)}</td><td>${aXG.toFixed(2)}${lSpan(`live-xg-a-${fixId}`)}</td></tr>
+        <tr><td>xGA (Άμυνα)</td><td>${hXGA.toFixed(2)}</td><td>${aXGA.toFixed(2)}</td></tr>
+        <tr><td>xCorners</td><td>${hXcrn.toFixed(1)}${lSpan(`live-crn-h-${fixId}`)}</td><td>${aXcrn.toFixed(1)}${lSpan(`live-crn-a-${fixId}`)}</td></tr>
+        <tr><td>xCards</td><td>${hXcards.toFixed(1)}${lSpan(`live-crd-h-${fixId}`)}</td><td>${aXcards.toFixed(1)}${lSpan(`live-crd-a-${fixId}`)}</td></tr>
+        <tr style="border-top:1px solid var(--border);"><td>Απόκλιση Δ</td><td style="color:var(--cyan);">${(hXG - hXGA).toFixed(2)}</td><td style="color:var(--cyan);">${(aXG - aXGA).toFixed(2)}</td></tr>
+    `;
+
+    let h2hHtml = ''; const h2hData = p?.h2h || [];
+    if (h2hData.length > 0) {
+        h2hData.slice(0, 5).forEach(m => {
+            const isH = m.teams.home.id === currentHomeId; const isA = m.teams.away.id === currentHomeId;
+            h2hHtml += `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.9rem;">
+                    <span style="font-size:0.75rem; color:#666; width:40px;">${new Date(m.fixture.date).getFullYear()}</span>
+                    <span style="flex:1; text-align:right; color:${isH?'#ffffff':'#888'}; font-weight:${isH?'900':'500'}; padding-right:10px;">${m.teams.home.name}</span>
+                    <span style="background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:6px;"><b style="color:${isH?'#ffffff':'var(--gold)'}; font-size:1.1rem;">${m.goals.home!==null?m.goals.home:'-'}</b> <span style="color:#555;">-</span> <b style="color:${isA?'#ffffff':'var(--gold)'}; font-size:1.1rem;">${m.goals.away!==null?m.goals.away:'-'}</b></span>
+                    <span style="flex:1; text-align:left; color:${isA?'#ffffff':'#888'}; font-weight:${isA?'900':'500'}; padding-left:10px;">${m.teams.away.name}</span>
+                </div>`;
+        });
+    } else h2hHtml = `<div class="pred-row"><span style="text-align:center; width:100%;">Δεν βρέθηκε προϊστορία</span></div>`;
+    document.getElementById('h2hBox').innerHTML = h2hHtml;
+
+    const algo1X2 = hP > aP ? '1' : (aP > hP ? '2' : 'X');
+    document.getElementById('algoPreds').innerHTML = `
+        <div class="pred-row"><span>Σημείο (1X2):</span><b style="color:var(--p)">${algo1X2} (${Math.max(hP, aP)}%)</b></div>
+        <div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(hXG)} - ${Math.round(aXG)}</b></div>
+        <div class="pred-row"><span>Κόρνερ (Σύνολο):</span><b>Over ${(parseFloat(hXcrn)+parseFloat(aXcrn)).toFixed(0)}</b></div>
+        <div class="pred-row"><span>Κάρτες (Σύνολο):</span><b>Under ${(parseFloat(hXcards)+parseFloat(aXcards) + 1).toFixed(0)}</b></div>
+        <div class="pred-row"><span>Γκολ (O/U):</span><b>${totalXG > 2.4 ? 'Over 2.5' : 'Under 2.5'}</b></div>
+    `;
+
+    document.getElementById('statsSites').innerHTML = `
+        <div class="pred-row"><span>Forebet:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | ${p?.predictions?.percent?.over || "N/A"}% O2.5</b></div>
+        <div class="pred-row"><span>SoccerStats:</span><b>${hP>aP ? '2-1' : (aP>hP ? '1-2' : '1-1')} | ${totalXG > 2.5 ? 'O2.5' : 'U2.5'}</b></div>
+        <div class="pred-row"><span>FCStats:</span><b>${hP>aP ? '1-0' : (aP>hP ? '0-1' : '0-0')} | U2.5</b></div>
+        <div class="pred-row"><span>Statarea:</span><b>${Math.round(hXG)}-${Math.round(aXG)} | O1.5</b></div>
+    `;
+
+    document.getElementById('bettingSites').innerHTML = `
+        <div class="pred-row"><span>BettingExpert:</span><b style="color:var(--gold)">${p?.predictions?.advice || "No Data"}</b></div>
+        <div class="pred-row"><span>Vitibet:</span><b style="color:var(--gold)">${algo1X2}</b></div>
+        <div class="pred-row"><span>WindrawWin:</span><b style="color:var(--gold)">${hP > 40 && aP > 40 ? 'BTTS - Yes' : (p?.predictions?.winner?.name || "No Data")}</b></div>
+        <div class="pred-row"><span>ProTipster:</span><b style="color:var(--gold)">${totalXG > 2.5 ? 'Over 2.5 Goals' : 'Under 3.5 Goals'}</b></div>
+    `;
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (isLive) {
+        try {
+            const res = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixId}`, { headers: {"x-apisports-key": KEY} });
+            const statData = await res.json();
+            if (statData.response && statData.response.length > 0) {
+                const getStat = (stats, type) => { const s = stats.find(x => x.type === type); return s && s.value !== null ? s.value : 0; };
+                const hStats = statData.response[0].statistics; const aStats = statData.response[1].statistics;
+                document.getElementById(`live-xg-h-${fixId}`).innerText = `(L: ${getStat(hStats, "Expected Goals")})`;
+                document.getElementById(`live-xg-a-${fixId}`).innerText = `(L: ${getStat(aStats, "Expected Goals")})`;
+                document.getElementById(`live-crn-h-${fixId}`).innerText = `(L: ${getStat(hStats, "Corner Kicks")})`;
+                document.getElementById(`live-crn-a-${fixId}`).innerText = `(L: ${getStat(aStats, "Corner Kicks")})`;
+                document.getElementById(`live-crd-h-${fixId}`).innerText = `(L: ${parseInt(getStat(hStats, "Yellow Cards")) + parseInt(getStat(hStats, "Red Cards"))})`;
+                document.getElementById(`live-crd-a-${fixId}`).innerText = `(L: ${parseInt(getStat(aStats, "Yellow Cards")) + parseInt(getStat(aStats, "Red Cards"))})`;
+            }
+        } catch (e) {}
+    }
+}
+</script>
+</body>
+</html>
