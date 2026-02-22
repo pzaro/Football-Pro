@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v303 - Complete Live Spec</title>
+    <title>Predictor Pro v305 - WildCard Spec</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
@@ -14,7 +14,7 @@
         /* AUTH */
         #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; justify-content: center; align-items: center; }
         .auth-box { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 40px 20px; text-align: center; width: 90%; max-width: 400px; backdrop-filter: blur(10px); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-        .auth-input { width: 100%; padding: 20px; margin: 20px 0; border-radius: 15px; border: 2px solid var(--border); background: #000; color: var(--p); font-size: 2rem; text-align: center; font-weight: 900; letter-spacing: 10px; }
+        .auth-input { width: 100%; padding: 20px; margin: 25px 0; border-radius: 15px; border: 2px solid var(--border); background: #000; color: var(--p); font-size: 2rem; text-align: center; font-weight: 900; letter-spacing: 10px; }
         .btn-auth { width: 100%; padding: 18px; background: var(--p); color: #000; border: none; border-radius: 15px; font-weight: 900; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; }
 
         /* TICKER */
@@ -93,7 +93,7 @@
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
         <input type="password" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" inputmode="numeric">
         <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v303</div>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v305</div>
     </div>
 </div>
 
@@ -103,7 +103,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">COMPLETE LIVE SPEC</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">WILDCARD SPEC</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -122,6 +122,7 @@
             <select id="leagueFilter" onchange="renderMatches()" style="margin-bottom:12px;"></select>
             <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
                 <select id="accaMarket">
+                    <option value="WILDCARD">🃏 WILDCARD</option>
                     <option value="1X2">ΣΗΜΕΙΑ (1X2)</option>
                     <option value="SCORE">🎯 ΣΚΟΡ</option>
                     <option value="CORNERS">🚩 ΚΟΡΝΕΡ</option>
@@ -130,7 +131,10 @@
                     <option value="COMBO">⚡ COMBO</option>
                 </select>
                 <select id="accaSize">
-                    <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
+                    <option value="2">2-ΑΔΑ</option>
+                    <option value="3">3-ΑΔΑ</option>
+                    <option value="4">4-ΑΔΑ</option>
+                    <option value="5">5-ΑΔΑ</option>
                 </select>
                 <button onclick="generateAcca()" class="btn-gen">GENERATE</button>
             </div>
@@ -193,7 +197,7 @@ let masterData = []; let standingsMap = {};
 function verifyPinBtn() {
     let v = document.getElementById('pinInput').value.trim();
     if(v === ACCESS_PIN) {
-        sessionStorage.setItem("p_auth_v303", "true");
+        sessionStorage.setItem("p_auth_v305", "true");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
@@ -204,7 +208,7 @@ function verifyPinBtn() {
     }
 }
 window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v303") === "true") { 
+    if(sessionStorage.getItem("p_auth_v305") === "true") { 
         document.getElementById('authScreen').style.display='none'; 
         document.getElementById('appContent').style.display='block'; 
         startSystem(); 
@@ -334,8 +338,8 @@ function openIntel(id) {
         if(totXG > 1.9 && Math.max(sGetP(p,'home'), sGetP(p,'away')) > 60) {
             bHtml += `<div class="builder-alert">🔥 BET BUILDER: Over 1.5 & ${p?.predictions?.winner?.name || 'Fav'}</div>`;
         }
-        if(hXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.home?.name} Wall:</b> (xGA ${hXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ.</div>`;
-        if(aXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.away?.name} Wall:</b> (xGA ${aXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ.</div>`;
+        if(hXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.home?.name} Wall:</b> (xGA ${hXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ του αντιπάλου.</div>`;
+        if(aXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.away?.name} Wall:</b> (xGA ${aXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ του αντιπάλου.</div>`;
         document.getElementById('builderBox').innerHTML = bHtml;
 
         const rf = (fArr) => fArr.map(c => `<span class="form-dot ${c}"></span>`).join('');
@@ -359,7 +363,6 @@ function openIntel(id) {
         document.getElementById('intelPanel').style.display = 'block';
         window.scrollTo(0,0);
 
-        // --- ASYNC LIVE STATS FETCH ---
         if(isLive) {
             fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${id}`, { headers: {"x-apisports-key": KEY} })
             .then(res => res.json())
@@ -367,9 +370,7 @@ function openIntel(id) {
                 if(sData.response && sData.response.length > 0) {
                     const gS = (s, t) => { let x = s.find(y => y.type===t); return x? (x.value!==null?x.value:0) : 0; };
                     const hS = sData.response[0].statistics; const aS = sData.response[1].statistics;
-                    
                     const setL = (elId, val) => { const el = document.getElementById(elId); if(el) el.innerText = ` (L: ${val})`; };
-                    
                     setL('lx-h', gS(hS, "Expected Goals")); setL('lx-a', gS(aS, "Expected Goals"));
                     setL('lc-h', gS(hS, "Corner Kicks")); setL('lc-a', gS(aS, "Corner Kicks"));
                     setL('cd-h', parseInt(gS(hS, "Yellow Cards")) + parseInt(gS(hS, "Red Cards")));
@@ -382,20 +383,48 @@ function openIntel(id) {
 
 function generateAcca() {
     const m = document.getElementById('accaMarket').value; const s = parseInt(document.getElementById('accaSize').value);
-    let pool = masterData.filter(d=>!['FT','PEN'].includes(d.fixture.fixture.status.short)).map(d => {
-        const p = d.prediction; const hXG = sGetXG(p?.teams?.home,'for'); const aXG = sGetXG(p?.teams?.away,'for');
+    
+    // Φιλτράρισμα: Για Wildcard ΜΟΝΟ όσα δεν έχουν ξεκινήσει. Αλλιώς, όσα δεν έχουν λήξει.
+    let pool = masterData.filter(d => {
+        const st = d.fixture.fixture.status.short;
+        if(m === 'WILDCARD') return ['NS', 'TBD'].includes(st);
+        return !['FT','PEN','AET'].includes(st);
+    }).map(d => {
+        const p = d.prediction; 
+        const hXG = sGetXG(p?.teams?.home,'for'); const aXG = sGetXG(p?.teams?.away,'for');
         const hXGA = sGetXG(p?.teams?.home,'against'); const aXGA = sGetXG(p?.teams?.away,'against');
         let ec = (4.1+hXG*0.9)+(3.6+aXG*0.8); if(aXGA<=0.60 && (4.1+hXG*0.9)>5) ec+=1.5; if(hXGA<=0.60 && (4.1+aXG*0.9)>5) ec+=1.5;
-        const hP = sGetP(p,'home'); const aP = sGetP(p,'away');
-        return { id: d.fixture.fixture.id, name: d.fixture.teams.home.name + ' - ' + d.fixture.teams.away.name, hP, aP, ec, o25: sGetP(p,'over'), sc: `${Math.round(hXG)}-${Math.round(aXG)}` };
+        const hP = sGetP(p,'home'); const aP = sGetP(p,'away'); const o25 = sGetP(p,'over'); const u25 = 100 - o25;
+        
+        let bProb = 0; let bTip = '';
+        if(hP > bProb) { bProb = hP; bTip = '1'; }
+        if(aP > bProb) { bProb = aP; bTip = '2'; }
+        if(o25 > bProb) { bProb = o25; bTip = 'Over 2.5'; }
+        if(u25 > bProb) { bProb = u25; bTip = 'Under 2.5'; }
+        
+        return { id: d.fixture.fixture.id, name: d.fixture.teams.home.name + ' - ' + d.fixture.teams.away.name, hP, aP, ec, o25, sc: `${Math.round(hXG)}-${Math.round(aXG)}`, bProb, bTip };
     });
     
-    if(m==='CORNERS') pool.sort((a,b)=>b.ec-a.ec); else if(m==='BOMBS') pool=pool.filter(i=>i.hP<=28||i.aP<=28).sort((a,b)=>Math.min(a.hP,a.aP)-Math.min(b.hP,b.aP)); else if(m==='GOALS') pool.sort((a,b)=>b.o25-a.o25); else if(m==='SCORE') pool.sort((a,b)=>(b.hP+b.aP+b.o25)-(a.hP+a.aP+a.o25)); else if(m==='COMBO') pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP)); else pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP));
+    if(pool.length < s) { alert("Δεν υπάρχουν αρκετοί αγώνες (NS) για αυτή την επιλογή."); return; }
+
+    if(m==='CORNERS') pool.sort((a,b)=>b.ec-a.ec); 
+    else if(m==='BOMBS') pool=pool.filter(i=>i.hP<=28||i.aP<=28).sort((a,b)=>Math.min(a.hP,a.aP)-Math.min(b.hP,b.aP)); 
+    else if(m==='GOALS') pool.sort((a,b)=>b.o25-a.o25); 
+    else if(m==='SCORE') pool.sort((a,b)=>(b.hP+b.aP+b.o25)-(a.hP+a.aP+a.o25)); 
+    else if(m==='COMBO') pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP)); 
+    else if(m==='WILDCARD') pool.sort((a,b)=>b.bProb-a.bProb);
+    else pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP));
     
-    let h = `<h3 style="color:var(--p); margin:0 0 15px 0;">🎯 ELITE ${s}-FOLD</h3>`;
+    let h = `<h3 style="color:var(--p); margin:0 0 15px 0;">🎯 ELITE ${s}-FOLD ${m==='WILDCARD'?'(WILDCARD 🃏)':''}</h3>`;
     pool.slice(0,s).forEach(i => {
         let tip = '';
-        if(m==='CORNERS') tip = `Over ${Math.floor(i.ec-1)}.5 Κόρνερ`; else if(m==='SCORE') tip = `Σκορ: ${i.sc}`; else if(m==='GOALS') tip = `Over 2.5`; else if(m==='BOMBS') tip = i.hP<i.aP?'2':'1'; else if(m==='COMBO') tip = (i.hP>i.aP?'1X':'X2') + ' & O1.5'; else tip = i.hP>i.aP?'1':'2';
+        if(m==='CORNERS') tip = `Over ${Math.floor(i.ec-1)}.5 Κόρνερ`; 
+        else if(m==='SCORE') tip = `Σκορ: ${i.sc}`; 
+        else if(m==='GOALS') tip = `Over 2.5`; 
+        else if(m==='BOMBS') tip = i.hP<i.aP?'2':'1'; 
+        else if(m==='COMBO') tip = (i.hP>i.aP?'1X':'X2') + ' & O1.5'; 
+        else if(m==='WILDCARD') tip = `${i.bTip} (${i.bProb}%)`;
+        else tip = i.hP>i.aP?'1':'2';
         h += `<div class="acca-item" onclick="openIntel(${i.id})"><span style="font-weight:800; font-size:0.9rem;">${i.name}</span><b style="color:var(--gold)">${tip}</b></div>`;
     });
     document.getElementById('accaDisplay').innerHTML=h; document.getElementById('accaDisplay').style.display='block';
