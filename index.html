@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v306 - Sovereign Math</title>
+    <title>Predictor Pro v307 - Grand Restoration</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
@@ -40,6 +40,7 @@
         /* MATCH CARDS */
         .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; margin-bottom: 16px; cursor: pointer; position: relative; overflow: hidden; }
         .match-card.finished { opacity: 0.6; filter: grayscale(0.6); border-color: var(--finished); }
+        .match-card.mod-spec { border: 2px solid var(--value); box-shadow: 0 0 15px rgba(191,64,191,0.3); }
         .match-card:active { transform: scale(0.98); }
         .value-badge { position: absolute; top: 0; right: 20px; background: var(--value); color: #fff; padding: 3px 12px; border-radius: 0 0 10px 10px; font-size: 0.7rem; font-weight: 900; box-shadow: 0 4px 10px rgba(191,64,191,0.4); z-index: 2; }
         
@@ -77,7 +78,7 @@
         .form-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin: 0 2px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
 
-        .live-indic { color: var(--live); font-size: 0.8rem; font-weight: 900; margin-left: 5px; animation: pulse 1.5s infinite; }
+        .live-indic { color: var(--live); font-size: 0.75rem; font-weight: 900; margin-left: 5px; animation: pulse 1.5s infinite; }
 
         @media (max-width: 600px) {
             .card-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -93,7 +94,7 @@
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
         <input type="password" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" inputmode="numeric">
         <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v306</div>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v307</div>
     </div>
 </div>
 
@@ -103,14 +104,14 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">SOVEREIGN MATH SPEC</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">GRAND RESTORATION SPEC</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
         
         <div class="ai-controls">
             <input type="date" id="evalDate" class="date-picker">
-            <button onclick="runDeepEvaluation()" class="btn-ai">DATA LAB PDF</button>
+            <button onclick="runDeepEvaluation()" class="btn-ai">ΑΝΑΛΥΣΗ ΗΜΕΡΑΣ</button>
         </div>
 
         <div id="syncCont" style="display:none; margin-bottom:25px; background:var(--card); padding:15px; border-radius:15px;">
@@ -127,14 +128,11 @@
                     <option value="SCORE">🎯 ΣΚΟΡ</option>
                     <option value="CORNERS">🚩 ΚΟΡΝΕΡ</option>
                     <option value="GOALS">⚽ OVER 2.5</option>
-                    <option value="BOMBS">💣 ΜΠΟΜΠΕΣ (>3.60)</option>
+                    <option value="BOMBS">💣 ΜΠΟΜΠΕΣ</option>
                     <option value="COMBO">⚡ COMBO</option>
                 </select>
                 <select id="accaSize">
-                    <option value="2">2-ΑΔΑ</option>
-                    <option value="3">3-ΑΔΑ</option>
-                    <option value="4">4-ΑΔΑ</option>
-                    <option value="5">5-ΑΔΑ</option>
+                    <option value="2">2-ΑΔΑ</option><option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
                 </select>
                 <button onclick="generateAcca()" class="btn-gen">GENERATE</button>
             </div>
@@ -142,6 +140,7 @@
 
         <div id="accaDisplay" style="display:none; background:rgba(191,64,191,0.1); border:1px solid var(--value); border-radius:20px; padding:20px; margin-bottom:25px;"></div>
         
+        <div id="modSection"></div>
         <div id="activeMatchList"></div>
         <div id="finishedSection" style="display:none;">
             <div class="section-separator">ΟΛΟΚΛΗΡΩΜΕΝΟΙ ΑΓΩΝΕΣ</div>
@@ -166,7 +165,7 @@
                 <button onclick="closePanel('aiPanel')" class="btn-close">ΚΛΕΙΣΙΜΟ</button>
             </div>
             <div id="pdfExportArea" style="background:#0b0e14; padding:20px; border-radius:20px; border:1px solid var(--border);">
-                <h2 style="text-align:center; color:var(--ai);">🧠 DATA LAB REPORT</h2>
+                <h2 style="text-align:center; color:var(--ai);">🧠 ΑΝΑΛΥΣΗ ΗΜΕΡΑΣ (BACKTEST)</h2>
                 <div id="aiResultsBox"></div>
             </div>
         </div>
@@ -179,39 +178,26 @@ const sGetP = (p, k) => parseInt(p?.predictions?.percent?.[k] || 0);
 const sGetXG = (t, s) => parseFloat(t?.last_5?.goals?.[s]?.average || (s==='for'?1.0:1.0));
 const sGetF = (t) => (t?.league?.form || "DDDDDD").split('').slice(-6);
 
-// NEW: Sovereign True Probs Algorithm
-// Υπολογίζει αληθινά ποσοστά 1Χ2 αγνοώντας τα default του API
 function calcTrueProbs(hXG, hXGA, aXG, aXGA) {
-    let hPwr = (hXG + aXGA) / 2 + 0.2; // 0.2 = Home Advantage
+    let hPwr = (hXG + aXGA) / 2 + 0.2; 
     let aPwr = (aXG + hXGA) / 2;
     let diff = Math.abs(hPwr - aPwr);
-    
-    let dProb = Math.max(0.15, 0.33 - (diff * 0.12)); // Ισοπαλία βάσει απόκλισης
+    let dProb = Math.max(0.15, 0.33 - (diff * 0.12)); 
     let rem = 1 - dProb;
-    let totPwr = hPwr + aPwr;
-    if(totPwr === 0) totPwr = 1;
-    
-    let hProb = rem * (hPwr / totPwr);
-    let aProb = rem * (aPwr / totPwr);
-    
-    return { 
-        h: Math.round(hProb * 100), 
-        d: Math.round(dProb * 100), 
-        a: Math.round(aProb * 100) 
-    };
+    let totPwr = hPwr + aPwr || 1;
+    return { h: Math.round((rem * (hPwr / totPwr)) * 100), d: Math.round(dProb * 100), a: Math.round((rem * (aPwr / totPwr)) * 100) };
 }
 
 // --- CORE CONFIG & AUTH ---
 const ACCESS_PIN = "106014";
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [
-    {id: 39, name: "Αγγλία - Premier"}, {id: 40, name: "Αγγλία - Championship"},
+    {id: 39, name: "Αγγλία - Premier League"}, {id: 40, name: "Αγγλία - Championship"},
     {id: 140, name: "Ισπανία - La Liga"}, {id: 141, name: "Ισπανία - Segunda"},
     {id: 135, name: "Ιταλία - Serie A"}, {id: 136, name: "Ιταλία - Serie B"},
     {id: 78, name: "Γερμανία - Bundesliga"}, {id: 61, name: "Γαλλία - Ligue 1"},
     {id: 88, name: "Ολλανδία - Eredivisie"}, {id: 197, name: "Ελλάδα - Super League"},
-    {id: 318, name: "Κύπρος - 1η"}, {id: 203, name: "Τουρκία - Süper Lig"},
-    {id: 253, name: "ΗΠΑ - MLS"}
+    {id: 318, name: "Κύπρος - 1η Κατηγορία"}, {id: 203, name: "Τουρκία - Süper Lig"}
 ];
 
 let masterData = []; let standingsMap = {};
@@ -219,7 +205,7 @@ let masterData = []; let standingsMap = {};
 function verifyPinBtn() {
     let v = document.getElementById('pinInput').value.trim();
     if(v === ACCESS_PIN) {
-        sessionStorage.setItem("p_auth_v306", "true");
+        sessionStorage.setItem("p_auth_v307", "true");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
@@ -230,7 +216,7 @@ function verifyPinBtn() {
     }
 }
 window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v306") === "true") { 
+    if(sessionStorage.getItem("p_auth_v307") === "true") { 
         document.getElementById('authScreen').style.display='none'; 
         document.getElementById('appContent').style.display='block'; 
         startSystem(); 
@@ -277,20 +263,14 @@ async function globalSync() {
             const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
             const pD = (await pR.json()).response?.[0];
             
-            // Προ-υπολογισμός των True Probs & Pressure Factors κατά το Sync
             if(pD) {
                 const hXG = sGetXG(pD.teams.home,'for'); const aXG = sGetXG(pD.teams.away,'for');
                 const hXGA = sGetXG(pD.teams.home,'against'); const aXGA = sGetXG(pD.teams.away,'against');
                 let hCr = 4.1 + hXG*0.9; let aCr = 3.6 + aXG*0.8;
-                
                 let tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA);
-                let hPres = (hXG * 1.5) + (hCr * 0.5);
-                let aPres = (aXG * 1.5) + (aCr * 0.5);
+                let hPres = (hXG * 1.5) + (hCr * 0.5); let aPres = (aXG * 1.5) + (aCr * 0.5);
 
-                masterData.push({ 
-                    fixture: m, prediction: pD, 
-                    calc: { hXG, aXG, hXGA, aXGA, hCr, aCr, tProbs, hPres, aPres } 
-                });
+                masterData.push({ fixture: m, prediction: pD, calc: { hXG, aXG, hXGA, aXGA, hCr, aCr, tProbs, hPres, aPres } });
             }
         }
     } catch(e) { alert("API Error. Παρακαλώ ανανεώστε τη σελίδα."); }
@@ -300,53 +280,64 @@ async function globalSync() {
     renderMatches();
 }
 
+function generateCardHTML(d, isFin, isMOD = false) {
+    const m = d.fixture; const st = m.fixture.status.short;
+    const hR = standingsMap[m.teams.home.id] || "-"; const aR = standingsMap[m.teams.away.id] || "-";
+    const isLive = ['1H','2H','HT'].includes(st);
+    const elapsed = m.fixture.status.elapsed || 0; const rem = 90 - elapsed;
+    
+    const tProbs = d.calc.tProbs;
+    const isValue = Math.max(tProbs.h, tProbs.a) > 65;
+    
+    return `
+        <div class="match-card ${isFin ? 'finished' : ''} ${isMOD ? 'mod-spec' : ''}" onclick="openIntel(${m.fixture.id})">
+            ${isValue && !isFin && !isMOD ? '<div class="value-badge">🔥 TRUE VALUE</div>' : ''}
+            <div class="card-header">
+                <div class="team-names"><span class="rank-info">(${hR})</span>${m.teams.home.name}<br><span class="rank-info">(${aR})</span>${m.teams.away.name}</div>
+                <div class="score-box">
+                    <div class="score-display" style="color:${isLive?'var(--live)':'#fff'}">${m.goals.home ?? '-'}:${m.goals.away ?? '-'}</div>
+                    ${isLive ? `<div class="time-rem">Υπόλοιπο: ${rem>0?rem:0}'</div>` : isFin ? `<div style="font-size:0.75rem;color:#888;">ΤΕΛΙΚΟ</div>` : `<div style="font-size:0.75rem;color:#888;">${new Date(m.fixture.date).toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'})}</div>`}
+                </div>
+            </div>
+            ${isLive ? `<div class="progress-bg"><div class="progress-fill" style="width:${(elapsed/90)*100}%;"></div></div>` : ''}
+            <div class="card-stats">
+                <div><div class="stat-label">1X2 (T)</div><div class="stat-value" style="color:var(--gold)">${tProbs.h}-${tProbs.d}-${tProbs.a}</div></div>
+                <div><div class="stat-label">O2.5</div><div class="stat-value">${sGetP(d.prediction,'over')}%</div></div>
+                <div><div class="stat-label">xG TOT</div><div class="stat-value">${(d.calc.hXG + d.calc.aXG).toFixed(1)}</div></div>
+                <div><div class="stat-label">PRES (H:A)</div><div class="stat-value" style="color:var(--cyan)">${d.calc.hPres.toFixed(0)}:${d.calc.aPres.toFixed(0)}</div></div>
+            </div>
+        </div>`;
+}
+
 function renderMatches() {
     const activeList = document.getElementById('activeMatchList'); activeList.innerHTML = "";
     const finishedList = document.getElementById('finishedMatchList'); finishedList.innerHTML = "";
+    const modSection = document.getElementById('modSection'); modSection.innerHTML = "";
     const sel = document.getElementById('leagueFilter').value;
+    
     let filtered = masterData.filter(d => sel === 'ALL' || d.fixture.league.id == sel);
+    let allUpcoming = filtered.filter(d => !['FT','AET','PEN'].includes(d.fixture.fixture.status.short));
+
+    // MOD Injection
+    if(sel === 'ALL' && allUpcoming.length > 0) {
+        let modMatch = allUpcoming.reduce((prev, curr) => {
+            return Math.max(prev.calc.tProbs.h, prev.calc.tProbs.a) > Math.max(curr.calc.tProbs.h, curr.calc.tProbs.a) ? prev : curr;
+        });
+        modSection.innerHTML = `<div class="league-header" style="background:var(--value); color:#fff; border-left-color:#fff;">👑 MATCH OF THE DAY (MOD)</div>` + generateCardHTML(modMatch, false, true);
+    }
 
     LEAGUES.forEach(lg => {
         let upcoming = filtered.filter(d => d.fixture.league.id === lg.id && !['FT','AET','PEN'].includes(d.fixture.fixture.status.short));
         let finished = filtered.filter(d => d.fixture.league.id === lg.id && ['FT','AET','PEN'].includes(d.fixture.fixture.status.short));
         
-        const process = (arr, list, isFin) => {
-            if(arr.length > 0) {
-                list.innerHTML += `<div class="league-header" style="${isFin?'opacity:0.6; filter:grayscale(1);':''}">🏆 ${lg.name}</div>`;
-                arr.forEach(d => {
-                    const m = d.fixture; const st = m.fixture.status.short;
-                    const hR = standingsMap[m.teams.home.id] || "-"; const aR = standingsMap[m.teams.away.id] || "-";
-                    const isLive = ['1H','2H','HT'].includes(st);
-                    const elapsed = m.fixture.status.elapsed || 0; const rem = 90 - elapsed;
-                    
-                    const tProbs = d.calc.tProbs;
-                    const isValue = Math.max(tProbs.h, tProbs.a) > 65; // Value με βάση το νέο αυστηρό αλγόριθμο
-                    
-                    const card = document.createElement('div');
-                    card.className = `match-card ${isFin ? 'finished' : ''}`;
-                    card.setAttribute("onclick", `openIntel(${m.fixture.id})`);
-                    
-                    card.innerHTML = `
-                        ${isValue && !isFin ? '<div class="value-badge">🔥 TRUE VALUE</div>' : ''}
-                        <div class="card-header">
-                            <div class="team-names"><span class="rank-info">(${hR})</span>${m.teams.home.name}<br><span class="rank-info">(${aR})</span>${m.teams.away.name}</div>
-                            <div class="score-box">
-                                <div class="score-display" style="color:${isLive?'var(--live)':'#fff'}">${m.goals.home ?? '-'}:${m.goals.away ?? '-'}</div>
-                                ${isLive ? `<div class="time-rem">Υπόλοιπο: ${rem>0?rem:0}'</div>` : isFin ? `<div style="font-size:0.75rem;color:#888;">ΤΕΛΙΚΟ</div>` : `<div style="font-size:0.75rem;color:#888;">${new Date(m.fixture.date).toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'})}</div>`}
-                            </div>
-                        </div>
-                        ${isLive ? `<div class="progress-bg"><div class="progress-fill" style="width:${(elapsed/90)*100}%;"></div></div>` : ''}
-                        <div class="card-stats">
-                            <div><div class="stat-label">1X2 (T)</div><div class="stat-value" style="color:var(--gold)">${tProbs.h}-${tProbs.d}-${tProbs.a}</div></div>
-                            <div><div class="stat-label">O2.5</div><div class="stat-value">${sGetP(d.prediction,'over')}%</div></div>
-                            <div><div class="stat-label">xG TOT</div><div class="stat-value">${(d.calc.hXG + d.calc.aXG).toFixed(1)}</div></div>
-                            <div><div class="stat-label">PRES (H:A)</div><div class="stat-value" style="color:var(--cyan)">${d.calc.hPres.toFixed(0)}:${d.calc.aPres.toFixed(0)}</div></div>
-                        </div>`;
-                    list.appendChild(card);
-                });
-            }
-        };
-        process(upcoming, activeList, false); process(finished, finishedList, true);
+        if(upcoming.length > 0) {
+            activeList.innerHTML += `<div class="league-header">🏆 ${lg.name}</div>`;
+            upcoming.forEach(d => { activeList.innerHTML += generateCardHTML(d, false); });
+        }
+        if(finished.length > 0) {
+            finishedList.innerHTML += `<div class="league-header" style="opacity:0.6; filter:grayscale(1);">🏆 ${lg.name}</div>`;
+            finished.forEach(d => { finishedList.innerHTML += generateCardHTML(d, true); });
+        }
     });
     document.getElementById('finishedSection').style.display = finishedList.innerHTML === "" ? "none" : "block";
 }
@@ -361,7 +352,6 @@ function openIntel(id) {
         let syn = ''; let expCrnH = c.hCr; let expCrnA = c.aCr;
         if(c.aXGA <= 0.60 && expCrnH > 5) { expCrnH += 1.5; syn = '▲'; } 
         if(c.hXGA <= 0.60 && expCrnA > 5) { expCrnA += 1.5; syn = '▲'; }
-        
         const totXG = c.hXG + c.aXG;
         const cCardsH = 1.5 + c.hXGA*0.5; const cCardsA = 1.5 + c.aXGA*0.5;
 
@@ -391,7 +381,7 @@ function openIntel(id) {
             <tr><td>Cards</td><td>~${cCardsH.toFixed(1)}${ls('cd-h')}</td><td>~${cCardsA.toFixed(1)}${ls('cd-a')}</td></tr>
             <tr><td>True Prob %</td><td style="color:var(--gold)">${c.tProbs.h}%</td><td style="color:var(--gold)">${c.tProbs.a}%</td></tr>`;
         
-        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο (Custom Math):</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
+        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο (T-Prob):</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
         
         let h2h = ''; (p?.h2h || []).slice(0,5).forEach(x => { h2h += `<div class="pred-row"><span>${x.teams?.home?.name}-${x.teams?.away?.name}</span><b>${x.goals?.home}:${x.goals?.away}</b></div>`; });
         document.getElementById('h2hBox').innerHTML = h2h || '<div class="pred-row">No H2H Data</div>';
@@ -435,7 +425,6 @@ function generateAcca() {
         if(o25 > bProb) { bProb = o25; bTip = 'Over 2.5'; }
         if(u25 > bProb) { bProb = u25; bTip = 'Under 2.5'; }
         
-        // Bomb Logic with Pressure Factor
         let bombVal = 0; let bombTip = '';
         if(c.tProbs.h <= 27.7) { bombVal = c.hPres / (c.tProbs.h||1); bombTip = '1'; }
         if(c.tProbs.a <= 27.7) { let aV = c.aPres / (c.tProbs.a||1); if(aV > bombVal) { bombVal = aV; bombTip = '2'; } }
@@ -468,30 +457,73 @@ function generateAcca() {
     document.getElementById('accaDisplay').innerHTML=h; document.getElementById('accaDisplay').style.display='block';
 }
 
+// --- FULL CRASH-PROOF DEEP SCAN ---
 async function runDeepEvaluation() {
-    const tD = document.getElementById('evalDate').value; document.getElementById('aiCont').style.display='block';
-    let sCr = {t:0, w:0}, sSyn = {t:0, w:0};
+    const tD = document.getElementById('evalDate').value; 
+    if(!tD) return;
+    document.getElementById('aiCont').style.display='block';
+    
+    let stats = { t1x2:0, w1x2:0, tbomb:0, wbomb:0, tcrn:0, wcrn:0, tsyn:0, wsyn:0, to25:0, wo25:0 };
+    
     try {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
         const fD = await fR.json();
-        const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
+        const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && ['FT','AET','PEN'].includes(m.fixture.status.short));
+        
+        if(tFix.length === 0) { alert("Δεν υπάρχουν ολοκληρωμένα ματς για αυτήν την ημερομηνία."); document.getElementById('aiCont').style.display='none'; return; }
+
         for (let i=0; i<tFix.length; i++) {
-            let m = tFix[i]; document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
+            let m = tFix[i]; 
+            document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
+            
             const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
-            const pD = (await pR.json()).response[0];
+            const pD = (await pR.json()).response?.[0];
             const sR = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, { headers: {"x-apisports-key": KEY} });
             const sD = await sR.json();
+            
             if(pD && sD.response?.[0]) {
-                const actC = (sD.response[0]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0);
                 const hXG = sGetXG(pD.teams.home,'for'); const aXG = sGetXG(pD.teams.away,'for');
                 const hXGA = sGetXG(pD.teams.home,'against'); const aXGA = sGetXG(pD.teams.away,'against');
-                let pC = (4.1+hXG*0.9)+(3.6+aXG*0.8); let syn = false; if((aXGA<=0.6 && (4.1+hXG*0.9)>5)||(hXGA<=0.6 && (4.1+aXG*0.9)>5)) { pC+=1.5; syn=true; }
-                sCr.t++; if(actC >= pC) sCr.w++; if(syn) { sSyn.t++; if(actC >= pC) sSyn.w++; }
+                const tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA);
+                
+                const hG = m.goals.home; const aG = m.goals.away;
+                const act1X2 = hG > aG ? 'h' : (aG > hG ? 'a' : 'd');
+                
+                // 1X2 Check
+                if(Math.max(tProbs.h, tProbs.a) > 50) {
+                    stats.t1x2++;
+                    if((tProbs.h > tProbs.a && act1X2 === 'h') || (tProbs.a > tProbs.h && act1X2 === 'a')) stats.w1x2++;
+                }
+                
+                // Bomb Check
+                if(tProbs.h <= 28 || tProbs.a <= 28) {
+                    stats.tbomb++;
+                    if((tProbs.h <= 28 && act1X2 === 'h') || (tProbs.a <= 28 && act1X2 === 'a')) stats.wbomb++;
+                }
+
+                // Corners Check
+                const actC = (sD.response[0]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0);
+                let pC = (4.1+hXG*0.9)+(3.6+aXG*0.8); let syn = false; 
+                if((aXGA<=0.6 && (4.1+hXG*0.9)>5)||(hXGA<=0.6 && (4.1+aXG*0.9)>5)) { pC+=1.5; syn=true; }
+                
+                stats.tcrn++; if(actC >= pC) stats.wcrn++; 
+                if(syn) { stats.tsyn++; if(actC >= pC) stats.wsyn++; }
+
+                // Goals Check
+                stats.to25++; if((hG+aG) >= 3) stats.wo25++;
             }
         }
-        document.getElementById('aiResultsBox').innerHTML = `<div class="pred-row"><span>Γενική Κόρνερ:</span><b>${sCr.t>0?Math.round(sCr.w/sCr.t*100):0}%</b></div><div class="pred-row" style="border:1px solid var(--gold);"><span>Μπετόν Synergy:</span><b>${sSyn.t>0?Math.round(sSyn.w/sSyn.t*100):0}%</b></div>`;
+        
+        const pct = (w,t) => t>0 ? Math.round((w/t)*100) : 0;
+        document.getElementById('aiResultsBox').innerHTML = `
+            <div class="pred-row"><span>Σημεία (True Probs >50%):</span><b>${stats.w1x2}/${stats.t1x2} (${pct(stats.w1x2, stats.t1x2)}%)</b></div>
+            <div class="pred-row"><span>Μπόμπες (True Probs <28%):</span><b style="color:var(--value);">${stats.wbomb}/${stats.tbomb} (${pct(stats.wbomb, stats.tbomb)}%)</b></div>
+            <div class="pred-row"><span>Γενικά Κόρνερ:</span><b>${stats.wcrn}/${stats.tcrn} (${pct(stats.wcrn, stats.tcrn)}%)</b></div>
+            <div class="pred-row" style="border:1px solid var(--gold);"><span>Μπετόν Synergy (Κόρνερ):</span><b style="color:var(--gold);">${stats.wsyn}/${stats.tsyn} (${pct(stats.wsyn, stats.tsyn)}%)</b></div>
+            <div class="pred-row"><span>Over 2.5:</span><b>${stats.wo25}/${stats.to25} (${pct(stats.wo25, stats.to25)}%)</b></div>
+        `;
         document.getElementById('aiPanel').style.display='block';
-    } catch(e) {}
+    } catch(e) { alert("Σφάλμα ανάλυσης"); }
     document.getElementById('aiCont').style.display='none';
 }
 
