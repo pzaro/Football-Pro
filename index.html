@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v311 - Data Lab Fix</title>
+    <title>Predictor Pro v312 - Ironclad Fix</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
@@ -92,7 +92,7 @@
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" onkeyup="if(event.key === 'Enter') verifyPinBtn()">
         <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v311</div>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v312</div>
         <div style="margin-top:25px; font-size:0.75rem; color:#666; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="clearCacheBtn()">🔄 ΚΑΘΑΡΙΣΜΟΣ ΜΝΗΜΗΣ</div>
     </div>
 </div>
@@ -103,14 +103,14 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">DATA LAB FIX SPEC</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">IRONCLAD SPEC v312</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
         
         <div class="ai-controls">
             <input type="date" id="evalDate" class="date-picker">
-            <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB (BACKTEST)</button>
+            <button onclick="runDeepEvaluation()" class="btn-ai">DATA LAB (BACKTEST)</button>
         </div>
 
         <div id="syncCont" style="display:none; margin-bottom:25px; background:var(--card); padding:15px; border-radius:15px;">
@@ -172,23 +172,39 @@
 </div>
 
 <script>
+// --- ERROR CHECKER (Ο Λόγος που κράσαρε η προηγούμενη) ---
+function checkApiError(data, elId) {
+    if(data && data.errors && Object.keys(data.errors).length > 0) {
+        const msg = Object.values(data.errors)[0];
+        const el = document.getElementById(elId);
+        if(el) el.innerHTML = `<span style="color:var(--alert)">API ERROR: ${msg}</span>`;
+        return true;
+    }
+    return false;
+}
+
+// --- MATH & SAFETY HELPERS ---
 const sGetP = (p, k) => parseInt(p?.predictions?.percent?.[k] || 0);
 const sGetXG = (t, s) => parseFloat(t?.last_5?.goals?.[s]?.average || (s==='for'?1.0:1.0));
 const sGetF = (t) => (t?.league?.form || "DDDDDD").split('').slice(-6);
 
 function calcTrueProbs(hXG, hXGA, aXG, aXGA) {
-    let hPwr = (hXG + aXGA) / 2 + 0.2; let aPwr = (aXG + hXGA) / 2;
-    let diff = Math.abs(hPwr - aPwr); let dProb = Math.max(0.15, 0.33 - (diff * 0.12)); 
-    let rem = 1 - dProb; let totPwr = hPwr + aPwr || 1;
+    let hPwr = (hXG + aXGA) / 2 + 0.2; 
+    let aPwr = (aXG + hXGA) / 2;
+    let diff = Math.abs(hPwr - aPwr);
+    let dProb = Math.max(0.15, 0.33 - (diff * 0.12)); 
+    let rem = 1 - dProb;
+    let totPwr = hPwr + aPwr || 1;
     return { h: Math.round((rem * (hPwr / totPwr)) * 100), d: Math.round(dProb * 100), a: Math.round((rem * (aPwr / totPwr)) * 100) };
 }
 
 function clearCacheBtn() {
     sessionStorage.clear(); localStorage.clear();
-    alert("Η μνήμη καθαρίστηκε! Η σελίδα θα ανανεωθεί.");
+    alert("Η μνήμη καθαρίστηκε. Η σελίδα θα ανανεωθεί.");
     window.location.reload();
 }
 
+// --- CORE CONFIG & AUTH ---
 const ACCESS_PIN = "106014";
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [
@@ -206,7 +222,7 @@ let masterData = []; let standingsMap = {};
 function verifyPinBtn() {
     let v = document.getElementById('pinInput').value.trim();
     if(v === ACCESS_PIN) {
-        sessionStorage.setItem("p_auth_v311", "true");
+        sessionStorage.setItem("p_auth_v312", "true");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
@@ -218,7 +234,7 @@ function verifyPinBtn() {
 }
 
 window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v311") === "true") { 
+    if(sessionStorage.getItem("p_auth_v312") === "true") { 
         document.getElementById('authScreen').style.display='none'; 
         document.getElementById('appContent').style.display='block'; 
         startSystem(); 
@@ -235,9 +251,12 @@ async function fetchLive() {
         const r = await fetch(`https://v3.football.api-sports.io/fixtures?live=${LEAGUES.map(l=>l.id).join('-')}`, { headers: {"x-apisports-key": KEY} });
         const d = await r.json();
         if(d.errors && Object.keys(d.errors).length > 0) return; 
+        
         const wrap = document.getElementById('liveTickerWrap');
         if(d.response?.length > 0) {
-            let h = ''; d.response.forEach(m => { h += `<div class="ticker-item"><span class="t-blink">● ${m.fixture.status.elapsed}'</span> ${m.teams.home.name} <span style="color:var(--gold)">${m.goals.home}-${m.goals.away}</span> ${m.teams.away.name}</div>`; });
+            let h = ''; d.response.forEach(m => { 
+                h += `<div class="ticker-item"><span class="t-blink">● ${m.fixture?.status?.elapsed||0}'</span> ${m.teams?.home?.name||''} <span style="color:var(--gold)">${m.goals?.home??'-'}-${m.goals?.away??'-'}</span> ${m.teams?.away?.name||''}</div>`; 
+            });
             document.getElementById('tickerContent').innerHTML = h + h;
             wrap.style.display = 'block';
         } else wrap.style.display = 'none';
@@ -255,13 +274,12 @@ async function globalSync() {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${day}`, { headers: {"x-apisports-key": KEY} });
         const fD = await fR.json();
         
-        if(fD.errors && Object.keys(fD.errors).length > 0) {
-            document.getElementById('syncStep').innerHTML = `<span style="color:var(--alert)">API LIMIT REACHED</span>`;
+        if(checkApiError(fD, 'syncStep')) {
             setTimeout(() => { document.getElementById('syncCont').style.display = 'none'; document.getElementById('masterBtn').style.display = 'block'; }, 4000);
             return;
         }
 
-        const myFix = (fD.response || []).filter(m => LEAGUES.some(l => l.id === m.league.id));
+        const myFix = (fD.response || []).filter(m => LEAGUES.some(l => l.id === m.league?.id));
         if(myFix.length === 0) {
             document.getElementById('syncStep').innerHTML = `<span style="color:var(--gold)">ΔΕΝ ΒΡΕΘΗΚΑΝ ΑΓΩΝΕΣ ΣΗΜΕΡΑ</span>`;
             setTimeout(() => { document.getElementById('syncCont').style.display = 'none'; document.getElementById('masterBtn').style.display = 'block'; }, 3000);
@@ -272,26 +290,30 @@ async function globalSync() {
         for (const [lId, lS] of Object.entries(sMap)) {
             const sR = await fetch(`https://v3.football.api-sports.io/standings?league=${lId}&season=${lS}`, { headers: {"x-apisports-key": KEY} });
             const sD = await sR.json();
-            if(sD.response?.[0]?.league?.standings?.[0]) sD.response[0].league.standings[0].forEach(t => standingsMap[t.team.id] = t.rank);
+            if(!checkApiError(sD, 'syncStep') && sD.response?.[0]?.league?.standings?.[0]) {
+                sD.response[0].league.standings[0].forEach(t => standingsMap[t.team.id] = t.rank);
+            }
         }
 
         for (let i=0; i<myFix.length; i++) {
             let m = myFix[i]; 
             document.getElementById('syncFill').style.width = Math.round(((i+1)/myFix.length)*100)+'%';
-            document.getElementById('syncStep').innerText = `ΑΝΑΛΥΣΗ: ${m.teams.home.name}`;
+            document.getElementById('syncStep').innerText = `ΑΝΑΛΥΣΗ: ${m.teams?.home?.name || 'Match'}`;
             
-            await new Promise(r => setTimeout(r, 250)); // THROTTLE: Προστασία από API Block
+            await new Promise(r => setTimeout(r, 250)); // THROTTLE
 
             const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
             const pData = await pR.json();
-            if(pData.errors && Object.keys(pData.errors).length > 0) break;
+            
+            if(checkApiError(pData, 'syncStep')) break; 
             
             const pD = pData.response?.[0];
             if(pD) {
-                const hXG = sGetXG(pD.teams.home,'for'); const aXG = sGetXG(pD.teams.away,'for');
-                const hXGA = sGetXG(pD.teams.home,'against'); const aXGA = sGetXG(pD.teams.away,'against');
+                const hXG = sGetXG(pD.teams?.home,'for'); const aXG = sGetXG(pD.teams?.away,'for');
+                const hXGA = sGetXG(pD.teams?.home,'against'); const aXGA = sGetXG(pD.teams?.away,'against');
                 let hCr = 4.1 + hXG*0.9; let aCr = 3.6 + aXG*0.8;
                 let tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA);
+                
                 masterData.push({ fixture: m, prediction: pD, calc: { hXG, aXG, hXGA, aXGA, hCr, aCr, tProbs } });
             }
         }
@@ -314,17 +336,17 @@ function renderMatches() {
     let filtered = masterData.filter(d => sel === 'ALL' || d.fixture.league.id == sel);
 
     LEAGUES.forEach(lg => {
-        let upcoming = filtered.filter(d => d.fixture.league.id === lg.id && !['FT','AET','PEN'].includes(d.fixture.fixture.status.short));
-        let finished = filtered.filter(d => d.fixture.league.id === lg.id && ['FT','AET','PEN'].includes(d.fixture.fixture.status.short));
+        let upcoming = filtered.filter(d => d.fixture.league.id === lg.id && !['FT','AET','PEN'].includes(d.fixture?.fixture?.status?.short));
+        let finished = filtered.filter(d => d.fixture.league.id === lg.id && ['FT','AET','PEN'].includes(d.fixture?.fixture?.status?.short));
         
         const process = (arr, list, isFin) => {
             if(arr.length > 0) {
                 list.innerHTML += `<div class="league-header" style="${isFin?'opacity:0.6; filter:grayscale(1);':''}">🏆 ${lg.name}</div>`;
                 arr.forEach(d => {
-                    const m = d.fixture; const p = d.prediction; const st = m.fixture.status.short;
-                    const hR = standingsMap[m.teams.home.id] || "-"; const aR = standingsMap[m.teams.away.id] || "-";
+                    const m = d.fixture; const p = d.prediction; const st = m.fixture?.status?.short;
+                    const hR = standingsMap[m.teams?.home?.id] || "-"; const aR = standingsMap[m.teams?.away?.id] || "-";
                     const isLive = ['1H','2H','HT'].includes(st);
-                    const elapsed = m.fixture.status.elapsed || 0; const rem = 90 - elapsed;
+                    const elapsed = m.fixture?.status?.elapsed || 0; const rem = 90 - elapsed;
                     
                     const tProbs = d.calc.tProbs;
                     const isValue = Math.max(tProbs.h, tProbs.a) > 70;
@@ -336,16 +358,16 @@ function renderMatches() {
                     card.innerHTML = `
                         ${isValue && !isFin ? '<div class="value-badge">🔥 VALUE BET</div>' : ''}
                         <div class="card-header">
-                            <div class="team-names"><span class="rank-info">(${hR})</span>${m.teams.home.name}<br><span class="rank-info">(${aR})</span>${m.teams.away.name}</div>
+                            <div class="team-names"><span class="rank-info">(${hR})</span>${m.teams?.home?.name||'H'}<br><span class="rank-info">(${aR})</span>${m.teams?.away?.name||'A'}</div>
                             <div class="score-box">
-                                <div class="score-display" style="color:${isLive?'var(--live)':'#fff'}">${m.goals.home ?? '-'}:${m.goals.away ?? '-'}</div>
+                                <div class="score-display" style="color:${isLive?'var(--live)':'#fff'}">${m.goals?.home ?? '-'}:${m.goals?.away ?? '-'}</div>
                                 ${isLive ? `<div class="time-rem">Υπόλοιπο: ${rem>0?rem:0}'</div>` : isFin ? `<div style="font-size:0.75rem;color:#888;">ΤΕΛΙΚΟ</div>` : `<div style="font-size:0.75rem;color:#888;">${new Date(m.fixture.date).toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'})}</div>`}
                             </div>
                         </div>
                         ${isLive ? `<div class="progress-bg"><div class="progress-fill" style="width:${(elapsed/90)*100}%;"></div></div>` : ''}
                         <div class="card-stats">
                             <div><div class="stat-label">1X2 (T)</div><div class="stat-value" style="color:var(--gold)">${tProbs.h}-${tProbs.d}-${tProbs.a}</div></div>
-                            <div><div class="stat-label">O2.5</div><div class="stat-value">${sGetP(d.prediction,'over')}%</div></div>
+                            <div><div class="stat-label">O2.5</div><div class="stat-value">${sGetP(p,'over')}%</div></div>
                             <div><div class="stat-label">xG TOT</div><div class="stat-value">${(d.calc.hXG + d.calc.aXG).toFixed(1)}</div></div>
                             <div><div class="stat-label">CARDS</div><div class="stat-value">~${(1.5+d.calc.hXGA*0.5).toFixed(1)}</div></div>
                         </div>`;
@@ -360,7 +382,7 @@ function renderMatches() {
 
 function openIntel(id) {
     try {
-        const d = masterData.find(x => x.fixture.fixture.id == id); 
+        const d = masterData.find(x => x.fixture?.fixture?.id == id); 
         if(!d) return;
         const p = d.prediction || {}; const m = d.fixture || {}; const c = d.calc;
         const isLive = ['1H','2H','HT'].includes(m.fixture?.status?.short);
@@ -380,8 +402,8 @@ function openIntel(id) {
         if(totXG > 1.9 && Math.max(c.tProbs.h, c.tProbs.a) > 55) {
             bHtml += `<div class="builder-alert">🔥 BET BUILDER: Over 1.5 & Σημείο ${bestPick}</div>`;
         }
-        if(c.hXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.home?.name} Wall:</b> (xGA ${c.hXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ του αντιπάλου.</div>`;
-        if(c.aXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.away?.name} Wall:</b> (xGA ${c.aXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ του αντιπάλου.</div>`;
+        if(c.hXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.home?.name} Wall:</b> (xGA ${c.hXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ.</div>`;
+        if(c.aXGA <= 0.60) bHtml += `<div class="alert-wall">🛡️ <b>${m.teams?.away?.name} Wall:</b> (xGA ${c.aXGA.toFixed(2)}) Ευνοεί ΚΟΡΝΕΡ.</div>`;
         document.getElementById('builderBox').innerHTML = bHtml;
 
         const rf = (fArr) => fArr.map(chr => `<span class="form-dot ${chr}"></span>`).join('');
@@ -397,9 +419,9 @@ function openIntel(id) {
             <tr><td>Cards</td><td>~${cCardsH.toFixed(1)}${ls('cd-h')}</td><td>~${cCardsA.toFixed(1)}${ls('cd-a')}</td></tr>
             <tr><td>True Prob %</td><td style="color:var(--gold)">${c.tProbs.h}%</td><td style="color:var(--gold)">${c.tProbs.a}%</td></tr>`;
         
-        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο (T-Prob):</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
+        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο:</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
         
-        let h2h = ''; (p?.h2h || []).slice(0,5).forEach(x => { h2h += `<div class="pred-row"><span>${x.teams?.home?.name}-${x.teams?.away?.name}</span><b>${x.goals?.home}:${x.goals?.away}</b></div>`; });
+        let h2h = ''; (p?.h2h || []).slice(0,5).forEach(x => { h2h += `<div class="pred-row"><span>${x.teams?.home?.name}-${x.teams?.away?.name}</span><b>${x.goals?.home ?? '-'}:${x.goals?.away ?? '-'}</b></div>`; });
         document.getElementById('h2hBox').innerHTML = h2h || '<div class="pred-row">No H2H Data</div>';
         
         document.getElementById('intelPanel').style.display = 'block';
@@ -424,66 +446,67 @@ function openIntel(id) {
 }
 
 function generateAcca() {
-    const m = document.getElementById('accaMarket').value; const s = parseInt(document.getElementById('accaSize').value);
-    
-    let pool = masterData.filter(d => {
-        const st = d.fixture.fixture.status.short;
-        if(m === 'WILDCARD') return ['NS', 'TBD'].includes(st);
-        return !['FT','PEN','AET'].includes(st);
-    }).map(d => {
-        const c = d.calc; const p = d.prediction;
-        let ec = (4.1+c.hXG*0.9)+(3.6+c.aXG*0.8); if(c.aXGA<=0.60 && (4.1+c.hXG*0.9)>5) ec+=1.5; if(c.hXGA<=0.60 && (4.1+c.aXG*0.9)>5) ec+=1.5;
-        const totXG = c.hXG + c.aXG;
+    try {
+        const m = document.getElementById('accaMarket').value; const s = parseInt(document.getElementById('accaSize').value);
         
-        let bProb = 0; let bTip = '';
-        if(c.tProbs.h > bProb) { bProb = c.tProbs.h; bTip = '1'; }
-        if(c.tProbs.a > bProb) { bProb = c.tProbs.a; bTip = '2'; }
-        
-        let o25Prob = totXG > 2.6 ? Math.min(90, 50 + (totXG - 2.6)*20) : 0;
-        let u25Prob = totXG < 2.2 ? Math.min(90, 50 + (2.2 - totXG)*20) : 0;
-        
-        if(o25Prob > bProb) { bProb = o25Prob; bTip = 'Over 2.5'; }
-        if(u25Prob > bProb) { bProb = u25Prob; bTip = 'Under 2.5'; }
-        
-        let bombVal = 0; let bombTip = '';
-        if(c.tProbs.h <= 27.7) { bombVal = 1; bombTip = '1'; }
-        if(c.tProbs.a <= 27.7) { bombVal = 1; bombTip = '2'; }
+        let pool = masterData.filter(d => {
+            const st = d.fixture?.fixture?.status?.short;
+            if(m === 'WILDCARD') return ['NS', 'TBD'].includes(st);
+            return !['FT','PEN','AET'].includes(st);
+        }).map(d => {
+            const c = d.calc; const p = d.prediction;
+            let ec = (4.1+c.hXG*0.9)+(3.6+c.aXG*0.8); if(c.aXGA<=0.60 && (4.1+c.hXG*0.9)>5) ec+=1.5; if(c.hXGA<=0.60 && (4.1+c.aXG*0.9)>5) ec+=1.5;
+            const totXG = c.hXG + c.aXG;
+            
+            let bProb = 0; let bTip = '';
+            if(c.tProbs.h > bProb) { bProb = c.tProbs.h; bTip = '1'; }
+            if(c.tProbs.a > bProb) { bProb = c.tProbs.a; bTip = '2'; }
+            
+            let o25Prob = totXG > 2.6 ? Math.min(90, 50 + (totXG - 2.6)*20) : 0;
+            let u25Prob = totXG < 2.2 ? Math.min(90, 50 + (2.2 - totXG)*20) : 0;
+            
+            if(o25Prob > bProb) { bProb = o25Prob; bTip = 'Over 2.5'; }
+            if(u25Prob > bProb) { bProb = u25Prob; bTip = 'Under 2.5'; }
+            
+            let bombVal = 0; let bombTip = '';
+            if(c.tProbs.h <= 27.7) { bombVal = 1; bombTip = '1'; }
+            if(c.tProbs.a <= 27.7) { bombVal = 1; bombTip = '2'; }
 
-        return { id: d.fixture.fixture.id, name: d.fixture.teams.home.name + ' - ' + d.fixture.teams.away.name, hP: c.tProbs.h, aP: c.tProbs.a, ec, o25: sGetP(p,'over'), sc: `${Math.round(c.hXG)}-${Math.round(c.aXG)}`, bProb, bTip, bombVal, bombTip };
-    });
-    
-    if(pool.length < s) { alert("Δεν υπάρχουν αρκετοί αγώνες για αυτή την επιλογή."); return; }
+            return { id: d.fixture.fixture.id, name: (d.fixture.teams?.home?.name || '') + ' - ' + (d.fixture.teams?.away?.name || ''), hP: c.tProbs.h, aP: c.tProbs.a, ec, o25: sGetP(p,'over'), sc: `${Math.round(c.hXG)}-${Math.round(c.aXG)}`, bProb, bTip, bombVal, bombTip };
+        });
+        
+        if(pool.length < s) { alert("Δεν υπάρχουν αρκετοί αγώνες για αυτή την επιλογή."); return; }
 
-    if(m==='CORNERS') pool.sort((a,b)=>b.ec-a.ec); 
-    else if(m==='BOMBS') pool=pool.filter(i=>i.bombVal > 0).sort((a,b)=>Math.min(a.hP,a.aP)-Math.min(b.hP,b.aP)); 
-    else if(m==='GOALS') pool.sort((a,b)=>b.o25-a.o25); 
-    else if(m==='SCORE') pool.sort((a,b)=>(b.hP+b.aP+b.o25)-(a.hP+a.aP+a.o25)); 
-    else if(m==='COMBO') pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP)); 
-    else if(m==='WILDCARD') pool.sort((a,b)=>b.bProb-a.bProb);
-    else pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP));
-    
-    let h = `<h3 style="color:var(--p); margin:0 0 15px 0;">🎯 ELITE ${s}-FOLD ${m==='WILDCARD'?'(ADVANCED 🃏)':''}</h3>`;
-    pool.slice(0,s).forEach(i => {
-        let tip = '';
-        if(m==='CORNERS') tip = `Over ${Math.floor(i.ec-1)}.5 Κόρνερ`; 
-        else if(m==='SCORE') tip = `Σκορ: ${i.sc}`; 
-        else if(m==='GOALS') tip = `Over 2.5`; 
-        else if(m==='BOMBS') tip = `${i.bombTip} (BOMB)`; 
-        else if(m==='COMBO') tip = (i.hP>i.aP?'1X':'X2') + ' & O1.5'; 
-        else if(m==='WILDCARD') tip = `${i.bTip} (${Math.round(i.bProb)}%)`;
-        else tip = i.hP>i.aP?'1':'2';
-        h += `<div class="acca-item" onclick="openIntel(${i.id})"><span style="font-weight:800; font-size:0.9rem;">${i.name}</span><b style="color:var(--gold)">${tip}</b></div>`;
-    });
-    document.getElementById('accaDisplay').innerHTML=h; document.getElementById('accaDisplay').style.display='block';
+        if(m==='CORNERS') pool.sort((a,b)=>b.ec-a.ec); 
+        else if(m==='BOMBS') pool=pool.filter(i=>i.bombVal > 0).sort((a,b)=>Math.min(a.hP,a.aP)-Math.min(b.hP,b.aP)); 
+        else if(m==='GOALS') pool.sort((a,b)=>b.o25-a.o25); 
+        else if(m==='SCORE') pool.sort((a,b)=>(b.hP+b.aP+b.o25)-(a.hP+a.aP+a.o25)); 
+        else if(m==='COMBO') pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP)); 
+        else if(m==='WILDCARD') pool.sort((a,b)=>b.bProb-a.bProb);
+        else pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP));
+        
+        let h = `<h3 style="color:var(--p); margin:0 0 15px 0;">🎯 ELITE ${s}-FOLD ${m==='WILDCARD'?'(ADVANCED 🃏)':''}</h3>`;
+        pool.slice(0,s).forEach(i => {
+            let tip = '';
+            if(m==='CORNERS') tip = `Over ${Math.floor(i.ec-1)}.5 Κόρνερ`; 
+            else if(m==='SCORE') tip = `Σκορ: ${i.sc}`; 
+            else if(m==='GOALS') tip = `Over 2.5`; 
+            else if(m==='BOMBS') tip = `${i.bombTip} (BOMB)`; 
+            else if(m==='COMBO') tip = (i.hP>i.aP?'1X':'X2') + ' & O1.5'; 
+            else if(m==='WILDCARD') tip = `${i.bTip} (${Math.round(i.bProb)}%)`;
+            else tip = i.hP>i.aP?'1':'2';
+            h += `<div class="acca-item" onclick="openIntel(${i.id})"><span style="font-weight:800; font-size:0.9rem;">${i.name}</span><b style="color:var(--gold)">${tip}</b></div>`;
+        });
+        document.getElementById('accaDisplay').innerHTML=h; document.getElementById('accaDisplay').style.display='block';
+    } catch(e) { alert("Σφάλμα στη δημιουργία δελτίου."); }
 }
 
-// --- DATA LAB WITH THROTTLING ---
 async function runDeepEvaluation() {
     const tD = document.getElementById('evalDate').value; 
     if(!tD) return;
     
     document.getElementById('aiCont').style.display='block';
-    const stepEl = document.getElementById('syncStep'); // Reusing existing ID mapping
+    document.getElementById('aiStep').innerText = "ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ...";
     
     let stats = {
         pts: { '70+': {t:0, w:0}, '60-69': {t:0, w:0}, '50-59': {t:0, w:0} },
@@ -491,53 +514,44 @@ async function runDeepEvaluation() {
         crn: { '>10.5': {t:0, w:0}, '9.5-10.5': {t:0, w:0}, '<9.5': {t:0, w:0} },
         o25: { '>3.0': {t:0, w:0}, '2.5-3.0': {t:0, w:0}, '<2.5': {t:0, w:0} }
     };
-    let topPicks = [];
-    let analyzedCount = 0;
+    let topPicks = []; let analyzedCount = 0;
     
     try {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
         const fD = await fR.json();
         
-        if(fD.errors && Object.keys(fD.errors).length > 0) {
-            document.getElementById('aiResultsBox').innerHTML = `<div style="color:var(--alert); text-align:center;">API LIMIT REACHED</div>`;
-            document.getElementById('aiPanel').style.display='block';
-            document.getElementById('aiCont').style.display='none';
-            return;
-        }
+        if(checkApiError(fD, 'aiStep')) { setTimeout(()=> { document.getElementById('aiCont').style.display='none'; }, 3000); return; }
 
-        const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && ['FT','AET','PEN'].includes(m.fixture.status.short));
+        const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && ['FT','AET','PEN'].includes(m.fixture?.status?.short));
         if(tFix.length === 0) {
-            document.getElementById('aiResultsBox').innerHTML = `<div style="color:var(--gold); text-align:center;">ΔΕΝ ΒΡΕΘΗΚΑΝ ΟΛΟΚΛΗΡΩΜΕΝΑ ΜΑΤΣ</div>`;
-            document.getElementById('aiPanel').style.display='block';
-            document.getElementById('aiCont').style.display='none';
-            return;
+            document.getElementById('aiStep').innerHTML = `<span style="color:var(--gold)">ΔΕΝ ΒΡΕΘΗΚΑΝ ΟΛΟΚΛΗΡΩΜΕΝΑ ΜΑΤΣ</span>`;
+            setTimeout(()=> { document.getElementById('aiCont').style.display='none'; }, 3000); return;
         }
 
         for (let i=0; i<tFix.length; i++) {
             let m = tFix[i]; 
             document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
             
-            await new Promise(r => setTimeout(r, 300)); // THROTTLE: Προστασία Data Lab
+            await new Promise(r => setTimeout(r, 300)); 
 
             try {
                 const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
                 const pData = await pR.json();
-                if(pData.errors && Object.keys(pData.errors).length > 0) break; 
+                if(checkApiError(pData, 'aiStep')) break; 
                 
                 const pD = pData.response?.[0];
-                
                 const statR = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, { headers: {"x-apisports-key": KEY} });
                 const sData = await statR.json();
-                if(sData.errors && Object.keys(sData.errors).length > 0) break;
+                if(checkApiError(sData, 'aiStep')) break;
                 const sD = sData;
                 
                 if(pD && sD.response?.[0]) {
                     analyzedCount++;
-                    const hXG = sGetXG(pD.teams.home,'for'); const aXG = sGetXG(pD.teams.away,'for');
-                    const hXGA = sGetXG(pD.teams.home,'against'); const aXGA = sGetXG(pD.teams.away,'against');
+                    const hXG = sGetXG(pD.teams?.home,'for'); const aXG = sGetXG(pD.teams?.away,'for');
+                    const hXGA = sGetXG(pD.teams?.home,'against'); const aXGA = sGetXG(pD.teams?.away,'against');
                     const tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA);
                     
-                    const hG = m.goals.home; const aG = m.goals.away; const totG = hG + aG;
+                    const hG = m.goals?.home || 0; const aG = m.goals?.away || 0; const totG = hG + aG;
                     const act1X2 = hG > aG ? 'h' : (aG > hG ? 'a' : 'd');
                     
                     const maxP = Math.max(tProbs.h, tProbs.a); const minP = Math.min(tProbs.h, tProbs.a);
@@ -603,7 +617,7 @@ async function runDeepEvaluation() {
         `;
         document.getElementById('aiPanel').style.display='block';
     } catch(e) { 
-        document.getElementById('aiResultsBox').innerHTML = `<div style="color:var(--alert); text-align:center;">ΣΦΑΛΜΑ ΔΙΚΤΥΟΥ Ή API.</div>`;
+        document.getElementById('aiResultsBox').innerHTML = `<div style="color:var(--alert); text-align:center;">ΣΦΑΛΜΑ ΔΙΚΤΥΟΥ.</div>`;
         document.getElementById('aiPanel').style.display='block';
     }
     document.getElementById('aiCont').style.display='none';
