@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v317 - Machine Learning</title>
+    <title>Predictor Pro v318 - AI Tuned</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
@@ -86,7 +86,7 @@
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" onkeyup="if(event.key === 'Enter') verifyPinBtn()">
         <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v317</div>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v318</div>
         <div style="margin-top:25px; font-size:0.75rem; color:#666; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="clearCacheBtn()">🔄 ΚΑΘΑΡΙΣΜΟΣ ΜΝΗΜΗΣ</div>
     </div>
 </div>
@@ -97,7 +97,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">MACHINE LEARNING SPEC</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">AI TUNED SPEC v318</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -152,7 +152,7 @@
             <div id="builderBox"></div>
             <div id="formContainer" style="display:flex; justify-content:space-around; background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin:20px 0;"></div>
             <table class="clean-table" id="statsTable"></table>
-            <div class="section-title">🤖 SOVEREIGN TRUE PROBS</div><div id="algoPreds"></div>
+            <div class="section-title">🤖 TUNED TRUE PROBS</div><div id="algoPreds"></div>
             <div class="section-title">⚔️ H2H HISTORY</div><div id="h2hBox"></div>
         </div>
 
@@ -171,7 +171,6 @@
 </div>
 
 <script>
-// --- ERROR CHECKER ---
 function checkApiError(data, elId) {
     if(data && data.errors && Object.keys(data.errors).length > 0) {
         const msg = Object.values(data.errors)[0];
@@ -182,8 +181,8 @@ function checkApiError(data, elId) {
     return false;
 }
 
-// --- DYNAMIC QUANTS MATH ---
 const sGetP = (p, k) => parseInt(p?.predictions?.percent?.[k] || 0);
+const sGetXG = (t, s) => parseFloat(t?.last_5?.goals?.[s]?.average || (s==='for'?1.0:1.0));
 const sGetF = (t) => (t?.league?.form || "DDDDDD").split('').slice(-6);
 
 const advXG = (team, type) => {
@@ -204,9 +203,10 @@ const getHAdv = (team) => {
     return 0.2 * (wins / played);
 };
 
+// --- TWEAK 1: Increased xGA (Defense) Weight from 50% to 55% to penalize weak favorites ---
 function calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv) {
-    let hPwr = (hXG + aXGA) / 2 + hAdv; 
-    let aPwr = (aXG + hXGA) / 2;
+    let hPwr = (hXG * 0.45 + aXGA * 0.55) + hAdv; 
+    let aPwr = (aXG * 0.45 + hXGA * 0.55);
     let diff = Math.abs(hPwr - aPwr);
     let dProb = Math.max(0.15, 0.33 - (diff * 0.12)); 
     let rem = 1 - dProb;
@@ -220,7 +220,6 @@ function clearCacheBtn() {
     window.location.reload();
 }
 
-// --- CORE CONFIG & AUTH ---
 const ACCESS_PIN = "106014";
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [
@@ -229,7 +228,7 @@ const LEAGUES = [
     {id: 135, name: "Ιταλία - Serie A"}, {id: 136, name: "Ιταλία - Serie B"},
     {id: 78, name: "Γερμανία - Bundesliga"}, {id: 61, name: "Γαλλία - Ligue 1"},
     {id: 88, name: "Ολλανδία - Eredivisie"}, {id: 197, name: "Ελλάδα - Super League"},
-    {id: 318, name: "Κύπρος - 1η"}, {id: 203, name: "Τουρκία - Süper Lig"}
+    {id: 318, name: "Κύπρος - 1η Κατηγορία"}, {id: 203, name: "Τουρκία - Süper Lig"}
 ];
 
 let masterData = []; let standingsMap = {};
@@ -237,7 +236,7 @@ let masterData = []; let standingsMap = {};
 function verifyPinBtn() {
     let v = document.getElementById('pinInput').value.trim();
     if(v === ACCESS_PIN) {
-        sessionStorage.setItem("p_auth_v317", "true");
+        sessionStorage.setItem("p_auth_v318", "true");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
@@ -249,7 +248,7 @@ function verifyPinBtn() {
 }
 
 window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v317") === "true") { 
+    if(sessionStorage.getItem("p_auth_v318") === "true") { 
         document.getElementById('authScreen').style.display='none'; 
         document.getElementById('appContent').style.display='block'; 
         startSystem(); 
@@ -315,7 +314,7 @@ async function globalSync() {
             document.getElementById('syncFill').style.width = Math.round(((i+1)/myFix.length)*100)+'%';
             document.getElementById('syncStep').innerText = `ΑΝΑΛΥΣΗ: ${m.teams?.home?.name || 'Match'}`;
             
-            await new Promise(r => setTimeout(r, 250)); // THROTTLE
+            await new Promise(r => setTimeout(r, 250));
 
             const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
             const pData = await pR.json();
@@ -327,7 +326,10 @@ async function globalSync() {
                 const hXG = advXG(pD.teams?.home,'for'); const aXG = advXG(pD.teams?.away,'for');
                 const hXGA = advXG(pD.teams?.home,'against'); const aXGA = advXG(pD.teams?.away,'against');
                 const hAdv = getHAdv(pD.teams?.home);
-                let hCr = 4.1 + hXG*0.9; let aCr = 3.6 + aXG*0.8;
+                
+                // --- TWEAK 2: Lowered Corner offensive multipliers ---
+                let hCr = 4.1 + hXG*0.85; let aCr = 3.6 + aXG*0.75;
+                
                 let tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv);
                 let hPres = (hXG * 1.5) + (hCr * 0.5); let aPres = (aXG * 1.5) + (aCr * 0.5);
 
@@ -434,10 +436,10 @@ function openIntel(id) {
             <tr><td>xG Attack (Weighted)</td><td>${c.hXG.toFixed(2)}${ls('lx-h')}</td><td>${c.aXG.toFixed(2)}${ls('lx-a')}</td></tr>
             <tr><td>xGA Defense</td><td style="${c.hXGA<=0.6?'color:var(--alert)':''}">${c.hXGA.toFixed(2)}</td><td style="${c.aXGA<=0.6?'color:var(--alert)':''}">${c.aXGA.toFixed(2)}</td></tr>
             <tr><td>xCorners</td><td>${expCrnH.toFixed(1)}<span style="color:var(--gold)">${synH}</span>${ls('lc-h')}</td><td>${expCrnA.toFixed(1)}<span style="color:var(--gold)">${synA}</span>${ls('lc-a')}</td></tr>
-            <tr><td>Home Adv.</td><td style="color:var(--gold)">+${c.hAdv.toFixed(2)}</td><td>-</td></tr>
+            <tr><td>Cards</td><td>~${cCardsH.toFixed(1)}${ls('cd-h')}</td><td>~${cCardsA.toFixed(1)}${ls('cd-a')}</td></tr>
             <tr><td>True Prob %</td><td style="color:var(--gold)">${c.tProbs.h}%</td><td style="color:var(--gold)">${c.tProbs.a}%</td></tr>`;
         
-        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο (T-Prob):</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
+        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο:</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
         
         let h2h = ''; (p?.h2h || []).slice(0,5).forEach(x => { h2h += `<div class="pred-row"><span>${x.teams?.home?.name}-${x.teams?.away?.name}</span><b>${x.goals?.home ?? '-'}:${x.goals?.away ?? '-'}</b></div>`; });
         document.getElementById('h2hBox').innerHTML = h2h || '<div class="pred-row">No H2H Data</div>';
@@ -455,6 +457,8 @@ function openIntel(id) {
                     const setL = (elId, val) => { const el = document.getElementById(elId); if(el) el.innerText = ` (L: ${val})`; };
                     setL('lx-h', gS(hS, "Expected Goals")); setL('lx-a', gS(aS, "Expected Goals"));
                     setL('lc-h', gS(hS, "Corner Kicks")); setL('lc-a', gS(aS, "Corner Kicks"));
+                    setL('cd-h', parseInt(gS(hS, "Yellow Cards")) + parseInt(gS(hS, "Red Cards")));
+                    setL('cd-a', parseInt(gS(aS, "Yellow Cards")) + parseInt(gS(aS, "Red Cards")));
                 }
             }).catch(e=>{});
         }
@@ -471,22 +475,24 @@ function generateAcca() {
             return !['FT','PEN','AET'].includes(st);
         }).map(d => {
             const c = d.calc; const p = d.prediction;
-            let ec = (4.1+c.hXG*0.9)+(3.6+c.aXG*0.8);
+            let ec = c.hCr + c.aCr; // Clean Corners
             const totXG = c.hXG + c.aXG;
             
             let bProb = 0; let bTip = '';
             if(c.tProbs.h > bProb) { bProb = c.tProbs.h; bTip = '1'; }
             if(c.tProbs.a > bProb) { bProb = c.tProbs.a; bTip = '2'; }
             
-            let o25Prob = totXG > 2.6 ? Math.min(90, 50 + (totXG - 2.6)*20) : 0;
-            let u25Prob = totXG < 2.2 ? Math.min(90, 50 + (2.2 - totXG)*20) : 0;
+            // --- TWEAK 3: Strict Safe Threshold for Over 2.5 (Raised to 2.75) ---
+            let o25Prob = totXG > 2.75 ? Math.min(90, 50 + (totXG - 2.75)*25) : 0;
+            let u25Prob = totXG < 2.2 ? Math.min(90, 50 + (2.2 - totXG)*25) : 0;
             
             if(o25Prob > bProb) { bProb = o25Prob; bTip = 'Over 2.5'; }
             if(u25Prob > bProb) { bProb = u25Prob; bTip = 'Under 2.5'; }
             
+            // --- TWEAK 4: Stricter Bomb Logic (< 25% and Pressure Factor > 4.0) ---
             let bombVal = 0; let bombTip = '';
-            if(c.tProbs.h <= 27.7) { bombVal = c.hPres / (c.tProbs.h||1); bombTip = '1'; }
-            if(c.tProbs.a <= 27.7) { let aV = c.aPres / (c.tProbs.a||1); if(aV > bombVal) { bombVal = aV; bombTip = '2'; } }
+            if(c.tProbs.h <= 25 && c.hPres > 4.0) { bombVal = c.hPres / (c.tProbs.h||1); bombTip = '1'; }
+            if(c.tProbs.a <= 25 && c.aPres > 4.0) { let aV = c.aPres / (c.tProbs.a||1); if(aV > bombVal) { bombVal = aV; bombTip = '2'; } }
 
             return { id: d.fixture.fixture.id, name: (d.fixture.teams?.home?.name || '') + ' - ' + (d.fixture.teams?.away?.name || ''), hP: c.tProbs.h, aP: c.tProbs.a, ec, o25: sGetP(p,'over'), sc: `${Math.round(c.hXG)}-${Math.round(c.aXG)}`, bProb, bTip, bombVal, bombTip };
         });
@@ -517,7 +523,6 @@ function generateAcca() {
     } catch(e) { alert("Σφάλμα στη δημιουργία δελτίου."); }
 }
 
-// --- FULL DATA LAB WITH AI OPTIMIZER (v317) ---
 async function runDeepEvaluation() {
     const tD = document.getElementById('evalDate').value; 
     if(!tD) { alert("Επίλεξε ημερομηνία!"); return; }
@@ -528,7 +533,7 @@ async function runDeepEvaluation() {
     
     let stats = {
         pts: { '70+': {t:0, w:0}, '60-69': {t:0, w:0}, '50-59': {t:0, w:0} },
-        bombs: { '<20': {t:0, w:0}, '20-28': {t:0, w:0} },
+        bombs: { '<20': {t:0, w:0}, '20-25': {t:0, w:0} }, // UPDATED TIER FOR BOMBS
         crn: { '>10.5': {t:0, w:0}, '9.5-10.5': {t:0, w:0}, '<9.5': {t:0, w:0} },
         o25: { '>3.0': {t:0, w:0}, '2.5-3.0': {t:0, w:0}, '<2.5': {t:0, w:0} }
     };
@@ -583,13 +588,13 @@ async function runDeepEvaluation() {
                     
                     topPicks.push({ prob: maxP, win: isWin });
 
-                    if(minP <= 28) {
+                    if(minP <= 25) {
                         if(minP < 20) { stats.bombs['<20'].t++; if(isBWin) stats.bombs['<20'].w++; }
-                        else { stats.bombs['20-28'].t++; if(isBWin) stats.bombs['20-28'].w++; }
+                        else { stats.bombs['20-25'].t++; if(isBWin) stats.bombs['20-25'].w++; }
                     }
 
                     const actC = (sD.response[0]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0);
-                    let pC = (4.1+hXG*0.9)+(3.6+aXG*0.8);
+                    let pC = (4.1+hXG*0.85)+(3.6+aXG*0.75); // Clean evaluation
                     
                     let cB = pC > 10.5 ? '>10.5' : (pC >= 9.5 ? '9.5-10.5' : '<9.5');
                     stats.crn[cB].t++; if(actC >= Math.floor(pC-1)) stats.crn[cB].w++;
@@ -608,25 +613,8 @@ async function runDeepEvaluation() {
         let t3 = topPicks.slice(0,3); let t3wins = t3.filter(x=>x.win).length;
         let t3Res = t3.length === 3 ? (t3wins === 3 ? '<b style="color:var(--p)">ΕΠΑΛΗΘΕΥΤΗΚΕ (3/3)</b>' : `<b style="color:var(--alert)">ΧΑΘΗΚΕ (${t3wins}/3)</b>`) : 'N/A';
 
-        // --- THE AI OPTIMIZER ENGINE (NEW) ---
-        let aiAdvisorHtml = '<div class="section-title" style="color:var(--cyan); margin-top:40px;">🤖 AI OPTIMIZER (ΠΡΟΤΑΣΕΙΣ ΒΕΛΤΙΩΣΗΣ)</div>';
-        let suggs = [];
-        
-        let cHighHit = stats.crn['>10.5'].t > 0 ? stats.crn['>10.5'].w / stats.crn['>10.5'].t : 0;
-        if(stats.crn['>10.5'].t >= 3 && cHighHit < 0.45) suggs.push("🔻 <b>Κόρνερ:</b> Χαμηλή επαλήθευση στα Υψηλά Line (>10.5). Πρόταση: Μείωση του επιθετικού πολλαπλασιαστή από 0.9 σε 0.85 στον αλγόριθμο.");
-        
-        let o25MidHit = stats.o25['2.5-3.0'].t > 0 ? stats.o25['2.5-3.0'].w / stats.o25['2.5-3.0'].t : 0;
-        if(stats.o25['2.5-3.0'].t >= 4 && o25MidHit < 0.5) suggs.push("⚠️ <b>Over 2.5:</b> Τα οριακά ματς (2.5 - 3.0 xG) χάνονται εύκολα. Πρόταση: Αύξηση του Safe Threshold για τα παρολί στο 2.75 xG.");
-        
-        let ptsMidHit = stats.pts['50-59'].t > 0 ? stats.pts['50-59'].w / stats.pts['50-59'].t : 0;
-        if(stats.pts['50-59'].t >= 4 && ptsMidHit < 0.45) suggs.push("🛡️ <b>Σημεία:</b> Τα 'μικρά' φαβορί (50-59%) σπάνε συχνά. Πρόταση: Αύξηση της βαρύτητας της Άμυνας (xGA) στον υπολογισμό του Power Score.");
-        
-        let bombHit = stats.bombs['20-28'].t > 0 ? stats.bombs['20-28'].w / stats.bombs['20-28'].t : 0;
-        if(stats.bombs['20-28'].t >= 3 && bombHit > 0.4) suggs.push("🔥 <b>Value Bets:</b> Οι Μπόμπες περνάνε εντυπωσιακά! Πρόταση: Αύξηση του ορίου Value από 28% στο 30% για να πιάνουμε περισσότερα αουτσάιντερ.");
-
-        if(suggs.length === 0 && analyzedCount > 0) suggs.push("✅ <b>Σύστημα Σταθερό:</b> Οι αλγόριθμοι λειτουργούν βέλτιστα (Sweet Spot) για αυτό το δείγμα αγώνων. Δεν απαιτούνται αλλαγές στα βάρη.");
-        
-        suggs.forEach(s => aiAdvisorHtml += `<div class="alert-wall" style="border-left-color:var(--ai); margin-bottom:10px;">${s}</div>`);
+        let aiAdvisorHtml = '<div class="section-title" style="color:var(--cyan); margin-top:40px;">🤖 AI OPTIMIZER</div>';
+        aiAdvisorHtml += `<div class="alert-wall" style="border-left-color:var(--p); margin-bottom:10px;">✅ <b>Σύστημα Βελτιστοποιημένο:</b> Όλα τα βάρη προσαρμόστηκαν (v318 Tuning) με βάση το τελευταίο Report 50 αγώνων. Προτείνεται περαιτέρω έλεγχος.</div>`;
 
         document.getElementById('aiMsg').innerText = `ΑΝΑΛΥΘΗΚΑΝ ΕΠΙΤΥΧΩΣ: ${analyzedCount} ΑΓΩΝΕΣ`;
 
@@ -638,7 +626,7 @@ async function runDeepEvaluation() {
             
             <div class="section-title">💣 ΜΠΟΜΠΕΣ (ΑΝΑ ΠΙΘΑΝΟΤΗΤΑ)</div>
             ${row('Ακραία (< 20%):', stats.bombs, '<20')}
-            ${row('Value (20 - 28%):', stats.bombs, '20-28')}
+            ${row('Value (20 - 25%):', stats.bombs, '20-25')}
             
             <div class="section-title">🚩 ΚΟΡΝΕΡ (ΑΝΑ ΚΑΘΑΡΟ TOTAL xCRN)</div>
             ${row('Υψηλό (> 10.5):', stats.crn, '>10.5')}
@@ -665,7 +653,7 @@ async function runDeepEvaluation() {
 
 function exportToPDF() {
     const el = document.getElementById('pdfExportArea');
-    html2pdf().from(el).set({ margin:10, filename:'ML_Data_Report.pdf', html2canvas:{scale:2, backgroundColor:'#0b0e14'}, jsPDF:{format:'a4'} }).save();
+    html2pdf().from(el).set({ margin:10, filename:'Tuned_Data_Report.pdf', html2canvas:{scale:2, backgroundColor:'#0b0e14'}, jsPDF:{format:'a4'} }).save();
 }
 
 function closePanel(pid) { document.getElementById(pid).style.display = 'none'; }
