@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v312 - Ironclad Fix</title>
+    <title>Predictor Pro v314 - Final Validation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
@@ -77,12 +77,6 @@
         .form-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin: 0 2px; }
         .W { background: var(--p); } .D { background: var(--gold); } .L { background: var(--alert); }
         .live-indic { color: var(--live); font-size: 0.8rem; font-weight: 900; margin-left: 5px; animation: pulse 1.5s infinite; }
-
-        @media (max-width: 600px) {
-            .card-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .pred-row { flex-direction: column; align-items: flex-start; }
-            .pred-row b { align-self: flex-end; margin-top: 5px; color: var(--gold); }
-        }
     </style>
 </head>
 <body>
@@ -92,7 +86,7 @@
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" onkeyup="if(event.key === 'Enter') verifyPinBtn()">
         <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v312</div>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v314</div>
         <div style="margin-top:25px; font-size:0.75rem; color:#666; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="clearCacheBtn()">🔄 ΚΑΘΑΡΙΣΜΟΣ ΜΝΗΜΗΣ</div>
     </div>
 </div>
@@ -103,7 +97,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">IRONCLAD SPEC v312</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">TIERED BACKTEST SPEC</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -114,8 +108,13 @@
         </div>
 
         <div id="syncCont" style="display:none; margin-bottom:25px; background:var(--card); padding:15px; border-radius:15px;">
-            <div style="display:flex; justify-content:space-between; color:var(--p); font-weight:900; margin-bottom:8px;"><span id="syncStep">ΕΝΑΡΞΗ...</span><span id="syncPerc">0%</span></div>
+            <div style="display:flex; justify-content:space-between; color:var(--p); font-weight:900; margin-bottom:8px;"><span id="syncStep">ΕΝΑΡΞΗ...</span></div>
             <div style="background:#000; height:8px; border-radius:4px; overflow:hidden;"><div id="syncFill" style="background:var(--p); height:100%; width:0%; transition:0.3s;"></div></div>
+        </div>
+
+        <div id="aiCont" style="display:none; margin-bottom:25px; background:var(--card); padding:15px; border-radius:15px; border:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; color:var(--ai); font-weight:900; margin-bottom:8px;"><span id="aiStep">ΑΝΑΚΤΗΣΗ ΙΣΤΟΡΙΚΩΝ ΔΕΔΟΜΕΝΩΝ...</span></div>
+            <div style="background:#000; height:8px; border-radius:4px; overflow:hidden;"><div id="aiFill" style="background:var(--ai); height:100%; width:0%; transition:0.3s;"></div></div>
         </div>
 
         <div id="dashboardTools" style="display:none; margin-bottom:25px; background:var(--card); padding:15px; border-radius:15px; border:1px solid var(--border);">
@@ -172,7 +171,7 @@
 </div>
 
 <script>
-// --- ERROR CHECKER (Ο Λόγος που κράσαρε η προηγούμενη) ---
+// --- ERROR CHECKER ---
 function checkApiError(data, elId) {
     if(data && data.errors && Object.keys(data.errors).length > 0) {
         const msg = Object.values(data.errors)[0];
@@ -222,7 +221,7 @@ let masterData = []; let standingsMap = {};
 function verifyPinBtn() {
     let v = document.getElementById('pinInput').value.trim();
     if(v === ACCESS_PIN) {
-        sessionStorage.setItem("p_auth_v312", "true");
+        sessionStorage.setItem("p_auth_v314", "true");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
@@ -234,7 +233,7 @@ function verifyPinBtn() {
 }
 
 window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v312") === "true") { 
+    if(sessionStorage.getItem("p_auth_v314") === "true") { 
         document.getElementById('authScreen').style.display='none'; 
         document.getElementById('appContent').style.display='block'; 
         startSystem(); 
@@ -419,7 +418,7 @@ function openIntel(id) {
             <tr><td>Cards</td><td>~${cCardsH.toFixed(1)}${ls('cd-h')}</td><td>~${cCardsA.toFixed(1)}${ls('cd-a')}</td></tr>
             <tr><td>True Prob %</td><td style="color:var(--gold)">${c.tProbs.h}%</td><td style="color:var(--gold)">${c.tProbs.a}%</td></tr>`;
         
-        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο:</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
+        document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο (T-Prob):</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
         
         let h2h = ''; (p?.h2h || []).slice(0,5).forEach(x => { h2h += `<div class="pred-row"><span>${x.teams?.home?.name}-${x.teams?.away?.name}</span><b>${x.goals?.home ?? '-'}:${x.goals?.away ?? '-'}</b></div>`; });
         document.getElementById('h2hBox').innerHTML = h2h || '<div class="pred-row">No H2H Data</div>';
@@ -485,7 +484,7 @@ function generateAcca() {
         else if(m==='WILDCARD') pool.sort((a,b)=>b.bProb-a.bProb);
         else pool.sort((a,b)=>Math.max(b.hP,b.aP)-Math.max(a.hP,a.aP));
         
-        let h = `<h3 style="color:var(--p); margin:0 0 15px 0;">🎯 ELITE ${s}-FOLD ${m==='WILDCARD'?'(ADVANCED 🃏)':''}</h3>`;
+        let h = `<h3 style="color:var(--p); margin:0 0 15px 0;">🎯 ELITE ${s}-FOLD</h3>`;
         pool.slice(0,s).forEach(i => {
             let tip = '';
             if(m==='CORNERS') tip = `Over ${Math.floor(i.ec-1)}.5 Κόρνερ`; 
@@ -501,11 +500,14 @@ function generateAcca() {
     } catch(e) { alert("Σφάλμα στη δημιουργία δελτίου."); }
 }
 
+// --- FULL DATA LAB (BACKTEST) WITH THE FIX ---
 async function runDeepEvaluation() {
     const tD = document.getElementById('evalDate').value; 
-    if(!tD) return;
+    if(!tD) { alert("Επίλεξε ημερομηνία!"); return; }
     
-    document.getElementById('aiCont').style.display='block';
+    // THE FIX: aiCont now safely exists in HTML!
+    const aiCont = document.getElementById('aiCont');
+    if(aiCont) aiCont.style.display='block';
     document.getElementById('aiStep').innerText = "ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ...";
     
     let stats = {
@@ -520,19 +522,19 @@ async function runDeepEvaluation() {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
         const fD = await fR.json();
         
-        if(checkApiError(fD, 'aiStep')) { setTimeout(()=> { document.getElementById('aiCont').style.display='none'; }, 3000); return; }
+        if(checkApiError(fD, 'aiStep')) { setTimeout(()=> { if(aiCont) aiCont.style.display='none'; }, 3000); return; }
 
         const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && ['FT','AET','PEN'].includes(m.fixture?.status?.short));
         if(tFix.length === 0) {
             document.getElementById('aiStep').innerHTML = `<span style="color:var(--gold)">ΔΕΝ ΒΡΕΘΗΚΑΝ ΟΛΟΚΛΗΡΩΜΕΝΑ ΜΑΤΣ</span>`;
-            setTimeout(()=> { document.getElementById('aiCont').style.display='none'; }, 3000); return;
+            setTimeout(()=> { if(aiCont) aiCont.style.display='none'; }, 3000); return;
         }
 
         for (let i=0; i<tFix.length; i++) {
             let m = tFix[i]; 
             document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
             
-            await new Promise(r => setTimeout(r, 300)); 
+            await new Promise(r => setTimeout(r, 250)); // Throttle protection
 
             try {
                 const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
@@ -617,10 +619,10 @@ async function runDeepEvaluation() {
         `;
         document.getElementById('aiPanel').style.display='block';
     } catch(e) { 
-        document.getElementById('aiResultsBox').innerHTML = `<div style="color:var(--alert); text-align:center;">ΣΦΑΛΜΑ ΔΙΚΤΥΟΥ.</div>`;
+        document.getElementById('aiResultsBox').innerHTML = `<div style="color:var(--alert); text-align:center;">ΣΦΑΛΜΑ ΔΙΚΤΥΟΥ Ή API.</div>`;
         document.getElementById('aiPanel').style.display='block';
     }
-    document.getElementById('aiCont').style.display='none';
+    if(aiCont) aiCont.style.display='none';
 }
 
 function exportToPDF() {
