@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v315 - Pure Stats</title>
+    <title>Predictor Pro v316 - Dynamic Quants</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
@@ -86,7 +86,7 @@
         <h1 style="color:var(--p); margin:0; font-size:2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" onkeyup="if(event.key === 'Enter') verifyPinBtn()">
         <button class="btn-auth" onclick="verifyPinBtn()">ΕΠΙΒΕΒΑΙΩΣΗ PIN</button>
-        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v315</div>
+        <div id="authMsg" style="color:var(--finished); font-weight:bold; font-size:0.85rem; margin-top:10px;">SECURE ENTRANCE v316</div>
         <div style="margin-top:25px; font-size:0.75rem; color:#666; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="clearCacheBtn()">🔄 ΚΑΘΑΡΙΣΜΟΣ ΜΝΗΜΗΣ</div>
     </div>
 </div>
@@ -97,7 +97,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px;">
             <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">PURE STATS SPEC v315</small>
+            <small style="color:var(--cyan); font-weight:900; letter-spacing:2px;">DYNAMIC QUANTS SPEC</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -171,6 +171,7 @@
 </div>
 
 <script>
+// --- ERROR CHECKER ---
 function checkApiError(data, elId) {
     if(data && data.errors && Object.keys(data.errors).length > 0) {
         const msg = Object.values(data.errors)[0];
@@ -181,12 +182,39 @@ function checkApiError(data, elId) {
     return false;
 }
 
+// --- DYNAMIC QUANTS MATH (v316) ---
 const sGetP = (p, k) => parseInt(p?.predictions?.percent?.[k] || 0);
-const sGetXG = (t, s) => parseFloat(t?.last_5?.goals?.[s]?.average || (s==='for'?1.0:1.0));
 const sGetF = (t) => (t?.league?.form || "DDDDDD").split('').slice(-6);
 
-function calcTrueProbs(hXG, hXGA, aXG, aXGA) {
-    let hPwr = (hXG + aXGA) / 2 + 0.2; 
+// ADVANCED XG: Ζυγίζει Season vs Last 5 βάσει Τυπικής Απόκλισης
+const advXG = (team, type) => {
+    let formAvg = parseFloat(team?.last_5?.goals?.[type]?.average);
+    let seasonAvg = parseFloat(team?.league?.goals?.[type]?.average?.total);
+    if(isNaN(formAvg)) formAvg = 1.0; 
+    if(isNaN(seasonAvg)) seasonAvg = formAvg;
+    
+    let deviation = formAvg - seasonAvg;
+    
+    // Αν η απόκλιση είναι μεγάλη (αλλαγή φόρμας/momentum), δίνουμε 50-50 βάρος.
+    // Αλλιώς 60% στο συνολικό (μακροπρόθεσμο) και 40% στο πρόσφατο.
+    if(Math.abs(deviation) >= 0.3) {
+        return (seasonAvg * 0.5) + (formAvg * 0.5);
+    } else {
+        return (seasonAvg * 0.6) + (formAvg * 0.4);
+    }
+};
+
+// DYNAMIC HOME ADVANTAGE: 0.2 * (Νίκες / Αγώνες Εντός)
+const getHAdv = (team) => {
+    let played = parseInt(team?.league?.fixtures?.played?.home);
+    let wins = parseInt(team?.league?.fixtures?.wins?.home);
+    if(isNaN(played) || played === 0) played = 1; 
+    if(isNaN(wins)) wins = 0;
+    return 0.2 * (wins / played);
+};
+
+function calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv) {
+    let hPwr = (hXG + aXGA) / 2 + hAdv; 
     let aPwr = (aXG + hXGA) / 2;
     let diff = Math.abs(hPwr - aPwr);
     let dProb = Math.max(0.15, 0.33 - (diff * 0.12)); 
@@ -201,6 +229,7 @@ function clearCacheBtn() {
     window.location.reload();
 }
 
+// --- CORE CONFIG ---
 const ACCESS_PIN = "106014";
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [
@@ -217,7 +246,7 @@ let masterData = []; let standingsMap = {};
 function verifyPinBtn() {
     let v = document.getElementById('pinInput').value.trim();
     if(v === ACCESS_PIN) {
-        sessionStorage.setItem("p_auth_v315", "true");
+        sessionStorage.setItem("p_auth_v316", "true");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
@@ -229,7 +258,7 @@ function verifyPinBtn() {
 }
 
 window.onload = () => { 
-    if(sessionStorage.getItem("p_auth_v315") === "true") { 
+    if(sessionStorage.getItem("p_auth_v316") === "true") { 
         document.getElementById('authScreen').style.display='none'; 
         document.getElementById('appContent').style.display='block'; 
         startSystem(); 
@@ -295,7 +324,7 @@ async function globalSync() {
             document.getElementById('syncFill').style.width = Math.round(((i+1)/myFix.length)*100)+'%';
             document.getElementById('syncStep').innerText = `ΑΝΑΛΥΣΗ: ${m.teams?.home?.name || 'Match'}`;
             
-            await new Promise(r => setTimeout(r, 250)); 
+            await new Promise(r => setTimeout(r, 250)); // THROTTLE
 
             const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
             const pData = await pR.json();
@@ -304,12 +333,19 @@ async function globalSync() {
             
             const pD = pData.response?.[0];
             if(pD) {
-                const hXG = sGetXG(pD.teams?.home,'for'); const aXG = sGetXG(pD.teams?.away,'for');
-                const hXGA = sGetXG(pD.teams?.home,'against'); const aXGA = sGetXG(pD.teams?.away,'against');
-                let hCr = 4.1 + hXG*0.9; let aCr = 3.6 + aXG*0.8;
-                let tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA);
+                // Χρήση νέων, σταθμισμένων xG (v316)
+                const hXG = advXG(pD.teams?.home,'for'); 
+                const aXG = advXG(pD.teams?.away,'for');
+                const hXGA = advXG(pD.teams?.home,'against'); 
+                const aXGA = advXG(pD.teams?.away,'against');
                 
-                masterData.push({ fixture: m, prediction: pD, calc: { hXG, aXG, hXGA, aXGA, hCr, aCr, tProbs } });
+                // Υπολογισμός Δυναμικής Έδρας
+                const hAdv = getHAdv(pD.teams?.home);
+                
+                let hCr = 4.1 + hXG*0.9; let aCr = 3.6 + aXG*0.8;
+                let tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv);
+                
+                masterData.push({ fixture: m, prediction: pD, calc: { hXG, aXG, hXGA, aXGA, hCr, aCr, tProbs, hAdv } });
             }
         }
     } catch(e) { 
@@ -384,11 +420,8 @@ function openIntel(id) {
         
         let expCrnH = c.hCr; let expCrnA = c.aCr;
         let synH = ''; let synA = '';
-        
-        // PURE STATS FIX: Καμία μαθηματική προσαύξηση (+1.5), ΜΟΝΟ οπτική επισήμανση
         if(c.aXGA <= 0.60 && expCrnH > 5) { synH = ' 🔥'; } 
         if(c.hXGA <= 0.60 && expCrnA > 5) { synA = ' 🔥'; }
-        
         const totXG = c.hXG + c.aXG;
         const cCardsH = 1.5 + c.hXGA*0.5; const cCardsA = 1.5 + c.aXGA*0.5;
 
@@ -412,10 +445,10 @@ function openIntel(id) {
         
         document.getElementById('statsTable').innerHTML = `
             <tr><th>METRIC</th><th>HOME</th><th>AWAY</th></tr>
-            <tr><td>xG Attack</td><td>${c.hXG.toFixed(2)}${ls('lx-h')}</td><td>${c.aXG.toFixed(2)}${ls('lx-a')}</td></tr>
+            <tr><td>xG Attack (Weighted)</td><td>${c.hXG.toFixed(2)}${ls('lx-h')}</td><td>${c.aXG.toFixed(2)}${ls('lx-a')}</td></tr>
             <tr><td>xGA Defense</td><td style="${c.hXGA<=0.6?'color:var(--alert)':''}">${c.hXGA.toFixed(2)}</td><td style="${c.aXGA<=0.6?'color:var(--alert)':''}">${c.aXGA.toFixed(2)}</td></tr>
             <tr><td>xCorners</td><td>${expCrnH.toFixed(1)}<span style="color:var(--gold)">${synH}</span>${ls('lc-h')}</td><td>${expCrnA.toFixed(1)}<span style="color:var(--gold)">${synA}</span>${ls('lc-a')}</td></tr>
-            <tr><td>Cards</td><td>~${cCardsH.toFixed(1)}${ls('cd-h')}</td><td>~${cCardsA.toFixed(1)}${ls('cd-a')}</td></tr>
+            <tr><td>Home Adv.</td><td style="color:var(--gold)">+${c.hAdv.toFixed(2)}</td><td>-</td></tr>
             <tr><td>True Prob %</td><td style="color:var(--gold)">${c.tProbs.h}%</td><td style="color:var(--gold)">${c.tProbs.a}%</td></tr>`;
         
         document.getElementById('algoPreds').innerHTML = `<div class="pred-row"><span>Σημείο:</span><b>${bestPick} (${Math.max(c.tProbs.h, c.tProbs.a)}%)</b></div><div class="pred-row"><span>Ακριβές Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div><div class="pred-row"><span>Κόρνερ:</span><b>Over ${Math.floor(expCrnH+expCrnA-1)}.5</b></div><div class="pred-row"><span>Γκολ:</span><b>${totXG>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
@@ -436,8 +469,6 @@ function openIntel(id) {
                     const setL = (elId, val) => { const el = document.getElementById(elId); if(el) el.innerText = ` (L: ${val})`; };
                     setL('lx-h', gS(hS, "Expected Goals")); setL('lx-a', gS(aS, "Expected Goals"));
                     setL('lc-h', gS(hS, "Corner Kicks")); setL('lc-a', gS(aS, "Corner Kicks"));
-                    setL('cd-h', parseInt(gS(hS, "Yellow Cards")) + parseInt(gS(hS, "Red Cards")));
-                    setL('cd-a', parseInt(gS(aS, "Yellow Cards")) + parseInt(gS(aS, "Red Cards")));
                 }
             }).catch(e=>{});
         }
@@ -454,7 +485,6 @@ function generateAcca() {
             return !['FT','PEN','AET'].includes(st);
         }).map(d => {
             const c = d.calc; const p = d.prediction;
-            // PURE STATS FIX: Καθαρό Line, καμία προσαύξηση
             let ec = (4.1+c.hXG*0.9)+(3.6+c.aXG*0.8);
             const totXG = c.hXG + c.aXG;
             
@@ -548,9 +578,10 @@ async function runDeepEvaluation() {
                 
                 if(pD && sD.response?.[0]) {
                     analyzedCount++;
-                    const hXG = sGetXG(pD.teams?.home,'for'); const aXG = sGetXG(pD.teams?.away,'for');
-                    const hXGA = sGetXG(pD.teams?.home,'against'); const aXGA = sGetXG(pD.teams?.away,'against');
-                    const tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA);
+                    const hXG = advXG(pD.teams?.home,'for'); const aXG = advXG(pD.teams?.away,'for');
+                    const hXGA = advXG(pD.teams?.home,'against'); const aXGA = advXG(pD.teams?.away,'against');
+                    const hAdv = getHAdv(pD.teams?.home);
+                    const tProbs = calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv);
                     
                     const hG = m.goals?.home || 0; const aG = m.goals?.away || 0; const totG = hG + aG;
                     const act1X2 = hG > aG ? 'h' : (aG > hG ? 'a' : 'd');
@@ -571,7 +602,6 @@ async function runDeepEvaluation() {
                     }
 
                     const actC = (sD.response[0]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0) + (sD.response[1]?.statistics?.find(x=>x.type==="Corner Kicks")?.value||0);
-                    // PURE STATS FIX: Καμία προσαύξηση στο Backtest
                     let pC = (4.1+hXG*0.9)+(3.6+aXG*0.8);
                     
                     let cB = pC > 10.5 ? '>10.5' : (pC >= 9.5 ? '9.5-10.5' : '<9.5');
@@ -626,7 +656,7 @@ async function runDeepEvaluation() {
 
 function exportToPDF() {
     const el = document.getElementById('pdfExportArea');
-    html2pdf().from(el).set({ margin:10, filename:'PureStats_Report.pdf', html2canvas:{scale:2, backgroundColor:'#0b0e14'}, jsPDF:{format:'a4'} }).save();
+    html2pdf().from(el).set({ margin:10, filename:'Tiered_Data_Report.pdf', html2canvas:{scale:2, backgroundColor:'#0b0e14'}, jsPDF:{format:'a4'} }).save();
 }
 
 function closePanel(pid) { document.getElementById(pid).style.display = 'none'; }
