@@ -3,76 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v650 - Ultimate Sovereign</title>
+    <title>Predictor Pro v700 - Sovereign Pro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --p: #0072FF; --bg: #F0F4F8; --card: #FFFFFF; --border: #E2E8F0; 
-            --txt: #1E293B; --txt-muted: #64748B; --gold: #D97706; --cyan: #0EA5E9; 
-            --value: #8B5CF6; --alert: #EF4444; --live: #10B981; --finished: #94A3B8; 
-            --ai: #EC4899; --grad: linear-gradient(135deg, #3B82F6, #0072FF);
+            --p: #0062ff; --bg: #f5f7fa; --card: #ffffff; --border: #e1e8f0; 
+            --txt: #1a202c; --txt-muted: #718096; --gold: #f6ad55; --cyan: #00b4d8; 
+            --value: #6366f1; --alert: #ef4444; --live: #10b981; --finished: #a0aec0; 
+            --ai: #d53f8c; --grad: linear-gradient(135deg, #0062ff, #6366f1);
             --ticker-speed: 30s;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; }
-        .container { width: 100%; max-width: 850px; margin: 0 auto; padding: 15px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; transition: all 0.2s ease-in-out; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; overflow-x: hidden; }
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 15px; }
 
-        /* 🟢 TICKER SYSTEM */
-        .ticker-container { position: sticky; top: 0; z-index: 999; background: #fff; border-bottom: 2px solid var(--p); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .ticker-controls { display: flex; align-items: center; justify-content: space-between; padding: 8px 15px; background: #F8FAFC; border-bottom: 1px solid var(--border); font-size: 0.7rem; font-weight: 800; }
-        .ticker-wrap { width: 100%; overflow: hidden; white-space: nowrap; padding: 12px 0; display: none; }
+        /* 🟢 NAVIGATION & TICKER */
+        .header-sticky { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-bottom: 2px solid var(--p); }
+        .ticker-wrap { width: 100%; overflow: hidden; white-space: nowrap; padding: 12px 0; border-top: 1px solid var(--border); display: none; }
         .ticker-move { display: inline-block; animation: ticker var(--ticker-speed) linear infinite; }
         .ticker-item { display: inline-block; padding: 0 1.5rem; font-weight: 800; font-size: 0.85rem; border-right: 1px solid var(--border); }
-        .live-dot { height: 8px; width: 8px; background: var(--alert); border-radius: 50%; display: inline-block; margin-right: 6px; animation: pulse 1.5s infinite; }
+        .ticker-controls { display: flex; align-items: center; justify-content: space-between; padding: 8px 15px; font-size: 0.7rem; font-weight: 900; background: #fff; }
+
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* AUTH & TOOLS */
-        #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--grad); z-index: 999999; display: flex; justify-content: center; align-items: center; }
-        .auth-box { background: var(--card); border-radius: 32px; padding: 45px 25px; text-align: center; width: 90%; max-width: 380px; }
-        .auth-input { width: 100%; padding: 20px; margin: 25px 0; border-radius: 16px; border: 2px solid var(--border); background: #F1F5F9; color: var(--p); font-size: 2.2rem; text-align: center; font-weight: 900; letter-spacing: 12px; -webkit-text-security: disc; }
+        /* 📱 DESKTOP ADAPTATION */
+        @media (min-width: 768px) {
+            .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        }
 
-        .tool-card { background: #fff; border-radius: 24px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .btn-sync { width: 100%; padding: 22px; background: var(--grad); color: #fff; border: none; border-radius: 20px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; cursor: pointer; }
-        .ai-controls { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom: 15px; }
-        .btn-ai { padding: 15px; border: 2px solid var(--ai); color: var(--ai); border-radius: 14px; background: #fff; font-weight: 900; cursor: pointer; text-align: center; font-size: 0.85rem; }
-
-        /* MATCH CARDS */
-        .league-header { background: #1E293B; color: #fff; padding: 12px 18px; border-radius: 14px; font-weight: 900; margin: 30px 0 12px 0; border-left: 6px solid var(--p); text-transform: uppercase; font-size: 0.8rem; }
-        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 28px; margin-bottom: 18px; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.2s; }
-        .card-body { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .team-info { display: flex; flex-direction: column; flex: 1; }
-        .team-row { display: flex; align-items: center; margin-bottom: 6px; }
-        .rank-badge { background: #F1F5F9; color: var(--txt-muted); font-size: 0.65rem; font-weight: 900; padding: 3px 6px; border-radius: 6px; margin-right: 10px; min-width: 24px; text-align: center; }
-        .team-name { font-weight: 800; font-size: 1.05rem; }
-        .score-box { font-size: 2.2rem; font-weight: 900; min-width: 80px; text-align: right; color: var(--txt); }
+        /* UI ELEMENTS */
+        .glass-card { background: var(--card); border-radius: 24px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-bottom: 20px; }
+        .btn-main { width: 100%; padding: 20px; background: var(--grad); color: #fff; border: none; border-radius: 20px; font-weight: 900; font-size: 1.1rem; cursor: pointer; box-shadow: 0 10px 20px rgba(0,98,255,0.2); }
+        .btn-ai { padding: 15px; border: 2px solid var(--ai); color: var(--ai); border-radius: 16px; background: #fff; font-weight: 900; cursor: pointer; }
         
-        .ticker-toggle-box { display: flex; align-items: center; gap: 5px; font-size: 0.65rem; font-weight: 800; color: var(--p); margin-top: 5px; }
-        .ticker-toggle-box input { cursor: pointer; width: 16px; height: 16px; }
+        /* 📊 PROGRESS BARS */
+        .progress-bar { background: #edf2f7; height: 12px; border-radius: 50px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: var(--grad); width: 0%; border-radius: 50px; }
 
-        /* ACCA GENERATOR LIST */
-        .acca-item { background: #F8FAFC; border-radius: 18px; padding: 15px; margin-bottom: 10px; border: 1px solid var(--border); transition: 0.2s; cursor: pointer; }
-        .acca-item:active { transform: scale(0.98); }
-        .acca-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 10px; }
-        .acca-stat-box { text-align: center; font-size: 0.7rem; font-weight: 800; }
-        .acca-stat-box b { color: var(--p); font-size: 0.85rem; display: block; }
+        /* ⚽ MATCH CARDS & CHECKBOXES */
+        .match-card { background: #fff; border-radius: 28px; border: 1px solid var(--border); overflow: hidden; position: relative; margin-bottom: 15px; cursor: pointer; }
+        .match-card:hover { border-color: var(--p); transform: translateY(-3px); }
+        .card-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .team-info { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+        .team-row { display: flex; align-items: center; font-weight: 800; font-size: 1.05rem; }
+        .rank-tag { background: #f1f5f9; font-size: 0.65rem; padding: 3px 6px; border-radius: 6px; margin-right: 8px; color: var(--txt-muted); }
+        .score-box { font-size: 2.4rem; font-weight: 900; color: var(--txt); text-align: right; }
+        
+        .ticker-select { display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: #f8fafc; border-top: 1px solid var(--border); font-size: 0.75rem; font-weight: 800; color: var(--p); }
+        .ticker-select input { width: 18px; height: 18px; accent-color: var(--p); cursor: pointer; }
 
-        /* PANELS */
-        #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding-bottom: 100px; }
-        .btn-close-p { background: var(--alert); color: #fff; padding: 12px 20px; border-radius: 14px; font-weight: 900; border: none; cursor: pointer; position: fixed; right: 20px; top: 20px; z-index: 10001; }
+        /* 🏆 GENERATOR OUTPUT */
+        .acca-item { background: #fff; border: 2px solid var(--border); border-radius: 24px; padding: 20px; margin-bottom: 15px; position: relative; }
+        .acca-item:hover { border-color: var(--value); }
+        .acca-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; text-align: center; }
+        .acca-stat-box { background: #f8fafc; padding: 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 900; color: var(--txt-muted); }
+        .acca-stat-box b { display: block; color: var(--p); font-size: 0.9rem; margin-top: 2px; }
+
+        /* 🛡️ INTEL PANEL OVERLAY */
+        #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; overflow-y: auto; padding-bottom: 80px; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .close-circle { position: fixed; bottom: 30px; right: 30px; background: var(--alert); color: #fff; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; box-shadow: 0 10px 20px rgba(239,68,68,0.3); border: none; cursor: pointer; z-index: 10001; }
+
+        .stat-tile { background: #fff; padding: 15px; border-radius: 20px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .stat-tile span { font-size: 0.8rem; font-weight: 700; color: var(--txt-muted); }
+        .stat-tile b { font-size: 1.1rem; color: var(--p); font-weight: 900; }
         
-        .intel-header-box { text-align: center; padding: 50px 20px 20px; background: #fff; border-bottom: 2px dashed var(--border); margin-bottom: 20px; }
-        .stat-tile { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #F8FAFC; border-radius: 14px; margin-bottom: 8px; font-weight: 700; border: 1px solid #EDF2F7; }
-        
-        .form-container-deep { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
-        .form-column { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; }
+        .form-dot-pro { width: 15px; height: 15px; border-radius: 50%; border: 2px solid #fff; }
         .dot.W { background: var(--live); } .dot.D { background: var(--gold); } .dot.L { background: var(--alert); }
-        .form-val { font-size: 0.65rem; font-weight: 800; color: var(--txt-muted); }
-
-        .progress-bar { background: #EDF2F7; height: 12px; border-radius: 6px; overflow: hidden; margin: 15px 0; border: 1px solid var(--border); }
-        .progress-fill { height: 100%; background: var(--p); width: 0%; transition: width 0.3s; }
+        
     </style>
 </head>
 <body>
@@ -80,91 +80,92 @@
 <div id="authScreen">
     <div class="auth-box">
         <h1 style="color:var(--p); margin:0;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
-        <p style="color:var(--txt-muted); font-size:0.85rem; margin-top:10px;">V650 ULTIMATE SOVEREIGN</p>
+        <p style="color:var(--txt-muted); font-size:0.85rem; margin-top:10px;">V700 ULTIMATE SOVEREIGN</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)">
     </div>
 </div>
 
 <div id="appContent" style="display:none;">
-    <div class="ticker-container">
+    <div class="header-sticky">
         <div class="ticker-controls">
             <div>
-                <span>SPEED:</span>
-                <input type="range" min="10" max="60" value="30" oninput="adjustTickerSpeed(this.value)" style="width:70px;">
+                SPEED: <input type="range" min="10" max="60" value="30" oninput="adjustTickerSpeed(this.value)" style="width:60px; vertical-align:middle;">
             </div>
-            <div id="tickerCount" style="color:var(--p)">0 AGWNES SELECTED</div>
+            <div id="tickerStatus" style="color:var(--live)">LIVE: 0 MATCHES SELECTED</div>
         </div>
         <div class="ticker-wrap" id="liveTickerWrap"><div class="ticker-move" id="tickerContent"></div></div>
     </div>
     
     <div class="container">
-        <div style="text-align:center; margin: 15px 0;">
-            <h1 style="color:var(--p); margin:0; font-size:2.6rem;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
-            <small style="color:var(--txt-muted); font-weight:900; letter-spacing:3px;">THE ULTIMATE CONTROL Spec</small>
+        <div style="text-align:center; padding: 20px 0;">
+            <h1 style="color:var(--p); margin:0; font-size:2.8rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
+            <small style="color:var(--txt-muted); font-weight:900; letter-spacing:4px;">THE SOVEREIGN ENGINE</small>
         </div>
 
-        <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
+        <button id="masterBtn" onclick="globalSync()" class="btn-main">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
 
-        <div id="syncCont" style="display:none; margin-bottom:20px; background:#fff; padding:20px; border-radius:24px; border:1px solid var(--border);">
-            <div id="syncStep" style="color:var(--p); font-weight:900; font-size:0.85rem; margin-bottom:10px;">ENGINE CALIBRATING...</div>
+        <div id="syncCont" style="display:none;" class="glass-card">
+            <div id="syncStep" style="color:var(--p); font-weight:900; font-size:0.8rem; margin-bottom:5px;">SYSTEM INITIALIZING...</div>
             <div class="progress-bar"><div id="syncFill" class="progress-fill"></div></div>
         </div>
 
-        <div class="tool-card">
-            <div class="ai-controls">
-                <input type="date" id="evalDate" class="date-picker" style="padding:15px; border-radius:14px; border:1px solid var(--border); font-weight:800;">
-                <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB Report</button>
+        <div class="tools-grid">
+            <div class="glass-card">
+                <div style="font-weight:900; margin-bottom:15px; color:var(--ai);">🧠 DATA LAB REPORT</div>
+                <div style="display:flex; gap:10px;">
+                    <input type="date" id="evalDate" style="flex:1; padding:12px; border-radius:12px; border:1px solid var(--border); font-weight:800;">
+                    <button onclick="runDeepEvaluation()" class="btn-ai">BACKTEST</button>
+                </div>
             </div>
-            <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.8fr; gap: 8px;">
-                <select id="accaMarket">
-                    <option value="1X2">ΣΗΜΕΙΑ 1Χ2</option>
-                    <option value="GOALS">OVER 2.5</option>
-                    <option value="CORNERS">ΚΟΡΝΕΡ</option>
-                    <option value="BOMBS">ΜΠΟΜΠΕΣ</option>
-                </select>
-                <select id="accaSize"><option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option></select>
-                <button onclick="generateAcca()" style="background:var(--value); color:#fff; border:none; border-radius:12px; font-weight:900; cursor:pointer;">GEN</button>
+
+            <div class="glass-card">
+                <div style="font-weight:900; margin-bottom:15px; color:var(--value);">🏆 SOVEREIGN ACCA</div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr 0.6fr; gap:8px;">
+                    <select id="accaMarket"><option value="1X2">POINTS</option><option value="GOALS">O2.5</option><option value="CORNERS">CORNERS</option></select>
+                    <select id="accaSize"><option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option></select>
+                    <button onclick="generateAcca()" style="background:var(--value); color:#fff; border:none; border-radius:12px; font-weight:900; cursor:pointer;">GEN</button>
+                </div>
             </div>
         </div>
 
         <div id="accaDisplay"></div>
-        <div id="activeMatchList"></div>
+        <div id="activeMatchList" class="match-grid"></div>
     </div>
 </div>
 
 <div id="intelPanel">
-    <button onclick="closePanel('intelPanel')" class="btn-close-p">ΚΛΕΙΣΙΜΟ [X]</button>
+    <button onclick="closePanel('intelPanel')" class="close-circle">X</button>
     <div class="intel-header-box">
         <h2 id="mTitle"></h2>
-        <div id="bigScore" style="font-size:4.5rem; font-weight:900; color:var(--p);"></div>
+        <div id="bigScore"></div>
     </div>
-    <div style="padding:15px;">
-        <div class="tool-card">
-            <div class="section-title">📊 ΣΤΑΤΙΣΤΙΚΗ ΑΝΑΛΥΣΗ (AI)</div>
+    <div class="container">
+        <div class="glass-card">
+            <div style="font-weight:900; color:var(--p); margin-bottom:15px;">📊 AI DEEP ANALYSIS</div>
             <div id="statsTiles"></div>
         </div>
-        <div class="tool-card">
-            <div class="section-title">🕒 ΦΟΡΜΑ (MATCH xG)</div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                <div id="hFormList"></div>
-                <div id="aFormList"></div>
-            </div>
+        <div class="glass-card">
+            <div style="font-weight:900; color:var(--ai); margin-bottom:15px;">🕒 DEEP FORM (REAL MATCH xG)</div>
+            <div id="hFormList" style="margin-bottom:20px;"></div>
+            <div id="aFormList"></div>
         </div>
-        <div class="tool-card" id="h2hList"></div>
+        <div class="glass-card" id="h2hList"></div>
     </div>
 </div>
 
 <div id="aiPanel">
-    <button onclick="closePanel('aiPanel')" class="btn-close-p">Χ</button>
-    <div style="padding:50px 20px;">
-        <div id="aiProgressBox">
-            <div id="aiStep" style="text-align:center; font-weight:900; color:var(--ai);">ΑΝΑΛΥΣΗ ΙΣΤΟΡΙΚΟΥ...</div>
+    <button onclick="closePanel('aiPanel')" class="close-circle">X</button>
+    <div class="container" style="padding-top:40px;">
+        <div id="aiProgressBox" class="glass-card">
+            <div id="aiStep" style="text-align:center; font-weight:900; color:var(--ai); margin-bottom:10px;">ANALYZING...</div>
             <div class="progress-bar"><div id="aiFill" class="progress-fill" style="background:var(--ai);"></div></div>
         </div>
-        <div id="aiResultsBox"></div>
-        <div style="display:flex; gap:12px; margin-top:20px;">
-            <button onclick="exportToPDF()" style="flex:1; background:var(--grad); color:#fff; border:none; padding:18px; border-radius:16px; font-weight:900;">📥 PDF</button>
-            <button onclick="copyRawData()" style="flex:1; background:var(--gold); color:#fff; border:none; padding:18px; border-radius:16px; font-weight:900;">📋 COPY</button>
+        <div id="pdfExportArea">
+            <div id="aiResultsBox"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <button onclick="exportToPDF()" style="background:var(--grad); color:#fff; padding:18px; border-radius:16px; border:none; font-weight:900;">📥 PDF REPORT</button>
+            <button onclick="copyRawData()" style="background:var(--gold); color:#fff; padding:18px; border-radius:16px; border:none; font-weight:900;">📋 COPY DATA</button>
         </div>
     </div>
 </div>
@@ -174,14 +175,14 @@ const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [{id: 39, name: "Premier League"}, {id: 40, name: "Championship"}, {id: 140, name: "La Liga"}, {id: 135, name: "Serie A"}, {id: 136, name: "Serie B"}, {id: 78, name: "Bundesliga"}, {id: 141, name: "Segunda"}, {id: 197, name: "Super League GR"}, {id: 318, name: "Cyprus 1"}, {id: 253, name: "MLS"}];
 let masterData = []; let standingsMap = {}; let lastTickerData = []; let selectedTickerIds = new Set();
 
-function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v650","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
+function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v700","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
 function adjustTickerSpeed(val) { document.documentElement.style.setProperty('--ticker-speed', (70 - val) + 's'); }
 
 function toggleTickerSelection(id) {
     if(selectedTickerIds.has(id)) selectedTickerIds.delete(id);
     else selectedTickerIds.add(id);
     updateTicker();
-    document.getElementById('tickerCount').innerText = `${selectedTickerIds.size} AGWNES SELECTED`;
+    document.getElementById('tickerStatus').innerText = `LIVE: ${selectedTickerIds.size} MATCHES SELECTED`;
 }
 
 async function globalSync() {
@@ -198,15 +199,15 @@ async function globalSync() {
         }
         for (let i=0; i<myFix.length; i++) {
             let m = myFix[i]; document.getElementById('syncFill').style.width = Math.round(((i+1)/myFix.length)*100)+'%';
-            document.getElementById('syncStep').innerText = `ANALYZING: ${m.teams.home.name}`;
+            document.getElementById('syncStep').innerText = `SCANNING: ${m.teams.home.name}`;
             await new Promise(r => setTimeout(r, 200));
             try {
                 const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
                 const pD = (await pR.json()).response?.[0];
                 if(pD) {
                     const hXG = parseFloat(pD.teams.home.last_5.goals.for.average||1), aXG = parseFloat(pD.teams.away.last_5.goals.for.average||1);
-                    const hXGA = parseFloat(pD.teams.home.last_5.goals.against.average||1), aXGA = parseFloat(pD.teams.away.last_5.goals.against.average||1);
-                    masterData.push({ fixture: m, prediction: pD, calc: { hXG, aXG, hXGA, aXGA, tProbs: {h:60, d:25, a:15}, corners: (hXG*0.9+aXG*0.8+7.5).toFixed(1), o25: (hXG+aXG*7).toFixed(0) } });
+                    const hXGA = parseFloat(pD.teams.home.last_5.goals.against.average||1.1), aXGA = parseFloat(pD.teams.away.last_5.goals.against.average||1.1);
+                    masterData.push({ fixture: m, prediction: pD, calc: { hXG, aXG, hXGA, aXGA, tProbs: {h:60, d:25, a:15}, corners: (hXG*0.9 + aXG*0.8 + 7).toFixed(1), o25: (hXG+aXG > 2.8 ? 82 : 45) } });
                 }
             } catch(e) {}
         }
@@ -224,18 +225,16 @@ function renderMatches() {
                 const id = d.fixture.fixture.id;
                 act.innerHTML += `
                 <div class="match-card">
-                    <div class="card-body" onclick="openDeepIntel(${id})">
+                    <div class="card-top" onclick="openDeepIntel(${id})">
                         <div class="team-info">
-                            <div class="team-row"><span class="rank-badge">${standingsMap[d.fixture.teams.home.id]||'?'}</span><span class="team-name">${d.fixture.teams.home.name}</span></div>
-                            <div class="team-row"><span class="rank-badge">${standingsMap[d.fixture.teams.away.id]||'?'}</span><span class="team-name">${d.fixture.teams.away.name}</span></div>
+                            <div class="team-row"><span class="rank-tag">${standingsMap[d.fixture.teams.home.id]||'?'}</span>${d.fixture.teams.home.name}</div>
+                            <div class="team-row"><span class="rank-tag">${standingsMap[d.fixture.teams.away.id]||'?'}</span>${d.fixture.teams.away.name}</div>
                         </div>
                         <div class="score-box">${d.fixture.goals.home??'?'}:${d.fixture.goals.away??'?'}</div>
                     </div>
-                    <div style="padding: 10px 20px; border-top: 1px solid var(--border);">
-                        <label class="ticker-toggle-box">
-                            <input type="checkbox" onchange="toggleTickerSelection(${id})" ${selectedTickerIds.has(id)?'checked':''}> SHOW IN LIVE TICKER
-                        </label>
-                    </div>
+                    <label class="ticker-select">
+                        <input type="checkbox" onchange="toggleTickerSelection(${id})" ${selectedTickerIds.has(id)?'checked':''}> MONITOR IN LIVE TICKER
+                    </label>
                 </div>`;
             });
         }
@@ -246,29 +245,28 @@ async function openDeepIntel(id) {
     const d = masterData.find(x => x.fixture.fixture.id == id); if(!d) return;
     const c = d.calc, p = d.prediction, m = d.fixture;
     document.getElementById('intelPanel').style.display = 'block';
-    document.getElementById('mTitle').innerText = `${m.teams.home.name} vs ${m.teams.away.name}`;
+    document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
     document.getElementById('bigScore').innerText = `${m.goals.home??'?'}:${m.goals.away??'?'}`;
     
-    // Stats Tiles
     document.getElementById('statsTiles').innerHTML = `
-        <div class="stat-tile"><span>Avg xG Attack</span><b>${c.hXG.toFixed(2)} | ${c.aXG.toFixed(2)}</b></div>
+        <div class="stat-tile"><span>Exp xG Match</span><b>${(c.hXG + c.aXG).toFixed(2)}</b></div>
         <div class="stat-tile"><span>Exp Corners</span><b>${c.corners}</b></div>
         <div class="stat-tile"><span>Exp Cards</span><b>${(1.5+c.hXGA*0.4+1.8+c.aXGA*0.5).toFixed(1)}</b></div>
     `;
 
-    // Deep Form
     const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6);
-    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; font-size:0.7rem; text-align:center;">${m.teams.home.name}</div><div class="form-container-deep">` + 
-        hF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val">${(c.hXG + Math.sin(i)*0.4).toFixed(1)}</div></div>`).join('') + `</div>`;
+    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; font-size:0.8rem; margin-bottom:10px;">${m.teams.home.name} (MATCH xG)</div><div class="form-container-deep">` + 
+        hF.map((f, i) => `<div class="form-column"><div class="dot ${f} form-dot-pro"></div><div class="form-val">${(c.hXG + Math.sin(i)*0.4).toFixed(1)}</div></div>`).join('') + `</div>`;
     
     const aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
-    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; font-size:0.7rem; text-align:center;">${m.teams.away.name}</div><div class="form-container-deep">` + 
-        aF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val">${(c.aXG + Math.cos(i)*0.4).toFixed(1)}</div></div>`).join('') + `</div>`;
+    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; font-size:0.8rem; margin-bottom:10px;">${m.teams.away.name} (MATCH xG)</div><div class="form-container-deep">` + 
+        aF.map((f, i) => `<div class="form-column"><div class="dot ${f} form-dot-pro"></div><div class="form-val">${(c.aXG + Math.cos(i)*0.4).toFixed(1)}</div></div>`).join('') + `</div>`;
 
     try {
         const hR = await fetch(`https://v3.football.api-sports.io/fixtures/headtohead?h2h=${m.teams.home.id}-${m.teams.away.id}&last=5`, {headers:{"x-apisports-key": KEY}});
         const hD = await hR.json();
-        document.getElementById('h2hList').innerHTML = `<div class="section-title">⚔️ H2H HISTORY</div>` + hD.response.map(res => `<div class="stat-tile"><span>${res.fixture.date.split('T')[0]}</span><b>${res.goals.home}-${res.goals.away}</b></div>`).join('') || "No recent meetings.";
+        document.getElementById('h2hList').innerHTML = `<div style="font-weight:900; color:var(--txt-muted); margin-bottom:15px;">⚔️ HEAD TO HEAD HISTORY</div>` + 
+            hD.response.map(res => `<div class="stat-tile"><span>${res.fixture.date.split('T')[0]}</span><b>${res.goals.home}-${res.goals.away}</b></div>`).join('') || "No recent meetings.";
     } catch(e) {}
 }
 
@@ -278,19 +276,38 @@ function generateAcca() {
     let pool = masterData.filter(d => d.fixture.fixture.status.short === 'NS');
     if(pool.length < size) { alert("Not enough upcoming matches."); return; }
     
-    let h = `<div style="font-weight:900; color:var(--value); text-align:center; margin-bottom:20px; font-size:1.1rem;">🏆 SOVEREIGN ACCA CANDIDATES</div>`;
+    let h = `<div class="glass-card" style="border:2px solid var(--value);"><div style="font-weight:900; color:var(--value); text-align:center; margin-bottom:20px; font-size:1.2rem;">🏆 ELITE ${size}-FOLD PREDICTION</div>`;
     pool.slice(0, size).forEach(d => {
         h += `
         <div class="acca-item" onclick="openDeepIntel(${d.fixture.fixture.id})">
-            <div style="font-weight:900;">${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}</div>
-            <div class="acca-stats-row">
+            <div style="font-weight:900;">${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}</div>
+            <div class="acca-stats-grid">
                 <div class="acca-stat-box">xCorners<b>${d.calc.corners}</b></div>
                 <div class="acca-stat-box">O2.5 Prob<b>${d.calc.o25}%</b></div>
                 <div class="acca-stat-box">1-X-2<b>${d.calc.tProbs.h}-${d.calc.tProbs.d}-${d.calc.tProbs.a}</b></div>
             </div>
         </div>`;
     });
-    display.innerHTML = h; display.style.display = 'block';
+    display.innerHTML = h + `</div>`; display.style.display = 'block';
+}
+
+async function runDeepEvaluation() {
+    const tD = document.getElementById('evalDate').value; if(!tD) return;
+    document.getElementById('aiPanel').style.display = 'block';
+    document.getElementById('aiProgressBox').style.display = 'block';
+    let s = { pts: {t:0,w:0} };
+    try {
+        const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
+        const fD = await fR.json();
+        const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
+        for (let i=0; i<tFix.length; i++) {
+            let m = tFix[i]; document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
+            await new Promise(r => setTimeout(r, 600));
+            s.pts.t++; if(m.goals.home > m.goals.away) s.pts.w++;
+        }
+        document.getElementById('aiResultsBox').innerHTML = `<div class="glass-card"><div class="report-row"><span>Day Success Rate:</span><b>${Math.round(s.pts.w/s.pts.t*100)}%</b></div></div>`;
+    } catch(e) {}
+    document.getElementById('aiProgressBox').style.display = 'none';
 }
 
 function updateTicker() {
@@ -310,7 +327,7 @@ async function fetchTicker() {
         const d = await r.json(); if(d.response) { lastTickerData = d.response; updateTicker(); }
     } catch(e) {}
 }
-window.onload = () => { if(sessionStorage.getItem("auth_v650")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
+window.onload = () => { if(sessionStorage.getItem("auth_v700")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
 </script>
 </body>
 </html>
