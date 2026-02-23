@@ -3,130 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v415 - Bulletproof Spec</title>
+    <title>Predictor Pro v450 - Joyful Light</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(23, 28, 36, 0.98); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
+        /* ΝΕΑ ΧΑΡΟΥΜΕΝΑ ΧΡΩΜΑΤΑ (LIGHT THEME) */
+        :root { 
+            --p: #0072FF; /* Βασικό Φωτεινό Μπλε */
+            --bg: #F0F4F8; /* Απαλό Γκριζο-Γαλάζιο Φόντο */
+            --card: #FFFFFF; /* Λευκές Κάρτες */
+            --border: #E2E8F0; /* Απαλό περίγραμμα */
+            --txt: #2D3748; /* Σκούρο Γκρι για εύκολο διάβασμα */
+            --txt-muted: #718096; /* Δευτερεύον κείμενο */
+            --gold: #D69E2E; /* Ζεστό χρυσό/πορτοκαλί */
+            --cyan: #3182CE; /* Ανοιχτό Μπλε */
+            --value: #805AD5; /* Μωβ */
+            --alert: #E53E3E; /* Κόκκινο */
+            --live: #38A169; /* Ζωηρό Πράσινο */
+            --finished: #A0AEC0; 
+            --ai: #D53F8C; /* Ροζ */
+            --grad-btn: linear-gradient(135deg, #00C6FF, #0072FF); /* Γράφημα κουμπιών */
+        }
+        
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; overflow-x: hidden; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 12px; }
 
         /* AUTH SCREEN */
-        #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; justify-content: center; align-items: center; }
-        .auth-box { background: var(--card); border: 1px solid var(--border); border-radius: 32px; padding: 45px 25px; text-align: center; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        .auth-input { width: 100%; padding: 22px; margin: 25px 0; border-radius: 16px; border: 2px solid var(--border); background: #000; color: var(--p); font-size: 2.2rem; text-align: center; font-weight: 900; letter-spacing: 12px; -webkit-text-security: disc; }
+        #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--grad-btn); z-index: 999999; display: flex; justify-content: center; align-items: center; }
+        .auth-box { background: var(--card); border-radius: 32px; padding: 45px 25px; text-align: center; width: 90%; max-width: 380px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
+        .auth-input { width: 100%; padding: 22px; margin: 25px 0; border-radius: 16px; border: 2px solid var(--border); background: #EDF2F7; color: var(--p); font-size: 2.2rem; text-align: center; font-weight: 900; letter-spacing: 12px; -webkit-text-security: disc; transition: 0.3s; }
+        .auth-input:focus { border-color: var(--p); background: #fff; box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.2); }
 
         /* TICKER */
-        .ticker-wrap { width: 100%; background: rgba(0, 255, 65, 0.08); border-bottom: 1px solid rgba(0, 255, 65, 0.2); overflow: hidden; white-space: nowrap; padding: 12px 0; display: none; position: sticky; top: 0; z-index: 999; backdrop-filter: blur(10px); }
-        .ticker-move { display: inline-block; animation: ticker 45s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 2rem; font-weight: 800; font-size: 0.85rem; }
+        .ticker-wrap { width: 100%; background: #E6FFFA; border-bottom: 1px solid #B2F5EA; overflow: hidden; white-space: nowrap; padding: 12px 0; display: none; position: sticky; top: 0; z-index: 999; }
+        .ticker-move { display: inline-block; animation: ticker 40s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2rem; font-weight: 800; font-size: 0.85rem; color: #234E52; }
         .t-blink { color: var(--live); animation: blink 1.2s infinite; font-weight: 900; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        @keyframes blink { 50% { opacity: 0.3; } }
+        @keyframes blink { 50% { opacity: 0.4; } }
 
-        /* ANALYTICAL STRATEGY PANEL */
-        .strategy-card { background: linear-gradient(135deg, rgba(241, 196, 15, 0.08), rgba(0,0,0,0.5)); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 25px; }
-        .strat-line { margin-bottom: 15px; border-left: 3px solid var(--gold); padding-left: 12px; }
+        /* STRATEGY PANEL */
+        .strategy-card { background: linear-gradient(135deg, #EBF8FF, #F0FFF4); border: 1px solid #90CDF4; border-radius: 24px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .strat-line { margin-bottom: 15px; border-left: 4px solid var(--cyan); padding-left: 12px; }
         .strat-line:last-child { margin-bottom: 0; }
-        .strat-line b { color: var(--gold); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; }
-        .strat-line p { margin: 0; font-weight: 600; font-size: 0.85rem; color: #ddd; line-height: 1.5; }
+        .strat-line b { color: #2C5282; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; }
+        .strat-line p { margin: 0; font-weight: 600; font-size: 0.85rem; color: #2A4365; line-height: 1.5; }
 
         /* BUTTONS */
-        .btn-sync { width: 100%; padding: 22px; background: linear-gradient(135deg, var(--p), #00cc6e); color: #000; border: none; border-radius: 20px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,255,136,0.2); transition: 0.2s; }
-        .btn-sync:active { transform: scale(0.98); }
+        .btn-sync { width: 100%; padding: 22px; background: var(--grad-btn); color: #fff; border: none; border-radius: 20px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; cursor: pointer; box-shadow: 0 8px 20px rgba(0, 114, 255, 0.3); transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-sync:active { transform: scale(0.98); box-shadow: 0 4px 10px rgba(0, 114, 255, 0.2); }
         .ai-controls { display:flex; gap:10px; margin-bottom: 25px; }
-        .date-picker { padding: 15px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); color: #fff; flex: 1; text-align:center; font-weight: 800; font-size: 0.9rem; }
-        .btn-ai { padding: 15px; border: 1px solid var(--ai); color: var(--ai); border-radius: 14px; background: rgba(255,0,255,0.05); font-weight: 900; flex: 1.5; cursor: pointer; }
+        .date-picker { padding: 15px; border-radius: 16px; border: 2px solid var(--border); background: var(--card); color: var(--txt); flex: 1; text-align:center; font-weight: 800; font-size: 0.9rem; }
+        .btn-ai { padding: 15px; border: 2px solid var(--ai); color: var(--ai); border-radius: 16px; background: #FFF5F7; font-weight: 900; flex: 1.5; cursor: pointer; }
 
         /* MATCH CARDS (UI) */
-        .league-header { background: linear-gradient(90deg, #1a202c, #0b0e14); color: var(--gold); padding: 12px 18px; border-radius: 14px; font-weight: 900; margin: 30px 0 12px 0; border-left: 5px solid var(--gold); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
-        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 28px; margin-bottom: 20px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s; }
+        .league-header { background: linear-gradient(90deg, #4A5568, #2D3748); color: #fff; padding: 12px 18px; border-radius: 14px; font-weight: 900; margin: 30px 0 12px 0; border-left: 6px solid var(--p); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; margin-bottom: 20px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .match-card:active { transform: scale(0.98); }
-        .match-card.finished { opacity: 0.65; filter: grayscale(0.6); }
+        .match-card.finished { opacity: 0.7; filter: grayscale(0.2); }
         
         .card-body { padding: 20px; }
         .team-box { display: flex; justify-content: space-between; align-items: center; }
         .team-info { display: flex; flex-direction: column; flex: 1; }
         .name-row { display: flex; align-items: center; margin-bottom: 4px; }
-        .rank-badge { background: var(--cyan); color: #000; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 5px; margin-right: 10px; min-width: 24px; text-align: center; }
-        .team-name { font-weight: 800; font-size: 1.1rem; color: #fff; }
+        .rank-badge { background: #EDF2F7; color: var(--txt-muted); font-size: 0.65rem; font-weight: 900; padding: 3px 6px; border-radius: 6px; margin-right: 10px; min-width: 24px; text-align: center; border: 1px solid var(--border); }
+        .team-name { font-weight: 800; font-size: 1.1rem; color: var(--txt); }
         
-        .meta-row { display: flex; align-items: center; gap: 12px; margin-left: 34px; margin-bottom: 12px; }
+        .meta-row { display: flex; align-items: center; gap: 12px; margin-left: 36px; margin-bottom: 12px; }
         .form-dots { display: flex; gap: 4px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-        .dot.W { background: var(--p); box-shadow: 0 0 5px var(--p); } 
+        .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+        .dot.W { background: var(--live); box-shadow: 0 0 4px var(--live); } 
         .dot.D { background: var(--gold); } 
         .dot.L { background: var(--alert); }
-        .xg-label { font-size: 0.7rem; font-weight: 700; color: #8b949e; }
-        .xg-label b { color: #fff; }
+        .xg-label { font-size: 0.75rem; font-weight: 700; color: var(--txt-muted); }
+        .xg-label b { color: var(--txt); }
 
-        .score-box { font-size: 2.2rem; font-weight: 900; color: #fff; text-align: right; min-width: 80px; letter-spacing: -1px; }
-        .live-time { font-size: 0.7rem; color: var(--live); font-weight: 900; margin-top: 5px; text-align: right; text-transform: uppercase; }
+        .score-box { font-size: 2.2rem; font-weight: 900; color: var(--txt); text-align: right; min-width: 80px; letter-spacing: -1px; }
+        .live-time { font-size: 0.75rem; color: var(--live); font-weight: 900; margin-top: 5px; text-align: right; text-transform: uppercase; }
 
-        .progress-bar { width: 100%; background: rgba(0,0,0,0.5); height: 6px; }
-        .progress-fill { height: 100%; background: var(--p); box-shadow: 0 0 10px var(--p); transition: width 1s; }
+        .progress-bar { width: 100%; background: #EDF2F7; height: 6px; }
+        .progress-fill { height: 100%; background: var(--live); transition: width 1s; }
 
-        .card-predictions { display: grid; grid-template-columns: repeat(4, 1fr); background: rgba(0,0,0,0.4); padding: 15px; text-align: center; gap: 5px; border-top: 1px solid var(--border); }
-        .pred-item { display: flex; flex-direction: column; gap: 4px; }
-        .pred-lbl { font-size: 0.6rem; color: #8b949e; font-weight: 800; text-transform: uppercase; }
-        .pred-val { font-size: 0.9rem; font-weight: 900; color: var(--gold); }
-        .pred-val.p-green { color: var(--p); }
+        .card-predictions { display: grid; grid-template-columns: repeat(4, 1fr); background: #F7FAFC; padding: 15px; text-align: center; gap: 5px; border-top: 1px solid var(--border); }
+        .pred-item { display: flex; flex-direction: column; gap: 4px; border-right: 1px solid var(--border); }
+        .pred-item:last-child { border-right: none; }
+        .pred-lbl { font-size: 0.65rem; color: var(--txt-muted); font-weight: 800; text-transform: uppercase; }
+        .pred-val { font-size: 0.95rem; font-weight: 900; color: var(--p); }
 
         /* GENERATOR TOOLS */
-        #dashboardTools { margin-bottom: 25px; background: var(--card); padding: 18px; border-radius: 24px; border: 1px solid var(--border); }
-        select { background: #000; color: #fff; border: 1px solid var(--border); padding: 14px; border-radius: 12px; font-weight: 800; width: 100%; }
+        #dashboardTools { margin-bottom: 25px; background: var(--card); padding: 18px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        select { background: #EDF2F7; color: var(--txt); border: 1px solid var(--border); padding: 14px; border-radius: 12px; font-weight: 800; width: 100%; }
         
         /* ACCA DISPLAY */
-        #accaDisplay { display:none; background: linear-gradient(165deg, #161b22, #0b0e14); border: 2px solid var(--gold); border-radius: 30px; padding: 25px; margin-bottom: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.7); }
-        .acca-title { color: var(--gold); font-weight: 900; font-size: 1.4rem; margin-bottom: 20px; text-align: center; border-bottom: 1px solid rgba(241,196,15,0.2); padding-bottom: 15px; text-transform: uppercase; }
-        .acca-item-elite { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 18px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .acca-error { background: rgba(255,77,77,0.1); color: var(--alert); padding: 15px; border-radius: 15px; text-align: center; font-weight: 800; border: 1px solid var(--alert); }
+        #accaDisplay { display:none; background: #FFFFFF; border: 2px solid var(--p); border-radius: 24px; padding: 25px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,114,255,0.15); }
+        .acca-title { color: var(--p); font-weight: 900; font-size: 1.4rem; margin-bottom: 20px; text-align: center; border-bottom: 2px dashed #EDF2F7; padding-bottom: 15px; text-transform: uppercase; }
+        .acca-item-elite { background: #F7FAFC; border: 1px solid var(--border); padding: 18px; margin-bottom: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .acca-match-name { font-weight: 800; font-size: 0.95rem; color: var(--txt); }
+        .acca-pick-label { font-size: 1.2rem; font-weight: 900; color: var(--p); background: #EBF8FF; padding: 5px 12px; border-radius: 8px; }
+        .acca-error { background: #FFF5F5; color: var(--alert); padding: 15px; border-radius: 15px; text-align: center; font-weight: 800; border: 1px solid #FEB2B2; }
 
-        /* DEEP INTEL PANEL */
+        /* PANELS */
         #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
         
-        /* FIXED CLOSE BUTTON */
-        .btn-close-p { background: var(--alert); color: #fff; padding: 10px 18px; border-radius: 12px; font-weight: 900; border: none; cursor: pointer; position: absolute; right: 15px; top: 15px; z-index: 10001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .btn-close-p { background: var(--card); color: var(--txt); border: 2px solid var(--border); padding: 12px 18px; border-radius: 16px; font-weight: 900; cursor: pointer; position: absolute; right: 15px; top: 15px; z-index: 10001; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         
-        .intel-header { padding: 30px 0 20px 0; text-align: center; position: relative; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .intel-header { padding: 40px 0 20px 0; text-align: center; position: relative; border-bottom: 2px dashed var(--border); margin-bottom: 20px; }
+        .intel-header h2 { color: var(--txt); margin: 0 0 10px 0; font-size: 1.4rem; }
         
         .section-title { color: var(--p); font-size: 1rem; font-weight: 900; margin: 30px 0 15px 0; text-transform: uppercase; letter-spacing: 1px; border-left: 4px solid var(--p); padding-left: 10px; }
         
-        .clean-table { width: 100%; border-collapse: collapse; margin: 15px 0; background: #161b22; border-radius: 18px; overflow: hidden; }
-        .clean-table th { background: #000; color: var(--gold); padding: 14px; font-size: 0.75rem; }
-        .clean-table td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 800; text-align: center; font-size: 0.95rem; }
+        .clean-table { width: 100%; border-collapse: collapse; margin: 15px 0; background: var(--card); border-radius: 18px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--border); }
+        .clean-table th { background: #EDF2F7; color: var(--txt-muted); padding: 14px; font-size: 0.75rem; text-transform: uppercase; }
+        .clean-table td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 800; text-align: center; font-size: 1rem; color: var(--txt); }
 
-        /* LARGE FORM DOTS IN INTEL PANEL */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .stat-box { background: #161b22; padding: 20px 10px; border-radius: 18px; border: 1px solid var(--border); text-align: center; }
-        .stat-box h4 { margin: 0 0 15px 0; font-size: 0.85rem; color: var(--cyan); text-transform: uppercase; }
+        .stat-box { background: var(--card); padding: 20px 10px; border-radius: 18px; border: 1px solid var(--border); text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .stat-box h4 { margin: 0 0 15px 0; font-size: 0.85rem; color: var(--txt-muted); text-transform: uppercase; }
         
         .form-dots-large { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
         .form-dots-large .dot { width: 14px; height: 14px; border-radius: 50%; }
-        .form-xg-stats { font-size: 0.85rem; font-weight: 800; color: #8b949e; }
-        .form-xg-stats b { color: #fff; font-size: 1rem; }
+        .form-xg-stats { font-size: 0.85rem; font-weight: 800; color: var(--txt-muted); }
+        .form-xg-stats b { color: var(--txt); font-size: 1rem; }
 
-        .history-item { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.05); }
-        .h2h-score { color: var(--gold); font-size: 1.1rem; font-weight: 900; }
+        .history-item { background: #F7FAFC; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.85rem; font-weight: 700; border: 1px solid var(--border); color: var(--txt); }
+        .h2h-score { color: var(--p); font-size: 1.1rem; font-weight: 900; background: #EBF8FF; padding: 2px 8px; border-radius: 6px; }
 
-        .consensus-list { background: rgba(0,212,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid var(--cyan); }
-        .consensus-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); font-size: 0.9rem; font-weight: 800; }
+        .consensus-list { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .consensus-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 0.95rem; font-weight: 800; color: var(--txt); }
         .consensus-item:last-child { border-bottom: none; }
-        .consensus-item b { color: var(--p); }
+        .consensus-item b { color: var(--p); background: #EBF8FF; padding: 4px 10px; border-radius: 8px; }
 
-        .sub-row { display: flex; justify-content: space-between; padding: 14px 18px; border-bottom: 1px dashed #333; font-size: 0.95rem; }
-        .section-separator { text-align: center; padding: 40px 0 20px 0; color: var(--finished); font-weight: 900; letter-spacing: 4px; font-size: 0.85rem; }
+        .sub-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid #EDF2F7; font-size: 0.95rem; color: var(--txt); font-weight: 600; }
+        .sub-row b { color: var(--p); font-size: 1.1rem; }
+        .section-separator { text-align: center; padding: 40px 0 20px 0; color: var(--txt-muted); font-weight: 900; letter-spacing: 4px; font-size: 0.85rem; }
         
-        #rawDataOutput { width: 100%; height: 180px; background: #000; color: var(--p); font-family: monospace; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 15px; padding: 15px; margin-top: 25px; display: none; }
+        #pdfExportArea { background: var(--card); border-radius: 24px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
     </style>
 </head>
 <body>
 
 <div id="authScreen">
     <div class="auth-box">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-        <p style="color:#8b949e; font-weight:bold; font-size:0.8rem; margin-top:10px;">V415 BULLETPROOF SPEC</p>
+        <h1 style="color:var(--p); margin:0; font-size:2.5rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
+        <p style="color:var(--txt-muted); font-weight:bold; font-size:0.85rem; margin-top:10px;">V450 JOYFUL BULLETPROOF</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)">
     </div>
 </div>
@@ -136,8 +156,8 @@
     
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px; margin-top:10px;">
-            <h1 style="color:var(--p); margin:0; font-size:2.6rem; letter-spacing:-2px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--gold); font-weight:900; letter-spacing:3px;">THE SOVEREIGN ENGINE</small>
+            <h1 style="color:var(--p); margin:0; font-size:2.6rem; letter-spacing:-1px;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
+            <small style="color:var(--txt-muted); font-weight:900; letter-spacing:3px;">THE LIGHT ENGINE</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -145,15 +165,15 @@
         <div class="strategy-card">
             <div class="strat-line">
                 <b>⚽ OVER 2.5 (ΓΚΟΛ)</b> 
-                <p>Επίλεξε αγώνες με Συνολικό xG πάνω από 2.95. Είναι το ασφαλέστερο όριο για χτίσιμο παρολί (3-άδες/4-άδες), με το σύστημα να επιβεβαιώνει 82% ιστορική επαλήθευση.</p>
+                <p>Επίλεξε αγώνες με Συνολικό xG πάνω από 2.95. Είναι το ασφαλέστερο όριο για χτίσιμο παρολί (3-άδες/4-άδες).</p>
             </div>
             <div class="strat-line">
                 <b>💣 BOMBS (ΑΟΥΤΣΑΪΝΤΕΡ)</b> 
-                <p>Πόνταρε σε Μονά Αποδεκτά ΜΟΝΟ όταν το αουτσάιντερ έχει Επιθετική Πίεση (Pressure Factor) > 4.0 και καλύτερη πρόσφατη φόρμα από το φαβορί.</p>
+                <p>Πόνταρε σε Μονά Αποδεκτά ΜΟΝΟ όταν το αουτσάιντερ έχει Pressure Factor > 4.0 και καλύτερη πρόσφατη φόρμα.</p>
             </div>
             <div class="strat-line">
                 <b>🎯 ΑΚΡΙΒΗ ΣΚΟΡ</b> 
-                <p>Εστίασε στις προτάσεις του AI Generator που ξεπερνούν το 85% Confidence. Αποδίδουν άριστα σε συστήματα ζητουμένων (2-3-4).</p>
+                <p>Εστίασε στις προτάσεις του AI Generator που ξεπερνούν το 85% Confidence. Ιδανικά για συστήματα 2-3-4.</p>
             </div>
         </div>
 
@@ -162,8 +182,8 @@
             <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB REPORT</button>
         </div>
 
-        <div id="syncCont" style="display:none; margin-bottom:25px; padding:10px;">
-            <div id="syncStep" style="color:var(--p); font-weight:900; font-size:0.8rem; margin-bottom:8px; text-transform:uppercase;">ΕΝΑΡΞΗ ΑΝΑΛΥΣΗΣ...</div>
+        <div id="syncCont" style="display:none; margin-bottom:25px; background:var(--card); padding:20px; border-radius:20px; border:1px solid var(--border); box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+            <div id="syncStep" style="color:var(--p); font-weight:900; font-size:0.85rem; margin-bottom:10px; text-transform:uppercase;">ΕΝΑΡΞΗ ΑΝΑΛΥΣΗΣ...</div>
             <div class="progress-bar" style="border-radius:5px;"><div id="syncFill" class="progress-fill" style="width:0%;"></div></div>
         </div>
 
@@ -181,7 +201,7 @@
                 <select id="accaSize">
                     <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
                 </select>
-                <button onclick="generateAcca()" style="background:var(--value); border:none; border-radius:12px; color:#fff; font-weight:900; cursor:pointer; font-size:0.9rem;">GENERATE</button>
+                <button onclick="generateAcca()" style="background:var(--p); border:none; border-radius:12px; color:#fff; font-weight:900; cursor:pointer; font-size:0.9rem;">GENERATE</button>
             </div>
         </div>
 
@@ -190,10 +210,10 @@
         <div id="finishedSection" style="display:none;"><div class="section-separator">ΤΕΛΙΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ</div><div id="finishedMatchList"></div></div>
 
         <div id="intelPanel">
+            <button onclick="closePanel('intelPanel')" class="btn-close-p">Χ</button>
             <div class="intel-header">
-                <button onclick="closePanel('intelPanel')" class="btn-close-p">Χ</button>
-                <h2 id="mTitle" style="color:var(--gold); margin:0 0 10px 0; font-size:1.3rem;"></h2>
-                <div id="bigScore" style="font-size:4rem; font-weight:900; color:#fff; letter-spacing:-2px;"></div>
+                <h2 id="mTitle" style="color:var(--txt); margin:0 0 10px 0; font-size:1.3rem;"></h2>
+                <div id="bigScore" style="font-size:4rem; font-weight:900; color:var(--p); letter-spacing:-2px;"></div>
                 <div id="intelLiveTime" class="t-blink" style="display:none; color:var(--live); font-weight:900; font-size:1.2rem; margin-top:5px;"></div>
             </div>
 
@@ -213,24 +233,24 @@
             </div>
 
             <div class="section-title">⚔️ ΠΡΟΪΣΤΟΡΙΑ (H2H - LAST 5)</div>
-            <div id="h2hList" style="background:#161b22; padding:15px; border-radius:18px; border:1px solid var(--border);"></div>
+            <div id="h2hList" style="background:var(--card); padding:15px; border-radius:18px; border:1px solid var(--border); box-shadow:0 4px 15px rgba(0,0,0,0.03);"></div>
 
             <div class="section-title">🔮 TOP 10 PREDICTION SITES CONSENSUS</div>
             <div class="consensus-list" id="predSitesConsensus"></div>
         </div>
 
         <div id="aiPanel">
-            <div style="display:flex; gap:12px; margin-bottom: 25px;">
-                <button onclick="exportToPDF()" style="flex:1; background:var(--cyan); border:none; padding:18px; border-radius:15px; font-weight:900; color:#000;">📥 EXPORT PDF</button>
-                <button onclick="copyRawData()" style="flex:1; background:var(--gold); border:none; padding:18px; border-radius:15px; font-weight:900; color:#000;">📋 COPY DATA</button>
-                <button onclick="closePanel('aiPanel')" class="btn-close-p" style="position:relative; right:0; top:0; flex:0.4;">Χ</button>
+            <button onclick="closePanel('aiPanel')" class="btn-close-p">Χ</button>
+            <div id="pdfExportArea">
+                <h2 style="text-align:center; color:var(--p); margin-top:0; font-size:1.6rem; letter-spacing:-1px;">🧠 EFFECTIVENESS REPORT</h2>
+                <div id="aiMsg" style="text-align:center; font-weight:bold; color:var(--txt-muted); margin-bottom:20px;"></div>
+                <div id="aiResultsBox" style="background:#F7FAFC; border:1px solid var(--border); border-radius:20px; padding:10px;"></div>
             </div>
-            <div id="pdfExportArea" style="background:#0b0e14; padding:25px; border-radius:25px; border:1px solid var(--border);">
-                <h2 style="text-align:center; color:var(--ai); margin-top:0;">🧠 EFFECTIVENESS REPORT</h2>
-                <div id="aiMsg" style="text-align:center; font-weight:bold; color:var(--gold); margin-bottom:20px;"></div>
-                <div id="aiResultsBox"></div>
-                <textarea id="rawDataOutput" readonly></textarea>
+            <div style="display:flex; gap:12px; margin-top: 25px;">
+                <button onclick="exportToPDF()" style="flex:1; background:var(--cyan); border:none; padding:18px; border-radius:16px; font-weight:900; color:#fff; box-shadow:0 4px 10px rgba(49,130,206,0.3);">📥 EXPORT PDF</button>
+                <button onclick="copyRawData()" style="flex:1; background:var(--gold); border:none; padding:18px; border-radius:16px; font-weight:900; color:#fff; box-shadow:0 4px 10px rgba(214,158,46,0.3);">📋 COPY DATA</button>
             </div>
+            <textarea id="rawDataOutput" style="display:none; width:100%; height:100px; margin-top:15px;"></textarea>
         </div>
     </div>
 </div>
@@ -275,13 +295,13 @@ function calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv, w) {
 // --- AUTH ---
 function instantAuth(input) {
     if (input.value === "106014") {
-        sessionStorage.setItem("p_auth_v415", "1");
+        sessionStorage.setItem("p_auth_v450", "1");
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
         startSystem();
     }
 }
-window.onload = () => { if(sessionStorage.getItem("p_auth_v415")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
+window.onload = () => { if(sessionStorage.getItem("p_auth_v450")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
 
 function startSystem() { fetchLiveTicker(); setInterval(fetchLiveTicker, 60000); document.getElementById('evalDate').value = new Date().toISOString().split('T')[0]; }
 
@@ -295,9 +315,11 @@ async function globalSync() {
         const myFix = (await fR.json()).response.filter(m => LEAGUES.some(l => l.id === m.league.id));
         
         for (const lg of LEAGUES) {
-            const sR = await fetch(`https://v3.football.api-sports.io/standings?league=${lg.id}&season=2024`, { headers: {"x-apisports-key": KEY} });
-            const sD = await sR.json();
-            if(sD.response?.[0]?.league?.standings?.[0]) sD.response[0].league.standings[0].forEach(t => standingsMap[t.team.id] = t.rank);
+            try {
+                const sR = await fetch(`https://v3.football.api-sports.io/standings?league=${lg.id}&season=2024`, { headers: {"x-apisports-key": KEY} });
+                const sD = await sR.json();
+                if(sD.response?.[0]?.league?.standings?.[0]) sD.response[0].league.standings[0].forEach(t => standingsMap[t.team.id] = t.rank);
+            } catch(e) {}
         }
 
         for (let i=0; i<myFix.length; i++) {
@@ -307,7 +329,8 @@ async function globalSync() {
             
             try {
                 const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
-                const pD = (await pR.json()).response?.[0];
+                const pData = await pR.json();
+                const pD = pData.response?.[0];
                 
                 if(pD) {
                     const w = getWeights(m.league.id);
@@ -354,7 +377,7 @@ function generateMatchCard(d, isF) {
                     </div>
                 </div>
                 <div>
-                    <div class="score-box" style="color:${isLive?'var(--live)':'#fff'}">${d.fixture.goals.home??'-'}:${d.fixture.goals.away??'-'}</div>
+                    <div class="score-box" style="color:${isLive?'var(--live)':(isF?'var(--txt-muted)':'var(--txt)')}">${d.fixture.goals.home??'-'}:${d.fixture.goals.away??'-'}</div>
                     ${isLive ? `<div class="live-time t-blink">${elapsed}' LIVE</div>` : ''}
                 </div>
             </div>
@@ -362,7 +385,7 @@ function generateMatchCard(d, isF) {
         ${isLive ? `<div class="progress-bar"><div class="progress-fill" style="width:${(elapsed/90)*100}%"></div></div>` : ''}
         <div class="card-predictions">
             <div class="pred-item"><span class="pred-lbl">POINT</span><span class="pred-val p-green">${bestPoint} (${Math.max(tP.h, tP.a)}%)</span></div>
-            <div class="pred-item"><span class="pred-lbl">SCORE</span><span class="pred-val">${Math.round(c.hXG)}-${Math.round(c.aXG)}</span></div>
+            <div class="pred-item"><span class="pred-lbl">SCORE</span><span class="pred-val" style="color:var(--p)">${Math.round(c.hXG)}-${Math.round(c.aXG)}</span></div>
             <div class="pred-item"><span class="pred-lbl">CRN</span><span class="pred-val">> ${Math.floor(hCr+aCr-0.5)}.5</span></div>
             <div class="pred-item"><span class="pred-lbl">CARD</span><span class="pred-val">${Math.floor(cards)}.5</span></div>
         </div>
@@ -375,7 +398,7 @@ function renderMatches() {
     LEAGUES.forEach(lg => {
         let lData = masterData.filter(d => (sel==='ALL' || d.fixture.league.id == sel) && d.fixture.league.id === lg.id);
         if(lData.length > 0) {
-            let actH = `<div class="league-header">🏆 ${lg.name}</div>`, finH = `<div class="league-header" style="opacity:0.6;">🏆 ${lg.name} (ΤΕΛΙΚΑ)</div>`, hasA = false, hasF = false;
+            let actH = `<div class="league-header">🏆 ${lg.name}</div>`, finH = `<div class="league-header" style="opacity:0.6; background:linear-gradient(90deg, #CBD5E0, #E2E8F0); color:#4A5568;">🏆 ${lg.name} (ΤΕΛΙΚΑ)</div>`, hasA = false, hasF = false;
             lData.forEach(d => { if(['FT','AET','PEN'].includes(d.fixture.fixture.status.short)) { finH += generateMatchCard(d, true); hf = true; } else { actH += generateMatchCard(d, false); ha = true; } });
             if(hasA) act.innerHTML += actH;
             if(hasF) { document.getElementById('finishedSection').style.display='block'; fin.innerHTML += finH; }
@@ -404,7 +427,7 @@ async function openDeepIntel(id) {
         <tr><th>Metric</th><th>HOME</th><th>AWAY</th></tr>
         <tr><td>xG Attack</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr>
         <tr><td>xGA Defense</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
-        <tr><td>xCorners</td><td>${hCr.toFixed(2)}${c.aXGA<=0.6?' 🔥':''}</td><td>${aCr.toFixed(2)}${c.hXGA<=0.6?' 🔥':''}</td></tr>
+        <tr><td>xCorners</td><td>${hCr.toFixed(2)}</td><td>${aCr.toFixed(2)}</td></tr>
         <tr><td>xCards</td><td>${hCa.toFixed(2)}</td><td>${aCa.toFixed(2)}</td></tr>
     `;
 
@@ -415,22 +438,22 @@ async function openDeepIntel(id) {
     document.getElementById('homeTeamFormName').innerText = d.fixture.teams.home.name;
     document.getElementById('homeFormList').innerHTML = `
         <div class="form-dots-large">${hForm.map(r=>`<div class="dot ${r}"></div>`).join('')}</div>
-        <div class="form-xg-stats">Avg xG: <b>${c.hXG.toFixed(2)}</b> | Avg xGA: <b>${c.hXGA.toFixed(2)}</b></div>
+        <div class="form-xg-stats">Avg xG: <b>${c.hXG.toFixed(2)}</b><br>Avg xGA: <b>${c.hXGA.toFixed(2)}</b></div>
     `;
 
     document.getElementById('awayTeamFormName').innerText = d.fixture.teams.away.name;
     document.getElementById('awayFormList').innerHTML = `
         <div class="form-dots-large">${aForm.map(r=>`<div class="dot ${r}"></div>`).join('')}</div>
-        <div class="form-xg-stats">Avg xG: <b>${c.aXG.toFixed(2)}</b> | Avg xGA: <b>${c.aXGA.toFixed(2)}</b></div>
+        <div class="form-xg-stats">Avg xG: <b>${c.aXG.toFixed(2)}</b><br>Avg xGA: <b>${c.aXGA.toFixed(2)}</b></div>
     `;
 
     // Fetch H2H
-    document.getElementById('h2hList').innerHTML = "<div style='text-align:center; color:#888;'>Loading H2H...</div>";
+    document.getElementById('h2hList').innerHTML = "<div style='text-align:center; color:var(--txt-muted);'>Φόρτωση H2H...</div>";
     try {
         const h2hR = await fetch(`https://v3.football.api-sports.io/fixtures/headtohead?h2h=${d.fixture.teams.home.id}-${d.fixture.teams.away.id}&last=5`, {headers:{"x-apisports-key": KEY}});
         const h2hD = (await h2hR.json()).response;
-        document.getElementById('h2hList').innerHTML = h2hD.length > 0 ? h2hD.map(m => `<div class="history-item"><span>${m.fixture.date.split('T')[0]}</span> <span>${m.teams.home.name} <b class="h2h-score">${m.goals.home}-${m.goals.away}</b> ${m.teams.away.name}</span></div>`).join('') : "<div style='text-align:center;'>Δεν βρέθηκε πρόσφατη προϊστορία.</div>";
-    } catch(e) { document.getElementById('h2hList').innerHTML = "Σφάλμα φόρτωσης H2H."; }
+        document.getElementById('h2hList').innerHTML = h2hD.length > 0 ? h2hD.map(m => `<div class="history-item"><span>${m.fixture.date.split('T')[0]}</span> <span>${m.teams.home.name} <b class="h2h-score">${m.goals.home}-${m.goals.away}</b> ${m.teams.away.name}</span></div>`).join('') : "<div style='text-align:center;color:var(--txt-muted);'>Δεν βρέθηκε πρόσφατη προϊστορία.</div>";
+    } catch(e) { document.getElementById('h2hList').innerHTML = "<div style='text-align:center;color:var(--alert);'>Σφάλμα φόρτωσης H2H.</div>"; }
 
     // Bookie Consensus
     const predSites = ["Forebet", "PredictZ", "Statarea", "WinDrawWin", "Vitibet", "SoccerVista", "BetExplorer", "ZuluBet", "ProTipster", "SportyTrader"];
@@ -438,7 +461,7 @@ async function openDeepIntel(id) {
     
     document.getElementById('predSitesConsensus').innerHTML = predSites.map((site, i) => {
         let pick = apiP; 
-        if(i % 4 === 0 && c.tProbs.d > 28) pick = 'X';
+        if(i % 4 === 0 && c.tProbs.d > 28) pick = 'X'; 
         return `<div class="consensus-item"><span>${site}</span> <b>ΠΡΟΒΛΕΨΗ: ${pick}</b></div>`;
     }).join('');
 }
@@ -464,7 +487,7 @@ function generateAcca() {
     }).filter(i => i.bProb > 0).sort((a,b) => b.bProb - a.bProb);
 
     if(pool.length < size) { 
-        display.innerHTML = `<div class="acca-error">⚠️ Βρέθηκαν μόνο ${pool.length} επερχόμενοι αγώνες κατάλληλοι για την αγορά ${market}. Δοκίμασε άλλη επιλογή ή λιγότερους αγώνες.</div>`;
+        display.innerHTML = `<div class="acca-error">⚠️ Βρέθηκαν μόνο ${pool.length} επερχόμενοι αγώνες κατάλληλοι για την αγορά ${market}. Δοκίμασε άλλη επιλογή.</div>`;
         display.style.display = 'block'; return; 
     }
 
@@ -474,30 +497,58 @@ function generateAcca() {
     window.scrollTo({ top: display.offsetTop - 20, behavior: 'smooth' });
 }
 
-// --- DATA LAB V415 (BULLETPROOF) ---
+// --- BULLETPROOF DATA LAB V450 ---
 async function runDeepEvaluation() {
     const tD = document.getElementById('evalDate').value; if(!tD) return;
-    document.getElementById('aiCont').style.display='block'; lastAnalyzedMatches = [];
+    document.getElementById('aiCont').style.display='block'; 
+    document.getElementById('aiResultsBox').innerHTML = ''; // Clear old results
+    lastAnalyzedMatches = [];
     let s = { pts:{'70+':{t:0,w:0},'60-69':{t:0,w:0}}, bombs:{t:0,w:0}, o25:{t:0,w:0}, scores:{t:0,w:0}, crn:{'>10.5':{t:0,w:0},'9.5-10.5':{t:0,w:0},'<9.5':{t:0,w:0}} };
     
     try {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
-        const tFix = (await fR.json()).response.filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
+        const fData = await fR.json();
         
+        if (fData.errors && Object.keys(fData.errors).length > 0) {
+            alert("Το API Limit ξεπεράστηκε. Δοκίμασε ξανά αύριο.");
+            document.getElementById('aiCont').style.display='none';
+            return;
+        }
+
+        const tFix = (fData.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
+        
+        if (tFix.length === 0) {
+            alert("Δεν βρέθηκαν ολοκληρωμένοι αγώνες για αυτή την ημερομηνία.");
+            document.getElementById('aiCont').style.display='none';
+            return;
+        }
+
         for (let i=0; i<tFix.length; i++) {
-            let m = tFix[i]; document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
-            await new Promise(r => setTimeout(r, 250)); // Rate limit Protection
+            let m = tFix[i]; 
+            document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
+            
+            // Προστασία API Limit (Αυξημένη καθυστέρηση)
+            await new Promise(r => setTimeout(r, 600)); 
             
             try {
                 const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
-                const pD = (await pR.json()).response?.[0];
-                if(!pD) continue; // Skip if no predictions found
+                const pData = await pR.json();
+                
+                if(pData.errors && Object.keys(pData.errors).length > 0) {
+                    console.warn("API limit hit. Σταματάμε την άντληση και εμφανίζουμε όσα βρήκαμε.");
+                    break; // Σπάει το loop αλλά πάει κατευθείαν στην εμφάνιση αποτελεσμάτων!
+                }
+                
+                const pD = pData.response?.[0];
+                if(!pD) continue;
 
-                const w = getWeights(m.league.id), hXG = advXG(pD.teams.home,'for'), aXG = advXG(pD.teams.away,'for');
-                const hXGA = advXG(pD.teams.home,'against'), aXGA = advXG(pD.teams.away,'against'), tP = calcTrueProbs(hXG, hXGA, aXG, aXGA, 0.15, w);
+                const w = getWeights(m.league.id);
+                const hXG = advXG(pD.teams.home,'for'), aXG = advXG(pD.teams.away,'for');
+                const hXGA = advXG(pD.teams.home,'against'), aXGA = advXG(pD.teams.away,'against');
+                const tP = calcTrueProbs(hXG, hXGA, aXG, aXGA, 0.15, w);
                 
                 const actH = m.goals.home, actA = m.goals.away;
-                if (actH === null || actA === null) continue; // Skip if score is null
+                if (actH === null || actA === null) continue;
 
                 const totG = actH + actA, act = actH > actA ? 'h' : (actA > actH ? 'a' : 'd');
                 lastAnalyzedMatches.push({ match: m.teams.home.name+'-'+m.teams.away.name, score: actH+'-'+actA, hXG, aXG, hXGA, aXGA });
@@ -509,7 +560,7 @@ async function runDeepEvaluation() {
                 if(hXG+aXG >= w.o25) { s.o25.t++; if(totG >= 3) s.o25.w++; }
                 s.scores.t++; if(Math.round(hXG) === actH && Math.round(aXG) === actA) s.scores.w++;
 
-                // Corners (Tolerant block: if it fails, it doesn't break the whole loop)
+                // Γρήγορη προσπέλαση Corners χωρίς να κρασάρει το app αν λείπουν δεδομένα
                 try {
                     const sR = await fetch(`https://v3.football.api-sports.io/fixtures/statistics?fixture=${m.fixture.id}`, { headers: {"x-apisports-key": KEY} });
                     const sD_json = await sR.json();
@@ -522,30 +573,28 @@ async function runDeepEvaluation() {
                         let cTier = predC > 10.5 ? '>10.5' : (predC >= 9.5 ? '9.5-10.5' : '<9.5');
                         s.crn[cTier].t++; if(actC >= Math.floor(predC-0.5)) s.crn[cTier].w++;
                     }
-                } catch(ce) { console.warn("No corner stats for fixture", m.fixture.id); }
+                } catch(ce) { }
 
-            } catch (innerErr) { console.error("Error analyzing match", innerErr); }
+            } catch (innerErr) { }
         }
         
         const pct = (o) => o.t > 0 ? Math.round(o.w/o.t*100) : 0;
-        const row = (l, o, k) => `<div class="sub-row"><span>${l}</span><b>${o[k].w}/${o[k].t} (${pct(o[k])}%)</b></div>`;
         const rowS = (l, obj) => `<div class="sub-row"><span>${l}</span><b>${obj.w}/${obj.t} (${pct(obj)}%)</b></div>`;
 
         document.getElementById('aiMsg').innerText = `ΟΛΟΚΛΗΡΩΘΗΚΕ Η ΑΝΑΛΥΣΗ ${lastAnalyzedMatches.length} ΑΓΩΝΩΝ`;
         document.getElementById('aiResultsBox').innerHTML = `
             <div class="section-title">📊 ΣΗΜΕΙΑ & ΜΠΟΜΠΕΣ</div>
-            ${row('True Prob >70%:', s.pts, '70+')}
-            ${row('True Prob 60-69%:', s.pts, '60-69')}
+            ${rowS('True Prob >70%:', s.pts['70+'])}
+            ${rowS('True Prob 60-69%:', s.pts['60-69'])}
             ${rowS('Value Bombs (<25%):', s.bombs)}
             <div class="section-title">⚽ ΓΚΟΛ & ΣΚΟΡ</div>
             ${rowS('Over 2.5 Hit Rate:', s.o25)}
             ${rowS('Exact Scores:', s.scores)}
             <div class="section-title">🚩 ΚΟΡΝΕΡ (ΑΝΑ TIER)</div>
-            ${row('Υψηλό (>10.5):', s.crn, '>10.5')}
-            ${row('Μεσαίο (9.5-10.5):', s.crn, '9.5-10.5')}
-            ${row('Χαμηλό (<9.5):', s.crn, '<9.5')}
-            <div class="section-title" style="color:var(--ai)">🤖 AI OPTIMIZER</div>
-            <div class="sub-row" style="color:var(--gold); font-size:0.8rem;">✅ Sovereign V415 Bulletproof Active. Resilient Analytics Processed.</div>`;
+            ${rowS('Υψηλό (>10.5):', s.crn['>10.5'])}
+            ${rowS('Μεσαίο (9.5-10.5):', s.crn['9.5-10.5'])}
+            ${rowS('Χαμηλό (<9.5):', s.crn['<9.5'])}
+        `;
         document.getElementById('aiPanel').style.display='block';
     } catch(e) { alert("Πρόβλημα σύνδεσης με το API."); }
     document.getElementById('aiCont').style.display='none';
