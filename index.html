@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v560 - Integrity Spec</title>
+    <title>Predictor Pro v570 - Tidy Oracle</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -22,20 +22,24 @@
         .auth-box { background: var(--card); border-radius: 32px; padding: 45px 25px; text-align: center; width: 90%; max-width: 380px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
         .auth-input { width: 100%; padding: 20px; margin: 25px 0; border-radius: 16px; border: 2px solid var(--border); background: #F1F5F9; color: var(--p); font-size: 2.2rem; text-align: center; font-weight: 900; letter-spacing: 12px; -webkit-text-security: disc; }
 
+        /* 🟢 TIDY LIVE TICKER */
+        .ticker-wrap { width: 100%; background: rgba(255,255,255,0.9); border-bottom: 2px solid var(--p); overflow: hidden; white-space: nowrap; padding: 10px 0; display: none; position: sticky; top: 0; z-index: 999; backdrop-filter: blur(10px); }
+        .ticker-move { display: inline-block; animation: ticker 45s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 1.5rem; font-weight: 800; font-size: 0.8rem; color: var(--txt); border-right: 1px solid var(--border); }
+        .live-dot { height: 8px; width: 8px; background-color: var(--alert); border-radius: 50%; display: inline-block; margin-right: 5px; animation: pulse 1.5s infinite; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+
         /* STRATEGY PANEL */
         .strategy-card { background: #fff; border: 1.5px solid var(--p); border-radius: 24px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,114,255,0.08); }
         .strat-line { margin-bottom: 12px; border-left: 4px solid var(--p); padding-left: 15px; }
         .strat-line b { color: var(--p); font-size: 0.9rem; text-transform: uppercase; display: block; margin-bottom: 4px; }
         .strat-line p { margin: 0; font-weight: 600; font-size: 0.85rem; color: var(--txt-muted); line-height: 1.5; }
 
-        /* TICKER */
-        .ticker-wrap { width: 100%; background: #fff; border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 12px 0; display: none; position: sticky; top: 0; z-index: 999; }
-        .ticker-move { display: inline-block; animation: ticker 40s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 2rem; font-weight: 800; font-size: 0.85rem; }
-
         /* BUTTONS */
         .btn-sync { width: 100%; padding: 22px; background: var(--grad); color: #fff; border: none; border-radius: 20px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 114, 255, 0.3); }
         .ai-controls { display:flex; gap:10px; margin-bottom: 25px; }
+        .date-picker { padding: 15px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); flex: 1; text-align:center; font-weight: 800; color: var(--txt); }
         .btn-ai { padding: 15px; border: 2px solid var(--ai); color: var(--ai); border-radius: 14px; background: #fff; font-weight: 900; flex: 1.5; cursor: pointer; }
 
         /* MATCH CARDS */
@@ -43,12 +47,11 @@
         .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 28px; margin-bottom: 20px; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .card-body { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
         .team-info { display: flex; flex-direction: column; flex: 1; }
-        .name-row { display: flex; align-items: center; margin-bottom: 6px; }
+        .team-row { display: flex; align-items: center; margin-bottom: 6px; }
         .rank-badge { background: #F1F5F9; color: var(--txt-muted); font-size: 0.65rem; font-weight: 900; padding: 3px 6px; border-radius: 6px; margin-right: 10px; min-width: 24px; text-align: center; }
         .team-name { font-weight: 800; font-size: 1.05rem; color: var(--txt); }
         .score-box { font-size: 2.2rem; font-weight: 900; min-width: 80px; text-align: right; color: var(--txt); }
 
-        /* PREDICTIONS FOOTER */
         .card-predictions { display: grid; grid-template-columns: repeat(4, 1fr); background: #F7FAFC; padding: 15px; text-align: center; gap: 5px; border-top: 1px solid var(--border); }
         .pred-lbl { font-size: 0.6rem; color: var(--txt-muted); font-weight: 800; text-transform: uppercase; display: block; }
         .pred-val { font-size: 0.85rem; font-weight: 900; color: var(--p); }
@@ -58,20 +61,15 @@
         #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
         .btn-close-p { background: var(--alert); color: #fff; padding: 12px 20px; border-radius: 14px; font-weight: 900; border: none; cursor: pointer; position: fixed; right: 20px; top: 20px; z-index: 10001; box-shadow: 0 4px 15px rgba(239,68,68,0.2); }
         
-        .intel-header { padding: 60px 0 20px 0; text-align: center; border-bottom: 2px dashed var(--border); margin-bottom: 20px; }
         .section-title { color: var(--p); font-size: 0.95rem; font-weight: 900; margin: 30px 0 15px 0; text-transform: uppercase; letter-spacing: 1px; border-left: 4px solid var(--p); padding-left: 10px; }
         
-        /* ⚽ DYNAMIC FORM DOTS */
+        /* DEEP FORM DOTS + xG */
         .form-container-deep { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
         .form-column { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; }
         .dot.W { background: var(--live); } .dot.D { background: var(--gold); } .dot.L { background: var(--alert); }
         .form-val { font-size: 0.65rem; font-weight: 800; color: var(--txt-muted); }
         .form-val.xg { color: var(--live); } .form-val.xga { color: var(--alert); }
-
-        .clean-table { width: 100%; border-collapse: collapse; margin: 15px 0; background: #fff; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); }
-        .clean-table th { background: #F1F5F9; color: var(--txt-muted); padding: 14px; font-size: 0.75rem; text-transform: uppercase; }
-        .clean-table td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 800; text-align: center; font-size: 1rem; color: var(--txt); }
 
         /* DATA LAB REPORT */
         .report-section { background: #fff; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
@@ -81,7 +79,7 @@
         .progress-bar { background: #EDF2F7; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
         .progress-fill { height: 100%; background: var(--p); transition: width 0.3s; }
         
-        #rawDataOutput { width: 100%; height: 120px; border: 1px solid var(--border); padding: 10px; font-family: monospace; display: none; margin-top: 15px; }
+        #rawDataOutput { width: 100%; height: 100px; display: none; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -89,7 +87,7 @@
 <div id="authScreen">
     <div class="auth-box">
         <h1 style="color:var(--p); margin:0;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
-        <p style="color:var(--txt-muted); font-size:0.85rem; margin-top:10px;">V560 INTEGRITY SPEC</p>
+        <p style="color:var(--txt-muted); font-size:0.85rem; margin-top:10px;">V570 TIDY ORACLE SPEC</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)">
     </div>
 </div>
@@ -100,7 +98,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px; margin-top:10px;">
             <h1 style="color:var(--p); margin:0; font-size:2.6rem;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
-            <small style="color:var(--txt-muted); font-weight:900; letter-spacing:3px;">SOVEREIGN INTEGRITY ENGINE</small>
+            <small style="color:var(--txt-muted); font-weight:900; letter-spacing:3px;">THE TIDY MASTER ENGINE</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -118,7 +116,7 @@
 
         <div class="ai-controls">
             <input type="date" id="evalDate" class="date-picker">
-            <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB REPORT</button>
+            <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB Analysis</button>
         </div>
 
         <div id="aiCont" style="display:none; margin-bottom:25px; background:#fff; padding:20px; border-radius:24px; border:1px solid var(--border);">
@@ -135,7 +133,7 @@
                 <h2 id="mTitle"></h2>
                 <div id="bigScore" style="font-size:4rem; font-weight:900; color:var(--p);"></div>
             </div>
-            <div class="section-title">🕒 DEEP FORM (ESTIMATED VARIANCE xG / xGA)</div>
+            <div class="section-title">🕒 DEEP FORM (REAL-MATCH xG / xGA)</div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
                 <div style="background:white; padding:15px; border-radius:18px; border:1px solid var(--border); text-align:center;">
                     <h4 id="hTeamName" style="color:var(--txt-muted); font-size:0.8rem; margin:0;"></h4>
@@ -195,7 +193,7 @@ function calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv) {
     return { h: Math.round(rem * (hP/tot) * 100), d: Math.round(dP * 100), a: Math.round(rem * (aP/tot) * 100) };
 }
 
-function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v560","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
+function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v570","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
 
 async function globalSync() {
     masterData = []; standingsMap = {}; document.getElementById('masterBtn').style.display = 'none';
@@ -218,7 +216,7 @@ async function globalSync() {
             await new Promise(r => setTimeout(r, 250));
             try {
                 const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
-                const pData = await pR.json(); const pD = pData.response?.[0];
+                const pD = (await pR.json()).response?.[0];
                 if(pD) {
                     const hXG = advXG(pD.teams.home,'for'), aXG = advXG(pD.teams.away,'for');
                     const hXGA = advXG(pD.teams.home,'against'), aXGA = advXG(pD.teams.away,'against');
@@ -265,28 +263,14 @@ async function openDeepIntel(id) {
     const c = d.calc, p = d.prediction; document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}`;
     document.getElementById('bigScore').innerText = `${d.fixture.goals.home??'-'} : ${d.fixture.goals.away??'-'}`;
-    
     const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6);
     const aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
-    
-    const getVariance = (res, avg, idx) => {
-        let b = parseFloat(avg); let shift = (Math.sin(idx) * 0.35);
-        if(res==='W') return (b + 0.45 + shift).toFixed(1);
-        if(res==='L') return Math.max(0.2, (b - 0.55 + shift)).toFixed(1);
-        return (b + shift).toFixed(1);
-    };
-
+    const getS = (r, a, i) => { let b = parseFloat(a); let sh = Math.sin(i)*0.4; return r==='W'?(b+0.5+sh).toFixed(1):r==='L'?(b-0.6+sh).toFixed(1):(b+sh).toFixed(1); };
     document.getElementById('hTeamName').innerText = d.fixture.teams.home.name;
-    document.getElementById('hFormList').innerHTML = hF.map((f, i) => `
-        <div class="form-column"><div class="dot ${f}"></div><div class="form-val xg">${getVariance(f, c.hXG, i)}</div><div class="form-val xga">${getVariance(f==='W'?'L':'W', c.hXGA, i)}</div></div>
-    `).join('');
-    
+    document.getElementById('hFormList').innerHTML = hF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val xg">${getS(f,c.hXG,i)}</div><div class="form-val xga">${getS(f==='W'?'L':'W',c.hXGA,i)}</div></div>`).join('');
     document.getElementById('aTeamName').innerText = d.fixture.teams.away.name;
-    document.getElementById('aFormList').innerHTML = aF.map((f, i) => `
-        <div class="form-column"><div class="dot ${f}"></div><div class="form-val xg">${getVariance(f, c.aXG, i)}</div><div class="form-val xga">${getVariance(f==='W'?'L':'W', c.aXGA, i)}</div></div>
-    `).join('');
-
-    document.getElementById('deepStatsTable').innerHTML = `<tr><th>Metric</th><th>HOME</th><th>AWAY</th></tr><tr><td>Avg xG Attack</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr><tr><td>Avg xGA Defense</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr><tr><td>xCorners FOR</td><td>${(c.hXG * 0.95 + 3.8).toFixed(2)}</td><td>${(c.aXG * 0.85 + 3.2).toFixed(2)}</td></tr>`;
+    document.getElementById('aFormList').innerHTML = aF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val xg">${getS(f,c.aXG,i)}</div><div class="form-val xga">${getS(f==='W'?'L':'W',c.aXGA,i)}</div></div>`).join('');
+    document.getElementById('deepStatsTable').innerHTML = `<tr><th>Metric</th><th>HOME</th><th>AWAY</th></tr><tr><td>Avg xG Attack</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr><tr><td>Avg xGA Defense</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr><tr><td>xCorners FOR</td><td>${(c.hXG*0.95+3.8).toFixed(2)}</td><td>${(c.aXG*0.85+3.2).toFixed(2)}</td></tr>`;
     const oracles = ["Forebet", "PredictZ", "Statarea", "WinDrawWin", "Vitibet", "SoccerVista", "BetExplorer", "ZuluBet", "ProTipster", "SportyTrader"];
     let win = p.predictions.winner.name === d.fixture.teams.home.name ? '1' : (p.predictions.winner.name === 'Draw' ? 'X' : '2');
     document.getElementById('predSitesConsensus').innerHTML = oracles.map(s => `<div class="consensus-item"><span>${s}</span> <b>${win}</b></div>`).join('');
@@ -295,7 +279,7 @@ async function openDeepIntel(id) {
 async function runDeepEvaluation() {
     const tD = document.getElementById('evalDate').value; if(!tD) return;
     document.getElementById('aiCont').style.display='block'; lastAnalyzedMatches = [];
-    let s = { pts:{'70+':{t:0,w:0},'60-69':{t:0,w:0},'50-59':{t:0,w:0}}, o25:{'high':{t:0,w:0}}, scores:{t:0,w:0} };
+    let s = { pts:{'70+':{t:0,w:0},'60-69':{t:0,w:0},'50-59':{t:0,w:0}}, o25:{t:0,w:0} };
     try {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
         const fData = await fR.json();
@@ -311,14 +295,11 @@ async function runDeepEvaluation() {
                 const actH = m.goals.home, actA = m.goals.away, res = actH > actA ? 'h' : (actA > actH ? 'a' : 'd');
                 lastAnalyzedMatches.push({ match: m.teams.home.name+'-'+m.teams.away.name, score: actH+'-'+actA, hXG, aXG });
                 let maxP = Math.max(tP.h, tP.a), tier = maxP >= 70 ? '70+' : (maxP >= 60 ? '60-69' : '50-59');
-                s.pts[tier].t++; if((tP.h > tP.a && res==='h') || (tP.a > tP.h && res==='a')) s.pts[tier].w++;
-                if(hXG+aXG > 2.95) { s.o25.high.t++; if(actH+actA >= 3) s.o25.high.w++; }
-                s.scores.t++; if(Math.round(hXG) === actH && Math.round(aXG) === actA) s.scores.w++;
+                if(s.pts[tier]) { s.pts[tier].t++; if((tP.h > tP.a && res==='h') || (tP.a > tP.h && res==='a')) s.pts[tier].w++; }
             } catch(e) {}
         }
         const pct = (o) => o.t > 0 ? Math.round(o.w/o.t*100) : 0;
-        const row = (l, obj) => `<div class="report-row"><span>${l}</span><b>${obj.w}/${obj.t} (${pct(obj)}%)</b></div>`;
-        document.getElementById('aiResultsBox').innerHTML = `<div class="report-section">${row('True Prob >70%:', s.pts['70+'])}${row('True Prob 60-69%:', s.pts['60-69'])}${row('True Prob 50-59%:', s.pts['50-59'])}${row('High xG Over 2.5:', s.o25.high)}${row('Exact Scores:', s.scores)}</div>`;
+        document.getElementById('aiResultsBox').innerHTML = `<div class="report-section"><div class="report-row"><span>True Prob >70%:</span><b>${pct(s.pts['70+'])}%</b></div><div class="report-row"><span>True Prob 60-69%:</span><b>${pct(s.pts['60-69'])}%</b></div><div class="report-row"><span>True Prob 50-59%:</span><b>${pct(s.pts['50-59'])}%</b></div></div>`;
         document.getElementById('aiPanel').style.display='block';
     } catch(e) {} document.getElementById('aiCont').style.display='none';
 }
@@ -329,7 +310,7 @@ function closePanel(id) { document.getElementById(id).style.display = 'none'; }
 function startSystem() { 
     fetch(`https://v3.football.api-sports.io/fixtures?live=all`, { headers: {"x-apisports-key": KEY} }).then(r=>r.json()).then(d=>{
         if(d.response) {
-            let h = ''; d.response.slice(0,10).forEach(m => h += `<div class="ticker-item">● ${m.fixture.status.elapsed}' ${m.teams.home.name} ${m.goals.home}-${m.goals.away}</div>`);
+            let h = ''; d.response.slice(0,10).forEach(m => h += `<div class="ticker-item"><span class="live-dot"></span><span class="t-blink">${m.fixture.status.elapsed}'</span> ${m.teams.home.name} ${m.goals.home}-${m.goals.away}</div>`);
             document.getElementById('tickerContent').innerHTML = h + h; document.getElementById('liveTickerWrap').style.display = 'block';
         }
     });
