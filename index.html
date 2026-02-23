@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v380 - Full Intelligence</title>
+    <title>Predictor Pro v385 - Ultra Mobile</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(22, 27, 34, 0.95); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
+        :root { --p:#00ff88; --bg:#0b0e14; --card:rgba(23, 28, 36, 0.98); --border:#30363d; --txt:#ffffff; --gold:#f1c40f; --cyan:#00d4ff; --value:#bf40bf; --alert:#ff4d4d; --live:#00ff41; --finished:#8b949e; --ai:#ff00ff; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; overflow-x: hidden; }
-        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 15px; }
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px 12px; }
 
         /* AUTH - PIN 106014 */
         #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; justify-content: center; align-items: center; }
@@ -18,54 +18,72 @@
         .auth-input { width: 100%; padding: 22px; margin: 25px 0; border-radius: 16px; border: 2px solid var(--border); background: #000; color: var(--p); font-size: 2.2rem; text-align: center; font-weight: 900; letter-spacing: 12px; -webkit-text-security: disc; }
 
         /* STRATEGY PANEL */
-        .strategy-card { background: rgba(241, 196, 15, 0.05); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 25px; }
-        .strat-line { margin-bottom: 12px; font-size: 0.85rem; line-height: 1.4; }
-        .strat-line b { color: var(--gold); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
-        .strat-line p { margin: 4px 0 0 0; font-weight: 700; color: #fff; }
+        .strategy-card { background: linear-gradient(135deg, rgba(241, 196, 15, 0.1), rgba(0,0,0,0.4)); border: 1px solid var(--gold); border-radius: 20px; padding: 18px; margin-bottom: 25px; }
+        .strat-line { margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+        .strat-line b { color: var(--gold); font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; margin-top: 3px; }
+        .strat-line p { margin: 0; font-weight: 700; font-size: 0.85rem; color: #fff; line-height: 1.3; }
 
         /* TICKER */
-        .ticker-wrap { width: 100%; background: rgba(0, 255, 65, 0.05); border-bottom: 1px solid rgba(0, 255, 65, 0.15); overflow: hidden; white-space: nowrap; padding: 14px 0; display: none; }
+        .ticker-wrap { width: 100%; background: rgba(0, 255, 65, 0.08); border-bottom: 1px solid rgba(0, 255, 65, 0.2); overflow: hidden; white-space: nowrap; padding: 12px 0; display: none; position: sticky; top: 0; z-index: 999; backdrop-filter: blur(10px); }
         .ticker-move { display: inline-block; animation: ticker 45s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 2.5rem; font-weight: 800; font-size: 0.85rem; }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .ticker-item { display: inline-block; padding: 0 2rem; font-weight: 800; font-size: 0.85rem; }
 
-        /* BUTTONS */
-        .btn-sync { width: 100%; padding: 22px; background: linear-gradient(135deg, var(--p), #00cc6e); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; cursor: pointer; }
-        .ai-controls { display:flex; gap:10px; margin-bottom: 25px; }
+        /* UI CONTROLS */
+        .btn-sync { width: 100%; padding: 22px; background: linear-gradient(135deg, var(--p), #00cc6e); color: #000; border: none; border-radius: 20px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,255,136,0.2); }
+        .ai-controls { display:flex; gap:10px; margin-bottom: 20px; }
+        .date-picker { padding: 15px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); color: #fff; flex: 1; text-align:center; font-weight: 800; font-size: 0.9rem; }
         .btn-ai { padding: 15px; border: 1px solid var(--ai); color: var(--ai); border-radius: 14px; background: rgba(255,0,255,0.05); font-weight: 900; flex: 1.5; cursor: pointer; }
 
-        /* MATCH CARD ENHANCED */
-        .league-header { background: linear-gradient(90deg, #1a202c, #0b0e14); color: var(--gold); padding: 12px 18px; border-radius: 12px; font-weight: 900; margin: 25px 0 12px 0; border-left: 5px solid var(--gold); text-transform: uppercase; font-size: 0.8rem; }
-        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; margin-bottom: 18px; cursor: pointer; overflow: hidden; position: relative; }
-        .card-main { padding: 20px; display: flex; justify-content: space-between; align-items: flex-start; }
-        .team-block { flex: 1; }
-        .team-row { display: flex; align-items: center; margin-bottom: 8px; }
-        .team-names { font-weight: 900; font-size: 1.05rem; color: #fff; }
-        .rank-tag { background: var(--cyan); color: #000; font-size: 0.65rem; font-weight: 900; padding: 2px 5px; border-radius: 4px; margin-right: 8px; min-width: 22px; text-align: center; }
+        /* ENHANCED MATCH CARD */
+        .league-header { background: linear-gradient(90deg, #1a202c, #0b0e14); color: var(--gold); padding: 10px 15px; border-radius: 12px; font-weight: 900; margin: 30px 0 12px 0; border-left: 5px solid var(--gold); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
         
-        /* FORM DOTS */
-        .form-row { display: flex; gap: 3px; margin: 4px 0 6px 30px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; }
-        .dot.W { background: var(--p); box-shadow: 0 0 5px var(--p); }
-        .dot.D { background: var(--gold); }
-        .dot.L { background: var(--alert); }
+        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 28px; margin-bottom: 20px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.1s; }
+        .match-card:active { transform: scale(0.98); }
+        .card-body { padding: 20px; }
         
-        /* xG MINI LAB */
-        .xg-mini { font-size: 0.7rem; font-weight: 800; color: #8b949e; margin-left: 30px; display: flex; gap: 10px; }
-        .xg-mini span b { color: var(--txt); }
+        /* TEAM ROWS */
+        .team-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .team-info { display: flex; flex-direction: column; flex: 1; }
+        .name-row { display: flex; align-items: center; margin-bottom: 5px; }
+        .rank-badge { background: var(--cyan); color: #000; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 5px; margin-right: 10px; min-width: 24px; text-align: center; }
+        .team-name { font-weight: 800; font-size: 1.1rem; color: #fff; }
+        
+        .meta-row { display: flex; align-items: center; gap: 10px; margin-left: 34px; }
+        .form-dots { display: flex; gap: 3px; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; }
+        .dot.W { background: var(--p); } .dot.D { background: var(--gold); } .dot.L { background: var(--alert); }
+        .xg-label { font-size: 0.65rem; font-weight: 700; color: #8b949e; }
+        .xg-label b { color: #fff; }
 
-        .score-display { font-size: 2rem; font-weight: 900; min-width: 70px; text-align: right; letter-spacing: -1px; }
-        .card-stats { display: grid; grid-template-columns: repeat(4, 1fr); background: rgba(0,0,0,0.3); padding: 12px; text-align: center; gap: 5px; border-top: 1px solid var(--border); }
-        .stat-label { font-size: 0.6rem; color: #8b949e; text-transform: uppercase; font-weight: 800; }
-        .stat-value { font-size: 0.9rem; font-weight: 900; }
+        .score-box { font-size: 2.2rem; font-weight: 900; color: #fff; text-align: right; letter-spacing: -2px; min-width: 80px; }
 
-        /* ACCA GRAPHICS */
-        #accaDisplay { display:none; background: linear-gradient(165deg, #161b22, #0b0e14); border: 2px solid var(--gold); border-radius: 28px; padding: 20px; margin-bottom: 30px; }
-        .acca-item-elite { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 15px; margin-bottom: 10px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; }
+        /* PREDICTIONS BLOCK IN CARD */
+        .card-predictions { display: grid; grid-template-columns: repeat(4, 1fr); background: rgba(0,0,0,0.4); padding: 15px; text-align: center; gap: 5px; border-top: 1px solid var(--border); }
+        .pred-item { display: flex; flex-direction: column; gap: 3px; }
+        .pred-lbl { font-size: 0.55rem; color: #8b949e; font-weight: 800; text-transform: uppercase; }
+        .pred-val { font-size: 0.85rem; font-weight: 900; color: var(--gold); }
+        .pred-val.p-green { color: var(--p); }
+
+        /* GEN TOOLS */
+        #dashboardTools { margin-bottom: 25px; background: var(--card); padding: 15px; border-radius: 24px; border: 1px solid var(--border); }
+        select { background: #000; color: #fff; border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 800; width: 100%; }
+
+        /* ACCA DISPLAY */
+        #accaDisplay { display:none; background: linear-gradient(165deg, #161b22, #0b0e14); border: 2px solid var(--gold); border-radius: 30px; padding: 20px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .acca-item-elite { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 15px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* PROGRESS BARS */
+        #syncCont, #aiCont { margin-bottom: 20px; }
+        .prog-bg { background: #000; height: 6px; border-radius: 3px; overflow: hidden; }
+        .prog-fill { height: 100%; transition: 0.3s; }
 
         /* PANELS */
-        #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 20px; }
+        #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
         .btn-close-p { background: var(--alert); color: #fff; padding: 12px 20px; border-radius: 12px; font-weight: 900; border: none; float: right; }
+        
+        .clean-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #161b22; border-radius: 20px; overflow: hidden; }
+        .clean-table th { background: #000; color: var(--gold); padding: 15px; font-size: 0.75rem; text-align: center; }
+        .clean-table td { padding: 15px 10px; border-bottom: 1px solid var(--border); font-weight: 800; text-align: center; font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -73,47 +91,52 @@
 <div id="authScreen">
     <div class="auth-box">
         <h1 style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1.5px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-        <p style="color:#8b949e; font-weight:bold; font-size:0.8rem; margin-top:10px;">V380 FULL INTELLIGENCE SPEC</p>
+        <p style="color:#8b949e; font-weight:bold; font-size:0.8rem; margin-top:10px;">V385 ULTRA MOBILE SPEC</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)">
+        <div id="authMsg" style="color:var(--alert); font-weight:900; font-size:0.85rem; height:20px;"></div>
     </div>
 </div>
 
 <div id="appContent" style="display:none;">
     <div class="ticker-wrap" id="liveTickerWrap"><div class="ticker-move" id="tickerContent"></div></div>
+    
     <div class="container">
-        <div style="text-align:center; padding-bottom: 15px;">
+        <div style="text-align:center; padding-bottom: 15px; margin-top: 10px;">
             <h1 style="color:var(--p); margin:0; font-size:2.5rem; letter-spacing:-2px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--gold); font-weight:900; letter-spacing:3px;">SOVEREIGN SMART ENGINE</small>
+            <small style="color:var(--gold); font-weight:900; letter-spacing:3px;">MOBILE SOVEREIGN ENGINE</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
 
         <div class="strategy-card">
-            <div class="strat-line"><b>⚽ OVER 2.5:</b> <p>Εμπιστεύσου xG > 2.95 για παρολί.</p></div>
-            <div class="strat-line"><b>💣 ΜΠΟΜΠΕΣ:</b> <p>Pressure > 4.0 & Καλύτερη Φόρμα.</p></div>
-            <div class="strat-line"><b>🎯 ΑΚΡΙΒΗ ΣΚΟΡ:</b> <p>Συστήματα 2-3-4 με Confidence > 85%.</p></div>
+            <div class="strat-line"><b>⚽ OVER 2.5</b> <p>xG > 2.95 (Safe Threshold)</p></div>
+            <div class="strat-line"><b>💣 BOMBS</b> <p>Pressure > 4.0 & Better Form</p></div>
+            <div class="strat-line"><b>🎯 SCORES</b> <p>Systems 2-3-4 with Confidence > 85%</p></div>
         </div>
 
         <div class="ai-controls">
             <input type="date" id="evalDate" class="date-picker">
-            <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB</button>
+            <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB REPORT</button>
         </div>
 
-        <div id="syncCont" style="display:none; margin-bottom:20px;"><div id="syncStep" style="color:var(--p); font-weight:900; font-size:0.8rem; margin-bottom:5px;">LOADING...</div><div style="background:#000; height:6px; border-radius:3px; overflow:hidden;"><div id="syncFill" style="background:var(--p); height:100%; width:0%;"></div></div></div>
+        <div id="syncCont" style="display:none;">
+            <div id="syncStep" style="color:var(--p); font-weight:900; font-size:0.8rem; margin-bottom:5px;">ENGINE ADAPTING...</div>
+            <div class="prog-bg"><div id="syncFill" class="prog-fill" style="background:var(--p); width:0%;"></div></div>
+        </div>
 
-        <div id="dashboardTools" style="display:none; margin-bottom:30px; background:var(--card); padding:15px; border-radius:20px; border:1px solid var(--border);">
-            <select id="leagueFilter" onchange="renderMatches()" style="margin-bottom:12px; background:#000; color:#fff; padding:15px; border-radius:12px; width:100%; font-weight:900;"></select>
+        <div id="dashboardTools" style="display:none;">
+            <select id="leagueFilter" onchange="renderMatches()" style="margin-bottom:12px;"></select>
             <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:8px;">
-                <select id="accaMarket" style="background:#000; color:#fff; padding:12px; border-radius:10px; font-weight:900;">
+                <select id="accaMarket">
                     <option value="WILDCARD">🃏 WILDCARD</option>
                     <option value="1X2">ΣΗΜΕΙΑ</option>
                     <option value="SCORE">🎯 ΣΚΟΡ</option>
                     <option value="BOMBS">💣 ΜΠΟΜΠΕΣ</option>
                 </select>
-                <select id="accaSize" style="background:#000; color:#fff; padding:12px; border-radius:10px; font-weight:900;">
+                <select id="accaSize">
                     <option value="3">3-ΑΔΑ</option><option value="4">4-ΑΔΑ</option><option value="5">5-ΑΔΑ</option>
                 </select>
-                <button onclick="generateAcca()" style="background:var(--value); border:none; border-radius:10px; color:#fff; font-weight:900; cursor:pointer;">GEN</button>
+                <button onclick="generateAcca()" style="background:var(--value); border:none; border-radius:12px; color:#fff; font-weight:900; cursor:pointer; font-size:0.8rem;">GEN</button>
             </div>
         </div>
 
@@ -124,20 +147,10 @@
         <div id="intelPanel">
             <button onclick="closePanel('intelPanel')" class="btn-close-p">ΠΙΣΩ</button>
             <h2 id="mTitle" style="text-align:center; color:var(--gold); margin-top:40px;"></h2>
-            <div id="bigScoreDisplay" style="text-align:center; font-size:4rem; font-weight:900;"></div>
+            <div id="bigScoreDisplay" style="text-align:center; font-size:4.5rem; font-weight:900; margin:15px 0;"></div>
             <table class="clean-table" id="statsTable"></table>
-            <div class="section-title">🤖 PREDICTIONS</div>
+            <div class="section-title">🤖 FULL STATS LAB</div>
             <div id="algoPreds"></div>
-        </div>
-
-        <div id="aiPanel">
-            <button onclick="closePanel('aiPanel')" class="btn-close-p">Χ</button>
-            <div id="pdfExportArea">
-                <h2 style="text-align:center; color:var(--ai);">🧠 DATA LAB REPORT</h2>
-                <div id="aiResultsBox"></div>
-                <button onclick="copyRawData()" style="width:100%; padding:15px; background:var(--gold); border:none; border-radius:12px; font-weight:900; margin-top:20px;">📋 COPY DATA FOR AI</button>
-                <textarea id="rawDataOutput" readonly></textarea>
-            </div>
         </div>
     </div>
 </div>
@@ -153,7 +166,7 @@ const LEAGUES = [
     {id: 318, name: "Cyprus 1", type: 'tactical'}, {id: 203, name: "Süper Lig TR", type: 'balanced'}, {id: 253, name: "MLS", type: 'attack'}
 ];
 
-let masterData = []; let standingsMap = {}; let lastAnalyzedMatches = [];
+let masterData = []; let standingsMap = {};
 
 const getWeights = (lId) => {
     const lg = LEAGUES.find(l => l.id === lId);
@@ -168,7 +181,17 @@ const advXG = (team, type) => {
     return Math.abs(form - season) >= 0.3 ? (season * 0.5 + form * 0.5) : (season * 0.6 + form * 0.4);
 };
 
-function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
+function calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv, w) {
+    let hP = (hXG * w.att + aXGA * w.def) + hAdv; 
+    let aP = (aXG * w.att + hXGA * w.def);
+    let dP = Math.max(0.15, 0.33 - (Math.abs(hP - aP) * 0.12)); 
+    let rem = 1 - dP; let tot = hP + aP || 1;
+    let res = { h: Math.round(rem * (hP/tot) * 100), d: Math.round(dP * 100), a: Math.round(rem * (aP/tot) * 100) };
+    if(Math.abs(hXG - aXG) > 0.8) { res.h = Math.min(95, res.h * 1.1); res.a = Math.min(95, res.a * 1.1); }
+    return res;
+}
+
+function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v385","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
 
 async function globalSync() {
     masterData = []; standingsMap = {}; document.getElementById('masterBtn').style.display = 'none';
@@ -194,14 +217,55 @@ async function globalSync() {
                 const w = getWeights(m.league.id);
                 const hXG = advXG(pD.teams.home,'for'), aXG = advXG(pD.teams.away,'for');
                 const hXGA = advXG(pD.teams.home,'against'), aXGA = advXG(pD.teams.away,'against');
-                masterData.push({ fixture: m, prediction: pD, weights: w, calc: { hXG, aXG, hXGA, aXGA } });
+                const hAdv = (pD.teams.home.league.fixtures.wins.home / pD.teams.home.league.fixtures.played.home || 0) * 0.2;
+                masterData.push({ fixture: m, prediction: pD, weights: w, calc: { hXG, aXG, hXGA, aXGA, hAdv, tProbs: calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv, w) } });
             }
         }
     } catch(e) {}
     document.getElementById('syncCont').style.display = 'none'; document.getElementById('dashboardTools').style.display = 'block';
-    const f = document.getElementById('leagueFilter');
-    f.innerHTML = '<option value="ALL">ΟΛΑ ΤΑ ΠΡΩΤΑΘΛΗΜΑΤΑ</option>' + LEAGUES.map(l => masterData.some(d=>d.fixture.league.id===l.id) ? `<option value="${l.id}">${l.name}</option>` : '').join('');
+    document.getElementById('leagueFilter').innerHTML = '<option value="ALL">ΟΛΑ ΤΑ ΠΡΩΤΑΘΛΗΜΑΤΑ</option>' + LEAGUES.map(l => masterData.some(d=>d.fixture.league.id===l.id) ? `<option value="${l.id}">${l.name}</option>` : '').join('');
     renderMatches();
+}
+
+function generateMatchCard(d, isF) {
+    const c = d.calc, tP = c.tProbs, st = d.fixture.fixture.status.short;
+    const hRank = standingsMap[d.fixture.teams.home.id] || '?';
+    const aRank = standingsMap[d.fixture.teams.away.id] || '?';
+    const hForm = (d.prediction.teams.home.league.form || "DDDDDD").split('').slice(-6);
+    const aForm = (d.prediction.teams.away.league.form || "DDDDDD").split('').slice(-6);
+    
+    const bestPoint = tP.h > tP.a ? '1' : '2';
+    const totXG = c.hXG + c.aXG;
+    const hCr = 4.1 + c.hXG * d.weights.hCrn, aCr = 3.6 + c.aXG * d.weights.aCrn;
+    const cards = (1.5 + c.hXGA * 0.5) + (1.5 + c.aXGA * 0.5);
+
+    return `
+    <div class="match-card ${isF?'finished':''}" onclick="openIntel(${d.fixture.fixture.id})">
+        <div class="card-body">
+            <div class="team-box">
+                <div class="team-info">
+                    <div class="name-row"><span class="rank-badge">${hRank}</span><span class="team-name">${d.fixture.teams.home.name}</span></div>
+                    <div class="meta-row">
+                        <div class="form-dots">${hForm.map(r=>`<div class="dot ${r}"></div>`).join('')}</div>
+                        <div class="xg-label">xG: <b>${c.hXG.toFixed(1)}</b></div>
+                    </div>
+                    <div style="height:12px;"></div>
+                    <div class="name-row"><span class="rank-badge">${aRank}</span><span class="team-name">${d.fixture.teams.away.name}</span></div>
+                    <div class="meta-row">
+                        <div class="form-dots">${aForm.map(r=>`<div class="dot ${r}"></div>`).join('')}</div>
+                        <div class="xg-label">xG: <b>${c.aXG.toFixed(1)}</b></div>
+                    </div>
+                </div>
+                <div class="score-box">${d.fixture.goals.home??'-'}:${d.fixture.goals.away??'-'}</div>
+            </div>
+        </div>
+        <div class="card-predictions">
+            <div class="pred-item"><span class="pred-lbl">Point</span><span class="pred-val p-green">${bestPoint} (${Math.max(tP.h, tP.a)}%)</span></div>
+            <div class="pred-item"><span class="pred-lbl">Score</span><span class="pred-val">${Math.round(c.hXG)}-${Math.round(c.aXG)}</span></div>
+            <div class="pred-item"><span class="pred-lbl">Corners</span><span class="pred-val">> ${Math.floor(hCr+aCr-0.5)}.5</span></div>
+            <div class="pred-item"><span class="pred-lbl">Cards</span><span class="pred-val">${Math.floor(cards)}.5</span></div>
+        </div>
+    </div>`;
 }
 
 function renderMatches() {
@@ -210,39 +274,10 @@ function renderMatches() {
     LEAGUES.forEach(lg => {
         let lData = masterData.filter(d => (sel==='ALL' || d.fixture.league.id == sel) && d.fixture.league.id === lg.id);
         if(lData.length > 0) {
-            let html = `<div class="league-header">🏆 ${lg.name}</div>`;
-            lData.forEach(d => {
-                const isF = ['FT','AET','PEN'].includes(d.fixture.fixture.status.short);
-                const hRank = standingsMap[d.fixture.teams.home.id] || '?';
-                const aRank = standingsMap[d.fixture.teams.away.id] || '?';
-                const hForm = (d.prediction.teams.home.league.form || "DDDDDD").split('').slice(-6);
-                const aForm = (d.prediction.teams.away.league.form || "DDDDDD").split('').slice(-6);
-
-                const card = `
-                <div class="match-card ${isF?'finished':''}" onclick="openIntel(${d.fixture.fixture.id})">
-                    <div class="card-main">
-                        <div class="team-block">
-                            <div class="team-row"><span class="rank-tag">${hRank}</span><span class="team-names">${d.fixture.teams.home.name}</span></div>
-                            <div class="form-row">${hForm.map(r=>`<div class="dot ${r}"></div>`).join('')}</div>
-                            <div class="xg-mini"><span>xG: <b>${d.calc.hXG.toFixed(1)}</b></span><span>xGA: <b>${d.calc.hXGA.toFixed(1)}</b></span></div>
-                            <div style="margin:10px 0;"></div>
-                            <div class="team-row"><span class="rank-tag">${aRank}</span><span class="team-names">${d.fixture.teams.away.name}</span></div>
-                            <div class="form-row">${aForm.map(r=>`<div class="dot ${r}"></div>`).join('')}</div>
-                            <div class="xg-mini"><span>xG: <b>${d.calc.aXG.toFixed(1)}</b></span><span>xGA: <b>${d.calc.aXGA.toFixed(1)}</b></span></div>
-                        </div>
-                        <div class="score-display">${d.fixture.goals.home??'-'}:${d.fixture.goals.away??'-'}</div>
-                    </div>
-                    <div class="card-stats">
-                        <div><div class="stat-label">xG TOT</div><div class="stat-value">${(d.calc.hXG + d.calc.aXG).toFixed(1)}</div></div>
-                        <div><div class="stat-label">O2.5 %</div><div class="stat-value">${d.prediction.predictions.percent.over}%</div></div>
-                        <div><div class="stat-label">BTTS</div><div class="stat-value">${d.prediction.predictions.percent.btts}%</div></div>
-                        <div><div class="stat-label">WEIGHTS</div><div class="stat-value" style="font-size:0.6rem;">${d.weights.o25 > 3 ? 'TACTICAL' : 'ATTACK'}</div></div>
-                    </div>
-                </div>`;
-                if(isF) { document.getElementById('finishedSection').style.display='block'; fin.innerHTML += (html + card); }
-                else act.innerHTML += (html + card);
-                html = "";
-            });
+            let hH = `<div class="league-header">🏆 ${lg.name}</div>`, fH = `<div class="league-header" style="opacity:0.6;">🏆 ${lg.name} (FIN)</div>`, ha = false, hf = false;
+            lData.forEach(d => { if(['FT','AET','PEN'].includes(d.fixture.fixture.status.short)) { fH += generateMatchCard(d, true); hf = true; } else { hH += generateMatchCard(d, false); ha = true; } });
+            if(ha) act.innerHTML += hH;
+            if(hf) { document.getElementById('finishedSection').style.display='block'; fin.innerHTML += fH; }
         }
     });
 }
@@ -252,51 +287,41 @@ function openIntel(id) {
     const c = d.calc, w = d.weights;
     document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}`;
     document.getElementById('bigScoreDisplay').innerText = `${d.fixture.goals.home??'-'}-${d.fixture.goals.away??'-'}`;
-    const best = c.hXG > c.aXG ? '1' : '2';
-    document.getElementById('algoPreds').innerHTML = `
-        <div class="pred-row"><span>Σημείο:</span><b>${best}</b></div>
-        <div class="pred-row"><span>Σκορ:</span><b>${Math.round(c.hXG)}-${Math.round(c.aXG)}</b></div>
-        <div class="pred-row"><span>Γκολ:</span><b>${(c.hXG+c.aXG)>2.5?'OVER 2.5':'UNDER 2.5'}</b></div>`;
+    document.getElementById('statsTable').innerHTML = `<tr><th>Metric</th><th>Home</th><th>Away</th></tr><tr><td>xG Attack</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr><tr><td>xGA Defense</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>`;
+    const best = c.tProbs.h > c.tProbs.a ? '1' : '2';
+    document.getElementById('algoPreds').innerHTML = `<div class="acca-item-elite"><span>Prediction Confidence</span><b>${Math.max(c.tProbs.h, c.tProbs.a)}%</b></div>`;
     document.getElementById('intelPanel').style.display = 'block';
 }
 
 function generateAcca() {
     const market = document.getElementById('accaMarket').value, size = parseInt(document.getElementById('accaSize').value);
     let pool = masterData.filter(d => d.fixture.fixture.status.short === 'NS').map(d => {
-        const totXG = d.calc.hXG + d.calc.aXG;
-        let bProb = 50, bTip = '';
-        if(market === 'SCORE') { bTip = `${Math.round(d.calc.hXG)}-${Math.round(d.calc.aXG)}`; bProb = 85; }
-        else { bTip = d.calc.hXG > d.calc.aXG ? '1' : '2'; bProb = 70; }
-        return { name: `${d.fixture.teams.home.name}-${d.fixture.teams.away.name}`, bTip };
-    });
+        let bProb = market === 'SCORE' ? 85 : Math.max(d.calc.tProbs.h, d.calc.tProbs.a);
+        let bTip = market === 'SCORE' ? `${Math.round(d.calc.hXG)}-${Math.round(d.calc.aXG)}` : (d.calc.tProbs.h > d.calc.tProbs.a ? '1' : '2');
+        return { name: `${d.fixture.teams.home.name}-${d.fixture.teams.away.name}`, bTip, bProb };
+    }).sort((a,b) => b.bProb - a.bProb);
     if(pool.length < size) return;
     let h = `<div class="acca-title">🏆 ELITE ${size}-FOLD</div>`;
     pool.slice(0,size).forEach(i => h += `<div class="acca-item-elite"><span>${i.name}</span><b style="color:var(--p)">${i.bTip}</b></div>`);
     document.getElementById('accaDisplay').innerHTML = h; document.getElementById('accaDisplay').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('accaDisplay').offsetTop - 20, behavior: 'smooth' });
 }
 
-async function runDeepEvaluation() {
-    const tD = document.getElementById('evalDate').value; if(!tD) return;
-    document.getElementById('aiResultsBox').innerHTML = "Mining data... please wait.";
-    document.getElementById('aiPanel').style.display='block';
-    // Simplified logic for brevity in this final spec
-    setTimeout(() => { document.getElementById('aiResultsBox').innerHTML = "Evaluation complete. Check PDF for full tiered report."; }, 2000);
-}
-
-function copyRawData() { alert("Raw Data Copied!"); }
-function startSystem() { fetchLiveTicker(); setInterval(fetchLiveTicker, 60000); }
-function closePanel(id) { document.getElementById(id).style.display='none'; }
 async function fetchLiveTicker() {
     try {
         const r = await fetch(`https://v3.football.api-sports.io/fixtures?live=all`, { headers: {"x-apisports-key": KEY} });
         const d = await r.json();
         if(d.response) {
-            let h = ''; d.response.slice(0,10).forEach(m => { h += `<div class="ticker-item">● ${m.fixture.status.elapsed}' ${m.teams.home.name} ${m.goals.home}-${m.goals.away} ${m.teams.away.name}</div>`; });
+            let h = ''; d.response.slice(0,12).forEach(m => { h += `<div class="ticker-item"><span class="t-blink">● ${m.fixture.status.elapsed}'</span> ${m.teams.home.name} ${m.goals.home}-${m.goals.away} ${m.teams.away.name}</div>`; });
             document.getElementById('tickerContent').innerHTML = h + h;
             document.getElementById('liveTickerWrap').style.display = 'block';
         }
     } catch(e) {}
 }
+
+function startSystem() { fetchLiveTicker(); setInterval(fetchLiveTicker, 60000); }
+function closePanel(id) { document.getElementById(id).style.display='none'; }
+window.onload = () => { if(sessionStorage.getItem("auth_v385")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
 </script>
 </body>
 </html>
