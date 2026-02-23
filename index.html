@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v570 - Tidy Oracle</title>
+    <title>Predictor Pro v580 - Absolute Sovereign</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -14,7 +14,7 @@
             --ai: #EC4899; --grad: linear-gradient(135deg, #3B82F6, #0072FF);
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; }
         .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px 12px; }
 
         /* AUTH SCREEN */
@@ -23,14 +23,14 @@
         .auth-input { width: 100%; padding: 20px; margin: 25px 0; border-radius: 16px; border: 2px solid var(--border); background: #F1F5F9; color: var(--p); font-size: 2.2rem; text-align: center; font-weight: 900; letter-spacing: 12px; -webkit-text-security: disc; }
 
         /* 🟢 TIDY LIVE TICKER */
-        .ticker-wrap { width: 100%; background: rgba(255,255,255,0.9); border-bottom: 2px solid var(--p); overflow: hidden; white-space: nowrap; padding: 10px 0; display: none; position: sticky; top: 0; z-index: 999; backdrop-filter: blur(10px); }
+        .ticker-wrap { width: 100%; background: rgba(255,255,255,0.95); border-bottom: 2px solid var(--p); overflow: hidden; white-space: nowrap; padding: 12px 0; display: none; position: sticky; top: 0; z-index: 999; backdrop-filter: blur(10px); }
         .ticker-move { display: inline-block; animation: ticker 45s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 1.5rem; font-weight: 800; font-size: 0.8rem; color: var(--txt); border-right: 1px solid var(--border); }
-        .live-dot { height: 8px; width: 8px; background-color: var(--alert); border-radius: 50%; display: inline-block; margin-right: 5px; animation: pulse 1.5s infinite; }
+        .ticker-item { display: inline-block; padding: 0 1.5rem; font-weight: 800; font-size: 0.8rem; border-right: 1px solid var(--border); }
+        .live-dot { height: 8px; width: 8px; background: var(--alert); border-radius: 50%; display: inline-block; margin-right: 5px; animation: pulse 1.5s infinite; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* STRATEGY PANEL */
+        /* 🛡️ STRATEGY PANEL */
         .strategy-card { background: #fff; border: 1.5px solid var(--p); border-radius: 24px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,114,255,0.08); }
         .strat-line { margin-bottom: 12px; border-left: 4px solid var(--p); padding-left: 15px; }
         .strat-line b { color: var(--p); font-size: 0.9rem; text-transform: uppercase; display: block; margin-bottom: 4px; }
@@ -39,47 +39,40 @@
         /* BUTTONS */
         .btn-sync { width: 100%; padding: 22px; background: var(--grad); color: #fff; border: none; border-radius: 20px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 114, 255, 0.3); }
         .ai-controls { display:flex; gap:10px; margin-bottom: 25px; }
-        .date-picker { padding: 15px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); flex: 1; text-align:center; font-weight: 800; color: var(--txt); }
         .btn-ai { padding: 15px; border: 2px solid var(--ai); color: var(--ai); border-radius: 14px; background: #fff; font-weight: 900; flex: 1.5; cursor: pointer; }
 
         /* MATCH CARDS */
-        .league-header { background: #1E293B; color: #fff; padding: 10px 15px; border-radius: 14px; font-weight: 900; margin: 30px 0 12px 0; border-left: 6px solid var(--p); text-transform: uppercase; font-size: 0.75rem; }
+        .league-header { background: #1E293B; color: #fff; padding: 12px 18px; border-radius: 14px; font-weight: 900; margin: 30px 0 12px 0; border-left: 6px solid var(--p); text-transform: uppercase; font-size: 0.75rem; }
         .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 28px; margin-bottom: 20px; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .card-body { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .team-info { display: flex; flex-direction: column; flex: 1; }
-        .team-row { display: flex; align-items: center; margin-bottom: 6px; }
         .rank-badge { background: #F1F5F9; color: var(--txt-muted); font-size: 0.65rem; font-weight: 900; padding: 3px 6px; border-radius: 6px; margin-right: 10px; min-width: 24px; text-align: center; }
         .team-name { font-weight: 800; font-size: 1.05rem; color: var(--txt); }
         .score-box { font-size: 2.2rem; font-weight: 900; min-width: 80px; text-align: right; color: var(--txt); }
 
+        /* BADGES */
+        .value-badge { position: absolute; top: 12px; right: 12px; background: var(--live); color: #fff; font-size: 0.6rem; font-weight: 900; padding: 4px 8px; border-radius: 20px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+
         .card-predictions { display: grid; grid-template-columns: repeat(4, 1fr); background: #F7FAFC; padding: 15px; text-align: center; gap: 5px; border-top: 1px solid var(--border); }
         .pred-lbl { font-size: 0.6rem; color: var(--txt-muted); font-weight: 800; text-transform: uppercase; display: block; }
         .pred-val { font-size: 0.85rem; font-weight: 900; color: var(--p); }
-        .hist-tag { font-size: 0.58rem; color: var(--ai); font-weight: 900; display: block; margin-top: 2px; }
+        .hist-tag { font-size: 0.55rem; color: var(--ai); font-weight: 900; display: block; margin-top: 2px; }
 
-        /* INTEL & AI PANELS */
+        /* INTEL PANEL */
         #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
-        .btn-close-p { background: var(--alert); color: #fff; padding: 12px 20px; border-radius: 14px; font-weight: 900; border: none; cursor: pointer; position: fixed; right: 20px; top: 20px; z-index: 10001; box-shadow: 0 4px 15px rgba(239,68,68,0.2); }
+        .btn-close-p { background: var(--alert); color: #fff; padding: 12px 20px; border-radius: 14px; font-weight: 900; border: none; cursor: pointer; position: fixed; right: 20px; top: 20px; z-index: 10001; }
         
-        .section-title { color: var(--p); font-size: 0.95rem; font-weight: 900; margin: 30px 0 15px 0; text-transform: uppercase; letter-spacing: 1px; border-left: 4px solid var(--p); padding-left: 10px; }
-        
-        /* DEEP FORM DOTS + xG */
+        /* DEEP FORM */
         .form-container-deep { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
         .form-column { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; }
+        .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; }
         .dot.W { background: var(--live); } .dot.D { background: var(--gold); } .dot.L { background: var(--alert); }
         .form-val { font-size: 0.65rem; font-weight: 800; color: var(--txt-muted); }
         .form-val.xg { color: var(--live); } .form-val.xga { color: var(--alert); }
 
-        /* DATA LAB REPORT */
         .report-section { background: #fff; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
         .report-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #F1F5F9; font-size: 0.9rem; font-weight: 700; }
-        .report-row b { color: var(--p); }
-
         .progress-bar { background: #EDF2F7; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; }
         .progress-fill { height: 100%; background: var(--p); transition: width 0.3s; }
-        
-        #rawDataOutput { width: 100%; height: 100px; display: none; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -87,7 +80,7 @@
 <div id="authScreen">
     <div class="auth-box">
         <h1 style="color:var(--p); margin:0;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
-        <p style="color:var(--txt-muted); font-size:0.85rem; margin-top:10px;">V570 TIDY ORACLE SPEC</p>
+        <p style="color:var(--txt-muted); font-size:0.85rem; margin-top:10px;">V580 SOVEREIGN MASTER</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)">
     </div>
 </div>
@@ -98,7 +91,7 @@
     <div class="container">
         <div style="text-align:center; padding-bottom: 15px; margin-top:10px;">
             <h1 style="color:var(--p); margin:0; font-size:2.6rem;">PREDICTOR <span style="color:var(--txt)">PRO</span></h1>
-            <small style="color:var(--txt-muted); font-weight:900; letter-spacing:3px;">THE TIDY MASTER ENGINE</small>
+            <small style="color:var(--txt-muted); font-weight:900; letter-spacing:3px;">THE ABSOLUTE SOVEREIGN ENGINE</small>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" class="btn-sync">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
@@ -109,14 +102,14 @@
         </div>
 
         <div class="strategy-card">
-            <div class="strat-line"><b>⚽ OVER 2.5</b> <p>Εμπιστεύσου xG > 2.95. Ασφαλέστερο όριο για παρολί. Ιστορική επαλήθευση: 82%.</p></div>
-            <div class="strat-line"><b>💣 BOMBS</b> <p>Πόνταρε ΜΟΝΟ αν το αουτσάιντερ έχει Pressure Factor > 4.0 και καλύτερη φόρμα.</p></div>
-            <div class="strat-line"><b>🎯 SCORES</b> <p>Confidence > 85% για συστήματα 2-3-4. Ιστορική επαλήθευση: 10%.</p></div>
+            <div class="strat-line"><b>⚽ OVER 2.5 (ΓΚΟΛ)</b> <p>Εμπιστεύσου xG > 2.95. Είναι το ασφαλέστερο όριο για παρολί. Ιστορική επαλήθευση: 82%.</p></div>
+            <div class="strat-line"><b>💣 BOMBS (ΑΟΥΤΣΑΪΝΤΕΡ)</b> <p>Πόνταρε ΜΟΝΟ αν το αουτσάιντερ έχει Pressure Factor > 4.0 και καλύτερη πρόσφατη φόρμα.</p></div>
+            <div class="strat-line"><b>🎯 ΑΚΡΙΒΗ ΣΚΟΡ</b> <p>Εστίασε σε Confidence > 85%. Ιδανικά για συστήματα 2-3-4. Ιστορική επαλήθευση: 10%.</p></div>
         </div>
 
         <div class="ai-controls">
             <input type="date" id="evalDate" class="date-picker">
-            <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB Analysis</button>
+            <button onclick="runDeepEvaluation()" class="btn-ai">🧠 DATA LAB REPORT</button>
         </div>
 
         <div id="aiCont" style="display:none; margin-bottom:25px; background:#fff; padding:20px; border-radius:24px; border:1px solid var(--border);">
@@ -144,8 +137,9 @@
                     <div id="aFormList" class="form-container-deep"></div>
                 </div>
             </div>
-            <div class="section-title">📊 ΣΤΑΤΙΣΤΙΚΑ AI (ΣΤΡΟΓΓΥΛΟΠΟΙΗΣΗ 2.00)</div>
+            <div class="section-title">📊 ΣΤΑΤΙΣΤΙΚΑ AI (ROUNDED 2.00)</div>
             <table class="clean-table" id="deepStatsTable"></table>
+            <div id="betBuilderPotential" style="background:var(--value); color:#fff; padding:10px; border-radius:12px; text-align:center; font-weight:900; display:none; margin-top:15px;">💎 BET BUILDER POTENTIAL (HIGH xG)</div>
             <div class="section-title">🔮 TOP 10 ORACLE CONSENSUS</div>
             <div id="predSitesConsensus" style="background:white; padding:20px; border-radius:18px; border:1px solid var(--border);"></div>
         </div>
@@ -161,7 +155,7 @@
                 <button onclick="exportToPDF()" style="flex:1; background:var(--grad); border:none; padding:18px; border-radius:16px; font-weight:900; color:#fff;">📥 PDF REPORT</button>
                 <button onclick="copyRawData()" style="flex:1; background:var(--gold); border:none; padding:18px; border-radius:16px; font-weight:900; color:#fff;">📋 COPY DATA</button>
             </div>
-            <textarea id="rawDataOutput" readonly></textarea>
+            <textarea id="rawDataOutput" readonly style="display:none;"></textarea>
         </div>
     </div>
 </div>
@@ -169,10 +163,9 @@
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [
-    {id: 39, name: "Premier League"}, {id: 40, name: "Championship"},
-    {id: 140, name: "La Liga"}, {id: 141, name: "Segunda"},
+    {id: 39, name: "Premier League"}, {id: 140, name: "La Liga"},
     {id: 135, name: "Serie A"}, {id: 136, name: "Serie B"},
-    {id: 78, name: "Bundesliga"}, {id: 61, name: "Ligue 1"},
+    {id: 78, name: "Bundesliga"}, {id: 141, name: "Segunda"},
     {id: 197, name: "Super League GR"}, {id: 318, name: "Cyprus 1"}, {id: 253, name: "MLS"}
 ];
 
@@ -193,7 +186,7 @@ function calcTrueProbs(hXG, hXGA, aXG, aXGA, hAdv) {
     return { h: Math.round(rem * (hP/tot) * 100), d: Math.round(dP * 100), a: Math.round(rem * (aP/tot) * 100) };
 }
 
-function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v570","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
+function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v580","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
 
 async function globalSync() {
     masterData = []; standingsMap = {}; document.getElementById('masterBtn').style.display = 'none';
@@ -239,6 +232,7 @@ function renderMatches() {
                 let maxP = Math.max(tP.h, tP.a), hRate = maxP >= 70 ? HIST.pts_70 : (maxP >= 60 ? HIST.pts_60 : HIST.pts_50);
                 act.innerHTML += `
                 <div class="match-card" onclick="openDeepIntel(${d.fixture.fixture.id})">
+                    ${hRate >= 70 ? '<div class="value-badge">Value Bet</div>' : ''}
                     <div class="card-body">
                         <div class="team-info">
                             <div class="team-row"><span class="rank-badge">${standingsMap[d.fixture.teams.home.id]??'?'}</span><span class="team-name">${d.fixture.teams.home.name}</span></div>
@@ -263,13 +257,16 @@ async function openDeepIntel(id) {
     const c = d.calc, p = d.prediction; document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} - ${d.fixture.teams.away.name}`;
     document.getElementById('bigScore').innerText = `${d.fixture.goals.home??'-'} : ${d.fixture.goals.away??'-'}`;
-    const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6);
-    const aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
+    const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6), aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
     const getS = (r, a, i) => { let b = parseFloat(a); let sh = Math.sin(i)*0.4; return r==='W'?(b+0.5+sh).toFixed(1):r==='L'?(b-0.6+sh).toFixed(1):(b+sh).toFixed(1); };
     document.getElementById('hTeamName').innerText = d.fixture.teams.home.name;
     document.getElementById('hFormList').innerHTML = hF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val xg">${getS(f,c.hXG,i)}</div><div class="form-val xga">${getS(f==='W'?'L':'W',c.hXGA,i)}</div></div>`).join('');
     document.getElementById('aTeamName').innerText = d.fixture.teams.away.name;
     document.getElementById('aFormList').innerHTML = aF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val xg">${getS(f,c.aXG,i)}</div><div class="form-val xga">${getS(f==='W'?'L':'W',c.aXGA,i)}</div></div>`).join('');
+    
+    if(c.hXG + c.aXG > 1.9) document.getElementById('betBuilderPotential').style.display = 'block';
+    else document.getElementById('betBuilderPotential').style.display = 'none';
+
     document.getElementById('deepStatsTable').innerHTML = `<tr><th>Metric</th><th>HOME</th><th>AWAY</th></tr><tr><td>Avg xG Attack</td><td>${c.hXG.toFixed(2)}</td><td>${c.aXG.toFixed(2)}</td></tr><tr><td>Avg xGA Defense</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr><tr><td>xCorners FOR</td><td>${(c.hXG*0.95+3.8).toFixed(2)}</td><td>${(c.aXG*0.85+3.2).toFixed(2)}</td></tr>`;
     const oracles = ["Forebet", "PredictZ", "Statarea", "WinDrawWin", "Vitibet", "SoccerVista", "BetExplorer", "ZuluBet", "ProTipster", "SportyTrader"];
     let win = p.predictions.winner.name === d.fixture.teams.home.name ? '1' : (p.predictions.winner.name === 'Draw' ? 'X' : '2');
@@ -282,8 +279,8 @@ async function runDeepEvaluation() {
     let s = { pts:{'70+':{t:0,w:0},'60-69':{t:0,w:0},'50-59':{t:0,w:0}}, o25:{t:0,w:0} };
     try {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
-        const fData = await fR.json();
-        const tFix = (fData.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
+        const fD = await fR.json();
+        const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
         for (let i=0; i<tFix.length; i++) {
             let m = tFix[i]; document.getElementById('aiFill').style.width = Math.round(((i+1)/tFix.length)*100)+'%';
             await new Promise(r => setTimeout(r, 650)); 
@@ -299,7 +296,8 @@ async function runDeepEvaluation() {
             } catch(e) {}
         }
         const pct = (o) => o.t > 0 ? Math.round(o.w/o.t*100) : 0;
-        document.getElementById('aiResultsBox').innerHTML = `<div class="report-section"><div class="report-row"><span>True Prob >70%:</span><b>${pct(s.pts['70+'])}%</b></div><div class="report-row"><span>True Prob 60-69%:</span><b>${pct(s.pts['60-69'])}%</b></div><div class="report-row"><span>True Prob 50-59%:</span><b>${pct(s.pts['50-59'])}%</b></div></div>`;
+        const row = (l, obj) => `<div class="report-row"><span>${l}</span><b>${obj.w}/${obj.t} (${pct(obj)}%)</b></div>`;
+        document.getElementById('aiResultsBox').innerHTML = `<div class="report-section">${row('True Prob >70%:', s.pts['70+'])}${row('True Prob 60-69%:', s.pts['60-69'])}${row('True Prob 50-59%:', s.pts['50-59'])}</div>`;
         document.getElementById('aiPanel').style.display='block';
     } catch(e) {} document.getElementById('aiCont').style.display='none';
 }
@@ -310,7 +308,7 @@ function closePanel(id) { document.getElementById(id).style.display = 'none'; }
 function startSystem() { 
     fetch(`https://v3.football.api-sports.io/fixtures?live=all`, { headers: {"x-apisports-key": KEY} }).then(r=>r.json()).then(d=>{
         if(d.response) {
-            let h = ''; d.response.slice(0,10).forEach(m => h += `<div class="ticker-item"><span class="live-dot"></span><span class="t-blink">${m.fixture.status.elapsed}'</span> ${m.teams.home.name} ${m.goals.home}-${m.goals.away}</div>`);
+            let h = ''; d.response.slice(0,10).forEach(m => h += `<div class="ticker-item"><span class="live-dot"></span> ● ${m.fixture.status.elapsed}' ${m.teams.home.name} ${m.goals.home}-${m.goals.away}</div>`);
             document.getElementById('tickerContent').innerHTML = h + h; document.getElementById('liveTickerWrap').style.display = 'block';
         }
     });
