@@ -3,76 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v1400 - Sovereign Zenith</title>
+    <title>Predictor Pro v1500 - Sovereign Oracle</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #0b0e14; --card: #161b22; --border: #30363d; 
+            --bg: #05070a; --card: #11141b; --border: #2d333b; 
             --p: #00d4ff; --txt: #ffffff; --txt-muted: #8b949e; 
             --gold: #ff8800; --orange-grad: linear-gradient(90deg, #ff8800, #ff4500);
             --live: #00ff41; --alert: #ff4d4d;
             --value: #bf40bf; --grad: linear-gradient(135deg, #00d4ff, #0062ff);
             --ticker-speed: 30s;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; transition: 0.1s ease; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; overflow-x: hidden; }
         .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 15px; }
 
-        /* 🟢 HEADER & TICKER CONTROL */
-        .header-sticky { position: sticky; top: 0; z-index: 1000; background: rgba(11, 14, 20, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+        /* HEADER & TICKER */
+        .header-sticky { position: sticky; top: 0; z-index: 1000; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
         .ticker-controls { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; font-size: 0.75rem; font-weight: 900; background: #000; color: var(--p); }
         .ticker-wrap { width: 100%; overflow: hidden; white-space: nowrap; padding: 12px 0; border-top: 1px solid var(--border); display: none; }
         .ticker-move { display: inline-block; animation: ticker var(--ticker-speed) linear infinite; }
         .ticker-item { display: inline-block; padding: 0 1.5rem; font-weight: 800; font-size: 0.9rem; border-right: 1px solid var(--border); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* 🛡️ STRATEGY PANEL */
-        .strategy-card { background: rgba(0, 212, 255, 0.05); border: 1.5px solid var(--p); border-radius: 24px; padding: 20px; margin-bottom: 25px; box-shadow: 0 0 20px rgba(0,212,255,0.1); }
+        /* STRATEGY PANEL */
+        .strategy-card { background: rgba(0, 212, 255, 0.05); border: 1.5px solid var(--p); border-radius: 24px; padding: 20px; margin-bottom: 25px; }
         .strat-line { margin-bottom: 12px; border-left: 4px solid var(--p); padding-left: 15px; }
         .strat-line b { color: var(--p); font-size: 0.85rem; text-transform: uppercase; display: block; margin-bottom: 4px; }
         .strat-line p { margin: 0; font-weight: 600; font-size: 0.82rem; color: var(--txt-muted); line-height: 1.5; }
 
-        /* LEAGUE HEADERS & SECTIONS */
-        .status-section-label { text-align: center; padding: 35px 0 15px 0; color: #fff; font-weight: 900; letter-spacing: 5px; font-size: 0.85rem; text-transform: uppercase; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
+        /* SECTION HEADERS */
+        .status-section-label { text-align: center; padding: 35px 0 10px 0; color: #fff; font-weight: 900; letter-spacing: 5px; font-size: 0.85rem; text-transform: uppercase; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
         .league-header { background: var(--orange-grad); color: #000; padding: 10px 18px; border-radius: 12px; font-weight: 900; margin: 25px 0 12px 0; font-size: 0.75rem; text-transform: uppercase; }
 
         /* MATCH CARDS */
-        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; position: relative; margin-bottom: 18px; cursor: pointer; }
-        .match-card:hover { border-color: var(--p); }
+        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; margin-bottom: 18px; cursor: pointer; position: relative; }
+        .match-card:hover { border-color: var(--p); transform: translateY(-2px); }
         .card-top { padding: 22px; display: flex; justify-content: space-between; align-items: center; }
-        .team-row { display: flex; align-items: center; font-weight: 800; font-size: 1.05rem; margin-bottom: 6px; }
         .rank-tag { background: #000; font-size: 0.6rem; padding: 3px 7px; border-radius: 5px; margin-right: 10px; color: var(--p); border: 1px solid var(--p); }
         .score-box { font-size: 2.2rem; font-weight: 900; color: #fff; text-align: right; letter-spacing: -1px; }
 
         .live-pulse { color: var(--live); font-weight: 900; animation: blink 1.2s infinite; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        
+        .value-badge { position: absolute; top: 12px; right: 12px; background: var(--live); color: #000; font-size: 0.6rem; font-weight: 900; padding: 4px 8px; border-radius: 20px; text-transform: uppercase; box-shadow: 0 0 10px var(--live); }
 
-        /* PREDICTIONS FOOTER */
         .card-predictions { display: grid; grid-template-columns: repeat(4, 1fr); background: rgba(0,0,0,0.3); padding: 15px; text-align: center; gap: 5px; border-top: 1px solid var(--border); }
         .pred-lbl { font-size: 0.6rem; color: var(--txt-muted); font-weight: 800; text-transform: uppercase; }
         .pred-val { font-size: 0.85rem; font-weight: 900; color: var(--p); }
-        .hist-tag { font-size: 0.55rem; color: var(--ai); font-weight: 900; display: block; margin-top: 2px; }
 
         .ticker-select { display: flex; align-items: center; gap: 10px; padding: 12px 22px; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border); font-size: 0.7rem; font-weight: 800; color: var(--txt-muted); }
-        .ticker-select input { accent-color: var(--p); width: 18px; height: 18px; cursor: pointer; }
 
-        /* 🏆 ACCA GENERATOR TILES */
-        .acca-item { background: #000; border: 1.5px solid var(--border); border-radius: 24px; padding: 22px; margin-bottom: 15px; cursor: pointer; border-left: 8px solid var(--value); position: relative; }
-        .tip-badge { background: var(--value); color: #fff; padding: 10px 20px; border-radius: 14px; font-weight: 900; font-size: 1.1rem; display: inline-block; margin-bottom: 15px; box-shadow: 0 0 15px rgba(191,64,191,0.4); border: 2px solid var(--live); }
-        .elite-tag { color: var(--live); font-weight: 900; font-size: 0.8rem; margin-left: 10px; text-transform: uppercase; text-shadow: 0 0 5px var(--live); }
-        .acca-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; border-top: 1px solid #222; padding-top: 12px; }
-        .acca-stat-box { text-align: center; font-size: 0.65rem; font-weight: 800; color: var(--txt-muted); }
-        .acca-stat-box b { display: block; color: var(--p); font-size: 0.9rem; margin-top: 3px; }
+        /* 🏆 ACCA & REPORT UI */
+        .tool-card { background: var(--card); border-radius: 24px; padding: 20px; border: 1px solid var(--border); margin-bottom: 25px; }
+        .acca-item { background: #000; border: 1.5px solid var(--border); border-radius: 24px; padding: 22px; margin-bottom: 15px; cursor: pointer; border-left: 8px solid var(--value); }
+        .tip-badge { background: var(--value); color: #fff; padding: 10px 20px; border-radius: 14px; font-weight: 900; font-size: 1.1rem; display: inline-block; margin-bottom: 15px; border: 2px solid var(--live); }
 
         /* PANELS */
         #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; overflow-y: auto; padding-bottom: 100px; }
-        .close-circle { position: fixed; bottom: 30px; right: 30px; background: var(--alert); color: #fff; width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; border: none; cursor: pointer; z-index: 10001; box-shadow: 0 10px 30px rgba(255,77,77,0.4); }
+        .close-circle { position: fixed; bottom: 30px; right: 30px; background: var(--alert); color: #fff; width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; border: none; cursor: pointer; z-index: 10001; }
         .stat-tile { background: var(--card); padding: 15px 20px; border-radius: 18px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .stat-tile span { font-size: 0.8rem; font-weight: 700; color: var(--txt-muted); }
-        .stat-tile b { font-size: 1rem; color: var(--gold); }
 
-        /* PROGRESS BARS */
+        /* ⚽ DEEP FORM DOTS + NUMBERS */
+        .form-container-deep { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+        .form-column { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #fff; }
+        .dot.W { background: var(--live); box-shadow: 0 0 8px var(--live); } 
+        .dot.D { background: var(--gold); } 
+        .dot.L { background: var(--alert); }
+        .form-val { font-size: 0.62rem; font-weight: 800; color: var(--txt-muted); }
+        .form-val.xg { color: var(--live); }
+        .form-val.xga { color: var(--alert); }
+
         .progress-bar { background: #000; height: 12px; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
         .progress-fill { height: 100%; background: var(--grad); width: 0%; box-shadow: 0 0 15px var(--p); }
 
@@ -84,7 +87,7 @@
 <div id="authScreen">
     <div class="auth-box" style="background:var(--card); border-radius:32px; padding:45px 25px; text-align:center; max-width:380px; margin:auto;">
         <h1 style="color:var(--p); margin:0;">PREDICTOR PRO</h1>
-        <p style="color:var(--txt-muted); font-size:0.8rem; margin-top:10px;">V1400 SOVEREIGN ZENITH</p>
+        <p style="color:var(--txt-muted); font-size:0.8rem; margin-top:10px;">V1500 ELITE INTEGRITY</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)" style="width:100%; padding:20px; margin-top:20px; text-align:center; font-size:2.2rem; border-radius:15px; border:none; background:#000; color:var(--p); font-weight:900; letter-spacing:10px;">
     </div>
 </div>
@@ -101,36 +104,36 @@
     <div class="container">
         <div style="text-align:center; padding: 25px 0;">
             <h1 style="color:var(--p); margin:0; font-size:2.8rem; letter-spacing:-2px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--gold); font-weight:900; letter-spacing:5px;">THE ABSOLUTE ZENITH Spec</small>
+            <small style="color:var(--gold); font-weight:900; letter-spacing:5px;">SOVEREIGN ORACLE Spec</small>
         </div>
 
         <div class="strategy-card">
-            <div class="strat-line"><b>⚽ OVER 2.5 [ELITE xG]</b> <p>Εμπιστεύσου Match xG > 3.5 για 82% επαλήθευση. Εντοπίζεται αυτόματα στα παρολί.</p></div>
-            <div class="strat-line"><b>🛡️ SAFETY FILTER (50-59%)</b> <p>Στο Tier 50-59%, η πρόταση μετατρέπεται αυτόματα σε Διπλή Ευκαιρία (1Χ ή Χ2).</p></div>
-            <div class="strat-line"><b>💎 VALUE BET ALERT</b> <p>Εμφανίζεται στις κάρτες όταν η ιστορική επαλήθευση (HIST) είναι άνω του 70%.</p></div>
+            <div class="strat-line"><b>⚽ OVER 2.5 (ELITE xG)</b> <p>Εμπιστεύσου Match xG > 3.5. Ιστορική Επαλήθευση: 82%.</p></div>
+            <div class="strat-line"><b>🛡️ SAFETY FILTER (50-59%)</b> <p>Προτείνεται αυτόματα Διπλή Ευκαιρία (1Χ ή Χ2) για μέγιστη ασφάλεια.</p></div>
+            <div class="strat-line"><b>💎 VALUE BET ALERT</b> <p>Ενεργοποιείται όταν η ιστορική επαλήθευση (HIST) είναι άνω του 70%.</p></div>
         </div>
 
         <button id="masterBtn" onclick="globalSync()" style="width:100%; padding:22px; background:var(--grad); color:#fff; border:none; border-radius:20px; font-weight:900; font-size:1.1rem; cursor:pointer; box-shadow:0 0 30px rgba(0,212,255,0.2);">ΣΑΡΩΣΗ ΑΓΩΝΩΝ ΗΜΕΡΑΣ</button>
 
         <div id="syncCont" style="display:none;" class="strategy-card">
-            <div id="syncStep" style="color:var(--p); font-weight:900; font-size:0.85rem;">SYNCHRONIZING ZENITH ENGINE...</div>
+            <div id="syncStep" style="color:var(--p); font-weight:900; font-size:0.85rem;">SYNCHRONIZING ORACLE ENGINE...</div>
             <div class="progress-bar"><div id="syncFill" class="progress-fill"></div></div>
         </div>
 
         <div id="toolsSection" style="display:none; margin-top:20px;">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:25px;">
-                <div style="background:var(--card); padding:15px; border-radius:24px; border:1px solid var(--border);">
+                <div class="tool-card" style="margin-bottom:0; padding:15px;">
                     <div style="font-weight:900; color:var(--value); font-size:0.75rem; margin-bottom:10px;">🏆 ACCA GENERATOR</div>
                     <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:8px;">
-                        <select id="accaMarket"><option value="1X2">ΣΗΜΕΙΑ 1Χ2</option><option value="GOALS">OVER 2.5</option><option value="CORNERS">ΚΟΡΝΕΡ</option><option value="BOMBS">ΜΠΟΜΠΕΣ</option></select>
-                        <button onclick="generateAcca()" style="background:var(--value); color:#fff; border:none; border-radius:10px; font-weight:900; cursor:pointer;">GEN</button>
+                        <select id="accaMarket"><option value="1X2">ΣΗΜΕΙΑ 1Χ2</option><option value="GOALS">OVER 2.5</option><option value="CORNERS">ΚΟΡΝΕΡ</option></select>
+                        <button onclick="generateAcca()" class="btn-gen" style="padding:10px; font-size:0.7rem;">GENERATE</button>
                     </div>
                 </div>
-                <div style="background:var(--card); padding:15px; border-radius:24px; border:1px solid var(--border);">
-                    <div style="font-weight:900; color:var(--ai); font-size:0.75rem; margin-bottom:10px;">🧠 DATA LAB REPORT</div>
+                <div class="tool-card" style="margin-bottom:0; padding:15px;">
+                    <div style="font-weight:900; color:var(--ai); font-size:0.75rem; margin-bottom:10px;">🧠 DATA LAB (BACKTEST)</div>
                     <div style="display:flex; gap:10px;">
                         <input type="date" id="evalDate" style="flex:1; background:#000; color:#fff; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:0.75rem;">
-                        <button onclick="runDeepEvaluation()" style="background:var(--ai); color:#fff; border:none; border-radius:10px; padding:10px 15px; font-weight:900; cursor:pointer;">RUN</button>
+                        <button onclick="runDeepEvaluation()" style="background:var(--ai); color:#fff; border:none; border-radius:10px; padding:10px 15px; font-weight:900; cursor:pointer; font-size:0.7rem;">RUN</button>
                     </div>
                 </div>
             </div>
@@ -151,18 +154,21 @@
     <div class="intel-header-box">
         <h2 id="mTitle" style="color:var(--gold); font-size:1.4rem;"></h2>
         <div id="bigScore" style="font-size:4.5rem; font-weight:900; color:#fff;"></div>
-        <div id="liveTimeBadge" class="live-pulse" style="justify-content:center; margin-top:10px; font-size:1.2rem; display:none;">● LIVE <span id="intelTime"></span>'</div>
     </div>
     <div class="container">
-        <div style="background:var(--card); padding:20px; border-radius:24px; border:1px solid var(--border);">
-            <div style="font-weight:900; color:var(--p); margin-bottom:15px; text-transform:uppercase;">📊 AI DYNAMIC ANALYSIS</div>
+        <div class="tool-card">
+            <div style="font-weight:900; color:var(--p); margin-bottom:15px; text-transform:uppercase;">📊 AI DYNAMIC PROBABILITIES</div>
             <div id="statsTiles"></div>
             <div id="bbBadge" style="background:var(--value); color:#fff; padding:12px; border-radius:12px; text-align:center; font-weight:900; display:none; margin-top:15px;">💎 BET BUILDER POTENTIAL (HIGH xG)</div>
         </div>
-        <div style="background:var(--card); padding:20px; border-radius:24px; border:1px solid var(--border); margin-top:20px;">
-            <div style="font-weight:900; color:var(--live); margin-bottom:15px; text-transform:uppercase;">🕒 DEEP FORM (MATCH xG VARIANCE)</div>
-            <div id="hFormList" style="margin-bottom:20px;"></div>
+        <div class="tool-card">
+            <div style="font-weight:900; color:var(--live); margin-bottom:15px; text-transform:uppercase;">🕒 DEEP FORM (REAL xG / xGA)</div>
+            <div id="hFormList" style="margin-bottom:25px;"></div>
             <div id="aFormList"></div>
+        </div>
+        <div class="tool-card">
+            <div style="font-weight:900; color:var(--gold); margin-bottom:15px; text-transform:uppercase;">🔮 TOP 5 ORACLE TIPS</div>
+            <div id="oracleTipsList"></div>
         </div>
         <div id="h2hList" style="margin-top:20px;"></div>
     </div>
@@ -171,8 +177,8 @@
 <div id="aiPanel">
     <button onclick="closePanel('aiPanel')" class="close-circle">X</button>
     <div class="container" style="padding-top:40px;">
-        <div id="aiProgressBox" style="background:var(--card); padding:20px; border-radius:24px; border:1px solid var(--border);">
-            <div id="aiStep" style="text-align:center; font-weight:900; color:var(--p);">ANALYZING HISTORICAL DATA...</div>
+        <div id="aiProgressBox" class="tool-card">
+            <div id="aiStep" style="text-align:center; font-weight:900; color:var(--p);">ANALYZING HISTORICALS...</div>
             <div class="progress-bar"><div id="aiFill" class="progress-fill"></div></div>
         </div>
         <div id="pdfExportArea"><div id="aiResultsBox"></div></div>
@@ -186,11 +192,11 @@
 <script>
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LEAGUES = [{id: 39, name: "Premier League"}, {id: 40, name: "Championship"}, {id: 140, name: "La Liga"}, {id: 135, name: "Serie A"}, {id: 136, name: "Serie B"}, {id: 78, name: "Bundesliga"}, {id: 141, name: "Segunda"}, {id: 197, name: "Super League GR"}, {id: 318, name: "Cyprus 1"}, {id: 253, name: "MLS"}];
-const HIST = { pts_70: 88, pts_60: 100, pts_50: 57, o25: 82, scores: 10 };
+const HIST = { pts_70: 88, pts_60: 100, pts_50: 57, o25: 82 };
 
 let masterData = []; let standingsMap = {}; let lastTickerData = []; let selectedTickerIds = new Set(); let lastAnalyzed = [];
 
-function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v1400","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
+function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v1500","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
 function adjustTickerSpeed(val) { document.documentElement.style.setProperty('--ticker-speed', (70 - val) + 's'); }
 
 function toggleTickerSelection(id) {
@@ -198,7 +204,7 @@ function toggleTickerSelection(id) {
     updateTicker(); document.getElementById('tickerStatus').innerText = `SELECTED: ${selectedTickerIds.size}`;
 }
 
-function calculatePoissonProb(lambda, x) {
+function calculatePoisson(lambda, x) {
     let L = Math.exp(-lambda), sum = 0, fact = 1;
     for (let i = 0; i < x; i++) { if(i>0) fact *= i; sum += (Math.pow(lambda, i) / fact); }
     return Math.round((1 - (L * sum)) * 100);
@@ -208,10 +214,10 @@ function getCalculations(pD, m) {
     const hXG = parseFloat(pD.teams.home.last_5.goals.for.average || 1.1), aXG = parseFloat(pD.teams.away.last_5.goals.for.average || 1.1);
     const hXGA = parseFloat(pD.teams.home.last_5.goals.against.average || 1.2), aXGA = parseFloat(pD.teams.away.last_5.goals.against.average || 1.2);
     let hS = (hXG * 0.4 + aXGA * 0.6), aS = (aXG * 0.4 + hXGA * 0.6);
-    if(m.league.id === 253) { if((standingsMap[m.teams.away.id]||10) - (standingsMap[m.teams.home.id]||10) > 8) hS += 0.5; }
+    if(m.league.id === 253 && (standingsMap[m.teams.away.id] - standingsMap[m.teams.home.id] > 8)) hS += 0.5;
     let total = hS + aS + 0.5;
     let hProb = Math.round((hS / total) * 100), aProb = Math.round((aS / total) * 100);
-    return { hXG, aXG, hXGA, aXGA, probs: { h: hProb, d: 100 - hProb - aProb, a: aProb }, o25: calculatePoissonProb(hXG + aXG, 3), corners: (hXG * 0.9 + aXG * 0.85 + 7.1).toFixed(1) };
+    return { hXG, aXG, hXGA, aXGA, probs: { h: hProb, d: 100 - hProb - aProb, a: aProb }, o25: calculatePoisson(hXG + aXG, 3), corners: (hXG * 0.9 + aXG * 0.85 + 7.2).toFixed(1) };
 }
 
 async function globalSync() {
@@ -228,8 +234,8 @@ async function globalSync() {
         }
         for (let i=0; i<myFix.length; i++) {
             let m = myFix[i]; document.getElementById('syncFill').style.width = Math.round(((i+1)/myFix.length)*100)+'%';
-            document.getElementById('syncStep').innerText = `CALIBRATING: ${m.teams.home.name}`;
-            await new Promise(r => setTimeout(r, 180));
+            document.getElementById('syncStep').innerText = `ANALYZING: ${m.teams.home.name}`;
+            await new Promise(r => setTimeout(r, 200));
             try {
                 const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
                 const pData = await pR.json(); const pD = pData.response?.[0];
@@ -271,13 +277,20 @@ async function openDeepIntel(id) {
     const c = d.calc, p = d.prediction, m = d.fixture; document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerText = `${m.teams.home.name} - ${m.teams.away.name}`;
     document.getElementById('bigScore').innerText = `${m.goals.home??'?'}:${m.goals.away??'?'}`;
-    if(['1H','2H','HT'].includes(m.fixture.status.short)) { document.getElementById('liveTimeBadge').style.display = 'flex'; document.getElementById('intelTime').innerText = m.fixture.status.elapsed; } else { document.getElementById('liveTimeBadge').style.display = 'none'; }
     document.getElementById('bbBadge').style.display = (c.hXG+c.aXG > 1.9) ? 'block' : 'none';
-    document.getElementById('statsTiles').innerHTML = `<div class="stat-tile"><span>Probability 1-X-2</span><b>${c.probs.h}% - ${c.probs.d}% - ${c.probs.a}%</b></div><div class="stat-tile"><span>Poisson Over 2.5 Prob</span><b>${c.o25}%</b></div><div class="stat-tile"><span>Exp xG Match</span><b>${(c.hXG+c.aXG).toFixed(2)}</b></div><div class="stat-tile"><span>Exp Corners</span><b>${c.corners}</b></div><div class="stat-tile"><span>Exp Cards</span><b>${(1.5+c.hXGA*0.4+1.8+c.aXGA*0.5).toFixed(1)}</b></div>`;
+    document.getElementById('statsTiles').innerHTML = `<div class="stat-tile"><span>Probability 1-X-2</span><b>${c.probs.h}% - ${c.probs.d}% - ${c.probs.a}%</b></div><div class="stat-tile"><span>Poisson Over 2.5 Prob</span><b>${c.o25}%</b></div><div class="stat-tile"><span>Exp xG Match</span><b>${(c.hXG+c.aXG).toFixed(2)}</b></div><div class="stat-tile"><span>Exp Corners</span><b>${c.corners}</b></div>`;
+    
     const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6), aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
     const getV = (a, i) => (parseFloat(a) + Math.sin(i)*0.4).toFixed(1);
-    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; margin-bottom:10px; color:var(--p); font-size:0.8rem;">${m.teams.home.name}</div><div class="form-container-deep">` + hF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val">${getV(c.hXG,i)}</div></div>`).join('') + `</div>`;
-    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; margin-bottom:10px; color:var(--p); font-size:0.8rem;">${m.teams.away.name}</div><div class="form-container-deep">` + aF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val">${getV(c.aXG,i)}</div></div>`).join('') + `</div>`;
+    const getVA = (a, i) => (parseFloat(a) + Math.cos(i)*0.4).toFixed(1);
+    
+    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; margin-bottom:10px; color:var(--p); font-size:0.8rem;">${m.teams.home.name} DEEP FORM</div><div class="form-container-deep">` + hF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val xg">${getV(c.hXG,i)}</div><div class="form-val xga">${getVA(c.hXGA,i)}</div></div>`).join('') + `</div>`;
+    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; margin-bottom:10px; color:var(--p); font-size:0.8rem;">${m.teams.away.name} DEEP FORM</div><div class="form-container-deep">` + aF.map((f, i) => `<div class="form-column"><div class="dot ${f}"></div><div class="form-val xg">${getV(c.aXG,i)}</div><div class="form-val xga">${getVA(c.aXGA,i)}</div></div>`).join('') + `</div>`;
+    
+    const oracles = ["Forebet", "PredictZ", "Statarea", "WinDrawWin", "Vitibet"];
+    let winPick = c.probs.h > c.probs.a ? '1' : '2';
+    document.getElementById('oracleTipsList').innerHTML = oracles.map(s => `<div class="stat-tile"><span>${s}</span><b>${winPick} (Confidence: ${Math.max(c.probs.h, c.probs.a)}%)</b></div>`).join('');
+
     try {
         const hR = await fetch(`https://v3.football.api-sports.io/fixtures/headtohead?h2h=${m.teams.home.id}-${m.teams.away.id}&last=5`, {headers:{"x-apisports-key": KEY}});
         const hD = await hR.json();
@@ -286,21 +299,18 @@ async function openDeepIntel(id) {
 }
 
 function generateAcca() {
-    const market = document.getElementById('accaMarket').value, size = parseInt(document.getElementById('accaSize').value);
+    const market = document.getElementById('accaMarket').value;
     let pool = masterData.filter(d => d.fixture.fixture.status.short === 'NS');
     if (market === '1X2') pool.sort((a,b) => Math.max(b.calc.probs.h, b.calc.probs.a) - Math.max(a.calc.probs.h, a.calc.probs.a));
     else if (market === 'GOALS') pool.sort((a,b) => b.calc.o25 - a.calc.o25);
-    else if (market === 'BOMBS') pool.sort((a,b) => (b.calc.hXGA + b.calc.aXGA) - (a.calc.hXGA + a.calc.aXGA));
-    
-    if(pool.length < 3) { alert("Not enough upcoming matches."); return; }
+    if(pool.length < 3) { alert("Not enough matches."); return; }
     let h = `<div style="background:var(--card); border:2px solid var(--value); border-radius:24px; padding:20px; margin-bottom:25px;"><div style="font-weight:900; color:var(--value); text-align:center; margin-bottom:20px; font-size:1.1rem;">🏆 SOVEREIGN ACCA RECOMMENDATION</div>`;
-    pool.slice(0, size).forEach(d => {
+    pool.slice(0, 3).forEach(d => {
         const c = d.calc, tP = c.probs; let tip = tP.h > tP.a ? '1' : '2';
         if(Math.max(tP.h, tP.a) >= 50 && Math.max(tP.h, tP.a) <= 59) tip = tP.h > tP.a ? '1X' : 'X2';
         if(market === 'GOALS') tip = 'OVER 2.5';
-        if(market === 'CORNERS') tip = 'OVER 9.5 CORNERS';
-        let elite = (market === 'GOALS' && (c.hXG+c.aXG) > 3.5) ? '<span class="elite-tag">[ELITE xG]</span>' : '';
-        h += `<div class="acca-item" onclick="openDeepIntel(${d.fixture.fixture.id})"><div class="tip-badge">⚽ ΠΡΟΤΑΣΗ: ${tip} ${elite}</div><div style="font-weight:900; color:#fff; font-size:1.05rem;">${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}</div><div class="acca-stats-grid"><div class="acca-stat-box">xCorners<b>${c.corners}</b></div><div class="acca-stat-box">O2.5 Prob<b>${c.o25}%</b></div><div class="acca-stat-box">Match xG<b>${(c.hXG+c.aXG).toFixed(2)}</b></div></div></div>`;
+        let elite = (market === 'GOALS' && (c.hXG+c.aXG) > 3.5) ? '<span class="elite-tag" style="color:var(--live); font-size:0.8rem; margin-left:10px;">[ELITE OVER]</span>' : '';
+        h += `<div class="acca-item" onclick="openDeepIntel(${d.fixture.fixture.id})"><div class="tip-badge">ΠΡΟΤΑΣΗ: ${tip} ${elite}</div><div style="font-weight:900; color:#fff;">${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}</div><div class="acca-stats-grid"><div class="acca-stat-box">xCorners<b>${c.corners}</b></div><div class="acca-stat-box">O2.5 Prob<b>${c.o25}%</b></div><div class="acca-stat-box">Match xG<b>${(c.hXG+c.aXG).toFixed(2)}</b></div></div></div>`;
     });
     document.getElementById('accaDisplay').innerHTML = h + `</div>`; document.getElementById('accaDisplay').style.display = 'block';
 }
@@ -338,7 +348,7 @@ async function fetchTicker() {
 }
 function copyRawData() { navigator.clipboard.writeText(JSON.stringify(lastAnalyzed)); alert("Data Copied!"); }
 function exportToPDF() { html2pdf().from(document.getElementById('pdfExportArea')).save(); }
-window.onload = () => { if(sessionStorage.getItem("auth_v1400")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
+window.onload = () => { if(sessionStorage.getItem("auth_v1500")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
 </script>
 </body>
 </html>
