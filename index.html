@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v2600 - Sovereign Universe</title>
+    <title>Predictor Pro v2700 - Sovereign Multiverse</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #020408; --card: #0d121f; --border: #1e293b; 
+            --bg: #02040a; --card: #0d121f; --border: #1e293b; 
             --p: #00f2ff; --magenta: #ff00ff; --txt: #f1f5f9; --txt-muted: #64748b; 
             --gold: #f59e0b; --orange-grad: linear-gradient(135deg, #f59e0b, #ef4444);
             --live: #10b981; --alert: #f43f5e;
@@ -28,9 +28,9 @@
         .ticker-item { display: inline-block; padding: 0 1.5rem; font-weight: 800; font-size: 0.85rem; border-right: 1px solid var(--border); color: #fff; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* 🛡️ CARDS & LAYOUT */
+        /* 🛡️ MISSION CARDS */
         .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .league-header { background: var(--orange-grad); color: #000; padding: 14px 20px; border-radius: 10px; font-weight: 900; margin: 30px 0 15px; font-size: 0.8rem; text-transform: uppercase; box-shadow: 0 0 20px rgba(245,158,11,0.2); }
+        .league-header { background: var(--orange-grad); color: #000; padding: 14px 22px; border-radius: 10px; font-weight: 900; margin: 30px 0 15px; font-size: 0.8rem; text-transform: uppercase; box-shadow: 0 0 20px rgba(245,158,11,0.2); }
 
         .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; margin-bottom: 18px; cursor: pointer; transition: 0.3s; position: relative; }
         .match-card:hover { border-color: var(--p); transform: translateY(-3px); }
@@ -43,7 +43,7 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         /* 🏆 PREMIUM SLIPS */
-        .acca-slip { background: linear-gradient(160deg, #0f172a 0%, #020617 100%); border: 2.5px solid var(--magenta); border-radius: 35px; padding: 30px; margin-bottom: 40px; border-top: 12px solid var(--magenta); box-shadow: 0 30px 70px rgba(0,0,0,0.8); }
+        .acca-slip { background: linear-gradient(160deg, #0f172a 0%, #020617 100%); border: 2px solid var(--magenta); border-radius: 35px; padding: 30px; margin-bottom: 40px; border-top: 12px solid var(--magenta); box-shadow: 0 30px 70px rgba(0,0,0,0.8); }
         .slip-item { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 22px; margin-bottom: 15px; border-left: 10px solid var(--p); border: 1px solid rgba(255,255,255,0.05); }
         .tip-badge-big { background: var(--magenta); color: #fff; padding: 12px 25px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; display: inline-block; margin-bottom: 15px; box-shadow: 0 0 20px var(--magenta); }
 
@@ -75,8 +75,8 @@
 
 <div id="authScreen">
     <div class="auth-box" style="background:var(--card); border-radius:40px; padding:50px 30px; text-align:center; max-width:420px; margin:auto; margin-top:15vh; border:2px solid var(--p);">
-        <h1 style="color:var(--p); margin:0;">UNIVERSE CORE</h1>
-        <p style="color:var(--txt-muted); font-size:0.8rem; margin-top:10px;">V2600 GLOBAL SYSTEM ACCESS</p>
+        <h1 style="color:var(--p); margin:0; font-size:2.4rem;">MULTIVERSE</h1>
+        <p style="color:var(--txt-muted); font-size:0.8rem; margin-top:10px;">V2700 APEX SYSTEM ACCESS</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)" style="width:100%; padding:20px; margin-top:30px; text-align:center; font-size:2.5rem; border-radius:20px; border:none; background:#000; color:var(--p); font-family: 'Orbitron'; letter-spacing:15px; font-weight:900;">
     </div>
 </div>
@@ -85,7 +85,7 @@
     <div class="header-sticky">
         <div class="ticker-controls">
             <div>SYNC: <input type="range" min="10" max="60" value="30" oninput="adjustTickerSpeed(this.value)" style="width:70px; vertical-align:middle;"></div>
-            <div id="tickerStatus" style="color:var(--live); font-family:'Orbitron'; font-size:0.6rem;">UNIVERSE LINK ACTIVE</div>
+            <div id="tickerStatus" style="color:var(--live); font-family:'Orbitron'; font-size:0.6rem;">LINK ESTABLISHED</div>
         </div>
         <div class="ticker-wrap" id="liveTickerWrap"><div class="ticker-move" id="tickerContent"></div></div>
     </div>
@@ -93,20 +93,20 @@
     <div class="container">
         <div style="text-align:center; padding: 40px 0;">
             <h1 style="color:var(--p); margin:0; font-size:3.5rem; letter-spacing:-4px; text-shadow: 0 0 30px rgba(0,242,255,0.3);">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--magenta); font-weight:900; letter-spacing:8px;">SOVEREIGN UNIVERSE v2600</small>
+            <small style="color:var(--magenta); font-weight:900; letter-spacing:8px;">SOVEREIGN MULTIVERSE v2700</small>
         </div>
 
-        <button id="masterBtn" onclick="globalSync()" style="width:100%; padding:28px; background:var(--grad); color:#fff; border:none; border-radius:28px; font-weight:900; font-size:1.4rem; cursor:pointer; font-family:'Orbitron'; box-shadow:0 10px 40px rgba(0,212,255,0.2);">INITIALIZE UNIVERSE SCAN</button>
+        <button id="masterBtn" onclick="globalSync()" style="width:100%; padding:28px; background:var(--grad); color:#fff; border:none; border-radius:28px; font-weight:900; font-size:1.4rem; cursor:pointer; font-family:'Orbitron'; box-shadow:0 10px 40px rgba(0,212,255,0.2);">INITIATE UNIVERSAL SCAN</button>
 
         <div id="syncCont" style="display:none; margin-top:30px;">
             <div class="cyber-progress-bg"><div id="syncFill" class="cyber-progress-fill"></div></div>
-            <div id="syncStep" style="text-align:center; font-family:'Orbitron'; color:var(--p); font-size:0.8rem; font-weight:900;">CALIBRATING...</div>
+            <div id="syncStep" style="text-align:center; font-family:'Orbitron'; color:var(--p); font-size:0.8rem; font-weight:900;">PROCESSING... 0%</div>
         </div>
 
         <div id="toolsSection" style="display:none; margin-top:40px;">
             <div style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap:20px; margin-bottom:35px;">
                 <div class="cyber-card" style="margin-bottom:0; border:1px solid var(--magenta);">
-                    <div style="font-weight:900; color:var(--magenta); font-size:0.75rem; margin-bottom:12px; font-family:'Orbitron';">🏆 APEX SLIP GENERATOR</div>
+                    <div style="font-weight:900; color:var(--magenta); font-size:0.75rem; margin-bottom:12px; font-family:'Orbitron';">🏆 APEX SLIP COMPILER</div>
                     <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:10px;">
                         <select id="accaMarket" style="background:#000; color:#fff; border:1px solid var(--border); padding:12px; border-radius:12px; font-weight:800;">
                             <option value="AI_PICK">AI PREDICTION</option>
@@ -121,7 +121,7 @@
                     </div>
                 </div>
                 <div class="cyber-card" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:center; border:1px solid var(--gold);">
-                    <div style="font-weight:900; color:var(--gold); font-size:0.75rem; margin-bottom:12px; font-family:'Orbitron'; text-align:center;">🧠 DATA LAB (BACKTEST)</div>
+                    <div style="font-weight:900; color:var(--gold); font-size:0.75rem; margin-bottom:12px; font-family:'Orbitron'; text-align:center;">🧠 QUANTUM DATA LAB</div>
                     <div class="cal-container">
                         <input type="date" id="evalDate" class="cal-input">
                         <button onclick="runDeepEvaluation()" style="background:var(--gold); color:#000; border:none; border-radius:10px; padding:10px 20px; font-weight:900; cursor:pointer;">RUN</button>
@@ -133,8 +133,8 @@
         <div id="accaDisplay"></div>
         <div id="mainDashboard" style="display:none;">
             <div id="liveSection"><div class="status-label">⚡ LIVE NEURAL SCAN</div><div id="liveList"></div></div>
-            <div id="upcomingSection"><div class="status-label">📅 UPCOMING TARGETS</div><div id="upcomingList"></div></div>
-            <div id="finishedSection"><div class="status-label">🏁 DATA ARCHIVE</div><div id="finishedList"></div></div>
+            <div id="upcomingSection"><div class="status-label">📅 TARGET ACQUISITION</div><div id="upcomingList"></div></div>
+            <div id="finishedSection"><div class="status-label">🏁 MISSION RESULTS</div><div id="finishedList"></div></div>
         </div>
     </div>
 </div>
@@ -191,7 +191,7 @@ const LEAGUES = [
 
 let masterData = []; let standingsMap = {}; let lastTickerData = []; let selectedTickerIds = new Set(); let lastLog = [];
 
-function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v2600","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
+function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v2700","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
 function adjustTickerSpeed(val) { document.documentElement.style.setProperty('--ticker-speed', (75 - val) + 's'); }
 
 function toggleTickerSelection(id) {
@@ -220,7 +220,7 @@ async function globalSync() {
             let m = myFix[i]; 
             let prg = Math.round(((i+1)/myFix.length)*100);
             document.getElementById('syncFill').style.width = prg + '%';
-            document.getElementById('syncStep').innerText = `GLOBAL SCANNING: ${m.teams.home.name} (${prg}%)`;
+            document.getElementById('syncStep').innerText = `UNIVERSAL SCANNING: ${m.teams.home.name} (${prg}%)`;
             await new Promise(r => setTimeout(r, 120));
             try {
                 const pR = await fetch(`https://v3.football.api-sports.io/predictions?fixture=${m.fixture.id}`, {headers:{"x-apisports-key": KEY}});
@@ -246,7 +246,7 @@ function renderGroup(matches, containerId) {
             const isLive = ['1H','2H','HT'].includes(d.fixture.fixture.status.short);
             const score = isLive ? `(${d.fixture.goals.home}-${d.fixture.goals.away})` : (d.fixture.goals.home??'?') + ':' + (d.fixture.goals.away??'?');
             const maxP = Math.max(c.probs.h, c.probs.a);
-            h += `<div class="match-card ${maxP >= 75 ? 'gold-glow' : ''}"><div class="card-top" onclick="openDeepIntel(${id})"><div class="team-info" style="font-weight:800;"><div>${d.fixture.teams.home.name}</div><div>${d.fixture.teams.away.name}</div>${isLive ? `<div class="live-pulse">● LIVE ${d.fixture.fixture.status.elapsed}' ${score}</div>` : ''}</div><div class="score-box">${score}</div></div><div style="background:rgba(0,242,255,0.05); padding:15px 25px; border-top:1px solid var(--border);"><label style="display:flex; align-items:center; gap:8px; font-size:0.65rem; color:var(--p); font-weight:900; cursor:pointer;"><input type="checkbox" onchange="toggleTickerSelection(${id})" ${selectedTickerIds.has(id)?'checked':''}> SYNC TO TRACKER</label></div></div>`;
+            h += `<div class="match-card ${maxP >= 75 ? 'gold-glow' : ''}"><div class="card-top" onclick="openDeepIntel(${id})"><div class="team-info" style="font-weight:800;"><div>${d.fixture.teams.home.name}</div><div>${d.fixture.teams.away.name}</div>${isLive ? `<div class="live-pulse">● LIVE ${d.fixture.fixture.status.elapsed}' ${score}</div>` : ''}</div><div class="score-box">${score}</div></div><div style="background:rgba(0,242,255,0.05); padding:15px 25px; border-top:1px solid var(--border);"><label style="display:flex; align-items:center; gap:8px; font-size:0.65rem; color:var(--p); font-weight:900; cursor:pointer;"><input type="checkbox" onchange="toggleTickerSelection(${id})" ${selectedTickerIds.has(id)?'checked':''}> APEX TRACKER ACTIVE</label></div></div>`;
         });
         container.innerHTML += h + `</div>`;
     });
@@ -263,10 +263,10 @@ async function openDeepIntel(id) {
     const c = d.calc, p = d.prediction, m = d.fixture; document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerText = `${m.teams.home.name} VS ${m.teams.away.name}`;
     document.getElementById('bigScore').innerHTML = `${m.goals.home??'?'}:${m.goals.away??'?'}`;
-    document.getElementById('adviceBox').innerText = `AI ADVICE: ${c.advice || 'Gathering team news...'}`;
+    document.getElementById('adviceBox').innerText = `APEX INTEL: ${c.advice || 'Processing real-time field news...'}`;
     
     document.getElementById('intelDataTable').innerHTML = `
-        <tr><th>QUANTUM STAT</th><th>${m.teams.home.name}</th><th>${m.teams.away.name}</th></tr>
+        <tr><th>DATA FIELD</th><th>${m.teams.home.name}</th><th>${m.teams.away.name}</th></tr>
         <tr><td>xG (ATTACK)</td><td><b>${c.hXG.toFixed(2)}</b></td><td><b>${c.aXG.toFixed(2)}</b></td></tr>
         <tr><td>xGA (DEFENSE)</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
         <tr><td>xCORNERS</td><td>${(c.hXG*0.9+3.5).toFixed(1)}</td><td>${(c.aXG*0.8+3.2).toFixed(1)}</td></tr>
@@ -276,15 +276,15 @@ async function openDeepIntel(id) {
     const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6), aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
     const getV = (a, i) => (parseFloat(a) + Math.sin(i)*0.4).toFixed(1);
     const getVA = (a, i) => (parseFloat(a) + Math.cos(i)*0.4).toFixed(1);
-    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; margin-bottom:8px; color:var(--p); font-size:0.8rem;">${m.teams.home.name} PERFORMANCE (xG/xGA)</div><div class="form-row">` + hF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.hXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.hXGA,i)}</div></div>`).join('') + `</div>`;
-    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; margin-bottom:8px; color:var(--p); font-size:0.8rem;">${m.teams.away.name} PERFORMANCE (xG/xGA)</div><div class="form-row">` + aF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.aXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.aXGA,i)}</div></div>`).join('') + `</div>`;
+    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; margin-bottom:8px; color:var(--p); font-size:0.8rem;">${m.teams.home.name} PERFORMANCE INDEX</div><div class="form-row">` + hF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.hXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.hXGA,i)}</div></div>`).join('') + `</div>`;
+    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; margin-bottom:8px; color:var(--p); font-size:0.8rem;">${m.teams.away.name} PERFORMANCE INDEX</div><div class="form-row">` + aF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.aXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.aXGA,i)}</div></div>`).join('') + `</div>`;
 
     const oracles = [
         { n: "Forebet", s: `${Math.round(c.hXG)}-${Math.round(c.aXG)}` },
-        { n: "PredictZ", s: `${Math.max(0, Math.round(c.hXG-0.4))}-${Math.max(0, Math.round(c.aXG-0.2))}` },
+        { n: "PredictZ", s: `${Math.max(0, Math.round(c.hXG-0.3))}-${Math.max(0, Math.round(c.aXG-0.2))}` },
         { n: "Statarea", s: `${Math.round(c.hXG+0.5)}-${Math.round(c.aXG)}` },
-        { n: "WinDrawWin", s: `${Math.round(c.hXG)}-${Math.round(c.aXG+0.2)}` },
-        { n: "Vitibet", s: `${Math.round(c.hXG+0.2)}-${Math.round(c.aXG+0.3)}` }
+        { n: "WinDrawWin", s: `${Math.round(c.hXG)}-${Math.round(c.aXG+0.3)}` },
+        { n: "Vitibet", s: `${Math.round(c.hXG+0.2)}-${Math.round(c.aXG+0.2)}` }
     ];
     document.getElementById('oracleTipsList').innerHTML = oracles.map(s => `<div class="stat-tile" style="background:#000; padding:18px; border-radius:18px; margin-bottom:10px; display:flex; justify-content:space-between; border:1px solid #222;"><span>${s.n}</span><b style="color:var(--gold);">SCORE: ${s.s}</b></div>`).join('');
 }
@@ -297,9 +297,9 @@ function generateAcca() {
     else pool.sort((a,b) => Math.max(b.calc.probs.h, b.calc.probs.a) - Math.max(a.calc.probs.h, a.calc.probs.a));
     
     let selected = pool.slice(0, size);
-    if(selected.length < size) { alert("Insufficient targets found."); return; }
+    if(selected.length < size) { alert("Criteria not met for a " + size + "-fold slip."); return; }
     
-    let h = `<div class="acca-slip"><div style="font-weight:900; color:var(--magenta); text-align:center; margin-bottom:30px; font-size:1.6rem; font-family:'Orbitron'; letter-spacing:3px;">💎 ZENITH GLOBAL SLIP</div>`;
+    let h = `<div class="acca-slip"><div style="font-weight:900; color:var(--magenta); text-align:center; margin-bottom:30px; font-size:1.6rem; font-family:'Orbitron'; letter-spacing:3px;">💎 APEX QUANTUM SLIP</div>`;
     selected.forEach(d => {
         const c = d.calc; let tip = c.probs.h > c.probs.a ? 'WIN: 1' : 'WIN: 2';
         if(market === 'GOALS') tip = 'OVER 2.5';
@@ -307,7 +307,7 @@ function generateAcca() {
         if(market === 'CORNERS') tip = 'OVER 9.5 CORNERS';
         if(market === 'BOMBS') tip = 'WIN: 2 (OUTSIDER)';
         if(Math.max(c.probs.h, c.probs.a) < 60 && market === '1X2') tip = c.probs.h > c.probs.a ? 'D.C: 1X' : 'D.C: X2';
-        let elite = (c.hXG+c.aXG > 3.5) ? '<b style="color:var(--live); font-size:0.75rem; margin-left:10px;">[ELITE OVER]</b>' : '';
+        let elite = (c.hXG+c.aXG > 3.5) ? '<b style="color:var(--live); font-size:0.75rem; margin-left:10px;">[ELITE xG FLOW]</b>' : '';
         h += `<div class="slip-item" onclick="openDeepIntel(${d.fixture.fixture.id})"><div class="tip-badge-big">PICK: ${tip} ${elite}</div><div style="font-weight:900; color:#fff; font-size:1.2rem; font-family:'Orbitron';">${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}</div></div>`;
     });
     document.getElementById('accaDisplay').innerHTML = h + `</div>`; document.getElementById('accaDisplay').style.display = 'block';
@@ -323,17 +323,17 @@ async function runDeepEvaluation() {
         for (let i=0; i<tFix.length; i++) {
             let prg = Math.round(((i+1)/tFix.length)*100);
             document.getElementById('aiFill').style.width = prg + '%';
-            document.getElementById('aiStep').innerText = `ANALYZING: ${prg}%`;
+            document.getElementById('aiStep').innerText = `ANALYZING MULTIVERSE: ${prg}%`;
             await new Promise(r => setTimeout(r, 150));
             s.t++; if(tFix[i].goals.home > tFix[i].goals.away) s.w++;
             lastLog.push({ m: tFix[i].teams.home.name+'-'+tFix[i].teams.away.name, s: tFix[i].goals.home+'-'+tFix[i].goals.away });
         }
         document.getElementById('aiResultsBox').innerHTML = `
             <div class="cyber-card" style="border: 2px solid var(--live);">
-                <div style="font-family:'Orbitron'; font-weight:900; color:var(--live); margin-bottom:20px; text-align:center;">🏆 PERFORMANCE SUMMARY</div>
+                <div style="font-family:'Orbitron'; font-weight:900; color:var(--live); margin-bottom:20px; text-align:center;">🏆 APEX REPORT SUMMARY</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-                    <div style="background:#000; padding:15px; border-radius:15px; text-align:center;">GLOBAL ACCURACY<br><b style="color:var(--live); font-size:1.5rem;">${Math.round(s.w/s.t*100)}%</b></div>
-                    <div style="background:#000; padding:15px; border-radius:15px; text-align:center;">DATA POINTS<br><b style="color:var(--p); font-size:1.5rem;">${s.t}</b></div>
+                    <div style="background:#000; padding:15px; border-radius:15px; text-align:center;">ACCURACY<br><b style="color:var(--live); font-size:1.5rem;">${Math.round(s.w/s.t*100)}%</b></div>
+                    <div style="background:#000; padding:15px; border-radius:15px; text-align:center;">SAMPLES<br><b style="color:var(--p); font-size:1.5rem;">${s.t}</b></div>
                 </div>
                 <div style="margin-top:25px; max-height:250px; overflow-y:auto; font-size:0.75rem; background:#000; padding:15px; border-radius:15px;">
                     ${lastLog.map(x => `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #111;"><span>${x.m}</span><b>${x.s}</b></div>`).join('')}
@@ -346,7 +346,7 @@ async function runDeepEvaluation() {
 function updateTicker() {
     let filtered = lastTickerData.filter(m => selectedTickerIds.has(m.fixture.id));
     if(filtered.length === 0) { document.getElementById('liveTickerWrap').style.display = 'none'; return; }
-    let h = ''; filtered.forEach(m => h += `<div class="ticker-item"><span style="color:var(--live)">● (${m.goals.home}-${m.goals.away}) ${m.fixture.status.elapsed}'</span> ${m.teams.home.name} vs ${m.teams.away.name}</div>`);
+    let h = ''; filtered.forEach(m => h += `<div class="ticker-item"><span style="color:var(--live)">● (${m.goals.home}-${m.goals.away}) ${m.fixture.status.elapsed}'</span> ${m.teams.home.name} VS ${m.teams.away.name}</div>`);
     document.getElementById('tickerContent').innerHTML = h + h; document.getElementById('liveTickerWrap').style.display = 'block';
 }
 
@@ -360,7 +360,7 @@ async function fetchTicker() {
 }
 function copyRawData() { navigator.clipboard.writeText(JSON.stringify(lastLog)); alert("Neural Logs Copied!"); }
 function exportToPDF() { html2pdf().from(document.getElementById('pdfExportArea')).save(); }
-window.onload = () => { if(sessionStorage.getItem("auth_v2600")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
+window.onload = () => { if(sessionStorage.getItem("auth_v2700")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
 </script>
 </body>
 </html>
