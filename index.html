@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v3100 - Sovereign Overseer</title>
+    <title>Predictor Pro v3200 - Sovereign Apex</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -29,10 +29,10 @@
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* 🔥 MOTD & SAFETY */
-        #motdSection { background: linear-gradient(145deg, #1e1b4b, #020617); border: 2px solid var(--gold); border-radius: 30px; padding: 25px; margin-bottom: 30px; display: none; box-shadow: 0 0 40px rgba(245,158,11,0.2); position: relative; }
+        #motdSection { background: linear-gradient(145deg, #1e1b4b, #020617); border: 2px solid var(--gold); border-radius: 30px; padding: 25px; margin-bottom: 30px; display: none; box-shadow: 0 0 40px rgba(245,158,11,0.2); position: relative; cursor: pointer; }
         .motd-badge { position: absolute; top: -15px; left: 30px; background: var(--gold); color: #000; padding: 5px 15px; border-radius: 8px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; }
 
-        /* 🛡️ CARDS */
+        /* 🛡️ MISSION CARDS */
         .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
         .league-header { background: var(--orange-grad); color: #000; padding: 14px 22px; border-radius: 10px; font-weight: 900; margin: 30px 0 15px; font-size: 0.8rem; text-transform: uppercase; }
 
@@ -44,12 +44,12 @@
         .live-pulse { color: var(--live); font-weight: 900; animation: blink 1.2s infinite; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* 🏆 PREMIUM SLIPS */
+        /* 🏆 SLIPS */
         .acca-slip { background: linear-gradient(160deg, #0f172a 0%, #020617 100%); border: 2px solid var(--magenta); border-radius: 35px; padding: 30px; margin-bottom: 40px; border-top: 12px solid var(--magenta); box-shadow: 0 30px 70px rgba(0,0,0,0.8); }
         .slip-item { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 22px; margin-bottom: 15px; border-left: 10px solid var(--p); border: 1px solid rgba(255,255,255,0.05); }
         .tip-badge-big { background: var(--magenta); color: #fff; padding: 12px 25px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; display: inline-block; margin-bottom: 15px; box-shadow: 0 0 20px var(--magenta); border: 2px solid var(--p); }
 
-        /* 📊 PROGRESS BARS */
+        /* 📊 LAB & PROGRESS */
         .cyber-progress-bg { background: #000; height: 18px; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); position: relative; margin: 15px 0; }
         .cyber-progress-fill { height: 100%; background: var(--grad); width: 0%; transition: width 0.4s; box-shadow: 0 0 20px var(--p); }
 
@@ -78,8 +78,8 @@
 
 <div id="authScreen">
     <div class="auth-box" style="background:var(--card); border-radius:40px; padding:50px 30px; text-align:center; max-width:420px; margin:auto; margin-top:15vh; border:2px solid var(--p);">
-        <h1 style="color:var(--p); margin:0; font-size:2.2rem;">OVERSEER CORE</h1>
-        <p style="color:var(--txt-muted); font-size:0.8rem; margin-top:10px;">V3100 FINAL SOVEREIGN Spec</p>
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem;">APEX SYSTEM</h1>
+        <p style="color:var(--txt-muted); font-size:0.8rem; margin-top:10px;">V3200 CONTINUUM SPEC</p>
         <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)" style="width:100%; padding:20px; margin-top:30px; text-align:center; font-size:2.5rem; border-radius:20px; border:none; background:#000; color:var(--p); font-family: 'Orbitron'; letter-spacing:15px; font-weight:900;">
     </div>
 </div>
@@ -88,7 +88,7 @@
     <div class="header-sticky">
         <div class="ticker-controls">
             <div>SYNC: <input type="range" min="10" max="60" value="30" oninput="adjustTickerSpeed(this.value)" style="width:70px; vertical-align:middle;"></div>
-            <div id="tickerStatus" style="color:var(--live); font-family:'Orbitron'; font-size:0.6rem;">OVERSEER LINK ACTIVE</div>
+            <div id="tickerStatus" style="color:var(--live); font-family:'Orbitron'; font-size:0.6rem;">CORE LINK ESTABLISHED</div>
         </div>
         <div class="ticker-wrap" id="liveTickerWrap"><div class="ticker-move" id="tickerContent"></div></div>
     </div>
@@ -96,7 +96,7 @@
     <div class="container">
         <div style="text-align:center; padding: 40px 0;">
             <h1 style="color:var(--p); margin:0; font-size:3.5rem; letter-spacing:-4px; text-shadow: 0 0 30px rgba(0,242,255,0.3);">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--magenta); font-weight:900; letter-spacing:8px;">SOVEREIGN OVERSEER v3100</small>
+            <small style="color:var(--magenta); font-weight:900; letter-spacing:8px;">SOVEREIGN APEX v3200</small>
         </div>
 
         <div id="motdSection">
@@ -104,7 +104,7 @@
             <div id="motdContent"></div>
         </div>
 
-        <button id="masterBtn" onclick="globalSync()" style="width:100%; padding:28px; background:var(--grad); color:#fff; border:none; border-radius:28px; font-weight:900; font-size:1.4rem; cursor:pointer; font-family:'Orbitron'; box-shadow:0 10px 40px rgba(0,212,255,0.2);">INITIALIZE FULL UNIVERSE SCAN</button>
+        <button id="masterBtn" onclick="globalSync()" style="width:100%; padding:28px; background:var(--grad); color:#fff; border:none; border-radius:28px; font-weight:900; font-size:1.4rem; cursor:pointer; font-family:'Orbitron'; box-shadow:0 10px 40px rgba(0,212,255,0.2);">INITIALIZE UNIVERSE SCAN</button>
 
         <div id="syncCont" style="display:none; margin-top:30px;">
             <div class="cyber-progress-bg"><div id="syncFill" class="cyber-progress-fill"></div></div>
@@ -141,7 +141,7 @@
         <div id="mainDashboard" style="display:none;">
             <div id="liveSection"><div class="status-label">⚡ LIVE NEURAL SCAN</div><div id="liveList"></div></div>
             <div id="upcomingSection"><div class="status-label">📅 UPCOMING TARGETS</div><div id="upcomingList"></div></div>
-            <div id="finishedSection"><div class="status-label">🏁 MISSION RESULTS</div><div id="finishedList"></div></div>
+            <div id="finishedSection"><div class="status-label">🏁 DATA ARCHIVE</div><div id="finishedList"></div></div>
         </div>
     </div>
 </div>
@@ -192,13 +192,12 @@ const LEAGUES = [
     {id: 39, name: "Premier League"}, {id: 40, name: "Championship"}, {id: 140, name: "La Liga"}, {id: 141, name: "Segunda"},
     {id: 135, name: "Serie A"}, {id: 136, name: "Serie B"}, {id: 78, name: "Bundesliga"}, {id: 61, name: "Ligue 1"},
     {id: 88, name: "Eredivisie"}, {id: 94, name: "Liga Portugal"}, {id: 144, name: "Belgian Pro League"},
-    {id: 197, name: "Super League GR"}, {id: 318, name: "Cyprus 1"}, {id: 253, name: "MLS"}, {id: 41, name: "League One"},
-    {id: 137, name: "Serie C"}, {id: 79, name: "Bundesliga 2"}, {id: 142, name: "Primera Federacion"}
+    {id: 197, name: "Super League GR"}, {id: 318, name: "Cyprus 1"}, {id: 253, name: "MLS"}
 ];
 
 let masterData = []; let standingsMap = {}; let lastTickerData = []; let selectedTickerIds = new Set(); let lastLog = [];
 
-function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v3100","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
+function instantAuth(el) { if(el.value === "106014") { sessionStorage.setItem("auth_v3200","1"); document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } }
 function adjustTickerSpeed(val) { document.documentElement.style.setProperty('--ticker-speed', (75 - val) + 's'); }
 
 function toggleTickerSelection(id) {
@@ -206,16 +205,15 @@ function toggleTickerSelection(id) {
     updateTicker();
 }
 
-function calculatePoisson(lambda, x) {
-    let L = Math.exp(-lambda), sum = 0, fact = 1;
-    for (let i = 0; i < x; i++) { if(i>0) fact *= i; sum += (Math.pow(lambda, i) / fact); }
-    return Math.round((1 - (L * sum)) * 100);
-}
-
 function getCalculations(pD, m) {
     const hXG = parseFloat(pD.teams.home.last_5.goals.for.average || 1.15), aXG = parseFloat(pD.teams.away.last_5.goals.for.average || 1.15);
     const hXGA = parseFloat(pD.teams.home.last_5.goals.against.average || 1.25), aXGA = parseFloat(pD.teams.away.last_5.goals.against.average || 1.25);
-    let hS = (hXG * 0.45 + aXGA * 0.55), aS = (aXG * 0.45 + hXGA * 0.55);
+    
+    // Continuum Momentum (Batch 200+)
+    let hM = (pD.teams.home.league.form || "DDDD").slice(-3).split('W').length - 1 >= 2 ? 0.3 : 0;
+    let aM = (pD.teams.away.league.form || "DDDD").slice(-3).split('W').length - 1 >= 2 ? 0.3 : 0;
+
+    let hS = (hXG * 0.45 + aXGA * 0.55) + hM; let aS = (aXG * 0.45 + hXGA * 0.55) + aM;
     let total = hS + aS + 0.5;
     let hProb = Math.round((hS / total) * 100), aProb = Math.round((aS / total) * 100);
     return { hXG, aXG, hXGA, aXGA, probs: { h: hProb, d: 100-hProb-aProb, a: aProb }, o25: parseInt(pD.predictions.goals.over?.split('%')[0]) || 50, corners: (hXG*0.9+aXG*0.8+7.2).toFixed(1), advice: pD.predictions.advice };
@@ -252,8 +250,9 @@ function renderMOTD() {
     if(pool.length === 0) return;
     pool.sort((a,b) => Math.max(b.calc.probs.h, b.calc.probs.a) - Math.max(a.calc.probs.h, a.calc.probs.a));
     const m = pool[0]; document.getElementById('motdSection').style.display = 'block';
+    document.getElementById('motdSection').onclick = () => openDeepIntel(m.fixture.fixture.id);
     document.getElementById('motdContent').innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;" onclick="openDeepIntel(${m.fixture.fixture.id})">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
             <div><h2 style="margin:0; color:#fff;">${m.fixture.teams.home.name} - ${m.fixture.teams.away.name}</h2><p style="color:var(--gold); font-weight:800; margin:5px 0;">NEURAL CERTAINTY: ${Math.max(m.calc.probs.h, m.calc.probs.a)}%</p></div>
             <div style="background:var(--gold); color:#000; padding:15px 25px; border-radius:15px; font-weight:900; font-size:1.4rem;">${m.calc.probs.h > m.calc.probs.a ? '1' : '2'}</div>
         </div>
@@ -290,10 +289,10 @@ async function openDeepIntel(id) {
     const c = d.calc, p = d.prediction, m = d.fixture; document.getElementById('intelPanel').style.display = 'block';
     document.getElementById('mTitle').innerText = `${m.teams.home.name} VS ${m.teams.away.name}`;
     document.getElementById('bigScore').innerHTML = `${m.goals.home??'?'}:${m.goals.away??'?'}`;
-    document.getElementById('adviceBox').innerText = `APEX INTEL: ${c.advice || 'Processing real-time field news...'}`;
+    document.getElementById('adviceBox').innerText = `APEX INTEL: ${c.advice || 'Processing flow...'}`;
     
     document.getElementById('intelDataTable').innerHTML = `
-        <tr><th>QUANTUM DATA</th><th>${m.teams.home.name}</th><th>${m.teams.away.name}</th></tr>
+        <tr><th>QUANTUM STAT</th><th>${m.teams.home.name}</th><th>${m.teams.away.name}</th></tr>
         <tr><td>xG (ATTACK)</td><td><b>${c.hXG.toFixed(2)}</b></td><td><b>${c.aXG.toFixed(2)}</b></td></tr>
         <tr><td>xGA (DEFENSE)</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
         <tr><td>xCORNERS</td><td>${(c.hXG*0.9+3.5).toFixed(1)}</td><td>${(c.aXG*0.8+3.2).toFixed(1)}</td></tr>
@@ -303,12 +302,12 @@ async function openDeepIntel(id) {
     const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6), aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
     const getV = (a, i) => (parseFloat(a) + Math.sin(i)*0.4).toFixed(1);
     const getVA = (a, i) => (parseFloat(a) + Math.cos(i)*0.4).toFixed(1);
-    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; margin-bottom:10px; color:var(--p); font-size:0.8rem;">${m.teams.home.name} PERFORMANCE</div><div class="form-row">` + hF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.hXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.hXGA,i)}</div></div>`).join('') + `</div>`;
-    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; margin-bottom:10px; color:var(--p); font-size:0.8rem;">${m.teams.away.name} PERFORMANCE</div><div class="form-row">` + aF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.aXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.aXGA,i)}</div></div>`).join('') + `</div>`;
+    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; margin-bottom:8px; color:var(--p); font-size:0.8rem;">${m.teams.home.name} PERFORMANCE (xG/xGA)</div><div class="form-row">` + hF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.hXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.hXGA,i)}</div></div>`).join('') + `</div>`;
+    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; margin-bottom:8px; color:var(--p); font-size:0.8rem;">${m.teams.away.name} PERFORMANCE (xG/xGA)</div><div class="form-row">` + aF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.aXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.aXGA,i)}</div></div>`).join('') + `</div>`;
 
     const oracles = [
         { n: "Forebet", s: `${Math.round(c.hXG)}-${Math.round(c.aXG)}` },
-        { n: "PredictZ", s: `${Math.max(0, Math.round(c.hXG-0.3))}-${Math.max(0, Math.round(c.aXG-0.2))}` },
+        { n: "PredictZ", s: `${Math.max(0, Math.round(c.hXG-0.4))}-${Math.max(0, Math.round(c.aXG-0.2))}` },
         { n: "Statarea", s: `${Math.round(c.hXG+0.5)}-${Math.round(c.aXG)}` },
         { n: "WinDrawWin", s: `${Math.round(c.hXG)}-${Math.round(c.aXG+0.3)}` },
         { n: "Vitibet", s: `${Math.round(c.hXG+0.2)}-${Math.round(c.aXG+0.2)}` }
@@ -331,22 +330,21 @@ function generateAcca() {
     let selected = pool.slice(0, size);
     if(selected.length < size) { alert("Targets insufficient for a " + size + "-fold slip."); return; }
     
-    let h = `<div class="acca-slip"><div style="font-weight:900; color:var(--magenta); text-align:center; margin-bottom:30px; font-size:1.6rem; font-family:'Orbitron'; letter-spacing:3px;">💎 APEX QUANTUM SLIP</div>`;
+    let h = `<div class="acca-slip"><div style="font-weight:900; color:var(--magenta); text-align:center; margin-bottom:30px; font-size:1.6rem; font-family:'Orbitron'; letter-spacing:3px;">💎 ZENITH APEX SLIP</div>`;
     selected.forEach(d => {
         const c = d.calc; let tip = c.probs.h > c.probs.a ? 'WIN: 1' : 'WIN: 2';
         if(market === 'GOALS') tip = 'OVER 2.5';
         if(market === 'SCORES') tip = `${Math.round(c.hXG)}-${Math.round(c.aXG)}`;
         if(Math.max(c.probs.h, c.probs.a) < 60 && (market === '1X2' || market === 'AI_PICK')) tip = c.probs.h > c.probs.a ? 'D.C: 1X' : 'D.C: X2';
         let elite = (c.hXG+c.aXG > 3.5) ? '<b style="color:var(--live); font-size:0.75rem; margin-left:10px;">[ELITE OVER]</b>' : '';
-        h += `<div class="slip-item" onclick="openDeepIntel(${d.fixture.fixture.id})"><div class="tip-badge-big">PICK: ${tip} ${elite}</div><div style="font-weight:900; color:#fff; font-size:1.2rem; font-family:'Orbitron';">${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}</div></div>`;
+        h += `<div class="slip-item" onclick="openDeepIntel(${d.fixture.fixture.id})"><div class="tip-badge-big">PICK: ${tip} ${elite}</div><div style="font-weight:900; color:#fff; font-size:1.1rem; font-family:'Orbitron';">${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}</div></div>`;
     });
     document.getElementById('accaDisplay').innerHTML = h + `</div>`; document.getElementById('accaDisplay').style.display = 'block';
 }
 
 async function runDeepEvaluation() {
     const tD = document.getElementById('evalDate').value; if(!tD) return;
-    document.getElementById('aiPanel').style.display = 'block';
-    document.getElementById('labControls').style.display = 'none';
+    document.getElementById('aiPanel').style.display = 'block'; document.getElementById('labControls').style.display = 'none';
     let s = { t:0, w:0 }; lastLog = [];
     try {
         const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
@@ -377,7 +375,6 @@ async function runDeepEvaluation() {
 
 function copyRawData() { navigator.clipboard.writeText(JSON.stringify(lastLog)); alert("Neural Logs Copied!"); }
 function exportToPDF() { html2pdf().from(document.getElementById('pdfExportArea')).save(); }
-
 function updateTicker() {
     let filtered = lastTickerData.filter(m => selectedTickerIds.has(m.fixture.id));
     if(filtered.length === 0) { document.getElementById('liveTickerWrap').style.display = 'none'; return; }
@@ -393,7 +390,7 @@ async function fetchTicker() {
         const d = await r.json(); if(d.response) { lastTickerData = d.response; updateTicker(); }
     } catch(e) {}
 }
-window.onload = () => { if(sessionStorage.getItem("auth_v3100")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
+window.onload = () => { if(sessionStorage.getItem("auth_v3200")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
 </script>
 </body>
 </html>
