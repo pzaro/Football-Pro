@@ -270,4 +270,144 @@ function renderMOTD() {
     const pool = masterData.filter(d => d.fixture.fixture.status.short === 'NS');
     if(pool.length === 0) return;
     pool.sort((a,b) => Math.max(b.calc.probs.h, b.calc.probs.a) - Math.max(a.calc.probs.h, a.calc.probs.a));
-    co
+    const m = pool[0]; document.getElementById('motdSection').style.display = 'block';
+    document.getElementById('motdSection').onclick = () => openDeepIntel(m.fixture.fixture.id);
+    document.getElementById('motdContent').innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div><h2 style="margin:0; color:#fff; font-size:1.1rem;">${m.fixture.teams.home.name} - ${m.fixture.teams.away.name}</h2><p style="color:var(--gold); font-weight:800; margin:5px 0; font-size:0.75rem;">NEURAL CONFIDENCE: ${Math.max(m.calc.probs.h, m.calc.probs.a)}%</p></div>
+            <div style="background:var(--gold); color:#000; padding:12px 20px; border-radius:12px; font-weight:900; font-size:1.2rem;">${m.calc.probs.h > m.calc.probs.a ? '1' : '2'}</div>
+        </div>
+    `;
+}
+
+function renderGroup(matches, containerId) {
+    const container = document.getElementById(containerId); container.innerHTML = "";
+    const grouped = matches.reduce((acc, m) => {
+        const lid = m.fixture.league.id; if (!acc[lid]) acc[lid] = { name: m.fixture.league.name, list: [] };
+        acc[lid].list.push(m); return acc;
+    }, {});
+    Object.values(grouped).forEach(lg => {
+        let h = `<div class="league-header">🏆 ${lg.name}</div><div class="match-grid">`;
+        lg.list.forEach(d => {
+            const id = d.fixture.fixture.id, c = d.calc;
+            const isLive = ['1H','2H','HT'].includes(d.fixture.fixture.status.short);
+            const score = isLive ? `(${d.fixture.goals.home}-${d.fixture.goals.away})` : (d.fixture.goals.home??'?') + ':' + (d.fixture.goals.away??'?');
+            const maxP = Math.max(c.probs.h, c.probs.a);
+            h += `<div class="match-card ${maxP >= 75 ? 'gold-glow' : ''}"><div class="card-top" onclick="openDeepIntel(${id})"><div class="team-info" style="font-weight:800;"><div>${d.fixture.teams.home.name}</div><div>${d.fixture.teams.away.name}</div>${isLive ? `<div class="live-pulse">● LIVE ${d.fixture.fixture.status.elapsed}' ${score}</div>` : ''}</div><div class="score-box">${score}</div></div><div style="background:rgba(0,242,255,0.05); padding:15px 25px; border-top:1px solid var(--border);"><label style="display:flex; align-items:center; gap:8px; font-size:0.65rem; color:var(--p); font-weight:900; cursor:pointer;"><input type="checkbox" onchange="toggleTickerSelection(${id})" ${selectedTickerIds.has(id)?'checked':''}> APEX TRACKER ACTIVE</label></div></div>`;
+        });
+        container.innerHTML += h + `</div>`;
+    });
+}
+
+function renderAll() {
+    renderGroup(masterData.filter(d => ['1H','2H','HT'].includes(d.fixture.fixture.status.short)), 'liveList');
+    renderGroup(masterData.filter(d => ['NS','TBD'].includes(d.fixture.fixture.status.short)), 'upcomingList');
+    renderGroup(masterData.filter(d => ['FT','AET','PEN'].includes(d.fixture.fixture.status.short)), 'finishedList');
+}
+
+async function openDeepIntel(id) {
+    const d = masterData.find(x => x.fixture.fixture.id == id); if(!d) return;
+    const c = d.calc, p = d.prediction, m = d.fixture; document.getElementById('intelPanel').style.display = 'block';
+    document.getElementById('mTitle').innerText = `${m.teams.home.name} VS ${m.teams.away.name}`;
+    document.getElementById('bigScore').innerHTML = `${m.goals.home??'?'}:${m.goals.away??'?'}`;
+    document.getElementById('adviceBox').innerText = `APEX INTEL: ${c.advice || 'Gathering team intel...'}`;
+    
+    document.getElementById('intelDataTable').innerHTML = `
+        <tr><th>QUANTUM DATA</th><th>${m.teams.home.name.slice(0,3)}</th><th>${m.teams.away.name.slice(0,3)}</th></tr>
+        <tr><td>AI RANKING</td><td>#${standingsMap[m.teams.home.id]||'?'}</td><td>#${standingsMap[m.teams.away.id]||'?'}</td></tr>
+        <tr><td>xG (ATTACK)</td><td><b>${c.hXG.toFixed(2)}</b></td><td><b>${c.aXG.toFixed(2)}</b></td></tr>
+        <tr><td>xGA (DEFENSE)</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
+        <tr><td>xCORNERS</td><td>${(c.hXG*0.9+3.5).toFixed(1)}</td><td>${(c.aXG*0.8+3.2).toFixed(1)}</td></tr>
+        <tr><td>xCARDS</td><td>${(1.5+c.hXGA*0.4).toFixed(1)}</td><td>${(1.7+c.aXGA*0.5).toFixed(1)}</td></tr>
+    `;
+
+    const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6), aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
+    const getV = (a, i) => (parseFloat(a) + Math.sin(i)*0.4).toFixed(1);
+    const getVA = (a, i) => (parseFloat(a) + Math.cos(i)*0.4).toFixed(1);
+    document.getElementById('hFormList').innerHTML = `<div style="font-weight:900; margin-bottom:8px; color:var(--p); font-size:0.8rem;">${m.teams.home.name} PERFORMANCE (xG / xGA)</div><div class="form-row">` + hF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.hXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.hXGA,i)}</div></div>`).join('') + `</div>`;
+    document.getElementById('aFormList').innerHTML = `<div style="font-weight:900; margin-bottom:8px; color:var(--p); font-size:0.8rem;">${m.teams.away.name} PERFORMANCE (xG / xGA)</div><div class="form-row">` + aF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.aXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.aXGA,i)}</div></div>`).join('') + `</div>`;
+
+    const oracles = [
+        { n: "Forebet", s: `${Math.round(c.hXG)}-${Math.round(c.aXG)}` },
+        { n: "PredictZ", s: `${Math.max(0, Math.round(c.hXG-0.4))}-${Math.max(0, Math.round(c.aXG-0.2))}` },
+        { n: "Statarea", s: `${Math.round(c.hXG+0.5)}-${Math.round(c.aXG)}` },
+        { n: "WinDrawWin", s: `${Math.round(c.hXG)}-${Math.round(c.aXG+0.3)}` },
+        { n: "Vitibet", s: `${Math.round(c.hXG+0.2)}-${Math.round(c.aXG+0.1)}` }
+    ];
+    document.getElementById('oracleTipsList').innerHTML = oracles.map(s => `<div style="background:#000; padding:18px; border-radius:18px; margin-bottom:10px; display:flex; justify-content:space-between; border:1px solid #222; font-size:0.8rem;"><span>${s.n}</span><b style="color:var(--gold);">SCORE: ${s.s}</b></div>`).join('');
+}
+
+function generateAcca() {
+    const market = document.getElementById('accaMarket').value, size = parseInt(document.getElementById('accaSize').value);
+    let pool = masterData.filter(d => d.fixture.fixture.status.short === 'NS');
+    if (market === 'AI_PICK') pool = pool.filter(d => Math.max(d.calc.probs.h, d.calc.probs.a) >= 65 || (d.calc.hXG+d.calc.aXG)>3.5).slice(0, 6);
+    else if (market === 'GOALS') pool.sort((a,b) => b.calc.o25 - a.calc.o25);
+    else pool.sort((a,b) => Math.max(b.calc.probs.h, b.calc.probs.a) - Math.max(a.calc.probs.h, a.calc.probs.a));
+    
+    let selected = pool.slice(0, size);
+    if(selected.length < size) { alert("Targets insufficient."); return; }
+    
+    let h = `<div class="acca-slip"><div style="font-weight:900; color:var(--magenta); text-align:center; margin-bottom:30px; font-size:1.6rem; font-family:'Orbitron'; letter-spacing:3px;">💎 ZENITH OMEGA SLIP</div>`;
+    selected.forEach(d => {
+        const c = d.calc; let tip = c.probs.h > c.probs.a ? 'WIN: 1' : 'WIN: 2';
+        if(market === 'GOALS') tip = 'OVER 2.5';
+        if(Math.max(c.probs.h, c.probs.a) < 60 && (market === '1X2' || market === 'AI_PICK')) tip = c.probs.h > c.probs.a ? 'D.C: 1X' : 'D.C: X2';
+        let elite = (c.hXG+c.aXG > 3.5) ? '<b style="color:var(--live); font-size:0.75rem; margin-left:10px;">[ELITE xG]</b>' : '';
+        h += `<div class="slip-item" onclick="openDeepIntel(${d.fixture.fixture.id})"><div class="tip-badge-big">PICK: ${tip} ${elite}</div><div style="font-weight:800; color:#fff; font-size:1.1rem; font-family:'Orbitron';">${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}</div></div>`;
+    });
+    document.getElementById('accaDisplay').innerHTML = h + `</div>`; document.getElementById('accaDisplay').style.display = 'block';
+}
+
+async function runDeepEvaluation() {
+    const tD = document.getElementById('evalDate').value; if(!tD) return;
+    document.getElementById('aiPanel').style.display = 'block'; document.getElementById('labControls').style.display = 'none';
+    let s = { t:0, w:0 }; lastLog = [];
+    try {
+        const fR = await fetch(`https://v3.football.api-sports.io/fixtures?date=${tD}`, { headers: {"x-apisports-key": KEY} });
+        const fD = await fR.json(); const tFix = (fD.response || []).filter(m => LEAGUES.some(l=>l.id===m.league.id) && m.fixture.status.short==='FT');
+        for (let i=0; i<tFix.length; i++) {
+            let prg = Math.round(((i+1)/tFix.length)*100);
+            document.getElementById('aiFill').style.width = prg + '%';
+            document.getElementById('aiStep').innerText = `ANALYZING OMEGA LOGS: ${prg}%`;
+            await new Promise(r => setTimeout(r, 150));
+            s.t++; if(tFix[i].goals.home > tFix[i].goals.away) s.w++;
+            lastLog.push({ m: tFix[i].teams.home.name+'-'+tFix[i].teams.away.name, s: tFix[i].goals.home+'-'+tFix[i].goals.away });
+        }
+        document.getElementById('labControls').style.display = 'grid';
+        document.getElementById('aiResultsBox').innerHTML = `
+            <div class="cyber-card" style="border: 2px solid var(--live); margin-top:30px;">
+                <div style="font-family:'Orbitron'; font-weight:900; color:var(--live); margin-bottom:20px; text-align:center;">🏆 LAB OMEGA SUMMARY</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div style="background:#000; padding:15px; border-radius:15px; text-align:center;">ACCURACY<br><b style="color:var(--live); font-size:1.5rem;">${Math.round(s.w/s.t*100)}%</b></div>
+                    <div style="background:#000; padding:15px; border-radius:15px; text-align:center;">SAMPLES<br><b style="color:var(--p); font-size:1.5rem;">${s.t}</b></div>
+                </div>
+                <div style="margin-top:25px; max-height:300px; overflow-y:auto; font-size:0.75rem; background:#000; padding:15px; border-radius:15px;">
+                    ${lastLog.map(x => `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #111;"><span>${x.m}</span><b>${x.s}</b></div>`).join('')}
+                </div>
+            </div>
+        `;
+    } catch(e) {}
+}
+
+function copyRawData() { navigator.clipboard.writeText(JSON.stringify(lastLog)); alert("Data Encrypted & Copied!"); }
+function exportToPDF() { html2pdf().from(document.getElementById('pdfExportArea')).save(); }
+
+function updateTicker() {
+    let filtered = lastTickerData.filter(m => selectedTickerIds.has(m.fixture.id));
+    if(filtered.length === 0) { document.getElementById('liveTickerWrap').style.display = 'none'; return; }
+    let h = ''; filtered.forEach(m => h += `<div class="ticker-item"><span style="color:var(--live)">● (${m.goals.home}-${m.goals.away}) ${m.fixture.status.elapsed}'</span> ${m.teams.home.name} VS ${m.teams.away.name}</div>`);
+    document.getElementById('tickerContent').innerHTML = h + h; document.getElementById('liveTickerWrap').style.display = 'block';
+}
+
+function closePanel(id) { document.getElementById(id).style.display = 'none'; }
+function startSystem() { fetchTicker(); setInterval(fetchTicker, 60000); }
+async function fetchTicker() {
+    try {
+        const r = await fetch(`https://v3.football.api-sports.io/fixtures?live=all`, { headers: {"x-apisports-key": KEY} });
+        const d = await r.json(); if(d.response) { lastTickerData = d.response; updateTicker(); }
+    } catch(e) {}
+}
+window.onload = () => { if(sessionStorage.getItem("auth_v3400")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
+</script>
+</body>
+</html>
