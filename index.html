@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Predictor Pro v4400 - Sovereign Zenith</title>
+    <title>Predictor Pro v4500 - Ultimate Stability</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -12,317 +12,206 @@
             --p: #00f2ff; --magenta: #ff00ff; --txt: #f0f6fc; --txt-muted: #8b949e; 
             --gold: #f59e0b; --orange-grad: linear-gradient(135deg, #f59e0b, #ef4444);
             --live: #238636; --alert: #da3633;
-            --value: #8b5cf6; --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
-            --ticker-speed: 25s;
+            --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; overflow-x: hidden; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; overflow-x: hidden; }
         h1, h2, .league-header, .motd-title { font-family: 'Orbitron', sans-serif; }
-        .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 12px; }
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 15px; }
 
-        /* 🟢 HEADER & TICKER */
-        .header-sticky { position: sticky; top: 0; z-index: 1000; background: rgba(1, 4, 9, 0.98); backdrop-filter: blur(20px); border-bottom: 2px solid var(--p); }
-        .ticker-controls { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; font-size: 0.7rem; font-weight: 900; background: #000; color: var(--p); }
-        .ticker-wrap { width: 100%; overflow: hidden; white-space: nowrap; padding: 10px 0; display: none; background: rgba(0,242,255,0.03); border-top: 1px solid #111; }
-        .ticker-move { display: inline-block; animation: ticker var(--ticker-speed) linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 1.2rem; font-weight: 800; font-size: 0.85rem; border-right: 1px solid var(--border); color: #fff; }
+        /* 🟢 NAVIGATION STYLES */
+        .header-sticky { position: sticky; top: 0; z-index: 1000; background: rgba(1, 4, 9, 0.98); border-bottom: 2px solid var(--p); backdrop-filter: blur(10px); }
+        .ticker-wrap { width: 100%; overflow: hidden; white-space: nowrap; padding: 12px 0; background: rgba(0,242,255,0.03); display: none; }
+        .ticker-move { display: inline-block; animation: ticker 30s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 20px; font-weight: 800; font-size: 0.85rem; color: #fff; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* 🔥 MOTD */
-        #motdSection { background: linear-gradient(145deg, #1e1b4b, #020617); border: 2px solid var(--gold); border-radius: 24px; padding: 20px; margin-bottom: 25px; display: none; box-shadow: 0 15px 40px rgba(0,0,0,0.6); position: relative; cursor: pointer; }
-        .motd-badge { position: absolute; top: -12px; left: 20px; background: var(--gold); color: #000; padding: 4px 12px; border-radius: 6px; font-weight: 900; font-size: 0.6rem; }
-
-        /* 🛡️ CARDS */
-        .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 18px; margin-bottom: 20px; }
-        .league-header { background: var(--orange-grad); color: #000; padding: 12px 18px; border-radius: 12px; font-weight: 900; margin: 25px 0 15px; font-size: 0.75rem; text-transform: uppercase; }
-        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; margin-bottom: 15px; cursor: pointer; transition: 0.3s; border-left: 4px solid transparent; }
-        .match-card:hover { border-color: var(--p); border-left-color: var(--p); transform: translateX(5px); }
-
-        .score-box { font-size: 2.4rem; font-weight: 900; color: #fff; font-family: 'Orbitron'; text-align: right; min-width: 80px; }
-
-        /* 📊 PROGRESS BARS */
-        .cyber-progress-bg { background: #000; height: 18px; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); position: relative; margin: 15px 0; display: block; }
-        .cyber-progress-fill { height: 100%; background: var(--grad); width: 0%; transition: width 0.3s ease; box-shadow: 0 0 20px var(--p); }
-
-        /* 🏆 SLIPS */
-        .acca-slip { background: linear-gradient(160deg, #0f172a 0%, #020617 100%); border: 3px solid var(--magenta); border-radius: 32px; padding: 25px; margin-bottom: 40px; border-top: 15px solid var(--magenta); }
-        .slip-item { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 20px; margin-bottom: 15px; border-left: 10px solid var(--p); border: 1px solid rgba(255,255,255,0.05); }
-
-        /* 🟢 INTEL TABLE & FORM */
-        .table-wrap { overflow-x: auto; margin-top: 15px; border-radius: 15px; border: 1px solid var(--border); }
-        .intel-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 400px; }
-        .intel-table th { background: #000; color: var(--p); text-align: left; padding: 12px; }
-        .intel-table td { padding: 14px 12px; border-bottom: 1px solid #0f172a; font-weight: 700; }
+        /* 🛡️ CARDS & UI */
+        .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 20px; margin-bottom: 20px; }
+        .league-header { background: var(--orange-grad); color: #000; padding: 12px; border-radius: 12px; font-weight: 900; margin: 25px 0 15px; text-transform: uppercase; font-size: 0.8rem; }
         
-        .form-row { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
-        .form-col { display: flex; flex-direction: column; align-items: center; }
-        .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #fff; }
-        .dot.W { background: var(--live); } .dot.D { background: var(--gold); } .dot.L { background: var(--alert); }
-        .form-val { font-size: 0.6rem; color: var(--txt-muted); font-weight: 900; margin-top: 5px; }
+        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; margin-bottom: 12px; cursor: pointer; border-left: 5px solid transparent; transition: 0.3s; }
+        .match-card:hover { border-color: var(--p); background: #161b22; transform: translateX(5px); }
+        .match-card.gold-glow { border-left-color: var(--gold); box-shadow: 0 0 15px rgba(245,158,11,0.2); }
 
-        #intelPanel, #aiPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; overflow-y: auto; padding-bottom: 100px; }
-        .close-circle { position: fixed; bottom: 30px; right: 30px; background: #da3633; color: #fff; width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; border: none; z-index: 10001; font-size: 1.4rem; cursor: pointer; }
+        .score-box { font-size: 2.2rem; font-weight: 900; font-family: 'Orbitron'; color: #fff; }
+
+        /* 📊 PROGRESS BARS (STRICT VISIBILITY) */
+        #syncCont { display: none; margin: 20px 0; }
+        .cyber-progress-bg { background: #000; height: 20px; border-radius: 50px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+        .cyber-progress-fill { height: 100%; background: var(--grad); width: 0%; transition: width 0.4s ease; box-shadow: 0 0 15px var(--p); }
+
+        /* 📅 BUTTONS */
+        #masterBtn { width: 100%; padding: 25px; background: var(--grad); color: #fff; border: none; border-radius: 20px; font-weight: 900; font-size: 1.2rem; cursor: pointer; font-family: 'Orbitron'; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        #intelPanel { display: none; background: var(--bg); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; overflow-y: auto; padding-bottom: 100px; }
+        .close-circle { position: fixed; bottom: 30px; right: 30px; background: var(--alert); color: #fff; width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; border: none; z-index: 10001; cursor: pointer; }
+
+        @media (min-width: 768px) { .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } }
     </style>
 </head>
 <body>
 
 <div id="authScreen">
-    <div class="auth-box" style="background:var(--card); border-radius:45px; padding:60px 40px; text-align:center; max-width:420px; margin:auto; margin-top:15vh; border:2px solid var(--p);">
-        <h1 style="color:var(--p); margin:0; font-size:2.4rem;">ZENITH</h1>
-        <p style="color:var(--txt-muted); font-size:0.85rem; margin-top:10px;">V4400 HIGH-SPEED BOOT</p>
-        <input type="tel" id="pinInput" class="auth-input" maxlength="6" placeholder="••••••" oninput="instantAuth(this)" style="width:100%; padding:20px; margin-top:30px; text-align:center; font-size:2.8rem; border-radius:25px; border:none; background:#000; color:var(--p); font-family: 'Orbitron'; letter-spacing:15px; font-weight:900;">
+    <div class="auth-box" style="background:var(--card); border-radius:45px; padding:60px 40px; text-align:center; max-width:400px; margin:auto; margin-top:15vh; border:2px solid var(--p);">
+        <h1 style="color:var(--p); margin:0; font-size:2.2rem;">OMEGA 4500</h1>
+        <p style="color:var(--txt-muted); font-size:0.8rem; margin-top:10px;">STABILITY INTEGRITY Spec</p>
+        <input type="tel" id="pinInput" maxlength="6" placeholder="••••••" oninput="instantAuth(this)" style="width:100%; padding:20px; margin-top:30px; text-align:center; font-size:2.5rem; border-radius:20px; border:none; background:#000; color:var(--p); font-family: 'Orbitron'; letter-spacing:10px;">
     </div>
 </div>
 
 <div id="appContent" style="display:none;">
     <div class="header-sticky">
-        <div class="ticker-controls">
-            <div>SYNC: <input type="range" min="10" max="60" value="30" oninput="adjustTickerSpeed(this.value)" style="width:65px;"></div>
-            <div id="tickerStatus" style="color:#238636; font-family:'Orbitron'; font-size:0.6rem;">ZENITH ACTIVE</div>
+        <div style="display:flex; justify-content:space-between; padding:12px 15px; background:#000; color:var(--p); font-size:0.7rem; font-weight:900;">
+            <div>SYNC STATUS: ACTIVE</div>
+            <div id="tickerStatus" style="color:var(--live);">PAID ENCRYPTED LINK</div>
         </div>
         <div class="ticker-wrap" id="liveTickerWrap"><div class="ticker-move" id="tickerContent"></div></div>
     </div>
-    
+
     <div class="container">
         <div style="text-align:center; padding: 40px 0;">
-            <h1 style="color:var(--p); margin:0; font-size:3.2rem; letter-spacing:-3px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-            <small style="color:var(--magenta); font-weight:900; letter-spacing:8px;">SOVEREIGN v4400</small>
+            <h1 style="color:var(--p); margin:0; font-size:3rem; letter-spacing:-3px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
+            <small style="color:var(--magenta); font-weight:900; letter-spacing:6px;">SOVEREIGN STABILITY v4500</small>
         </div>
 
-        <div id="motdSection">
-            <div class="motd-badge">MATCH OF THE DAY</div>
-            <div id="motdContent"></div>
-        </div>
+        <button id="masterBtn" onclick="startQuantumScan()">🚀 INITIALIZE PAID FLOW SCAN</button>
 
-        <button id="masterBtn" onclick="initializeFlow()" style="width:100%; padding:28px; background:var(--grad); color:#fff; border:none; border-radius:28px; font-weight:900; font-size:1.3rem; cursor:pointer; font-family:'Orbitron';">🚀 RUN PAID QUANTUM SCAN</button>
-
-        <div id="syncCont" style="display:none; margin:30px 0;">
+        <div id="syncCont">
             <div class="cyber-progress-bg"><div id="syncFill" class="cyber-progress-fill"></div></div>
-            <div id="syncStep" style="text-align:center; font-family:'Orbitron'; color:var(--p); font-size:0.8rem; font-weight:900;">INITIALIZING...</div>
+            <div id="syncStep" style="text-align:center; font-family:'Orbitron'; color:var(--p); font-size:0.8rem; font-weight:900; margin-top:10px;">PREPARING NEURAL CORE...</div>
         </div>
 
-        <div id="toolsSection" style="display:none; margin-top:40px;">
-            <div class="cyber-card" style="border: 1px solid var(--magenta);">
-                <div style="font-weight:900; color:var(--magenta); font-size:0.8rem; margin-bottom:15px; font-family:'Orbitron';">🏆 APEX SLIP COMPILER</div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <select id="accaMarket" style="background:#000; color:#fff; border:1px solid var(--border); padding:12px; border-radius:12px;">
-                        <option value="AI_PICK">SAFETY ACCA (6-FOLD)</option>
-                        <option value="1X2">ΣΗΜΕΙΑ 1Χ2</option>
-                        <option value="GOALS">ELITE OVER 2.5</option>
-                    </select>
-                    <button onclick="generateAcca()" style="grid-column: span 2; background:var(--magenta); color:#fff; border:none; border-radius:12px; padding:18px; font-weight:900; cursor:pointer; font-family:'Orbitron';">BUILD APEX SLIP</button>
-                </div>
-            </div>
-            <div class="cyber-card" style="border: 1px solid var(--gold);">
-                <div style="font-weight:900; color:var(--gold); font-size:0.8rem; margin-bottom:15px; font-family:'Orbitron'; text-align:center;">🧠 QUANTUM DATA LAB</div>
-                <div style="display:flex; gap:10px;">
-                    <input type="date" id="evalDate" style="flex:1; background:#000; color:var(--gold); border:1px solid var(--gold); border-radius:10px; padding:10px;">
-                    <button onclick="runDeepEvaluation()" style="background:var(--gold); color:#000; border:none; border-radius:10px; padding:0 20px; font-weight:900; cursor:pointer;">RUN</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="accaDisplay"></div>
-        <div id="mainDashboard" style="display:none;">
-            <div id="liveSection"><div class="status-label" style="text-align:center; font-weight:900; letter-spacing:5px; margin-bottom:15px;">⚡ LIVE NEURAL SCAN</div><div id="liveList"></div></div>
-            <div id="upcomingSection"><div class="status-label" style="text-align:center; font-weight:900; letter-spacing:5px; margin-bottom:15px;">📅 TARGET ACQUISITION</div><div id="upcomingList"></div></div>
+        <div id="mainDashboard" style="display:none; margin-top:30px;">
+            <div id="liveSection"></div>
+            <div id="upcomingSection"></div>
         </div>
     </div>
 </div>
 
 <div id="intelPanel">
     <button onclick="closePanel('intelPanel')" class="close-circle">X</button>
-    <div style="text-align:center; padding:70px 20px 40px; background:#000; border-bottom:1px solid var(--border);">
-        <h2 id="mTitle" style="color:var(--p); font-size:1.5rem; margin:0;"></h2>
-        <div id="bigScore" style="font-size:5rem; font-weight:900; font-family:'Orbitron'; margin-top:15px;"></div>
-        <div id="adviceBox" style="margin-top:25px; color:var(--gold); font-weight:900; font-size:0.85rem; border:1px dashed var(--gold); padding:15px; border-radius:15px;"></div>
+    <div style="text-align:center; padding:80px 20px 40px; background:#000;">
+        <h2 id="mTitle" style="color:var(--p); font-size:1.4rem;"></h2>
+        <div id="bigScore" style="font-size:5rem; font-weight:900; margin:10px 0;"></div>
+        <div id="adviceBox" style="color:var(--gold); border:1px dashed var(--gold); padding:15px; border-radius:15px; max-width:600px; margin:auto; font-weight:800; font-size:0.85rem;"></div>
     </div>
     <div class="container">
         <div class="cyber-card" style="border: 2px solid var(--p);">
-            <div style="font-weight:900; color:var(--p); margin-bottom:20px; font-family:'Orbitron'; text-align:center;">📊 NEURAL ANALYTICS TABLE</div>
-            <div class="table-wrap"><table class="intel-table" id="intelDataTable"></table></div>
-        </div>
-        <div class="cyber-card">
-            <div style="font-weight:900; color:#238636; margin-bottom:20px; font-family:'Orbitron'; text-align:center;">🕒 DEEP FORM (xG / xGA)</div>
-            <div id="hFormList"></div>
-            <div id="aFormList" style="margin-top:25px;"></div>
-        </div>
-        <div class="cyber-card">
-            <div style="font-weight:900; color:var(--gold); margin-bottom:20px; font-family:'Orbitron'; text-align:center;">🔮 UNIQUE ORACLE SCORES</div>
-            <div id="oracleTipsList"></div>
-        </div>
-    </div>
-</div>
-
-<div id="aiPanel">
-    <button onclick="closePanel('aiPanel')" class="close-circle">X</button>
-    <div class="container" style="padding-top:40px;">
-        <div id="aiProgressBox" class="cyber-card" style="border: 1px solid var(--p);">
-            <div class="cyber-progress-bg"><div id="aiFill" class="cyber-progress-fill"></div></div>
-            <div id="aiStep" style="text-align:center; font-family:'Orbitron'; color:var(--p); font-size:0.8rem; font-weight:900;">INITIALIZING LAB...</div>
-        </div>
-        <div id="pdfExportArea"><div id="aiResultsBox"></div></div>
-        <div id="labControls" style="display:none; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px;">
-            <button onclick="exportToPDF()" style="background:var(--grad); color:#fff; padding:20px; border-radius:20px; border:none; font-weight:900;">📥 PDF REPORT</button>
-            <button onclick="copyRawData()" style="background:var(--gold); color:#000; padding:20px; border-radius:20px; border:none; font-weight:900;">📋 COPY DATA</button>
+            <div style="font-weight:900; text-align:center; margin-bottom:15px; font-family:'Orbitron';">📊 ANALYTICS TABLE</div>
+            <div style="overflow-x:auto;"><table id="intelDataTable" style="width:100%; border-collapse:collapse; font-size:0.8rem;"></table></div>
         </div>
     </div>
 </div>
 
 <script>
+// 🔑 CREDENTIALS
 const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
 const HOST = "api-football-v1.p.rapidapi.com";
-const BASE_URL = "https://api-football-v1.p.rapidapi.com/v3";
+const BASE = "https://api-football-v1.p.rapidapi.com/v3";
 const LEAGUES = [2, 3, 848, 197, 61, 40, 94, 262, 128, 253];
 
-let masterData = []; let lastTickerData = []; let selectedTickerIds = new Set(); let lastLog = [];
+let masterData = [];
 
-function instantAuth(el) { 
-    if(el.value === "106014") { 
-        sessionStorage.setItem("auth_v4400","1"); 
-        document.getElementById('authScreen').style.display='none'; 
-        document.getElementById('appContent').style.display='block'; 
-        setTimeout(startSystem, 200);
-    } 
-}
-
-function initializeFlow() {
-    document.getElementById('syncCont').style.display = 'block';
-    document.getElementById('syncFill').style.width = '0%';
-    document.getElementById('masterBtn').style.display = 'none';
-    setTimeout(globalSync, 300);
-}
-
-async function apiFetch(endpoint) {
-    try {
-        const r = await fetch(`${BASE_URL}/${endpoint}`, {
-            headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": HOST }
-        });
-        return await r.json();
-    } catch(e) { return {response:[]}; }
-}
-
-function getCalculations(pD) {
-    const hXG = parseFloat(pD.teams.home.last_5.goals.for.average || 1.1), aXG = parseFloat(pD.teams.away.last_5.goals.for.average || 1.1);
-    const hXGA = parseFloat(pD.teams.home.last_5.goals.against.average || 1.2), aXGA = parseFloat(pD.teams.away.last_5.goals.against.average || 1.2);
-    let hS = (hXG * 0.45 + aXGA * 0.55), aS = (aXG * 0.45 + hXGA * 0.55);
-    let total = hS + aS + 0.5;
-    let hProb = Math.round((hS / total) * 100), aProb = Math.round((aS / total) * 100);
-    return { hXG, aXG, hXGA, aXGA, probs: { h: hProb, d: 100-hProb-aProb, a: aProb }, advice: pD.predictions.advice };
-}
-
-async function globalSync() {
-    masterData = [];
-    const day = new Date().toISOString().split('T')[0];
-    try {
-        const fD = await apiFetch(`fixtures?date=${day}`);
-        let myFix = (fD.response || []).filter(m => LEAGUES.includes(m.league.id));
-        if(myFix.length === 0) myFix = (fD.response || []).slice(0, 15);
-
-        for (let i=0; i<myFix.length; i++) {
-            let m = myFix[i]; 
-            let prg = Math.round(((i+1)/myFix.length)*100);
-            document.getElementById('syncFill').style.width = prg + '%';
-            document.getElementById('syncStep').innerText = `ZENITH SCAN: ${prg}%`;
-            const pData = await apiFetch(`predictions?fixture=${m.fixture.id}`);
-            const pD = pData.response?.[0];
-            if(pD) masterData.push({ fixture: m, prediction: pD, calc: getCalculations(pD) });
-            await new Promise(r => setTimeout(r, 50));
-        }
-    } catch(e) {}
-    
-    document.getElementById('syncCont').style.display = 'none'; 
-    document.getElementById('toolsSection').style.display = 'block';
-    document.getElementById('mainDashboard').style.display = 'block'; 
-    renderMOTD(); renderAll();
-}
-
-function renderMOTD() {
-    const pool = masterData.filter(d => d.fixture.fixture.status.short === 'NS');
-    if(pool.length === 0) return;
-    pool.sort((a,b) => Math.max(b.calc.probs.h, b.calc.probs.a) - Math.max(a.calc.probs.h, a.calc.probs.a));
-    const m = pool[0]; document.getElementById('motdSection').style.display = 'block';
-    document.getElementById('motdSection').onclick = () => openDeepIntel(m.fixture.fixture.id);
-    document.getElementById('motdContent').innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div><h2 style="margin:0; color:#fff; font-size:1.1rem;">${m.fixture.teams.home.name} - ${m.fixture.teams.away.name}</h2><p style="color:var(--gold); font-weight:800; margin:5px 0; font-size:0.75rem;">CONFIDENCE: ${Math.max(m.calc.probs.h, m.calc.probs.a)}%</p></div>
-            <div style="background:var(--gold); color:#000; padding:12px 20px; border-radius:12px; font-weight:900; font-size:1.2rem;">${m.calc.probs.h > m.calc.probs.a ? '1' : '2'}</div>
-        </div>`;
-}
-
-function renderGroup(matches, containerId) {
-    const container = document.getElementById(containerId); container.innerHTML = "";
-    const grouped = matches.reduce((acc, m) => {
-        const lid = m.fixture.league.name; if (!acc[lid]) acc[lid] = [];
-        acc[lid].push(m); return acc;
-    }, {});
-    for(let league in grouped) {
-        let h = `<div class="league-header">🏆 ${league}</div><div class="match-grid">`;
-        grouped[league].forEach(d => {
-            const id = d.fixture.fixture.id, c = d.calc;
-            const score = d.fixture.goals.home + ':' + d.fixture.goals.away;
-            h += `<div class="match-card ${Math.max(c.probs.h, c.probs.a) >= 75 ? 'gold-glow' : ''}" onclick="openDeepIntel(${id})"><div class="card-top"><div class="team-info"><div><span class="team-name">${d.fixture.teams.home.name}</span><span class="team-name">${d.fixture.teams.away.name}</span></div></div><div class="score-box">${score}</div></div></div>`;
-        });
-        container.innerHTML += h + `</div>`;
+function instantAuth(el) {
+    if(el.value === "106014") {
+        sessionStorage.setItem("omega_auth", "true");
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
     }
 }
 
-async function openDeepIntel(id) {
-    const d = masterData.find(x => x.fixture.fixture.id == id); if(!d) return;
-    const c = d.calc, p = d.prediction, m = d.fixture; document.getElementById('intelPanel').style.display = 'block';
-    document.getElementById('mTitle').innerText = `${m.teams.home.name} VS ${m.teams.away.name}`;
-    document.getElementById('bigScore').innerHTML = `${m.goals.home??'?'}:${m.goals.away??'?'}`;
-    document.getElementById('adviceBox').innerText = `PAID PRO ADVICE: ${c.advice || 'Neural scan complete.'}`;
-    
-    document.getElementById('intelDataTable').innerHTML = `
-        <tr><th>ZENITH DATA</th><th>${m.teams.home.name.slice(0,3)}</th><th>${m.teams.away.name.slice(0,3)}</th></tr>
-        <tr><td>xG (ATTACK)</td><td><b>${c.hXG.toFixed(2)}</b></td><td><b>${c.aXG.toFixed(2)}</b></td></tr>
-        <tr><td>xGA (DEFENSE)</td><td>${c.hXGA.toFixed(2)}</td><td>${c.aXGA.toFixed(2)}</td></tr>
-        <tr><td>xCORNERS</td><td>${(c.hXG*0.9+3.5).toFixed(1)}</td><td>${(c.aXG*0.8+3.2).toFixed(1)}</td></tr>
-    `;
-
-    const hF = (p.teams.home.league.form || "DDDDDD").split('').slice(-6), aF = (p.teams.away.league.form || "DDDDDD").split('').slice(-6);
-    const getV = (a, i) => (parseFloat(a) + Math.sin(i)*0.2).toFixed(1);
-    const getVA = (a, i) => (parseFloat(a) + Math.cos(i)*0.2).toFixed(1);
-    document.getElementById('hFormList').innerHTML = `<div class="form-row">` + hF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.hXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.hXGA,i)}</div></div>`).join('') + `</div>`;
-    document.getElementById('aFormList').innerHTML = `<div class="form-row">` + aF.map((f, i) => `<div class="form-col"><div class="dot ${f}"></div><div class="form-val">${getV(c.aXG,i)}</div><div class="form-val" style="color:var(--alert)">${getVA(c.aXGA,i)}</div></div>`).join('') + `</div>`;
-
-    const oracles = [
-        { n: "Forebet", s: `${Math.round(c.hXG)}-${Math.round(c.aXG)}` },
-        { n: "PredictZ", s: `${Math.max(0, Math.round(c.hXG-0.3))}-${Math.max(0, Math.round(c.aXG-0.1))}` },
-        { n: "Vitibet", s: `${Math.round(c.hXG+0.1)}-${Math.round(c.aXG+0.1)}` }
-    ];
-    document.getElementById('oracleTipsList').innerHTML = oracles.map(s => `<div style="background:#000; padding:15px; border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; border:1px solid #222;"><span>${s.n}</span><b>SCORE: ${s.s}</b></div>`).join('');
+async function apiCall(end) {
+    try {
+        const r = await fetch(`${BASE}/${end}`, {
+            headers: { "x-rapidapi-key": KEY, "x-rapidapi-host": HOST }
+        });
+        const d = await r.json();
+        if(d.errors && Object.keys(d.errors).length > 0) throw new Error(JSON.stringify(d.errors));
+        return d;
+    } catch(e) {
+        console.error("API Error:", e);
+        return { response: [] };
+    }
 }
 
-function generateAcca() {
-    const market = document.getElementById('accaMarket').value, size = 6;
-    let pool = masterData.filter(d => d.fixture.fixture.status.short === 'NS');
-    if (market === 'AI_PICK') pool = pool.filter(d => Math.max(d.calc.probs.h, d.calc.probs.a) >= 65).slice(0, size);
-    else pool.sort((a,b) => Math.max(b.calc.probs.h, b.calc.probs.a) - Math.max(a.calc.probs.h, a.calc.probs.a)).slice(0, size);
+function startQuantumScan() {
+    document.getElementById('masterBtn').style.display = 'none';
+    document.getElementById('syncCont').style.display = 'block';
+    document.getElementById('syncFill').style.width = '5%';
+    setTimeout(globalSync, 500);
+}
+
+async function globalSync() {
+    const day = new Date().toISOString().split('T')[0];
+    const data = await apiCall(`fixtures?date=${day}`);
+    let fixtures = (data.response || []).filter(m => LEAGUES.includes(m.league.id));
     
-    if(pool.length === 0) { alert("Targets insufficient."); return; }
-    let h = `<div class="acca-slip"><div style="font-weight:900; color:var(--magenta); text-align:center; margin-bottom:30px; font-size:1.6rem; letter-spacing:3px;">💎 ZENITH APEX SLIP</div>`;
-    pool.forEach(d => {
-        const c = d.calc; let tip = c.probs.h > c.probs.a ? 'WIN: 1' : 'WIN: 2';
-        if(Math.max(c.probs.h, c.probs.a) < 60) tip = c.probs.h > c.probs.a ? 'D.C: 1X' : 'D.C: X2';
-        h += `<div class="slip-item" onclick="openDeepIntel(${d.fixture.fixture.id})"><div class="tip-badge-big">PICK: ${tip}</div><div style="font-weight:800; color:#fff; font-size:1.1rem;">${d.fixture.teams.home.name} vs ${d.fixture.teams.away.name}</div></div>`;
-    });
-    document.getElementById('accaDisplay').innerHTML = h + `</div>`;
+    if(fixtures.length === 0) fixtures = (data.response || []).slice(0, 10); // Fallback
+
+    for (let i = 0; i < fixtures.length; i++) {
+        let m = fixtures[i];
+        let prg = Math.round(((i + 1) / fixtures.length) * 100);
+        document.getElementById('syncFill').style.width = prg + '%';
+        document.getElementById('syncStep').innerText = `ANALYZING: ${m.teams.home.name} (${prg}%)`;
+        
+        const predData = await apiCall(`predictions?fixture=${m.fixture.id}`);
+        if(predData.response?.[0]) {
+            masterData.push({ fixture: m, prediction: predData.response[0] });
+        }
+        await new Promise(r => setTimeout(r, 100));
+    }
+
+    document.getElementById('syncCont').style.display = 'none';
+    document.getElementById('mainDashboard').style.display = 'block';
+    renderDashboard();
+}
+
+function renderDashboard() {
+    const live = masterData.filter(d => ['1H','2H','HT'].includes(d.fixture.fixture.status.short));
+    const up = masterData.filter(d => ['NS','TBD'].includes(d.fixture.fixture.status.short));
+
+    const renderList = (list, id, title) => {
+        let h = `<div class="league-header">🏆 ${title}</div><div class="match-grid">`;
+        list.forEach(d => {
+            const score = d.fixture.goals.home + ':' + d.fixture.goals.away;
+            h += `<div class="match-card gold-glow" onclick="openIntel(${d.fixture.fixture.id})">
+                    <div class="card-top">
+                        <div style="font-weight:800;">${d.fixture.teams.home.name}<br>${d.fixture.teams.away.name}</div>
+                        <div class="score-box">${score}</div>
+                    </div>
+                </div>`;
+        });
+        document.getElementById(id).innerHTML = h + `</div>`;
+    };
+
+    renderList(live, 'liveSection', 'LIVE SCAN');
+    renderList(up, 'upcomingSection', 'UPCOMING TARGETS');
+}
+
+function openIntel(id) {
+    const d = masterData.find(x => x.fixture.fixture.id == id);
+    if(!d) return;
+    document.getElementById('intelPanel').style.display = 'block';
+    document.getElementById('mTitle').innerText = `${d.fixture.teams.home.name} VS ${d.fixture.teams.away.name}`;
+    document.getElementById('bigScore').innerText = d.fixture.goals.home + ':' + d.fixture.goals.away;
+    document.getElementById('adviceBox').innerText = "AI PRO ADVICE: " + (d.prediction.predictions.advice || "No specific advice available.");
+    
+    document.getElementById('intelDataTable').innerHTML = `
+        <tr><td style="padding:10px; border-bottom:1px solid #222;">WIN PROBABILITY</td><td style="text-align:right; font-weight:900; color:var(--p);">${d.prediction.predictions.percent.home} - ${d.prediction.predictions.percent.draw} - ${d.prediction.predictions.percent.away}</td></tr>
+        <tr><td style="padding:10px; border-bottom:1px solid #222;">EXPECTED GOALS</td><td style="text-align:right; font-weight:900;">Over 2.5: ${d.prediction.predictions.goals.over || 'N/A'}</td></tr>
+    `;
 }
 
 function closePanel(id) { document.getElementById(id).style.display = 'none'; }
-function startSystem() { fetchTicker(); setInterval(fetchTicker, 60000); }
-async function fetchTicker() {
-    try {
-        const d = await apiFetch(`fixtures?live=all`);
-        if(d.response) {
-            let h = ''; d.response.slice(0, 10).forEach(m => h += `<div class="ticker-item"><span style="color:#238636">● (${m.goals.home}-${m.goals.away})</span> ${m.teams.home.name} VS ${m.teams.away.name}</div>`);
-            document.getElementById('tickerContent').innerHTML = h + h; document.getElementById('liveTickerWrap').style.display = 'block';
-        }
-    } catch(e) {}
-}
-window.onload = () => { if(sessionStorage.getItem("auth_v4400")) { document.getElementById('authScreen').style.display='none'; document.getElementById('appContent').style.display='block'; startSystem(); } };
+
+// AUTO-LOGIN CHECK
+window.onload = () => {
+    if(sessionStorage.getItem("omega_auth")) {
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+    }
+};
 </script>
 </body>
 </html>
