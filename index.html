@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Predictor Pro v4700.1 - Apex Alpha Deep Intel</title>
+  <title>Predictor Pro v4700.2 - Deep Stats</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <style>
@@ -17,7 +17,6 @@
     h1, h2, .orbitron { font-family: 'Orbitron', sans-serif; }
     .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 15px; }
 
-    /* SHOCK METER CSS */
     .shock-bar-bg { background: #222; height: 6px; border-radius: 3px; margin-top: 5px; overflow: hidden; border: 1px solid #333; }
     .shock-bar-fill { height: 100%; transition: width 0.5s; }
     .shock-low { background: var(--live); box-shadow: 0 0 10px var(--live); }
@@ -25,7 +24,6 @@
     .shock-high { background: var(--alert); box-shadow: 0 0 15px var(--alert); animation: pulse 1s infinite; }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-    /* CARDS & UI */
     .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; transition: 0.3s; }
     .gold-glow { border-left: 4px solid var(--gold); box-shadow: 0 0 20px rgba(245,158,11,0.1); }
     .standard-glow { border-left: 4px solid var(--p); }
@@ -38,19 +36,23 @@
     .btn-apex { width: 100%; padding: 20px; background: var(--grad); color:#fff; border:none; border-radius:16px; font-weight:900; cursor:pointer; font-family:'Orbitron'; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; transition: 0.2s;}
     .btn-apex:hover { transform: scale(1.02); }
 
-    /* DEEP INTEL SECTION */
     .btn-toggle { background: transparent; color: var(--txt-muted); border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 700; width: 100%; margin-top: 15px; transition: 0.2s;}
     .btn-toggle:hover { background: var(--border); color: #fff; }
+    
+    /* DEEP INTEL GRID */
     .deep-intel-box { display: none; background: var(--card-deep); border-radius: 12px; padding: 15px; margin-top: 15px; border: 1px solid #222; font-size: 0.85rem; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #333; }
+    .stat-box { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border: 1px solid #222; }
+    .stat-title { color: var(--txt-muted); font-size: 0.65rem; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
+    .stat-value { font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 900; color: #fff; }
     
+    /* FORM CIRCLES */
+    .form-circle { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; color: #fff; margin-right: 3px; }
+    .form-W { background: var(--live); }
+    .form-D { background: #555; }
+    .form-L { background: var(--alert); }
+
     .rule-item { margin-bottom: 8px; padding-left: 15px; border-left: 2px solid var(--magenta); color: #c9d1d9; }
-    
-    /* PROBABILITY BARS */
-    .prob-row { display: flex; align-items: center; margin-bottom: 6px; }
-    .prob-label { width: 40px; font-weight: 800; color: var(--txt-muted); }
-    .prob-bar-bg { flex-grow: 1; background: #000; height: 10px; border-radius: 5px; margin: 0 10px; overflow: hidden; }
-    .prob-bar-fill { height: 100%; background: var(--p); }
-    .prob-val { width: 40px; text-align: right; font-weight: 900; font-family: 'Orbitron'; }
   </style>
 </head>
 
@@ -58,7 +60,7 @@
   <div id="authScreen">
     <div class="container" style="margin-top:20vh; text-align:center;">
       <h1 class="orbitron" style="color:var(--p); font-size:3rem; margin-bottom:10px;">APEX ALPHA</h1>
-      <p style="color:var(--txt-muted); font-weight:600; letter-spacing:1px;">SOVEREIGN OMEGA v4700.1 // 863 MATCHES SYNCED</p>
+      <p style="color:var(--txt-muted); font-weight:600; letter-spacing:1px;">SOVEREIGN OMEGA v4700.2 // DEEP STATS</p>
       <input type="password" id="pinInput" placeholder="••••••" oninput="instantAuth(this)" 
              style="width:280px; padding:20px; text-align:center; font-size:2.5rem; border-radius:16px; border:1px solid var(--border); background:#000; color:var(--p); font-family:'Orbitron'; letter-spacing:10px; outline:none; margin-top: 20px;">
     </div>
@@ -68,10 +70,10 @@
     <div class="container">
       <header style="text-align:center; padding: 20px 0 30px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-        <small style="color:var(--magenta); font-weight:900; letter-spacing:4px; font-size:0.7rem;">DEEP INTEL ACTIVE</small>
+        <small style="color:var(--magenta); font-weight:900; letter-spacing:4px; font-size:0.7rem;">v4700.2 ADVANCED METRICS</small>
       </header>
 
-      <button class="btn-apex" id="scanBtn" onclick="runApexScan()">🚀 Run Quantum Scan</button>
+      <button class="btn-apex" id="scanBtn" onclick="runApexScan()">🚀 Run Deep Scan</button>
 
       <div id="syncCont" style="display:none; margin-bottom:30px;">
         <div style="background:#000; height:8px; border-radius:4px; overflow:hidden;">
@@ -87,30 +89,12 @@
   </div>
 
   <script>
-    // System Config
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API_BASE = "https://v3.football.api-sports.io";
     let masterData = [];
 
-    // "Χρυσή Λίστα" Πρωταθλημάτων βάσει της βαθμονόμησης των 863 αγώνων
-    const targetLeagues = [
-      39, 40,      // Premier League, Championship (ENG)
-      140,         // La Liga (ESP)
-      135,         // Serie A (ITA)
-      78, 79,      // Bundesliga 1 & 2 (GER)
-      61,          // Ligue 1 (FRA)
-      253,         // MLS (USA)
-      262,         // Liga MX (MEX)
-      128,         // Liga Profesional (ARG)
-      197,         // Super League (GRE)
-      318,         // 1st Division (CYP)
-      94,          // Primeira Liga (POR)
-      88,          // Eredivisie (NED)
-      144,         // Pro League (BEL)
-      2, 3, 84     // UCL, UEL, UECL
-    ];
+    const targetLeagues = [39, 40, 140, 135, 78, 79, 61, 253, 262, 128, 197, 318, 94, 88, 144, 2, 3, 84];
 
-    // Auth
     function instantAuth(el) {
       if (el.value === "106014") {
         document.getElementById('authScreen').style.display = 'none';
@@ -118,13 +102,11 @@
       }
     }
 
-    // Toggle Detailed Intel View
     function toggleIntel(id) {
       const el = document.getElementById(`intel-${id}`);
       el.style.display = el.style.display === 'block' ? 'none' : 'block';
     }
 
-    // API Fetcher with error handling
     async function apiFetch(path) {
       try {
         const r = await fetch(`${API_BASE}/${path}`, { headers: {"x-apisports-key": KEY} });
@@ -132,145 +114,149 @@
       } catch(e) { return { response: [] }; }
     }
 
-    // --- Ο ΠΥΡΗΝΑΣ OMEGA (Μαθηματικά & Λογική) ---
+    // --- Ο ΠΥΡΗΝΑΣ OMEGA ADVANCED ---
     function calculateApex(pD, fixture) {
-      let rulesLog = []; // Εδώ αποθηκεύουμε το σκεπτικό του αλγορίθμου για το UI
+      let rulesLog = [];
       
-      // 1. Raw Data Extraction (Fallback στο 1.1xG για αποφυγή λαθών)
+      // 1. Βασικά xG & xGA (Goals For & Against)
       let rawHXG = parseFloat(pD?.teams?.home?.last_5?.goals?.for?.average) || 1.1;
       let rawAXG = parseFloat(pD?.teams?.away?.last_5?.goals?.for?.average) || 1.1;
+      let rawHXGA = parseFloat(pD?.teams?.home?.last_5?.goals?.against?.average) || 1.2;
+      let rawAXGA = parseFloat(pD?.teams?.away?.last_5?.goals?.against?.average) || 1.2;
       
-      let hXG = rawHXG;
-      let aXG = rawAXG;
+      let hXG = rawHXG; let aXG = rawAXG;
 
-      // 2. Fatigue Index (Batch #21: Η πτώση των μεγάλων)
+      // 2. Εξαγωγή Φόρμας (Τελευταία 6 ματς)
+      let hFormStr = pD?.teams?.home?.league?.form || "?????";
+      let aFormStr = pD?.teams?.away?.league?.form || "?????";
+      // Κρατάμε τα 6 τελευταία (το API δίνει όλο το string συχνά)
+      hFormStr = hFormStr.slice(-6).split('');
+      aFormStr = aFormStr.slice(-6).split('');
+
+      // 3. Εξαγωγή H2H (Προϊστορία)
+      let h2hList = [];
+      if (pD.h2h && pD.h2h.length > 0) {
+        let maxH2h = Math.min(3, pD.h2h.length); // Κρατάμε τα 3 πιο πρόσφατα
+        for(let i=0; i<maxH2h; i++) {
+          let match = pD.h2h[i];
+          if(match.goals.home !== null) {
+            h2hList.push(`${match.teams.home.name} <span style="color:var(--p); font-weight:900;">${match.goals.home} - ${match.goals.away}</span> ${match.teams.away.name}`);
+          }
+        }
+      }
+      if(h2hList.length === 0) h2hList.push("Δεν υπάρχει πρόσφατη προϊστορία");
+
+      // 4. Νευρωνικός Υπολογισμός xCorners & xCards
+      // Τα κόρνερ εξαρτώνται από την επιθετική πίεση (xG). Βάση: 4.5
+      let hXCorner = (4.0 + (rawHXG * 1.5)).toFixed(1);
+      let aXCorner = (4.0 + (rawAXG * 1.5)).toFixed(1);
+      
+      // Οι κάρτες εξαρτώνται από την αμυντική πίεση (xGA) και τη λίγκα. Βάση: 1.8
+      let hXCards = (1.5 + (rawHXGA * 1.2)).toFixed(1);
+      let aXCards = (1.5 + (rawAXGA * 1.2)).toFixed(1);
+      
+      // Regional Bias
+      if (fixture.league.id === 128 || fixture.league.id === 262 || fixture.league.id === 197) { 
+        // Λατινική Αμερική & Ελλάδα = Πιο σκληρό παιχνίδι (+1.2 κάρτες)
+        hXCards = (parseFloat(hXCards) + 1.2).toFixed(1);
+        aXCards = (parseFloat(aXCards) + 1.2).toFixed(1);
+        
+        if(fixture.league.id === 128) { hXG *= 0.85; aXG *= 0.85; rulesLog.push("🛡️ Argentina Under Bias."); }
+        if(fixture.league.id === 262) { hXG *= 1.15; aXG *= 1.15; rulesLog.push("🔥 Liga MX Volatility."); }
+      }
+
+      // 5. Fatigue
       let isFatigued = false;
       const eliteLeagues = [39, 140, 135, 78, 61, 2, 3, 84]; 
       if (eliteLeagues.includes(fixture.league.id)) {
-        isFatigued = true; 
-        hXG *= 0.88; // -12% πέναλτι
-        rulesLog.push("⚠️ Fatigue Penalty (-12% xG): Ενεργό λόγω πιθανής κόπωσης σε Elite Λίγκα.");
-      } else {
-        rulesLog.push("✅ Stable Flow: Δεν εντοπίστηκε κίνδυνος υπερκόπωσης.");
+        isFatigued = true; hXG *= 0.88; 
+        rulesLog.push("⚠️ Fatigue Penalty (-12% xG).");
       }
 
-      // 3. Regional Biases (Βαθμονόμηση ανά Ήπειρο)
-      if (fixture.league.id === 128) { 
-        hXG *= 0.85; aXG *= 0.85; 
-        rulesLog.push("🛡️ Argentina Under Bias: Μείωση επιθετικού δείκτη (-15%).");
-      }
-      if (fixture.league.id === 262) { 
-        hXG *= 1.15; aXG *= 1.15; 
-        rulesLog.push("🔥 Liga MX Volatility: Αύξηση επιθετικού δείκτη (+15%).");
-      }
-      if (fixture.league.id === 197 || fixture.league.id === 318) {
-        rulesLog.push("🏛️ GR/CY Defense Bias: Ισχυρή προτίμηση σε Under/DC στα ντέρμπι.");
-      }
-
-      // 4. Shock Potential (0-100)
+      // 6. Shock Potential
       const favoriteStrength = Math.max(hXG, aXG) || 1; 
       const underdogAttack = Math.min(hXG, aXG);
       let shockScore = ((underdogAttack / favoriteStrength) * 100).toFixed(0);
       if (isFatigued) shockScore = Math.min(parseInt(shockScore) + 15, 100);
 
-      if (shockScore > 70) rulesLog.push("💣 Upset Alert: Υψηλός κίνδυνος 'βόμβας'. Προτείνεται αποφυγή τελικού σημείου.");
-
-      // 5. Normalization & Probabilities
-      let total = hXG + aXG + 0.6; // 0.6 = Base Entropy για την ισοπαλία
+      // 7. Πιθανότητες & Αγορές
+      let total = hXG + aXG + 0.6; 
       let hP = Math.round((hXG / total) * 100);
       let aP = Math.round((aXG / total) * 100);
       let dP = 100 - hP - aP;
 
-      // 6. Market Focus (Τελικό Ζύγισμα)
       let mainPick = hP > aP ? '1' : '2';
       let pickColor = 'var(--p)'; 
       let isDC = false;
       
-      // Dynamic Double Chance Trap Zone (60%-72%)
       if (Math.max(hP, aP) >= 60 && Math.max(hP, aP) <= 72) {
-        mainPick = hP > aP ? '1X (DC)' : 'X2 (DC)';
-        pickColor = 'var(--gold)'; 
-        isDC = true;
-        rulesLog.push("⚖️ Derby Deadlock Guard: Το σημείο μετατράπηκε σε Διπλή Ευκαιρία για ασφάλεια.");
-      } else if (Math.max(hP, aP) > 72) {
-        rulesLog.push("💎 Elite Favorite Lock: Καθαρή υπεροχή φαβορί. Το σημείο διατηρείται.");
+        mainPick = hP > aP ? '1X (DC)' : 'X2 (DC)'; pickColor = 'var(--gold)'; isDC = true;
+        rulesLog.push("⚖️ Derby Deadlock Guard ενεργό.");
       }
 
-      // Default Market
       let marketText = "2-3 GOALS";
       if (!isDC && shockScore < 50) marketText = "OVER 1.5 TEAM GOALS";
 
       return { 
         rawHXG: rawHXG.toFixed(2), rawAXG: rawAXG.toFixed(2),
+        rawHXGA: rawHXGA.toFixed(2), rawAXGA: rawAXGA.toFixed(2),
+        hXCorner, aXCorner, hXCards, aXCards, hFormStr, aFormStr, h2hList,
         adjHXG: hXG.toFixed(2), adjAXG: aXG.toFixed(2),
         hP, dP, aP, shockScore, isFatigued, rulesLog, mainPick, pickColor, marketText 
       };
     }
 
-    // --- MAIN EXECUTION ---
     async function runApexScan() {
       const btn = document.getElementById('scanBtn');
-      btn.disabled = true;
-      btn.innerText = "SCANNING NETWORK...";
-      
-      // Ημερομηνία συστήματος
+      btn.disabled = true; btn.innerText = "SCANNING NETWORK...";
       const day = new Date().toISOString().split('T')[0];
       
       document.getElementById('syncCont').style.display = 'block';
-      masterData = [];
-      document.getElementById('upcomingList').innerHTML = "";
+      masterData = []; document.getElementById('upcomingList').innerHTML = "";
 
       const fD = await apiFetch(`fixtures?date=${day}`);
       const allFixtures = fD.response || [];
-      
-      // ΦΙΛΤΡΟ: Κρατάμε μόνο τις βαθμονομημένες λίγκες
       const filteredFixtures = allFixtures.filter(m => targetLeagues.includes(m.league.id));
-      const fixtures = filteredFixtures.slice(0, 15); // Προστασία Rate Limit
+      const fixtures = filteredFixtures.slice(0, 15); 
 
       if(fixtures.length === 0) {
-          document.getElementById('syncStep').innerText = "ΑΝΑΜΟΝΗ: ΚΑΝΕΝΑ ΜΑΤΣ ΑΠΟ ΤΙΣ ΒΑΘΜΟΝΟΜΗΜΕΝΕΣ ΛΙΓΚΕΣ ΣΗΜΕΡΑ";
+          document.getElementById('syncStep').innerText = "ΑΝΑΜΟΝΗ: ΚΑΝΕΝΑ ΜΑΤΣ ΑΠΟ ΤΙΣ ΛΙΓΚΕΣ ΜΑΣ ΣΗΜΕΡΑ";
           document.getElementById('syncFill').style.width = '100%';
-          setTimeout(() => { 
-            document.getElementById('syncCont').style.display = 'none';
-            btn.disabled = false;
-            btn.innerText = "🚀 Run Quantum Scan";
-          }, 3000);
+          setTimeout(() => { document.getElementById('syncCont').style.display = 'none'; btn.disabled = false; btn.innerText = "🚀 Run Deep Scan"; }, 3000);
           return;
       }
 
       for (let i = 0; i < fixtures.length; i++) {
         const m = fixtures[i];
-        const prg = Math.round(((i + 1) / fixtures.length) * 100);
-        document.getElementById('syncFill').style.width = prg + '%';
-        document.getElementById('syncStep').innerText = `DATA SYNC: ${m.teams.home.name} [ID: ${m.league.id}]`;
+        document.getElementById('syncFill').style.width = Math.round(((i + 1) / fixtures.length) * 100) + '%';
+        document.getElementById('syncStep').innerText = `DATA SYNC: ${m.teams.home.name}`;
 
         const pData = await apiFetch(`predictions?fixture=${m.fixture.id}`);
         const p0 = pData.response?.[0];
-        
         if (p0) masterData.push({ id: m.fixture.id, fixture: m, calc: calculateApex(p0, m) });
-        
-        // Anti-Rate Limit Buffer (250ms)
         await new Promise(r => setTimeout(r, 250)); 
       }
 
       document.getElementById('syncCont').style.display = 'none';
-      btn.style.display = 'none'; // Κρύβουμε το κουμπί μετά από επιτυχή σάρωση
+      btn.style.display = 'none'; 
       renderApexDashboard();
     }
 
-    // --- UI RENDERING ---
+    // Βοηθητική function για δημιουργία των HTML κύκλων της φόρμας
+    function buildFormHtml(formArray) {
+      return formArray.map(f => `<span class="form-circle form-${f}">${f}</span>`).join('');
+    }
+
     function renderApexDashboard() {
       const container = document.getElementById('upcomingList');
       container.innerHTML = "<h2 class='orbitron' style='text-align:center; color:var(--gold); margin-bottom: 30px;'>💎 APEX TARGETS</h2>";
 
       masterData.forEach(d => {
-        const c = d.calc;
-        const fix = d.fixture;
+        const c = d.calc; const fix = d.fixture;
         const shockClass = c.shockScore > 70 ? 'shock-high' : (c.shockScore > 45 ? 'shock-med' : 'shock-low');
         const cardGlow = Math.max(c.hP, c.aP) >= 75 ? 'gold-glow' : 'standard-glow';
-
-        // Χτίσιμο των Rules Logs
         let rulesHtml = c.rulesLog.map(r => `<div class="rule-item">${r}</div>`).join('');
+        let h2hHtml = c.h2hList.map(h => `<div style="padding: 4px 0; border-bottom: 1px dashed #333;">${h}</div>`).join('');
 
         container.innerHTML += `
           <div class="cyber-card ${cardGlow}">
@@ -280,16 +266,13 @@
                   ${c.isFatigued ? '⚠️ HIGH FATIGUE' : '✅ STABLE'}
                 </span>
                 <span style="color:var(--txt-muted); font-size:0.7rem; margin-left:8px;">${fix.league.name}</span>
-                
                 <div class="team-name">${fix.teams.home.name}</div>
                 <div class="team-name">${fix.teams.away.name}</div>
-                
                 <div style="margin-top:12px; max-width: 200px;">
                   <small style="color:var(--txt-muted); font-size:0.65rem; font-weight:900;">SHOCK POTENTIAL: ${c.shockScore}%</small>
                   <div class="shock-bar-bg"><div class="shock-bar-fill ${shockClass}" style="width:${c.shockScore}%"></div></div>
                 </div>
               </div>
-              
               <div style="text-align:right; min-width: 120px;">
                 <div style="color:var(--gold); font-family:'Orbitron'; font-weight:900; font-size:0.65rem;">${c.marketText}</div>
                 <div style="background:#000; padding:15px; border-radius:12px; margin-top:5px; border:1px solid var(--border); display:inline-block;">
@@ -301,36 +284,52 @@
             <button class="btn-toggle" onclick="toggleIntel(${d.id})">🔍 ΠΛΗΡΗΣ ΑΝΑΛΥΣΗ OMEGA</button>
 
             <div id="intel-${d.id}" class="deep-intel-box">
-              <div style="display:flex; justify-content:space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #333;">
-                <div>
-                  <div style="color:var(--txt-muted); font-size:0.7rem;">RAW xG (Home - Away)</div>
-                  <div class="orbitron" style="color:#fff; font-size: 1rem;">${c.rawHXG} - ${c.rawAXG}</div>
+              
+              <div class="stats-grid">
+                <div class="stat-box">
+                  <div class="stat-title">🏠 ΓΗΠΕΔΟΥΧΟΣ (Τελ. 6)</div>
+                  <div style="margin-bottom: 5px;">${buildFormHtml(c.hFormStr)}</div>
+                  <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <div><span style="color:var(--txt-muted); font-size:0.7rem;">xG:</span> <span class="stat-value" style="color:var(--p);">${c.rawHXG}</span></div>
+                    <div><span style="color:var(--txt-muted); font-size:0.7rem;">xGA:</span> <span class="stat-value" style="color:var(--alert);">${c.rawHXGA}</span></div>
+                  </div>
                 </div>
-                <div style="text-align:right;">
-                  <div style="color:var(--txt-muted); font-size:0.7rem;">ADJUSTED xG (Omega)</div>
-                  <div class="orbitron" style="color:var(--p); font-size: 1rem;">${c.adjHXG} - ${c.adjAXG}</div>
-                </div>
-              </div>
-
-              <div style="margin-bottom: 15px;">
-                <div class="prob-row">
-                  <div class="prob-label">1</div>
-                  <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:${c.hP}%; background: ${c.hP > Math.max(c.aP, c.dP) ? 'var(--p)' : '#444'};"></div></div>
-                  <div class="prob-val" style="color: ${c.hP > Math.max(c.aP, c.dP) ? 'var(--p)' : '#888'};">${c.hP}%</div>
-                </div>
-                <div class="prob-row">
-                  <div class="prob-label">X</div>
-                  <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:${c.dP}%; background: ${c.dP > Math.max(c.hP, c.aP) ? 'var(--gold)' : '#444'};"></div></div>
-                  <div class="prob-val" style="color: ${c.dP > Math.max(c.hP, c.aP) ? 'var(--gold)' : '#888'};">${c.dP}%</div>
-                </div>
-                <div class="prob-row">
-                  <div class="prob-label">2</div>
-                  <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:${c.aP}%; background: ${c.aP > Math.max(c.hP, c.dP) ? 'var(--magenta)' : '#444'};"></div></div>
-                  <div class="prob-val" style="color: ${c.aP > Math.max(c.hP, c.dP) ? 'var(--magenta)' : '#888'};">${c.aP}%</div>
+                
+                <div class="stat-box">
+                  <div class="stat-title">✈️ ΦΙΛΟΞΕΝΟΥΜΕΝΟΣ (Τελ. 6)</div>
+                  <div style="margin-bottom: 5px;">${buildFormHtml(c.aFormStr)}</div>
+                  <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <div><span style="color:var(--txt-muted); font-size:0.7rem;">xG:</span> <span class="stat-value" style="color:var(--p);">${c.rawAXG}</span></div>
+                    <div><span style="color:var(--txt-muted); font-size:0.7rem;">xGA:</span> <span class="stat-value" style="color:var(--alert);">${c.rawAXGA}</span></div>
+                  </div>
                 </div>
               </div>
 
-              <div style="color:var(--txt-muted); font-size:0.7rem; margin-bottom:5px; font-weight:800;">APPLIED NEURAL FILTERS:</div>
+              <div class="stats-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr; text-align:center;">
+                <div class="stat-box">
+                  <div class="stat-title">🚩 xC (HOME)</div>
+                  <div class="stat-value">${c.hXCorner}</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-title">🚩 xC (AWAY)</div>
+                  <div class="stat-value">${c.aXCorner}</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-title">🟨 xCard (H)</div>
+                  <div class="stat-value" style="color:#f1c40f;">${c.hXCards}</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-title">🟨 xCard (A)</div>
+                  <div class="stat-value" style="color:#f1c40f;">${c.aXCards}</div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border: 1px solid #222;">
+                <div class="stat-title" style="margin-bottom:8px;">⚔️ ΤΕΛΕΥΤΑΙΑ Η2Η</div>
+                ${h2hHtml}
+              </div>
+
+              <div style="color:var(--txt-muted); font-size:0.7rem; margin-bottom:5px; font-weight:800; text-transform:uppercase;">Εφαρμοσμενα Νευρωνικα Φιλτρα:</div>
               ${rulesHtml}
             </div>
           </div>
