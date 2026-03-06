@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Predictor Pro v4700.3 - Real Stats Edition</title>
+  <title>Predictor Pro v4700.3 - Real Stats & Live Ticker</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <style>
@@ -16,6 +16,16 @@
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; font-size: 16px; overflow-x: hidden; }
     h1, h2, .orbitron { font-family: 'Orbitron', sans-serif; }
     .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 15px; }
+
+    /* --- LIVESCORE TICKER CSS --- */
+    .ticker-wrap { width: 100%; overflow: hidden; background: #000; border-bottom: 1px solid var(--p); padding: 10px 0; box-sizing: border-box; box-shadow: 0 0 15px rgba(0, 242, 255, 0.1); }
+    .ticker-move { display: inline-flex; white-space: nowrap; animation: ticker 35s linear infinite; }
+    .ticker-move:hover { animation-play-state: paused; }
+    .ticker-item { display: inline-block; padding: 0 25px; color: var(--txt); font-size: 0.85rem; font-family: 'Orbitron', sans-serif; font-weight: 700; border-right: 1px solid #333; }
+    .ticker-live { color: var(--alert); animation: pulseTicker 1.5s infinite; margin-right: 6px; }
+    .ticker-score { color: var(--gold); font-size: 1.05rem; margin: 0 6px; }
+    @keyframes ticker { 0% { transform: translate3d(100vw, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+    @keyframes pulseTicker { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
     .shock-bar-bg { background: #222; height: 6px; border-radius: 3px; margin-top: 5px; overflow: hidden; border: 1px solid #333; }
     .shock-bar-fill { height: 100%; transition: width 0.5s; }
@@ -58,17 +68,22 @@
   <div id="authScreen">
     <div class="container" style="margin-top:20vh; text-align:center;">
       <h1 class="orbitron" style="color:var(--p); font-size:3rem; margin-bottom:10px;">APEX ALPHA</h1>
-      <p style="color:var(--txt-muted); font-weight:600; letter-spacing:1px;">SOVEREIGN OMEGA v4700.3 // PREMIUM DATA</p>
+      <p style="color:var(--txt-muted); font-weight:600; letter-spacing:1px;">SOVEREIGN OMEGA v4700.3 // TERMINAL ACTIVE</p>
       <input type="password" id="pinInput" placeholder="••••••" oninput="instantAuth(this)" 
              style="width:280px; padding:20px; text-align:center; font-size:2.5rem; border-radius:16px; border:1px solid var(--border); background:#000; color:var(--p); font-family:'Orbitron'; letter-spacing:10px; outline:none; margin-top: 20px;">
     </div>
   </div>
 
   <div id="appContent" style="display:none;">
+    
+    <div class="ticker-wrap" id="liveTickerWrap" style="display:none;">
+      <div class="ticker-move" id="liveTicker"></div>
+    </div>
+
     <div class="container">
       <header style="text-align:center; padding: 20px 0 30px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-        <small style="color:var(--magenta); font-weight:900; letter-spacing:4px; font-size:0.7rem;">REAL-TIME 6-MATCH DEEP STATS</small>
+        <small style="color:var(--magenta); font-weight:900; letter-spacing:4px; font-size:0.7rem;">REAL-TIME QUANTS ENGINE</small>
       </header>
 
       <button class="btn-apex" id="scanBtn" onclick="runApexScan()">🚀 Run Premium Scan</button>
@@ -91,12 +106,17 @@
     const API_BASE = "https://v3.football.api-sports.io";
     let masterData = [];
 
+    // Οι λίγκες μας
     const targetLeagues = [39, 40, 140, 135, 78, 79, 61, 253, 262, 128, 197, 318, 94, 88, 144, 2, 3, 84];
 
     function instantAuth(el) {
       if (el.value === "106014") {
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
+        
+        // Εκκίνηση Live Ticker
+        fetchLiveScores();
+        setInterval(fetchLiveScores, 60000); // Ανανέωση κάθε 60 δευτερόλεπτα
       }
     }
 
@@ -110,6 +130,36 @@
         const r = await fetch(`${API_BASE}/${path}`, { headers: {"x-apisports-key": KEY} });
         return await r.json();
       } catch(e) { return { response: [] }; }
+    }
+
+    // --- LIVESCORE ENGINE ---
+    async function fetchLiveScores() {
+      // Φιλτράρισμα μόνο για τα δικά μας πρωταθλήματα
+      const liveLeagues = targetLeagues.join('-');
+      try {
+        const res = await apiFetch(`fixtures?live=${liveLeagues}`);
+        const matches = res.response || [];
+        const tickerEl = document.getElementById('liveTicker');
+        const wrapEl = document.getElementById('liveTickerWrap');
+
+        if (matches.length > 0) {
+          wrapEl.style.display = 'block';
+          let html = '';
+          matches.forEach(m => {
+            let time = m.fixture.status.elapsed ? m.fixture.status.elapsed + "'" : "HT";
+            html += `<div class="ticker-item">
+                      <span class="ticker-live">⏱ ${time}</span> 
+                      ${m.teams.home.name} 
+                      <span class="ticker-score">${m.goals.home} - ${m.goals.away}</span> 
+                      ${m.teams.away.name}
+                     </div>`;
+          });
+          // Επανάληψη του string 2 φορές για ομαλό CSS continuous scrolling
+          tickerEl.innerHTML = html + html; 
+        } else {
+          wrapEl.style.display = 'none';
+        }
+      } catch(e) { console.error("Live Ticker Error", e); }
     }
 
     // --- REAL DATA EXTRACTOR (Τελευταία 6 Ματς) ---
@@ -128,12 +178,10 @@
         let goalsFor = isHome ? pf.goals.home : pf.goals.away;
         let goalsAgainst = isHome ? pf.goals.away : pf.goals.home;
         
-        // Form Logic (W/D/L)
         if (goalsFor > goalsAgainst) formArr.push('W');
         else if (goalsFor < goalsAgainst) formArr.push('L');
         else formArr.push('D');
 
-        // Fetching Real Match Stats
         let statsRes = await apiFetch(`fixtures/statistics?fixture=${fixId}`);
         let statsArr = statsRes.response || [];
         
@@ -143,7 +191,6 @@
           
           let getStat = (arr, type) => {
             let obj = arr.find(x => x.type === type);
-            // Ασφαλές parsing
             let val = obj && obj.value ? parseFloat(obj.value) : 0;
             return isNaN(val) ? 0 : val; 
           };
@@ -151,7 +198,6 @@
           let matchXG = getStat(myStats, "Expected Goals");
           let matchXGA = getStat(oppStats, "Expected Goals");
           
-          // CRITICAL FIX: Αν δεν υπάρχει xG, πάρε τα πραγματικά γκολ. Αν είναι 0, βάλε 0.1 για να μη σπάσει.
           if (matchXG === 0) matchXG = goalsFor > 0 ? goalsFor : 0.1;
           if (matchXGA === 0) matchXGA = goalsAgainst > 0 ? goalsAgainst : 0.1;
 
@@ -162,7 +208,6 @@
           
           count++;
         }
-        // RATE LIMIT FIX: 120ms delay
         await new Promise(r => setTimeout(r, 120)); 
       }
 
@@ -173,7 +218,7 @@
         xGA: avg(totalXGA),
         corners: avg(totalCorners),
         cards: avg(totalCards),
-        formStr: formArr.reverse() // FORM FIX: Παλαιότερο -> Νεότερο
+        formStr: formArr.reverse() 
       };
     }
 
@@ -241,7 +286,6 @@
       const btn = document.getElementById('scanBtn');
       btn.disabled = true; btn.innerText = "EXTRACTING DEEP STATS...";
       
-      // TIMEZONE FIX
       const tzOffset = (new Date()).getTimezoneOffset() * 60000;
       const day = (new Date(Date.now() - tzOffset)).toISOString().split('T')[0];
       
