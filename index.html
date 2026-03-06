@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4700.22 - Apex Turbo</title>
+  <title>Predictor Pro v4700.23 - Omega Core</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -25,8 +25,8 @@
     .season-xga-plain { color: #8b949e; font-weight: 600; font-family: 'Orbitron'; margin-left: 5px; }
     
     .dev-badge { font-size: 0.75rem; font-weight: 900; padding: 3px 6px; border-radius: 4px; margin-left: 8px; font-family: 'Orbitron'; }
-    .dev-pos { background: #238636; color: #fff; }
-    .dev-neg { background: #da3633; color: #fff; }
+    .dev-pos { background: #238636; color: #fff; border: 1px solid var(--neon-live); }
+    .dev-neg { background: #da3633; color: #fff; border: 1px solid #ff4d4d; }
 
     .btn-main { padding: 15px 25px; background: var(--grad); color: #fff; border: none; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; margin: 5px; transition: 0.3s; }
     .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
@@ -42,12 +42,19 @@
     
     .form-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; margin-right: 3px; color:#fff;}
     .form-W { background: #238636; } .form-D { background: #666; } .form-L { background: #da3633; }
+
+    /* DATA LAB AUDIT PANEL */
+    .lab-audit-panel { background: #000; border: 2px solid var(--gold); border-radius: 16px; padding: 20px; margin-bottom: 30px; box-shadow: 0 0 30px rgba(245, 158, 11, 0.1); }
+    .audit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+    .audit-box { background: #161b22; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
+    .audit-label { font-size: 0.65rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .audit-value { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--gold); font-weight: 900; margin: 5px 0; }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4700.22</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4700.23</h1>
     <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" 
            style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;">
   </div>
@@ -55,12 +62,13 @@
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding: 20px 0;">
-        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">v4700.22</span></h1>
+        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">CORE</span></h1>
       </header>
 
       <div style="display:flex; justify-content:center; flex-wrap: wrap; margin-bottom:20px;">
-        <button class="btn-main" onclick="runScan('pre')">🚀 TURBO SCAN (PRE-MATCH)</button>
+        <button class="btn-main" onclick="runScan('pre')">🚀 TURBO PRE-MATCH SCAN</button>
         <button class="btn-main" style="background:#da3633;" onclick="runScan('live')">🔴 LIVE RADAR</button>
+        <button class="btn-main" style="background:var(--gold); color:#000;" onclick="runAudit()">🔍 DATA LAB AUDIT</button>
         <button class="btn-main" style="background:#222;" onclick="exportPDF()">📄 SAVE PDF</button>
       </div>
 
@@ -69,6 +77,7 @@
         <p id="status" class="orbitron" style="font-size:0.7rem; color:var(--p); margin-top:8px;"></p>
       </div>
 
+      <div id="labSection"></div>
       <div id="display"></div>
     </div>
   </div>
@@ -77,7 +86,7 @@
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
     
-    // Επιβεβαιωμένα 25 Πρωταθλήματα
+    // 25 Leagues Verified
     const LEAGUES = [39, 40, 41, 140, 141, 135, 136, 78, 79, 61, 62, 253, 262, 128, 197, 318, 281, 94, 88, 144, 2, 3, 84, 203, 357];
     let memoryBank = [];
 
@@ -86,6 +95,7 @@
       return await r.json();
     }
 
+    // --- STAGGERED TURBO METRICS ENGINE ---
     async function getTeamData(teamId, leagueId, season, venueType) {
       const [sRes, fRes] = await Promise.all([
         apiReq(`teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`),
@@ -99,30 +109,41 @@
 
       async function batchCalculate(list) {
         if(list.length === 0) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
-        const results = await Promise.all(list.map(f => apiReq(`fixtures/statistics?fixture=${f.fixture.id}`)));
+        
+        // Staggered Requests: Αποτρέπει το Error 429 (Too Many Requests)
+        const results = await Promise.all(list.map(async (f, idx) => {
+            await new Promise(r => setTimeout(r, idx * 80)); // Καθυστέρηση 80ms ανά κλήση
+            return apiReq(`fixtures/statistics?fixture=${f.fixture.id}`);
+        }));
+
         let xgS = 0, xgaS = 0, corS = 0, crdS = 0, cnt = 0;
 
         results.forEach((st, idx) => {
           if (st.response && st.response.length === 2) {
             let my = st.response.find(x => x.team.id === teamId).statistics;
             let op = st.response.find(x => x.team.id !== teamId).statistics;
-            let gV = (a, t) => { let o = a.find(x => x.type === t); return (o && o.value) ? parseFloat(o.value) : 0; };
-            let xG = gV(my, "Expected Goals") || (gV(my, "Shots on Goal") * 0.18);
-            xgS += xG; xgaS += (gV(op, "Expected Goals") || 0.9);
-            corS += gV(my, "Corner Kicks"); crdS += (gV(my, "Yellow Cards") + gV(my, "Red Cards"));
+            let gV = (a, t) => { let o = a.find(x => x.type === t); return (o && o.value != null) ? parseFloat(o.value) : 0; };
+            
+            let xG = gV(my, "Expected Goals");
+            if (xG === 0) xG = (gV(my, "Shots on Goal") * 0.18) + ((list[idx].goals.home || 0) * 0.4);
+            
+            xgS += xG; 
+            xgaS += (gV(op, "Expected Goals") || 0.9);
+            corS += gV(my, "Corner Kicks"); 
+            crdS += (gV(my, "Yellow Cards") + gV(my, "Red Cards"));
             cnt++;
           }
         });
         return { 
-          xg: cnt > 0 ? (xgS/cnt).toFixed(2) : "1.10", 
-          xga: cnt > 0 ? (xgaS/cnt).toFixed(2) : "1.10", 
+          xg: cnt > 0 ? (xgS/cnt).toFixed(2) : "1.00", 
+          xga: cnt > 0 ? (xgaS/cnt).toFixed(2) : "1.00", 
           cor: cnt > 0 ? (corS/cnt).toFixed(1) : "4.0", 
           crd: cnt > 0 ? (crdS/cnt).toFixed(1) : "2.0" 
         };
       }
 
       const [form, split] = await Promise.all([batchCalculate(last6Gen), batchCalculate(last6Split)]);
-      const base_xg = parseFloat(s.goals?.for?.average?.total) || 1.20;
+      const base_xg = parseFloat(s.goals?.for?.average?.total) || 1.10;
       const base_xga = parseFloat(s.goals?.against?.average?.total) || 1.10;
 
       const getDev = (curr, base) => {
@@ -147,28 +168,35 @@
     async function runScan(mode) {
       document.getElementById('loader').style.display = 'block';
       const disp = document.getElementById('display'); disp.innerHTML = "";
+      document.getElementById('labSection').innerHTML = "";
       const date = new Date().toISOString().split('T')[0];
       const res = await apiReq(`fixtures?date=${date}`);
       const matches = (res.response || []).filter(m => LEAGUES.includes(m.league.id)).slice(0, 15);
-      memoryBank = [];
+      
+      if(mode === 'pre') memoryBank = [];
 
       for(let i=0; i<matches.length; i++) {
         let m = matches[i];
         document.getElementById('bar').style.width = ((i+1)/matches.length * 100) + "%";
-        document.getElementById('status').innerText = `CALIBRATING: ${m.teams.home.name}`;
+        document.getElementById('status').innerText = `ANALYZING: ${m.teams.home.name}`;
 
         let intel = null;
         if(mode === 'pre') {
-          const [hData, aData] = await Promise.all([
+          const [intelHome, intelAway] = await Promise.all([
             getTeamData(m.teams.home.id, m.league.id, m.league.season, 'home'),
             getTeamData(m.teams.away.id, m.league.id, m.league.season, 'away')
           ]);
-          intel = { h: hData, a: aData };
-          memoryBank.push({ matchId: m.fixture.id, teams: `${m.teams.home.name}-${m.teams.away.name}`, stats: intel });
+          intel = { h: intelHome, a: intelAway };
+          memoryBank.push({ m: m, stats: intel }); // Save to Memory Bank
         } else {
           const sR = await apiReq(`fixtures/statistics?fixture=${m.fixture.id}`);
           if(sR.response && sR.response.length === 2) {
-            let gV = (a, t) => { let o = a.find(x => x.type === t); return o && o.value ? parseInt(o.value.toString().replace('%','')) : 0; };
+            // Null-safe extraction for Live Radar
+            let gV = (a, t) => { 
+                let o = a.find(x => x.type === t); 
+                if(!o || o.value == null) return 0;
+                return parseInt(o.value.toString().replace('%','')) || 0; 
+            };
             intel = { h: { danger: gV(sR.response[0].statistics, "Dangerous Attacks"), shots: gV(sR.response[0].statistics, "Shots on Goal"), corners: gV(sR.response[0].statistics, "Corner Kicks"), poss: gV(sR.response[0].statistics, "Ball Possession") },
                       a: { danger: gV(sR.response[1].statistics, "Dangerous Attacks"), shots: gV(sR.response[1].statistics, "Shots on Goal"), corners: gV(sR.response[1].statistics, "Corner Kicks"), poss: gV(sR.response[1].statistics, "Ball Possession") } };
           }
@@ -176,6 +204,55 @@
         renderMatch(m, intel, mode);
       }
       document.getElementById('loader').style.display = 'none';
+    }
+
+    // --- DATA LAB AUDIT FUNCTION ---
+    async function runAudit() {
+        if(memoryBank.length === 0) {
+            alert("Το Memory Bank είναι άδειο. Τρέξε πρώτα ένα PRE-MATCH SCAN για να συλλέξεις δεδομένα.");
+            return;
+        }
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('display').innerHTML = "";
+        document.getElementById('status').innerText = "FETCHING ACTUAL RESULTS...";
+
+        let totalActualGoals = 0, auditCount = 0;
+
+        for(let entry of memoryBank) {
+            const res = await apiReq(`fixtures?id=${entry.m.fixture.id}`);
+            const f = res.response[0];
+            if(f && f.fixture.status.short === "FT") {
+                totalActualGoals += (f.goals.home + f.goals.away);
+                auditCount++;
+                
+                let html = `
+                <div class="cyber-card" style="border-left-color: var(--gold);">
+                  <div style="font-size:0.7rem; color:var(--txt-muted);">${f.league.name} [COMPLETED]</div>
+                  <h3 class="orbitron" style="margin:5px 0;">${f.teams.home.name} ${f.goals.home} - ${f.goals.away} ${f.teams.away.name}</h3>
+                  <div style="margin-top:10px; font-size:0.8rem;">
+                     <div><span style="color:var(--p)">Predicted xG:</span> ${entry.stats.h.formXG} - ${entry.stats.a.formXG}</div>
+                     <div><span style="color:var(--neon-live)">Actual Goals:</span> ${f.goals.home} - ${f.goals.away}</div>
+                  </div>
+                </div>`;
+                document.getElementById('display').innerHTML += html;
+            }
+        }
+
+        if(auditCount > 0) {
+            const avgActual = (totalActualGoals / auditCount).toFixed(2);
+            document.getElementById('labSection').innerHTML = `
+            <div class="lab-audit-panel">
+              <h2 class="orbitron" style="color:var(--gold); text-align:center; margin-top:0;">🔬 DATA LAB AUDIT</h2>
+              <div class="audit-grid">
+                <div class="audit-box"><div class="audit-label">MATCHES EVALUATED</div><div class="audit-value">${auditCount}</div></div>
+                <div class="audit-box"><div class="audit-label">AVG ACTUAL GOALS</div><div class="audit-value">${avgActual}</div></div>
+                <div class="audit-box"><div class="audit-label">ALGO STATUS</div><div class="audit-value" style="color:var(--neon-live)">ACTIVE</div></div>
+              </div>
+            </div>`;
+        } else {
+            document.getElementById('display').innerHTML = "<h3 class='orbitron' style='text-align:center; color:var(--alert);'>Δεν υπάρχουν ακόμα ολοκληρωμένα (FT) ματς στη μνήμη.</h3>";
+        }
+        document.getElementById('loader').style.display = 'none';
     }
 
     function renderMatch(m, s, mode) {
@@ -221,7 +298,7 @@
                 </div>
                 <div class="stat-row"><span>Dangerous Attacks / Shots:</span> <span class="val-xg">${s.h.danger}(${s.h.shots}) - ${s.a.danger}(${s.a.shots})</span></div>
                 <div class="stat-row"><span>Corners (Live):</span> <span style="color:#fff; font-weight:800;">🚩 ${s.h.corners} - ${s.a.corners}</span></div>
-                ` : `<div style="text-align:center; color:var(--txt-muted);">SYNCING LIVE RADAR...</div>`}
+                ` : `<div style="text-align:center; color:var(--txt-muted);">SCANNING LIVE FEED...</div>`}
               </div>
             `}
           </div>
@@ -229,7 +306,7 @@
       document.getElementById('display').innerHTML += html;
     }
 
-    function exportPDF() { html2pdf().from(document.getElementById('display')).save('Apex_Turbo_Audit_v22.pdf'); }
+    function exportPDF() { html2pdf().from(document.getElementById('app')).save('Apex_Turbo_Core.pdf'); }
   </script>
 </body>
 </html>
