@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4700.11 - Apex Sovereign</title>
+  <title>Predictor Pro v4700.12 - Apex Alpha</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -19,43 +19,48 @@
     .container { max-width: 1000px; margin: 0 auto; padding: 15px; }
 
     /* UI ELEMENTS */
-    .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--p); }
+    .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--p); transition: 0.3s; }
     .live-glow { border-left-color: var(--neon-live); box-shadow: 0 0 15px rgba(57, 255, 20, 0.1); }
     .finished-glow { border-left-color: #555; opacity: 0.8; }
 
-    .btn-main { padding: 15px 25px; background: var(--grad); color: #fff; border: none; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; margin-right: 10px; transition: 0.3s; }
+    .btn-main { padding: 15px 25px; background: var(--grad); color: #fff; border: none; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; margin: 5px; }
     .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
-    .team-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid #222; }
-    .stat-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; }
-    .val { font-family: 'Orbitron'; color: var(--p); font-weight: 700; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    .team-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid #222; }
+    .stat-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem; border-bottom: 1px solid #1a1d23; padding-bottom: 4px; }
+    .val-xg { color: var(--p); font-weight: 800; font-family: 'Orbitron'; }
+    .val-corner { color: #fff; font-weight: 800; }
+    .val-card { color: var(--gold); font-weight: 800; }
     
-    .impact-alert { background: rgba(218, 54, 51, 0.1); border: 1px solid var(--alert); color: var(--alert); padding: 10px; border-radius: 6px; font-size: 0.75rem; margin-top: 10px; font-weight: 700; }
     .live-pulse { color: var(--neon-live); animation: pulse 1s infinite; font-weight: 900; }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
     
     .form-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; margin-right: 3px; color:#fff;}
     .form-W { background: #238636; } .form-D { background: #666; } .form-L { background: #da3633; }
+
+    /* SEPARATION TAGS */
+    .tag-corner { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; color: #fff; border: 1px solid #444; }
+    .tag-card { background: rgba(245,158,11,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; color: var(--gold); border: 1px solid var(--gold); }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4700.11</h1>
-    <input type="password" id="pin" placeholder="ENTER PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; outline:none;">
+    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4700.12</h1>
+    <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;">
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding: 20px 0;">
-        <h1 class="orbitron" style="color:var(--p); margin:0;">PREDICTOR PRO <span style="color:#fff">SOVEREIGN</span></h1>
+        <h1 class="orbitron" style="color:var(--p); margin:0;">PREDICTOR PRO <span style="color:#fff">ALPHA</span></h1>
       </header>
 
-      <div style="display:flex; justify-content:center; margin-bottom:30px;">
-        <button class="btn-main" onclick="runScan('pre')">🚀 PRE-MATCH STRATEGY</button>
+      <div style="display:flex; justify-content:center; flex-wrap: wrap; margin-bottom:20px;">
+        <button class="btn-main" onclick="runScan('pre')">🚀 PRE-MATCH SCAN</button>
         <button class="btn-main" style="background:#da3633;" onclick="runScan('live')">🔴 LIVE RADAR</button>
-        <button class="btn-main" style="background:#222;" onclick="exportPDF()">📄 PDF REPORT</button>
+        <button class="btn-main" style="background:#222;" onclick="exportPDF()">📄 PDF</button>
       </div>
 
       <div id="loader" style="display:none; margin-bottom:20px; text-align:center;">
@@ -63,7 +68,6 @@
         <p id="status" class="orbitron" style="font-size:0.7rem; color:var(--p); margin-top:8px;"></p>
       </div>
 
-      <div id="lab"></div>
       <div id="display"></div>
     </div>
   </div>
@@ -71,6 +75,7 @@
   <script>
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
+    // Επιβεβαιωμένα Πρωταθλήματα (23 Λίγκες)
     const LEAGUES = [39, 40, 41, 140, 141, 135, 78, 79, 61, 62, 253, 262, 128, 197, 318, 94, 88, 144, 2, 3, 84, 203, 357];
 
     async function apiReq(path) {
@@ -78,13 +83,9 @@
       return await r.json();
     }
 
-    // --- DEEP ANALYTICS ---
     async function getTeamData(teamId, leagueId, season) {
-      // 1. Season Stats
       const sRes = await apiReq(`teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`);
       const sData = sRes.response || {};
-      
-      // 2. Last 6 Form
       const fRes = await apiReq(`fixtures?team=${teamId}&last=6&status=FT`);
       const fixs = fRes.response || [];
       
@@ -92,31 +93,18 @@
       for(let f of fixs) {
         let isH = f.teams.home.id === teamId;
         form.push(isH ? (f.goals.home > f.goals.away ? 'W' : (f.goals.home < f.goals.away ? 'L' : 'D')) : (f.goals.away > f.goals.home ? 'W' : (f.goals.away < f.goals.home ? 'L' : 'D')));
-        
         const stRes = await apiReq(`fixtures/statistics?fixture=${f.fixture.id}`);
         const st = stRes.response || [];
         if(st.length === 2) {
           let my = st.find(x => x.team.id === teamId).statistics;
           let op = st.find(x => x.team.id !== teamId).statistics;
-          let getV = (a, t) => { let o = a.find(x => x.type === t); return o && o.value ? parseFloat(o.value) : 0; };
-          
-          let xG = getV(my, "Expected Goals") || (getV(my, "Shots on Goal") * 0.2);
-          let xGA = getV(op, "Expected Goals") || (getV(op, "Shots on Goal") * 0.2);
-          txG += xG; txGA += xGA;
+          let getV = (a, t) => { let o = a.find(x => x.type === t); return (o && o.value) ? parseFloat(o.value) : 0; };
+          txG += getV(my, "Expected Goals"); txGA += getV(op, "Expected Goals");
           tCor += getV(my, "Corner Kicks"); tCrd += (getV(my, "Yellow Cards") + getV(my, "Red Cards"));
         }
         await new Promise(r => setTimeout(r, 100));
       }
-
-      return {
-        seasonXG: sData.goals?.for?.average?.total || "0.00",
-        seasonXGA: sData.goals?.against?.average?.total || "0.00",
-        formXG: (txG/6).toFixed(2),
-        formXGA: (txGA/6).toFixed(2),
-        corners: (tCor/6).toFixed(1),
-        cards: (tCrd/6).toFixed(1),
-        form: form.reverse()
-      };
+      return { seasonXG: sData.goals?.for?.average?.total || "1.1", seasonXGA: sData.goals?.against?.average?.total || "1.1", formXG: (txG/6).toFixed(2), formXGA: (txGA/6).toFixed(2), corners: (tCor/6).toFixed(1), cards: (tCrd/6).toFixed(1), form: form.reverse() };
     }
 
     async function runScan(mode) {
@@ -124,24 +112,25 @@
       const disp = document.getElementById('display'); disp.innerHTML = "";
       const date = new Date().toISOString().split('T')[0];
       const res = await apiReq(`fixtures?date=${date}`);
-      const matches = (res.response || []).filter(m => LEAGUES.includes(m.league.id)).slice(0, 12);
+      const matches = (res.response || []).filter(m => LEAGUES.includes(m.league.id)).slice(0, 15);
 
       for(let i=0; i<matches.length; i++) {
         let m = matches[i];
         document.getElementById('bar').style.width = ((i+1)/matches.length * 100) + "%";
-        document.getElementById('status').innerText = `DEEP SCAN: ${m.teams.home.name}`;
+        document.getElementById('status').innerText = `CALIBRATING ${m.teams.home.name}...`;
 
         let intel = null;
         if(mode === 'pre') {
           intel = { h: await getTeamData(m.teams.home.id, m.league.id, m.league.season), a: await getTeamData(m.teams.away.id, m.league.id, m.league.season) };
-          // Lineups/Injuries check
-          const lineRes = await apiReq(`fixtures/lineups?fixture=${m.fixture.id}`);
-          intel.missing = lineRes.response?.filter(x => x.substitutes?.length < 5).length || 0;
         } else {
           const sR = await apiReq(`fixtures/statistics?fixture=${m.fixture.id}`);
           if(sR.response?.length === 2) {
             let hS = sR.response[0].statistics; let aS = sR.response[1].statistics;
-            let gV = (a, t) => { let o = a.find(x => x.type === t); return o && o.value ? parseInt(o.value) : 0; };
+            let gV = (a, t) => { 
+                let o = a.find(x => x.type === t); 
+                if(!o || o.value === null) return 0;
+                return parseInt(o.value.toString().replace('%','')) || 0; 
+            };
             intel = { h: { danger: gV(hS, "Dangerous Attacks"), shots: gV(hS, "Shots on Goal"), corners: gV(hS, "Corner Kicks"), poss: gV(hS, "Ball Possession") },
                       a: { danger: gV(aS, "Dangerous Attacks"), shots: gV(aS, "Shots on Goal"), corners: gV(aS, "Corner Kicks"), poss: gV(aS, "Ball Possession") } };
           }
@@ -161,55 +150,58 @@
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
               <span class="status-badge ${isLive ? 'badge-live' : ''}">${isLive ? m.fixture.status.elapsed+"'" : m.fixture.status.short}</span>
-              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${m.league.name.toUpperCase()}</div>
+              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${m.league.name}</div>
               <h3 class="orbitron" style="margin:5px 0 0 0;">${m.teams.home.name}</h3>
               <h3 class="orbitron" style="margin:2px 0;">${m.teams.away.name}</h3>
             </div>
             <div style="text-align:right;">
-              <div class="${isLive ? 'live-pulse' : ''}" style="font-size:2rem; font-weight:900;">${m.goals.home ?? 0} - ${m.goals.away ?? 0}</div>
+              <div class="${isLive ? 'live-pulse' : ''}" style="font-size:2.2rem; font-weight:900;">${m.goals.home ?? 0} - ${m.goals.away ?? 0}</div>
             </div>
           </div>
 
           <div class="stats-grid">
             ${mode === 'pre' ? `
               <div class="team-box">
-                <div style="font-weight:800; color:var(--p); font-size:0.7rem; margin-bottom:8px;">HOME ANALYTICS</div>
+                <div style="font-weight:800; color:var(--p); font-size:0.7rem; margin-bottom:8px;">🏠 HOME ANALYTICS</div>
                 ${s.h.form.map(f => `<span class="form-dot form-${f}">${f}</span>`).join('')}
-                <div class="stat-row" style="margin-top:10px;"><span>Season xG/xGA:</span> <span class="val">${s.h.seasonXG} / ${s.h.seasonXGA}</span></div>
-                <div class="stat-row"><span>Last 6 xG/xGA:</span> <span class="val">${s.h.formXG} / ${s.h.formXGA}</span></div>
-                <div class="stat-row"><span>Avg Corners/Cards:</span> <span class="val">${s.h.corners} / ${s.h.cards}</span></div>
+                <div class="stat-row" style="margin-top:10px;"><span>Season xG/xGA:</span> <span class="val-xg">${s.h.seasonXG} / ${s.h.seasonXGA}</span></div>
+                <div class="stat-row"><span>Form (L6) xG/xGA:</span> <span class="val-xg">${s.h.formXG} / ${s.h.formXGA}</span></div>
+                <div class="stat-row"><span>Avg <span class="tag-corner">Corners</span></span> <span class="val-corner">${s.h.corners}</span></div>
+                <div class="stat-row"><span>Avg <span class="tag-card">Cards</span></span> <span class="val-card">${s.h.cards}</span></div>
               </div>
               <div class="team-box">
-                <div style="font-weight:800; color:var(--magenta); font-size:0.7rem; margin-bottom:8px;">AWAY ANALYTICS</div>
+                <div style="font-weight:800; color:var(--magenta); font-size:0.7rem; margin-bottom:8px;">✈️ AWAY ANALYTICS</div>
                 ${s.a.form.map(f => `<span class="form-dot form-${f}">${f}</span>`).join('')}
-                <div class="stat-row" style="margin-top:10px;"><span>Season xG/xGA:</span> <span class="val">${s.a.seasonXG} / ${s.a.seasonXGA}</span></div>
-                <div class="stat-row"><span>Last 6 xG/xGA:</span> <span class="val">${s.a.formXG} / ${s.a.formXGA}</span></div>
-                <div class="stat-row"><span>Avg Corners/Cards:</span> <span class="val">${s.a.corners} / ${s.a.cards}</span></div>
+                <div class="stat-row" style="margin-top:10px;"><span>Season xG/xGA:</span> <span class="val-xg">${s.a.seasonXG} / ${s.a.seasonXGA}</span></div>
+                <div class="stat-row"><span>Form (L6) xG/xGA:</span> <span class="val-xg">${s.a.formXG} / ${s.a.formXGA}</span></div>
+                <div class="stat-row"><span>Avg <span class="tag-corner">Corners</span></span> <span class="val-corner">${s.a.corners}</span></div>
+                <div class="stat-row"><span>Avg <span class="tag-card">Cards</span></span> <span class="val-card">${s.a.cards}</span></div>
               </div>
             ` : `
               <div class="team-box" style="grid-column: span 2;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                   <div style="text-align:center">Possession: <span class="val">${s.h.poss}%</span></div>
-                   <div style="text-align:center">Pressure: <span class="val">${Math.round(s.h.danger/2)} - ${Math.round(s.a.danger/2)}</span></div>
-                   <div style="text-align:center">Possession: <span class="val">${s.a.poss}%</span></div>
+                   <div style="text-align:center; flex:1">Possession<br><span class="val-xg">${s ? s.h.poss : 50}%</span></div>
+                   <div style="text-align:center; flex:1; color:#555">VS</div>
+                   <div style="text-align:center; flex:1">Possession<br><span class="val-xg">${s ? s.a.poss : 50}%</span></div>
                 </div>
-                <div class="stat-row"><span>Shots on Target:</span> <span class="val">${s.h.shots} - ${s.a.shots}</span></div>
-                <div class="stat-row"><span>Dangerous Attacks:</span> <span class="val">${s.h.danger} - ${s.a.danger}</span></div>
-                <div class="stat-row"><span>Live Corners:</span> <span class="val">${s.h.corners} - ${s.a.corners}</span></div>
+                <div class="stat-row"><span>Shots on Target:</span> <span class="val-xg">${s ? s.h.shots : 0} - ${s ? s.a.shots : 0}</span></div>
+                <div class="stat-row"><span>Dangerous Attacks:</span> <span class="val-xg">${s ? s.h.danger : 0} - ${s ? s.a.danger : 0}</span></div>
+                <div class="stat-row"><span>Live <span class="tag-corner">Corners</span>:</span> <span class="val-corner">${s ? s.h.corners : 0} - ${s ? s.a.corners : 0}</span></div>
               </div>
             `}
           </div>
-
-          ${mode === 'pre' && s.missing > 0 ? `
-            <div class="impact-alert">
-              ⚠️ IMPACT REPORT: Εντοπίστηκαν ${s.missing} σημαντικές απουσίες. Πιθανή απόκλιση xG κατά 15-20%.
-            </div>
-          ` : ''}
         </div>`;
       document.getElementById('display').innerHTML += html;
     }
 
-    function exportPDF() { html2pdf().from(document.getElementById('display')).save('Apex_Final_Report.pdf'); }
+    function exportPDF() { 
+        const element = document.getElementById('display');
+        html2pdf().from(element).set({
+            margin: 10, filename: 'Apex_Strategy_Report.pdf',
+            html2canvas: { scale: 2, backgroundColor: '#010409' },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }).save();
+    }
   </script>
 </body>
 </html>
