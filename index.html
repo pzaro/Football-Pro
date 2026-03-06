@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Predictor Pro v4700.2 - Deep Stats</title>
+  <title>Predictor Pro v4700.3 - Real Stats Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <style>
@@ -39,14 +39,12 @@
     .btn-toggle { background: transparent; color: var(--txt-muted); border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 700; width: 100%; margin-top: 15px; transition: 0.2s;}
     .btn-toggle:hover { background: var(--border); color: #fff; }
     
-    /* DEEP INTEL GRID */
     .deep-intel-box { display: none; background: var(--card-deep); border-radius: 12px; padding: 15px; margin-top: 15px; border: 1px solid #222; font-size: 0.85rem; }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #333; }
     .stat-box { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border: 1px solid #222; }
     .stat-title { color: var(--txt-muted); font-size: 0.65rem; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
     .stat-value { font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 900; color: #fff; }
     
-    /* FORM CIRCLES */
     .form-circle { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; color: #fff; margin-right: 3px; }
     .form-W { background: var(--live); }
     .form-D { background: #555; }
@@ -60,7 +58,7 @@
   <div id="authScreen">
     <div class="container" style="margin-top:20vh; text-align:center;">
       <h1 class="orbitron" style="color:var(--p); font-size:3rem; margin-bottom:10px;">APEX ALPHA</h1>
-      <p style="color:var(--txt-muted); font-weight:600; letter-spacing:1px;">SOVEREIGN OMEGA v4700.2 // DEEP STATS</p>
+      <p style="color:var(--txt-muted); font-weight:600; letter-spacing:1px;">SOVEREIGN OMEGA v4700.3 // PREMIUM DATA</p>
       <input type="password" id="pinInput" placeholder="••••••" oninput="instantAuth(this)" 
              style="width:280px; padding:20px; text-align:center; font-size:2.5rem; border-radius:16px; border:1px solid var(--border); background:#000; color:var(--p); font-family:'Orbitron'; letter-spacing:10px; outline:none; margin-top: 20px;">
     </div>
@@ -70,10 +68,10 @@
     <div class="container">
       <header style="text-align:center; padding: 20px 0 30px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0; font-size:2.2rem; letter-spacing:-1px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-        <small style="color:var(--magenta); font-weight:900; letter-spacing:4px; font-size:0.7rem;">v4700.2 ADVANCED METRICS</small>
+        <small style="color:var(--magenta); font-weight:900; letter-spacing:4px; font-size:0.7rem;">REAL-TIME 6-MATCH DEEP STATS</small>
       </header>
 
-      <button class="btn-apex" id="scanBtn" onclick="runApexScan()">🚀 Run Deep Scan</button>
+      <button class="btn-apex" id="scanBtn" onclick="runApexScan()">🚀 Run Premium Scan</button>
 
       <div id="syncCont" style="display:none; margin-bottom:30px;">
         <div style="background:#000; height:8px; border-radius:4px; overflow:hidden;">
@@ -114,29 +112,80 @@
       } catch(e) { return { response: [] }; }
     }
 
+    // --- REAL DATA EXTRACTOR (Τελευταία 6 Ματς) ---
+    async function getRealFormStats(teamId) {
+      let res = await apiFetch(`fixtures?team=${teamId}&last=6&status=FT`);
+      let pastFixs = res.response || [];
+      
+      let totalXG = 0, totalXGA = 0, totalCorners = 0, totalCards = 0;
+      let formArr = [];
+      let count = 0;
+
+      for(let pf of pastFixs) {
+        let fixId = pf.fixture.id;
+        
+        // Φόρμα (W/D/L)
+        let isHome = pf.teams.home.id === teamId;
+        let goalsFor = isHome ? pf.goals.home : pf.goals.away;
+        let goalsAgainst = isHome ? pf.goals.away : pf.goals.home;
+        
+        if (goalsFor > goalsAgainst) formArr.push('W');
+        else if (goalsFor < goalsAgainst) formArr.push('L');
+        else formArr.push('D');
+
+        // Πραγματικά Στατιστικά από τον αγώνα
+        let statsRes = await apiFetch(`fixtures/statistics?fixture=${fixId}`);
+        let statsArr = statsRes.response || [];
+        
+        if(statsArr.length === 2) {
+          let myStats = statsArr.find(s => s.team.id === teamId)?.statistics || [];
+          let oppStats = statsArr.find(s => s.team.id !== teamId)?.statistics || [];
+          
+          let getStat = (arr, type) => {
+            let obj = arr.find(x => x.type === type);
+            return obj && obj.value ? parseFloat(obj.value) : 0;
+          };
+
+          // Συλλογή Δεδομένων
+          let matchXG = getStat(myStats, "Expected Goals");
+          let matchXGA = getStat(oppStats, "Expected Goals");
+          // Fallback στα πραγματικά γκολ αν το πρωτάθλημα δεν δίνει xG
+          if (matchXG === 0 && goalsFor > 0) matchXG = goalsFor;
+          if (matchXGA === 0 && goalsAgainst > 0) matchXGA = goalsAgainst;
+
+          totalXG += matchXG;
+          totalXGA += matchXGA;
+          totalCorners += getStat(myStats, "Corner Kicks");
+          totalCards += getStat(myStats, "Yellow Cards") + getStat(myStats, "Red Cards");
+          
+          count++;
+        }
+        await new Promise(r => setTimeout(r, 50)); // Ελαφρύ delay
+      }
+
+      let avg = (val) => count > 0 ? (val/count).toFixed(2) : "0.00";
+      
+      return {
+        xG: avg(totalXG),
+        xGA: avg(totalXGA),
+        corners: avg(totalCorners),
+        cards: avg(totalCards),
+        formStr: formArr
+      };
+    }
+
     // --- Ο ΠΥΡΗΝΑΣ OMEGA ADVANCED ---
-    function calculateApex(pD, fixture) {
+    function calculateApex(hStats, aStats, pD, fixture) {
       let rulesLog = [];
       
-      // 1. Βασικά xG & xGA (Goals For & Against)
-      let rawHXG = parseFloat(pD?.teams?.home?.last_5?.goals?.for?.average) || 1.1;
-      let rawAXG = parseFloat(pD?.teams?.away?.last_5?.goals?.for?.average) || 1.1;
-      let rawHXGA = parseFloat(pD?.teams?.home?.last_5?.goals?.against?.average) || 1.2;
-      let rawAXGA = parseFloat(pD?.teams?.away?.last_5?.goals?.against?.average) || 1.2;
-      
+      let rawHXG = parseFloat(hStats.xG);
+      let rawAXG = parseFloat(aStats.xG);
       let hXG = rawHXG; let aXG = rawAXG;
 
-      // 2. Εξαγωγή Φόρμας (Τελευταία 6 ματς)
-      let hFormStr = pD?.teams?.home?.league?.form || "?????";
-      let aFormStr = pD?.teams?.away?.league?.form || "?????";
-      // Κρατάμε τα 6 τελευταία (το API δίνει όλο το string συχνά)
-      hFormStr = hFormStr.slice(-6).split('');
-      aFormStr = aFormStr.slice(-6).split('');
-
-      // 3. Εξαγωγή H2H (Προϊστορία)
+      // Εξαγωγή H2H (Προϊστορία) από το prediction endpoint
       let h2hList = [];
       if (pD.h2h && pD.h2h.length > 0) {
-        let maxH2h = Math.min(3, pD.h2h.length); // Κρατάμε τα 3 πιο πρόσφατα
+        let maxH2h = Math.min(3, pD.h2h.length); 
         for(let i=0; i<maxH2h; i++) {
           let match = pD.h2h[i];
           if(match.goals.home !== null) {
@@ -146,31 +195,12 @@
       }
       if(h2hList.length === 0) h2hList.push("Δεν υπάρχει πρόσφατη προϊστορία");
 
-      // 4. Νευρωνικός Υπολογισμός xCorners & xCards
-      // Τα κόρνερ εξαρτώνται από την επιθετική πίεση (xG). Βάση: 4.5
-      let hXCorner = (4.0 + (rawHXG * 1.5)).toFixed(1);
-      let aXCorner = (4.0 + (rawAXG * 1.5)).toFixed(1);
-      
-      // Οι κάρτες εξαρτώνται από την αμυντική πίεση (xGA) και τη λίγκα. Βάση: 1.8
-      let hXCards = (1.5 + (rawHXGA * 1.2)).toFixed(1);
-      let aXCards = (1.5 + (rawAXGA * 1.2)).toFixed(1);
-      
-      // Regional Bias
-      if (fixture.league.id === 128 || fixture.league.id === 262 || fixture.league.id === 197) { 
-        // Λατινική Αμερική & Ελλάδα = Πιο σκληρό παιχνίδι (+1.2 κάρτες)
-        hXCards = (parseFloat(hXCards) + 1.2).toFixed(1);
-        aXCards = (parseFloat(aXCards) + 1.2).toFixed(1);
-        
-        if(fixture.league.id === 128) { hXG *= 0.85; aXG *= 0.85; rulesLog.push("🛡️ Argentina Under Bias."); }
-        if(fixture.league.id === 262) { hXG *= 1.15; aXG *= 1.15; rulesLog.push("🔥 Liga MX Volatility."); }
-      }
-
       // 5. Fatigue
       let isFatigued = false;
       const eliteLeagues = [39, 140, 135, 78, 61, 2, 3, 84]; 
       if (eliteLeagues.includes(fixture.league.id)) {
         isFatigued = true; hXG *= 0.88; 
-        rulesLog.push("⚠️ Fatigue Penalty (-12% xG).");
+        rulesLog.push("⚠️ Fatigue Penalty (-12% xG) βάσει L-12 match density.");
       }
 
       // 6. Shock Potential
@@ -191,7 +221,7 @@
       
       if (Math.max(hP, aP) >= 60 && Math.max(hP, aP) <= 72) {
         mainPick = hP > aP ? '1X (DC)' : 'X2 (DC)'; pickColor = 'var(--gold)'; isDC = true;
-        rulesLog.push("⚖️ Derby Deadlock Guard ενεργό.");
+        rulesLog.push("⚖️ Derby Deadlock Guard ενεργό: DC Protection.");
       }
 
       let marketText = "2-3 GOALS";
@@ -199,8 +229,10 @@
 
       return { 
         rawHXG: rawHXG.toFixed(2), rawAXG: rawAXG.toFixed(2),
-        rawHXGA: rawHXGA.toFixed(2), rawAXGA: rawAXGA.toFixed(2),
-        hXCorner, aXCorner, hXCards, aXCards, hFormStr, aFormStr, h2hList,
+        rawHXGA: hStats.xGA, rawAXGA: aStats.xGA,
+        hXCorner: hStats.corners, aXCorner: aStats.corners, 
+        hXCards: hStats.cards, aXCards: aStats.cards, 
+        hFormStr: hStats.formStr, aFormStr: aStats.formStr, h2hList,
         adjHXG: hXG.toFixed(2), adjAXG: aXG.toFixed(2),
         hP, dP, aP, shockScore, isFatigued, rulesLog, mainPick, pickColor, marketText 
       };
@@ -208,7 +240,7 @@
 
     async function runApexScan() {
       const btn = document.getElementById('scanBtn');
-      btn.disabled = true; btn.innerText = "SCANNING NETWORK...";
+      btn.disabled = true; btn.innerText = "EXTRACTING DEEP STATS...";
       const day = new Date().toISOString().split('T')[0];
       
       document.getElementById('syncCont').style.display = 'block';
@@ -220,36 +252,42 @@
       const fixtures = filteredFixtures.slice(0, 15); 
 
       if(fixtures.length === 0) {
-          document.getElementById('syncStep').innerText = "ΑΝΑΜΟΝΗ: ΚΑΝΕΝΑ ΜΑΤΣ ΑΠΟ ΤΙΣ ΛΙΓΚΕΣ ΜΑΣ ΣΗΜΕΡΑ";
+          document.getElementById('syncStep').innerText = "ΚΑΝΕΝΑ ΜΑΤΣ ΑΠΟ ΤΙΣ ΛΙΓΚΕΣ ΜΑΣ ΣΗΜΕΡΑ";
           document.getElementById('syncFill').style.width = '100%';
-          setTimeout(() => { document.getElementById('syncCont').style.display = 'none'; btn.disabled = false; btn.innerText = "🚀 Run Deep Scan"; }, 3000);
+          setTimeout(() => { document.getElementById('syncCont').style.display = 'none'; btn.disabled = false; btn.innerText = "🚀 Run Premium Scan"; }, 3000);
           return;
       }
 
       for (let i = 0; i < fixtures.length; i++) {
         const m = fixtures[i];
-        document.getElementById('syncFill').style.width = Math.round(((i + 1) / fixtures.length) * 100) + '%';
-        document.getElementById('syncStep').innerText = `DATA SYNC: ${m.teams.home.name}`;
+        document.getElementById('syncFill').style.width = Math.round(((i) / fixtures.length) * 100) + '%';
+        document.getElementById('syncStep').innerText = `ANALYZING PAST 12 MATCHES: ${m.teams.home.name}`;
 
+        // REAL DATA EXTRACTION (Home & Away)
+        const hStats = await getRealFormStats(m.teams.home.id);
+        const aStats = await getRealFormStats(m.teams.away.id);
+        
+        // H2H Predictions Fetch
         const pData = await apiFetch(`predictions?fixture=${m.fixture.id}`);
         const p0 = pData.response?.[0];
-        if (p0) masterData.push({ id: m.fixture.id, fixture: m, calc: calculateApex(p0, m) });
-        await new Promise(r => setTimeout(r, 250)); 
+        
+        if (p0) masterData.push({ id: m.fixture.id, fixture: m, calc: calculateApex(hStats, aStats, p0, m) });
       }
 
+      document.getElementById('syncFill').style.width = '100%';
       document.getElementById('syncCont').style.display = 'none';
       btn.style.display = 'none'; 
       renderApexDashboard();
     }
 
-    // Βοηθητική function για δημιουργία των HTML κύκλων της φόρμας
     function buildFormHtml(formArray) {
+      if(!formArray || formArray.length === 0) return `<span class="form-circle form-D">-</span>`;
       return formArray.map(f => `<span class="form-circle form-${f}">${f}</span>`).join('');
     }
 
     function renderApexDashboard() {
       const container = document.getElementById('upcomingList');
-      container.innerHTML = "<h2 class='orbitron' style='text-align:center; color:var(--gold); margin-bottom: 30px;'>💎 APEX TARGETS</h2>";
+      container.innerHTML = "<h2 class='orbitron' style='text-align:center; color:var(--gold); margin-bottom: 30px;'>💎 PREMIUM TARGETS</h2>";
 
       masterData.forEach(d => {
         const c = d.calc; const fix = d.fixture;
