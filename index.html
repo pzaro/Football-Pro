@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Predictor Pro v4700 - Apex Alpha</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <title>Predictor Pro v4700.1 - Apex Alpha</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 
   <style>
@@ -35,7 +34,6 @@
     .badge-fatigue { background: var(--alert); color: #fff; }
     .badge-stable { background: var(--live); color: #fff; }
 
-    .score-box { font-size: 2.2rem; font-weight: 900; color: #fff; font-family: 'Orbitron'; min-width: 80px; text-align: right; }
     .team-name { font-weight: 800; font-size: 1.1rem; color: #fff; margin: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px; }
     
     .btn-apex { width: 100%; padding: 22px; background: var(--grad); color:#fff; border:none; border-radius:20px; font-weight:900; cursor:pointer; font-family:'Orbitron'; font-size: 1.1rem; margin-bottom: 20px; }
@@ -46,7 +44,7 @@
   <div id="authScreen">
     <div class="container" style="margin-top:20vh; text-align:center;">
       <h1 style="color:var(--p); font-size:3rem; margin-bottom:10px;">APEX ALPHA</h1>
-      <p style="color:var(--txt-muted);">SOVEREIGN OMEGA v4700 - 863 MATCHES SYNCED</p>
+      <p style="color:var(--txt-muted);">SOVEREIGN OMEGA v4700.1 - STABLE BUILD</p>
       <input type="tel" id="pinInput" placeholder="••••••" oninput="instantAuth(this)" 
              style="width:280px; padding:20px; text-align:center; font-size:2.5rem; border-radius:20px; border:none; background:#000; color:var(--p); font-family:'Orbitron'; letter-spacing:10px;">
     </div>
@@ -56,7 +54,7 @@
     <div class="container">
       <header style="text-align:center; padding: 30px 0;">
         <h1 style="color:var(--p); margin:0; font-size:2.5rem; letter-spacing:-2px;">PREDICTOR <span style="color:#fff">PRO</span></h1>
-        <small style="color:var(--magenta); font-weight:900; letter-spacing:5px;">v4700 CALIBRATED</small>
+        <small style="color:var(--magenta); font-weight:900; letter-spacing:5px;">v4700.1 CALIBRATED</small>
       </header>
 
       <button class="btn-apex" onclick="runApexScan()">🚀 RUN QUANTUM APEX SCAN</button>
@@ -69,7 +67,6 @@
       </div>
 
       <div id="resultsDashboard">
-        <div id="liveList"></div>
         <div id="upcomingList"></div>
       </div>
     </div>
@@ -95,20 +92,19 @@
       } catch(e) { return { response: [] }; }
     }
 
-    // --- Ο ΕΓΚΕΦΑΛΟΣ v4700 ---
+    // --- Ο ΕΓΚΕΦΑΛΟΣ v4700.1 ---
     function calculateApex(pD, fixture) {
-      // 1. Βασικά xG
-      let hXG = parseFloat(pD?.teams?.home?.last_5?.goals?.for?.average || 1.2);
-      let aXG = parseFloat(pD?.teams?.away?.last_5?.goals?.for?.average || 1.1);
-      let hXGA = parseFloat(pD?.teams?.home?.last_5?.goals?.against?.average || 1.2);
-      let aXGA = parseFloat(pD?.teams?.away?.last_5?.goals?.against?.average || 1.3);
+      // 1. Βασικά xG (με δικλείδα fallback αν η API δεν επιστρέψει δεδομένα)
+      let hXG = parseFloat(pD?.teams?.home?.last_5?.goals?.for?.average) || 1.2;
+      let aXG = parseFloat(pD?.teams?.away?.last_5?.goals?.for?.average) || 1.1;
+      let hXGA = parseFloat(pD?.teams?.home?.last_5?.goals?.against?.average) || 1.2;
+      let aXGA = parseFloat(pD?.teams?.away?.last_5?.goals?.against?.average) || 1.3;
 
-      // 2. Fatigue Index Check (Simulation based on 863 findings)
-      // Αν το φαβορί παίζει 3ο ματς σε 8 μέρες ή είναι "Elite"
+      // 2. Fatigue Index Check (Βασισμένο στα 863 findings)
       let isFatigued = false;
-      const eliteLeagues = [39, 140, 135, 78, 61]; // PL, La Liga, Serie A, etc.
+      const eliteLeagues = [39, 140, 135, 78, 61]; 
       if (eliteLeagues.includes(fixture.league.id)) {
-        isFatigued = true; // Safe assumption for March fixtures
+        isFatigued = true; 
         hXG *= 0.88; 
       }
 
@@ -117,10 +113,10 @@
       if (fixture.league.id === 262) { hXG *= 1.15; aXG *= 1.15; } // Mexico Over Bias
 
       // 4. Shock Potential Score (0-100)
-      const favoriteStrength = Math.max(hXG, aXG);
+      const favoriteStrength = Math.max(hXG, aXG) || 1; 
       const underdogAttack = Math.min(hXG, aXG);
       let shockScore = ((underdogAttack / favoriteStrength) * 100).toFixed(0);
-      if (isFatigued) shockScore = parseInt(shockScore) + 15;
+      if (isFatigued) shockScore = Math.min(parseInt(shockScore) + 15, 100);
 
       // 5. Probabilities
       let total = hXG + aXG + 0.5;
@@ -135,9 +131,17 @@
       const day = new Date().toISOString().split('T')[0];
       document.getElementById('syncCont').style.display = 'block';
       masterData = [];
+      document.getElementById('upcomingList').innerHTML = "";
 
       const fD = await apiFetch(`fixtures?date=${day}`);
-      const fixtures = (fD.response || []).slice(0, 40); // Top 40 for speed
+      const fixtures = (fD.response || []).slice(0, 15); // Περιορισμένο στα 15 για γρήγορο τεστ
+
+      if(fixtures.length === 0) {
+          document.getElementById('syncStep').innerText = "ΔΕΝ ΒΡΕΘΗΚΑΝ ΑΓΩΝΕΣ ΓΙΑ ΣΗΜΕΡΑ";
+          document.getElementById('syncFill').style.width = '100%';
+          setTimeout(() => document.getElementById('syncCont').style.display = 'none', 2000);
+          return;
+      }
 
       for (let i = 0; i < fixtures.length; i++) {
         const m = fixtures[i];
@@ -147,10 +151,13 @@
 
         const pData = await apiFetch(`predictions?fixture=${m.fixture.id}`);
         const p0 = pData.response?.[0];
+        
         if (p0) {
           masterData.push({ fixture: m, calc: calculateApex(p0, m) });
         }
-        await new Promise(r => setTimeout(r, 60));
+        
+        // Καθυστέρηση για να μην χτυπήσουμε το Rate Limit της API
+        await new Promise(r => setTimeout(r, 200)); 
       }
 
       document.getElementById('syncCont').style.display = 'none';
@@ -166,12 +173,13 @@
         const shockClass = c.shockScore > 70 ? 'shock-high' : (c.shockScore > 45 ? 'shock-med' : 'shock-low');
         const isElite = Math.max(c.hP, c.aP) >= 75;
 
-        // Dynamic DC Logic
+        // Η ΔΙΟΡΘΩΣΗ ΕΙΝΑΙ ΕΔΩ (Εισαγωγικά γύρω από τις CSS μεταβλητές)
         let mainPick = c.hP > c.aP ? '1' : '2';
-        let pickColor = 'var(--p)';
+        let pickColor = 'var(--p)'; 
+        
         if (Math.max(c.hP, c.aP) >= 60 && Math.max(c.hP, c.aP) <= 72) {
           mainPick = c.hP > c.aP ? '1X (DC)' : 'X2 (DC)';
-          pickColor = var(--gold);
+          pickColor = 'var(--gold)'; 
         }
 
         container.innerHTML += `
