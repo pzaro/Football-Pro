@@ -3,77 +3,289 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4700.24 - Anti-Freeze Edition</title>
+  <title>Predictor Pro v4701.00 - Omega Core Stable</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root {
-      --bg: #010409; --card: #0d1117; --border: #30363d;
-      --p: #00f2ff; --magenta: #ff00ff; --gold: #f59e0b;
-      --neon-live: #39ff14; --alert: #da3633;
+      --bg: #010409;
+      --card: #0d1117;
+      --border: #30363d;
+      --p: #00f2ff;
+      --magenta: #ff00ff;
+      --gold: #f59e0b;
+      --neon-live: #39ff14;
+      --alert: #da3633;
+      --txt-muted: #8b949e;
       --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
     }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f0f6fc; margin: 0; padding: 0; }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: #f0f6fc;
+      margin: 0;
+      padding: 0;
+    }
+
     .orbitron { font-family: 'Orbitron', sans-serif; }
     .container { max-width: 1000px; margin: 0 auto; padding: 15px; }
 
-    .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--p); }
-    .live-glow { border-left-color: var(--neon-live); box-shadow: 0 0 15px rgba(57, 255, 20, 0.1); }
-    
-    .season-xg-red { background: var(--alert); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 900; font-family: 'Orbitron'; font-size: 0.9rem; }
-    .season-xga-plain { color: #8b949e; font-weight: 600; font-family: 'Orbitron'; margin-left: 5px; }
-    
-    .dev-badge { font-size: 0.75rem; font-weight: 900; padding: 3px 6px; border-radius: 4px; margin-left: 8px; font-family: 'Orbitron'; }
-    .dev-pos { background: #238636; color: #fff; border: 1px solid var(--neon-live); }
-    .dev-neg { background: #da3633; color: #fff; border: 1px solid #ff4d4d; }
+    .cyber-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid var(--p);
+    }
 
-    .btn-main { padding: 15px 25px; background: var(--grad); color: #fff; border: none; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; margin: 5px; transition: 0.3s; }
-    .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
+    .live-glow {
+      border-left-color: var(--neon-live);
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.1);
+    }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-    .team-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid #222; }
-    .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; border-bottom: 1px solid #1a1d23; padding-bottom: 5px; align-items: center; }
-    .val-xg { color: var(--p); font-weight: 800; font-family: 'Orbitron'; font-size: 1rem; }
-    .val-split { color: var(--magenta); font-weight: 900; font-family: 'Orbitron'; border: 1px solid var(--magenta); padding: 2px 6px; border-radius: 4px; }
-    
-    .live-pulse { color: var(--neon-live); animation: pulse 1s infinite; font-weight: 900; font-size: 2.5rem;}
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-    
-    .form-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; margin-right: 3px; color:#fff;}
-    .form-W { background: #238636; } .form-D { background: #666; } .form-L { background: #da3633; }
+    .season-xg-red {
+      background: var(--alert);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+    }
 
-    /* DATA LAB AUDIT PANEL */
-    .lab-audit-panel { background: #000; border: 2px solid var(--gold); border-radius: 16px; padding: 20px; margin-bottom: 30px; box-shadow: 0 0 30px rgba(245, 158, 11, 0.1); }
-    .audit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
-    .audit-box { background: #161b22; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
-    .audit-label { font-size: 0.65rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 1px; }
-    .audit-value { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--gold); font-weight: 900; margin: 5px 0; }
+    .season-xga-plain {
+      color: #8b949e;
+      font-weight: 600;
+      font-family: 'Orbitron', sans-serif;
+      margin-left: 5px;
+    }
+
+    .dev-badge {
+      font-size: 0.75rem;
+      font-weight: 900;
+      padding: 3px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .dev-pos {
+      background: #238636;
+      color: #fff;
+      border: 1px solid var(--neon-live);
+    }
+
+    .dev-neg {
+      background: #da3633;
+      color: #fff;
+      border: 1px solid #ff4d4d;
+    }
+
+    .btn-main {
+      padding: 15px 25px;
+      background: var(--grad);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      cursor: pointer;
+      text-transform: uppercase;
+      margin: 5px;
+      transition: 0.3s;
+    }
+
+    .btn-main:hover {
+      filter: brightness(1.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-main:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      filter: none;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .team-box {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #222;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #1a1d23;
+      padding-bottom: 5px;
+      align-items: center;
+    }
+
+    .val-xg {
+      color: var(--p);
+      font-weight: 800;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+    }
+
+    .val-split {
+      color: var(--magenta);
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      border: 1px solid var(--magenta);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .live-pulse {
+      color: var(--neon-live);
+      animation: pulse 1s infinite;
+      font-weight: 900;
+      font-size: 2.5rem;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+
+    .form-dot {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 18px;
+      font-size: 0.6rem;
+      font-weight: 900;
+      margin-right: 3px;
+      color: #fff;
+    }
+
+    .form-W { background: #238636; }
+    .form-D { background: #666; }
+    .form-L { background: #da3633; }
+
+    .lab-audit-panel {
+      background: #000;
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.1);
+    }
+
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .audit-box {
+      background: #161b22;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #333;
+    }
+
+    .audit-label {
+      font-size: 0.65rem;
+      color: var(--txt-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .audit-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      font-weight: 900;
+      margin: 5px 0;
+    }
+
+    .status-line {
+      margin-top: 6px;
+      color: var(--txt-muted);
+      font-size: 0.8rem;
+    }
+
+    .small-note {
+      color: var(--txt-muted);
+      font-size: 0.75rem;
+      margin-top: 8px;
+    }
+
+    .error-box {
+      background: rgba(218, 54, 51, 0.08);
+      border: 1px solid rgba(218, 54, 51, 0.5);
+      color: #ffb3b3;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid,
+      .audit-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4700.24</h1>
-    <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" 
-           style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;">
+    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4701.00</h1>
+    <input
+      type="password"
+      id="pin"
+      placeholder="PIN"
+      oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
+      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
+    >
+    <div class="small-note">Stable build with cache, throttling, timeout and safer rendering</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
-      <header style="text-align:center; padding: 20px 0;">
-        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">ANTI-FREEZE</span></h1>
+      <header style="text-align:center; padding:20px 0;">
+        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">CORE</span></h1>
+        <div class="status-line">v4701.00 Stable Edition</div>
       </header>
 
-      <div style="display:flex; justify-content:center; flex-wrap: wrap; margin-bottom:20px;">
-        <button class="btn-main" onclick="runScan('pre')">🚀 SAFE PRE-MATCH SCAN</button>
-        <button class="btn-main" style="background:#da3633;" onclick="runScan('live')">🔴 LIVE RADAR</button>
-        <button class="btn-main" style="background:var(--gold); color:#000;" onclick="runAudit()">🔍 DATA LAB AUDIT</button>
-        <button class="btn-main" style="background:#222;" onclick="exportPDF()">📄 SAVE PDF</button>
+      <div style="display:flex; justify-content:center; flex-wrap:wrap; margin-bottom:20px;">
+        <button class="btn-main" id="btnPre" onclick="runScan('pre')">🚀 TURBO PRE-MATCH SCAN</button>
+        <button class="btn-main" id="btnLive" style="background:#da3633;" onclick="runScan('live')">🔴 LIVE RADAR</button>
+        <button class="btn-main" id="btnAudit" style="background:var(--gold); color:#000;" onclick="runAudit()">🔍 DATA LAB AUDIT</button>
+        <button class="btn-main" id="btnPdf" style="background:#222;" onclick="exportPDF()">📄 SAVE PDF</button>
       </div>
 
+      <div id="errorBox"></div>
+
       <div id="loader" style="display:none; text-align:center; margin-bottom:20px;">
-        <div style="width:100%; background:#222; height:8px; border-radius:4px; overflow:hidden;"><div id="bar" style="width:0%; height:100%; background:var(--grad); transition:0.3s;"></div></div>
+        <div style="width:100%; background:#222; height:8px; border-radius:4px; overflow:hidden;">
+          <div id="bar" style="width:0%; height:100%; background:var(--grad); transition:0.3s;"></div>
+        </div>
         <p id="status" class="orbitron" style="font-size:0.7rem; color:var(--p); margin-top:8px;"></p>
       </div>
 
@@ -83,245 +295,592 @@
   </div>
 
   <script>
+    /*
+      IMPORTANT:
+      Για production μην αφήνεις API key στο frontend.
+      Καλύτερα μέσω backend proxy.
+    */
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
-    const LEAGUES = [39, 40, 41, 140, 141, 135, 136, 78, 79, 61, 62, 253, 262, 128, 197, 318, 281, 94, 88, 144, 2, 3, 84, 203, 357];
-    let memoryBank = [];
 
-    // Θωρακισμένο API Request Engine
-    async function apiReq(path) {
-      try {
-        const r = await fetch(`${API}/${path}`, { headers: {"x-apisports-key": KEY} });
-        if(!r.ok) return { response: [] }; // Αποτροπή crash σε περίπτωση error 429
-        return await r.json();
-      } catch(e) {
-        console.warn("Network Error (Ignored):", e);
-        return { response: [] };
+    // Verified leagues
+    const LEAGUES = [39, 40, 41, 140, 141, 135, 136, 78, 79, 61, 62, 253, 262, 128, 197, 318, 281, 94, 88, 144, 2, 3, 84, 203, 357];
+
+    // Safer operational limits
+    const MAX_PRE_MATCHES = 5;
+    const MAX_LIVE_MATCHES = 8;
+    const LAST_GENERAL = 6;
+    const LAST_SPLIT = 6;
+    const REQUEST_DELAY_MS = 280;
+    const REQUEST_TIMEOUT_MS = 12000;
+
+    let memoryBank = [];
+    let statsCache = new Map();
+    let teamStatsCache = new Map();
+    let lastFixturesCache = new Map();
+    let isRunning = false;
+    let globalRequestCounter = 0;
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function setLoader(show, text = "") {
+      document.getElementById("loader").style.display = show ? "block" : "none";
+      document.getElementById("status").innerText = text;
+      if (!show) {
+        document.getElementById("bar").style.width = "0%";
       }
+    }
+
+    function setProgress(percent, text = "") {
+      document.getElementById("bar").style.width = `${percent}%`;
+      document.getElementById("status").innerText = text;
+    }
+
+    function setButtonsDisabled(disabled) {
+      ["btnPre", "btnLive", "btnAudit", "btnPdf"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = disabled;
+      });
+    }
+
+    function showError(message) {
+      document.getElementById("errorBox").innerHTML = `<div class="error-box">${escapeHtml(message)}</div>`;
+    }
+
+    function clearError() {
+      document.getElementById("errorBox").innerHTML = "";
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    async function throttledFetch(url, options = {}, timeout = REQUEST_TIMEOUT_MS) {
+      globalRequestCounter++;
+      await sleep(REQUEST_DELAY_MS);
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeout);
+
+      try {
+        const response = await fetch(url, {
+          ...options,
+          signal: controller.signal
+        });
+
+        return response;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    async function apiReq(path) {
+      const url = `${API}/${path}`;
+
+      try {
+        const response = await throttledFetch(url, {
+          headers: { "x-apisports-key": KEY }
+        });
+
+        if (!response.ok) {
+          if (response.status === 429) {
+            console.warn("RATE LIMIT HIT:", path);
+            return { response: [], errors: { rateLimit: true, status: 429 } };
+          }
+          console.warn("HTTP ERROR:", response.status, path);
+          return { response: [], errors: { status: response.status } };
+        }
+
+        const data = await response.json();
+        return data || { response: [] };
+      } catch (err) {
+        console.error("API ERROR:", path, err);
+        return {
+          response: [],
+          errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown error") }
+        };
+      }
+    }
+
+    function getTodayISO() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    async function getTeamSeasonStats(teamId, leagueId, season) {
+      const key = `${teamId}_${leagueId}_${season}`;
+      if (teamStatsCache.has(key)) return teamStatsCache.get(key);
+
+      const data = await apiReq(`teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`);
+      const response = data?.response || {};
+      teamStatsCache.set(key, response);
+      return response;
+    }
+
+    async function getLastFixtures(teamId) {
+      const key = `team_last_${teamId}`;
+      if (lastFixturesCache.has(key)) return lastFixturesCache.get(key);
+
+      const data = await apiReq(`fixtures?team=${teamId}&last=20&status=FT`);
+      const response = data?.response || [];
+      lastFixturesCache.set(key, response);
+      return response;
+    }
+
+    async function getFixtureStats(fixtureId) {
+      if (statsCache.has(fixtureId)) return statsCache.get(fixtureId);
+
+      const data = await apiReq(`fixtures/statistics?fixture=${fixtureId}`);
+      statsCache.set(fixtureId, data);
+      return data;
+    }
+
+    function statVal(statsArr, type) {
+      if (!Array.isArray(statsArr)) return 0;
+      const item = statsArr.find(x => x.type === type);
+      if (!item || item.value == null) return 0;
+
+      const raw = String(item.value).replace("%", "").trim();
+      const num = parseFloat(raw);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function getTeamGoalsInFixture(fixture, teamId) {
+      return fixture?.teams?.home?.id === teamId
+        ? (fixture?.goals?.home ?? 0)
+        : (fixture?.goals?.away ?? 0);
+    }
+
+    function getFormHistory(fixtures, teamId) {
+      return fixtures.map(f => {
+        const isHome = f.teams.home.id === teamId;
+        const myGoals = isHome ? (f.goals.home ?? 0) : (f.goals.away ?? 0);
+        const oppGoals = isHome ? (f.goals.away ?? 0) : (f.goals.home ?? 0);
+        if (myGoals > oppGoals) return "W";
+        if (myGoals < oppGoals) return "L";
+        return "D";
+      }).reverse();
+    }
+
+    function getDev(curr, base) {
+      if (!base || base <= 0) {
+        return `<span class="dev-badge dev-pos">N/A</span>`;
+      }
+      const d = (((parseFloat(curr) - base) / base) * 100).toFixed(1);
+      return `<span class="dev-badge ${d >= 0 ? "dev-pos" : "dev-neg"}">${d > 0 ? "+" : ""}${d}%</span>`;
+    }
+
+    async function batchCalculate(list, teamId) {
+      if (!list.length) {
+        return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
+      }
+
+      let xgSum = 0;
+      let xgaSum = 0;
+      let corSum = 0;
+      let crdSum = 0;
+      let count = 0;
+
+      for (const fixture of list) {
+        const statResp = await getFixtureStats(fixture.fixture.id);
+
+        if (!statResp?.response || statResp.response.length < 2) continue;
+
+        const myObj = statResp.response.find(x => x.team.id === teamId);
+        const opObj = statResp.response.find(x => x.team.id !== teamId);
+
+        if (!myObj || !opObj) continue;
+
+        const my = myObj.statistics || [];
+        const op = opObj.statistics || [];
+
+        let myXG = statVal(my, "Expected Goals");
+        const opXG = statVal(op, "Expected Goals");
+        const myShotsOnGoal = statVal(my, "Shots on Goal");
+        const myGoals = getTeamGoalsInFixture(fixture, teamId);
+
+        // Fallback xG if API does not provide it
+        if (myXG === 0) {
+          myXG = (myShotsOnGoal * 0.18) + (myGoals * 0.4);
+        }
+
+        const myCorners = statVal(my, "Corner Kicks");
+        const myCards = statVal(my, "Yellow Cards") + statVal(my, "Red Cards");
+
+        xgSum += myXG;
+        xgaSum += (opXG || 0.9);
+        corSum += myCorners;
+        crdSum += myCards;
+        count++;
+      }
+
+      return {
+        xg: count > 0 ? (xgSum / count).toFixed(2) : "1.00",
+        xga: count > 0 ? (xgaSum / count).toFixed(2) : "1.00",
+        cor: count > 0 ? (corSum / count).toFixed(1) : "4.0",
+        crd: count > 0 ? (crdSum / count).toFixed(1) : "2.0"
+      };
     }
 
     async function getTeamData(teamId, leagueId, season, venueType) {
-      const sRes = await apiReq(`teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`);
-      const fRes = await apiReq(`fixtures?team=${teamId}&last=20&status=FT`);
+      const [seasonStats, allFixs] = await Promise.all([
+        getTeamSeasonStats(teamId, leagueId, season),
+        getLastFixtures(teamId)
+      ]);
 
-      const s = sRes.response || {};
-      const allFixs = fRes.response || [];
-      const last6Gen = allFixs.slice(0, 6);
-      const last6Split = allFixs.filter(f => venueType === 'home' ? f.teams.home.id === teamId : f.teams.away.id === teamId).slice(0, 6);
+      const generalLast = allFixs.slice(0, LAST_GENERAL);
+      const splitLast = allFixs
+        .filter(f => venueType === "home"
+          ? f.teams.home.id === teamId
+          : f.teams.away.id === teamId
+        )
+        .slice(0, LAST_SPLIT);
 
-      // ΒΡΙΣΚΟΥΜΕ ΤΑ ΜΟΝΑΔΙΚΑ ΜΑΤΣ ΓΙΑ ΝΑ ΜΗΝ ΚΑΝΟΥΜΕ ΔΙΠΛΑ REQUESTS ΣΤΟ API
-      const uniqueFixs = [...new Map([...last6Gen, ...last6Split].map(f => [f.fixture.id, f])).values()];
-      const statsMap = {};
+      const [form, split] = await Promise.all([
+        batchCalculate(generalLast, teamId),
+        batchCalculate(splitLast, teamId)
+      ]);
 
-      for(let f of uniqueFixs) {
-         const stRes = await apiReq(`fixtures/statistics?fixture=${f.fixture.id}`);
-         statsMap[f.fixture.id] = stRes;
-         await new Promise(r => setTimeout(r, 120)); // Throttling: 120ms για να μην πάρουμε Ban!
-      }
-
-      function calcMetrics(list) {
-        if(list.length === 0) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
-        let xgS = 0, xgaS = 0, corS = 0, crdS = 0, cnt = 0;
-
-        for(let f of list) {
-          let st = statsMap[f.fixture.id];
-          if (st && st.response && st.response.length === 2) {
-            let my = st.response.find(x => x.team.id === teamId)?.statistics || [];
-            let op = st.response.find(x => x.team.id !== teamId)?.statistics || [];
-            let gV = (a, t) => { let o = a.find(x => x.type === t); return (o && o.value != null) ? parseFloat(o.value) : 0; };
-            
-            let xG = gV(my, "Expected Goals");
-            if (xG === 0) xG = (gV(my, "Shots on Goal") * 0.18) + ((f.goals.home || 0) * 0.4);
-            
-            xgS += xG; 
-            xgaS += (gV(op, "Expected Goals") || 0.9);
-            corS += gV(my, "Corner Kicks"); 
-            crdS += (gV(my, "Yellow Cards") + gV(my, "Red Cards"));
-            cnt++;
-          }
-        }
-        return { 
-          xg: cnt > 0 ? (xgS/cnt).toFixed(2) : "1.00", 
-          xga: cnt > 0 ? (xgaS/cnt).toFixed(2) : "1.00", 
-          cor: cnt > 0 ? (corS/cnt).toFixed(1) : "4.0", 
-          crd: cnt > 0 ? (crdS/cnt).toFixed(1) : "2.0" 
-        };
-      }
-
-      const form = calcMetrics(last6Gen);
-      const split = calcMetrics(last6Split);
-
-      const base_xg = parseFloat(s.goals?.for?.average?.total) || 1.10;
-      const base_xga = parseFloat(s.goals?.against?.average?.total) || 1.10;
-
-      const getDev = (curr, base) => {
-        let d = (((parseFloat(curr) - base) / base) * 100).toFixed(1);
-        return `<span class="dev-badge ${d >= 0 ? 'dev-pos' : 'dev-neg'}">${d > 0 ? '+' : ''}${d}%</span>`;
-      };
+      const baseXG = parseFloat(seasonStats?.goals?.for?.average?.total) || 1.10;
+      const baseXGA = parseFloat(seasonStats?.goals?.against?.average?.total) || 1.10;
 
       return {
-        seasonXG: base_xg.toFixed(2), seasonXGA: base_xga.toFixed(2),
-        formXG: form.xg, formXGA: form.xga,
-        devXG: getDev(form.xg, base_xg), devXGA: getDev(form.xga, base_xga),
-        splitXG: split.xg, splitXGA: split.xga,
-        corners: form.cor, cards: form.crd,
-        history: last6Gen.map(f => {
-          let win = f.teams.home.id === teamId ? f.goals.home > f.goals.away : f.goals.away > f.goals.home;
-          let loss = f.teams.home.id === teamId ? f.goals.home < f.goals.away : f.goals.away < f.goals.home;
-          return win ? 'W' : (loss ? 'L' : 'D');
-        }).reverse()
+        seasonXG: baseXG.toFixed(2),
+        seasonXGA: baseXGA.toFixed(2),
+        formXG: form.xg,
+        formXGA: form.xga,
+        devXG: getDev(form.xg, baseXG),
+        devXGA: getDev(form.xga, baseXGA),
+        splitXG: split.xg,
+        splitXGA: split.xga,
+        corners: form.cor,
+        cards: form.crd,
+        history: getFormHistory(generalLast, teamId)
       };
+    }
+
+    function isLiveStatus(short) {
+      return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short);
+    }
+
+    function buildMatchCard(m, s, mode) {
+      const isLive = isLiveStatus(m.fixture.status.short);
+      const homeName = escapeHtml(m.teams.home.name);
+      const awayName = escapeHtml(m.teams.away.name);
+      const leagueName = escapeHtml(m.league.name);
+      const statusText = isLive ? `${m.fixture.status.elapsed || 0}'` : escapeHtml(m.fixture.status.short);
+      const homeGoals = m.goals.home ?? 0;
+      const awayGoals = m.goals.away ?? 0;
+
+      return `
+        <div class="cyber-card ${isLive ? "live-glow" : ""}">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
+            <div>
+              <span class="status-badge" style="background:#222; padding:4px 8px; border-radius:4px;">${statusText}</span>
+              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${leagueName}</div>
+              <h2 class="orbitron" style="margin:5px 0;">${homeName}</h2>
+              <h2 class="orbitron" style="margin:2px 0;">${awayName}</h2>
+            </div>
+            <div class="${isLive ? "live-pulse" : ""}" style="font-size:2.5rem; font-weight:900;">${homeGoals} - ${awayGoals}</div>
+          </div>
+
+          <div class="stats-grid">
+            ${
+              mode === "pre"
+                ? `
+              <div class="team-box">
+                <div style="color:var(--p); font-size:0.7rem; font-weight:900; margin-bottom:10px;">🏠 HOME ANALYTICS</div>
+                ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f}">${f}</span>`).join("")}
+                <div class="stat-row" style="margin-top:12px;">
+                  <span>Season Baseline:</span>
+                  <div>
+                    <span class="season-xg-red">${s?.h?.seasonXG || "1.10"}</span>
+                    <span class="season-xga-plain">/ ${s?.h?.seasonXGA || "1.10"}</span>
+                  </div>
+                </div>
+                <div class="stat-row">
+                  <span>Form (L6) xG:</span>
+                  <div><span class="val-xg">${s?.h?.formXG || "1.00"}</span> ${s?.h?.devXG || ""}</div>
+                </div>
+                <div class="stat-row">
+                  <span>Form (L6) xGA:</span>
+                  <div><span class="val-xg">${s?.h?.formXGA || "1.00"}</span> ${s?.h?.devXGA || ""}</div>
+                </div>
+                <div class="stat-row">
+                  <span>Split (ONLY AT HOME):</span>
+                  <span class="val-split">${s?.h?.splitXG || "1.00"} / ${s?.h?.splitXGA || "1.00"}</span>
+                </div>
+                <div class="stat-row" style="border:none;">
+                  <span>Avg Stats:</span>
+                  <span style="font-weight:800;">🚩${s?.h?.corners || "0.0"} | 🟨${s?.h?.cards || "0.0"}</span>
+                </div>
+              </div>
+
+              <div class="team-box">
+                <div style="color:var(--magenta); font-size:0.7rem; font-weight:900; margin-bottom:10px;">✈️ AWAY ANALYTICS</div>
+                ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f}">${f}</span>`).join("")}
+                <div class="stat-row" style="margin-top:12px;">
+                  <span>Season Baseline:</span>
+                  <div>
+                    <span class="season-xg-red">${s?.a?.seasonXG || "1.10"}</span>
+                    <span class="season-xga-plain">/ ${s?.a?.seasonXGA || "1.10"}</span>
+                  </div>
+                </div>
+                <div class="stat-row">
+                  <span>Form (L6) xG:</span>
+                  <div><span class="val-xg">${s?.a?.formXG || "1.00"}</span> ${s?.a?.devXG || ""}</div>
+                </div>
+                <div class="stat-row">
+                  <span>Form (L6) xGA:</span>
+                  <div><span class="val-xg">${s?.a?.formXGA || "1.00"}</span> ${s?.a?.devXGA || ""}</div>
+                </div>
+                <div class="stat-row">
+                  <span>Split (ONLY AWAY):</span>
+                  <span class="val-split">${s?.a?.splitXG || "1.00"} / ${s?.a?.splitXGA || "1.00"}</span>
+                </div>
+                <div class="stat-row" style="border:none;">
+                  <span>Avg Stats:</span>
+                  <span style="font-weight:800;">🚩${s?.a?.corners || "0.0"} | 🟨${s?.a?.cards || "0.0"}</span>
+                </div>
+              </div>
+              `
+                : `
+              <div class="team-box" style="grid-column: span 2;">
+                ${
+                  s
+                    ? `
+                  <div style="display:flex; justify-content:space-between; margin-bottom:10px; text-align:center; gap:10px;">
+                    <div>POSS: <span class="val-xg">${s.h.poss}%</span></div>
+                    <div style="color:var(--gold); font-weight:900;">PRESSURE INDEX: ${Math.round(s.h.danger / 2)} - ${Math.round(s.a.danger / 2)}</div>
+                    <div>POSS: <span class="val-xg">${s.a.poss}%</span></div>
+                  </div>
+                  <div class="stat-row"><span>Dangerous Attacks / Shots:</span> <span class="val-xg">${s.h.danger}(${s.h.shots}) - ${s.a.danger}(${s.a.shots})</span></div>
+                  <div class="stat-row"><span>Corners (Live):</span> <span style="color:#fff; font-weight:800;">🚩 ${s.h.corners} - ${s.a.corners}</span></div>
+                  <div class="small-note">Live scan runs only on matches with active live status.</div>
+                  `
+                    : `<div style="text-align:center; color:var(--txt-muted);">NO LIVE STATS AVAILABLE</div>`
+                }
+              </div>
+              `
+            }
+          </div>
+        </div>
+      `;
     }
 
     async function runScan(mode) {
-      document.getElementById('loader').style.display = 'block';
-      const disp = document.getElementById('display'); disp.innerHTML = "";
-      document.getElementById('labSection').innerHTML = "";
-      
-      const date = new Date().toISOString().split('T')[0];
-      let matches = [];
+      if (isRunning) return;
+
+      isRunning = true;
+      clearError();
+      setButtonsDisabled(true);
+      setLoader(true, mode === "pre" ? "BOOTING PRE-MATCH SCAN..." : "BOOTING LIVE RADAR...");
+
+      const display = document.getElementById("display");
+      const labSection = document.getElementById("labSection");
+      display.innerHTML = "";
+      labSection.innerHTML = "";
+
       try {
-        const res = await apiReq(`fixtures?date=${date}`);
-        matches = (res.response || []).filter(m => LEAGUES.includes(m.league.id)).slice(0, 15);
-      } catch (err) {
-        alert("Δεν ήταν δυνατή η σύνδεση στο API. Δοκίμασε σε 1 λεπτό.");
-        document.getElementById('loader').style.display = 'none';
-        return;
-      }
-      
-      if(mode === 'pre') memoryBank = [];
-
-      for(let i=0; i<matches.length; i++) {
-        let m = matches[i];
-        document.getElementById('bar').style.width = ((i+1)/matches.length * 100) + "%";
-        document.getElementById('status').innerText = `ANALYZING: ${m.teams.home.name}`;
-
-        try {
-            let intel = null;
-            if(mode === 'pre') {
-              const [intelHome, intelAway] = await Promise.all([
-                getTeamData(m.teams.home.id, m.league.id, m.league.season, 'home'),
-                getTeamData(m.teams.away.id, m.league.id, m.league.season, 'away')
-              ]);
-              intel = { h: intelHome, a: intelAway };
-              memoryBank.push({ m: m, stats: intel });
-            } else {
-              const sR = await apiReq(`fixtures/statistics?fixture=${m.fixture.id}`);
-              if(sR.response && sR.response.length === 2) {
-                let gV = (a, t) => { 
-                    let o = a.find(x => x.type === t); 
-                    if(!o || o.value == null) return 0;
-                    return parseInt(o.value.toString().replace('%','')) || 0; 
-                };
-                intel = { h: { danger: gV(sR.response[0].statistics, "Dangerous Attacks"), shots: gV(sR.response[0].statistics, "Shots on Goal"), corners: gV(sR.response[0].statistics, "Corner Kicks"), poss: gV(sR.response[0].statistics, "Ball Possession") },
-                          a: { danger: gV(sR.response[1].statistics, "Dangerous Attacks"), shots: gV(sR.response[1].statistics, "Shots on Goal"), corners: gV(sR.response[1].statistics, "Corner Kicks"), poss: gV(sR.response[1].statistics, "Ball Possession") } };
-              }
-            }
-            renderMatch(m, intel, mode);
-        } catch (matchError) {
-            console.warn(`Skipped match ${m.teams.home.name} due to data error.`);
+        if (mode === "pre") {
+          memoryBank = [];
+          statsCache.clear();
         }
+
+        const date = getTodayISO();
+        const fixturesResp = await apiReq(`fixtures?date=${date}`);
+        let matches = (fixturesResp.response || []).filter(m => LEAGUES.includes(m.league.id));
+
+        if (mode === "live") {
+          matches = matches.filter(m => isLiveStatus(m.fixture.status.short)).slice(0, MAX_LIVE_MATCHES);
+        } else {
+          matches = matches.slice(0, MAX_PRE_MATCHES);
+        }
+
+        if (!matches.length) {
+          display.innerHTML = `
+            <div class="cyber-card">
+              <h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν διαθέσιμοι αγώνες για το σημερινό scan.</h3>
+            </div>
+          `;
+          return;
+        }
+
+        let htmlBuffer = "";
+
+        for (let i = 0; i < matches.length; i++) {
+          const m = matches[i];
+          const pct = Math.round(((i + 1) / matches.length) * 100);
+          setProgress(pct, `ANALYZING: ${m.teams.home.name} vs ${m.teams.away.name}`);
+
+          let intel = null;
+
+          if (mode === "pre") {
+            const [intelHome, intelAway] = await Promise.all([
+              getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
+              getTeamData(m.teams.away.id, m.league.id, m.league.season, "away")
+            ]);
+
+            intel = { h: intelHome, a: intelAway };
+            memoryBank.push({ m, stats: intel });
+          } else {
+            const sR = await getFixtureStats(m.fixture.id);
+            if (sR.response && sR.response.length === 2) {
+              const homeStats = sR.response[0].statistics || [];
+              const awayStats = sR.response[1].statistics || [];
+
+              intel = {
+                h: {
+                  danger: statVal(homeStats, "Dangerous Attacks"),
+                  shots: statVal(homeStats, "Shots on Goal"),
+                  corners: statVal(homeStats, "Corner Kicks"),
+                  poss: statVal(homeStats, "Ball Possession")
+                },
+                a: {
+                  danger: statVal(awayStats, "Dangerous Attacks"),
+                  shots: statVal(awayStats, "Shots on Goal"),
+                  corners: statVal(awayStats, "Corner Kicks"),
+                  poss: statVal(awayStats, "Ball Possession")
+                }
+              };
+            }
+          }
+
+          htmlBuffer += buildMatchCard(m, intel, mode);
+        }
+
+        display.innerHTML = htmlBuffer;
+      } catch (err) {
+        console.error("SCAN ERROR:", err);
+        showError(`Το scan σταμάτησε λόγω σφάλματος: ${err?.message || "unknown error"}`);
+      } finally {
+        setLoader(false);
+        setButtonsDisabled(false);
+        isRunning = false;
       }
-      document.getElementById('loader').style.display = 'none';
     }
 
     async function runAudit() {
-        if(memoryBank.length === 0) {
-            alert("Τρέξε πρώτα ένα PRE-MATCH SCAN για να συλλέξεις δεδομένα."); return;
+      if (isRunning) return;
+
+      clearError();
+
+      if (!memoryBank.length) {
+        showError("Το Memory Bank είναι άδειο. Τρέξε πρώτα ένα PRE-MATCH SCAN.");
+        return;
+      }
+
+      isRunning = true;
+      setButtonsDisabled(true);
+      setLoader(true, "FETCHING ACTUAL RESULTS...");
+
+      const display = document.getElementById("display");
+      const labSection = document.getElementById("labSection");
+      display.innerHTML = "";
+      labSection.innerHTML = "";
+
+      try {
+        let totalActualGoals = 0;
+        let totalPredGoals = 0;
+        let auditCount = 0;
+        let htmlBuffer = "";
+
+        for (let i = 0; i < memoryBank.length; i++) {
+          const entry = memoryBank[i];
+          const pct = Math.round(((i + 1) / memoryBank.length) * 100);
+          setProgress(pct, `AUDITING: ${entry.m.teams.home.name} vs ${entry.m.teams.away.name}`);
+
+          const res = await apiReq(`fixtures?id=${entry.m.fixture.id}`);
+          const f = res?.response?.[0];
+
+          if (f && f.fixture.status.short === "FT") {
+            const actualGoals = (f.goals.home ?? 0) + (f.goals.away ?? 0);
+            const predictedGoals = (parseFloat(entry.stats.h.formXG) || 0) + (parseFloat(entry.stats.a.formXG) || 0);
+
+            totalActualGoals += actualGoals;
+            totalPredGoals += predictedGoals;
+            auditCount++;
+
+            htmlBuffer += `
+              <div class="cyber-card" style="border-left-color: var(--gold);">
+                <div style="font-size:0.7rem; color:var(--txt-muted);">${escapeHtml(f.league.name)} [COMPLETED]</div>
+                <h3 class="orbitron" style="margin:5px 0;">${escapeHtml(f.teams.home.name)} ${f.goals.home} - ${f.goals.away} ${escapeHtml(f.teams.away.name)}</h3>
+                <div style="margin-top:10px; font-size:0.8rem;">
+                  <div><span style="color:var(--p)">Predicted xG:</span> ${entry.stats.h.formXG} - ${entry.stats.a.formXG}</div>
+                  <div><span style="color:var(--neon-live)">Actual Goals:</span> ${f.goals.home} - ${f.goals.away}</div>
+                </div>
+              </div>
+            `;
+          }
         }
-        document.getElementById('loader').style.display = 'block';
-        document.getElementById('display').innerHTML = "";
-        document.getElementById('status').innerText = "FETCHING ACTUAL RESULTS...";
 
-        let totalActualGoals = 0, auditCount = 0;
+        if (auditCount > 0) {
+          const avgActual = (totalActualGoals / auditCount).toFixed(2);
+          const avgPred = (totalPredGoals / auditCount).toFixed(2);
+          const delta = (avgActual - avgPred).toFixed(2);
 
-        for(let entry of memoryBank) {
-            const res = await apiReq(`fixtures?id=${entry.m.fixture.id}`);
-            const f = res.response[0];
-            if(f && f.fixture.status.short === "FT") {
-                totalActualGoals += (f.goals.home + f.goals.away);
-                auditCount++;
-                let html = `
-                <div class="cyber-card" style="border-left-color: var(--gold);">
-                  <div style="font-size:0.7rem; color:var(--txt-muted);">${f.league.name} [COMPLETED]</div>
-                  <h3 class="orbitron" style="margin:5px 0;">${f.teams.home.name} ${f.goals.home} - ${f.goals.away} ${f.teams.away.name}</h3>
-                  <div style="margin-top:10px; font-size:0.8rem;">
-                     <div><span style="color:var(--p)">Predicted xG (Form):</span> ${entry.stats.h.formXG} - ${entry.stats.a.formXG}</div>
-                     <div><span style="color:var(--neon-live)">Actual Goals:</span> ${f.goals.home} - ${f.goals.away}</div>
-                  </div>
-                </div>`;
-                document.getElementById('display').innerHTML += html;
-            }
-        }
-
-        if(auditCount > 0) {
-            const avgActual = (totalActualGoals / auditCount).toFixed(2);
-            document.getElementById('labSection').innerHTML = `
+          labSection.innerHTML = `
             <div class="lab-audit-panel">
               <h2 class="orbitron" style="color:var(--gold); text-align:center; margin-top:0;">🔬 DATA LAB AUDIT</h2>
               <div class="audit-grid">
-                <div class="audit-box"><div class="audit-label">MATCHES EVALUATED</div><div class="audit-value">${auditCount}</div></div>
-                <div class="audit-box"><div class="audit-label">AVG ACTUAL GOALS</div><div class="audit-value">${avgActual}</div></div>
-                <div class="audit-box"><div class="audit-label">ALGO STATUS</div><div class="audit-value" style="color:var(--neon-live)">ACTIVE</div></div>
-              </div>
-            </div>`;
-        } else {
-            document.getElementById('display').innerHTML = "<h3 class='orbitron' style='text-align:center; color:var(--alert);'>Δεν υπάρχουν ακόμα ολοκληρωμένα (FT) ματς στη μνήμη.</h3>";
-        }
-        document.getElementById('loader').style.display = 'none';
-    }
-
-    function renderMatch(m, s, mode) {
-      if (!s) return;
-      const isLive = ["1H","2H","HT","LIVE"].includes(m.fixture.status.short);
-      let html = `
-        <div class="cyber-card ${isLive ? 'live-glow' : ''}">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <span class="status-badge" style="background:#222; padding:4px 8px; border-radius:4px;">${isLive ? m.fixture.status.elapsed+"'" : m.fixture.status.short}</span>
-              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${m.league.name}</div>
-              <h2 class="orbitron" style="margin:5px 0;">${m.teams.home.name}</h2>
-              <h2 class="orbitron" style="margin:2px 0;">${m.teams.away.name}</h2>
-            </div>
-            <div class="${isLive ? 'live-pulse' : ''}" style="font-size:2.5rem; font-weight:900;">${m.goals.home ?? 0} - ${m.goals.away ?? 0}</div>
-          </div>
-          <div class="stats-grid">
-            ${mode === 'pre' ? `
-              <div class="team-box">
-                <div style="color:var(--p); font-size:0.7rem; font-weight:900; margin-bottom:10px;">🏠 HOME ANALYTICS</div>
-                ${s.h.history.map(f => `<span class="form-dot form-${f}">${f}</span>`).join('')}
-                <div class="stat-row" style="margin-top:12px;"><span>Season Baseline:</span> <div><span class="season-xg-red">${s.h.seasonXG}</span><span class="season-xga-plain">/ ${s.h.seasonXGA}</span></div></div>
-                <div class="stat-row"><span>Form (L6) xG:</span> <div><span class="val-xg">${s.h.formXG}</span> ${s.h.devXG}</div></div>
-                <div class="stat-row"><span>Form (L6) xGA:</span> <div><span class="val-xg">${s.h.formXGA}</span> ${s.h.devXGA}</div></div>
-                <div class="stat-row"><span>Split (ONLY AT HOME):</span> <span class="val-split">${s.h.splitXG} / ${s.h.splitXGA}</span></div>
-                <div class="stat-row" style="border:none;"><span>Avg Stats:</span> <span style="font-weight:800;">🚩${s.h.corners} | 🟨${s.h.cards}</span></div>
-              </div>
-              <div class="team-box">
-                <div style="color:var(--magenta); font-size:0.7rem; font-weight:900; margin-bottom:10px;">✈️ AWAY ANALYTICS</div>
-                ${s.a.history.map(f => `<span class="form-dot form-${f}">${f}</span>`).join('')}
-                <div class="stat-row" style="margin-top:12px;"><span>Season Baseline:</span> <div><span class="season-xg-red">${s.a.seasonXG}</span><span class="season-xga-plain">/ ${s.a.seasonXGA}</span></div></div>
-                <div class="stat-row"><span>Form (L6) xG:</span> <div><span class="val-xg">${s.a.formXG}</span> ${s.a.devXG}</div></div>
-                <div class="stat-row"><span>Form (L6) xGA:</span> <div><span class="val-xg">${s.a.formXGA}</span> ${s.a.devXGA}</div></div>
-                <div class="stat-row"><span>Split (ONLY AWAY):</span> <span class="val-split">${s.a.splitXG} / ${s.a.splitXGA}</span></div>
-                <div class="stat-row" style="border:none;"><span>Avg Stats:</span> <span style="font-weight:800;">🚩${s.a.corners} | 🟨${s.a.cards}</span></div>
-              </div>
-            ` : `
-              <div class="team-box" style="grid-column: span 2;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px; text-align:center;">
-                   <div>POSS: <span class="val-xg">${s.h.poss}%</span></div>
-                   <div style="color:var(--gold); font-weight:900;">PRESSURE INDEX: ${Math.round(s.h.danger/2)} - ${Math.round(s.a.danger/2)}</div>
-                   <div>POSS: <span class="val-xg">${s.a.poss}%</span></div>
+                <div class="audit-box">
+                  <div class="audit-label">MATCHES EVALUATED</div>
+                  <div class="audit-value">${auditCount}</div>
                 </div>
-                <div class="stat-row"><span>Dangerous Attacks / Shots:</span> <span class="val-xg">${s.h.danger}(${s.h.shots}) - ${s.a.danger}(${s.a.shots})</span></div>
-                <div class="stat-row"><span>Corners (Live):</span> <span style="color:#fff; font-weight:800;">🚩 ${s.h.corners} - ${s.a.corners}</span></div>
+                <div class="audit-box">
+                  <div class="audit-label">AVG ACTUAL GOALS</div>
+                  <div class="audit-value">${avgActual}</div>
+                </div>
+                <div class="audit-box">
+                  <div class="audit-label">AVG PREDICTED xG</div>
+                  <div class="audit-value">${avgPred}</div>
+                </div>
               </div>
-            `}
-          </div>
-        </div>`;
-      document.getElementById('display').innerHTML += html;
+              <div class="small-note" style="text-align:center; margin-top:14px;">
+                Model delta (Actual - Predicted): <strong>${delta}</strong>
+              </div>
+            </div>
+          `;
+          display.innerHTML = htmlBuffer;
+        } else {
+          display.innerHTML = `
+            <div class="cyber-card">
+              <h3 class="orbitron" style="text-align:center; color:var(--alert);">Δεν υπάρχουν ακόμα ολοκληρωμένα (FT) ματς στη μνήμη.</h3>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error("AUDIT ERROR:", err);
+        showError(`Το audit σταμάτησε λόγω σφάλματος: ${err?.message || "unknown error"}`);
+      } finally {
+        setLoader(false);
+        setButtonsDisabled(false);
+        isRunning = false;
+      }
     }
 
-    function exportPDF() { html2pdf().from(document.getElementById('app')).save('Apex_Turbo_Audit.pdf'); }
+    function exportPDF() {
+      const app = document.getElementById("app");
+      if (!app) return;
+
+      html2pdf().set({
+        margin: 8,
+        filename: "Apex_Turbo_Core_Stable.pdf",
+        image: { type: "jpeg", quality: 0.96 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      }).from(app).save();
+    }
   </script>
 </body>
 </html>
