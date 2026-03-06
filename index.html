@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4700.16 - Sovereign Feedback</title>
+  <title>Predictor Pro v4700.17 - Sovereign Precision</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -18,30 +18,30 @@
     .orbitron { font-family: 'Orbitron', sans-serif; }
     .container { max-width: 1000px; margin: 0 auto; padding: 15px; }
 
-    /* UI & DATA LAB AUDIT */
-    .lab-audit-panel { background: #000; border: 2px solid var(--gold); border-radius: 16px; padding: 20px; margin-bottom: 30px; box-shadow: 0 0 30px rgba(245, 158, 11, 0.1); }
-    .audit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+    /* UI & DATA LAB */
+    .lab-audit-panel { background: #000; border: 2px solid var(--gold); border-radius: 16px; padding: 20px; margin-bottom: 30px; }
+    .audit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
     .audit-box { background: #161b22; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
     .audit-value { font-family: 'Orbitron'; font-size: 1.3rem; color: var(--gold); font-weight: 900; }
 
     .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--p); }
-    .live-glow { border-left-color: var(--neon-live); box-shadow: 0 0 15px rgba(57, 255, 20, 0.1); }
     
-    /* SEASON XG RED BOX */
-    .season-xg-box { border: 1px solid var(--alert); padding: 4px 8px; border-radius: 4px; display: inline-block; color: var(--alert); font-weight: 800; font-family: 'Orbitron'; font-size: 0.85rem; margin-top: 4px; }
+    /* NEW STYLING FOR XG */
+    .season-xg-red { background: var(--alert); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 900; font-family: 'Orbitron'; font-size: 0.9rem; }
+    .season-xga-plain { color: #8b949e; font-weight: 600; font-family: 'Orbitron'; margin-left: 5px; }
     
-    /* DEVIATION BADGES */
-    .dev-badge { font-size: 0.7rem; font-weight: 900; padding: 2px 4px; border-radius: 4px; margin-left: 4px; }
-    .dev-pos { background: rgba(57, 255, 20, 0.1); color: var(--neon-live); }
-    .dev-neg { background: rgba(218, 54, 51, 0.1); color: var(--alert); }
+    /* ENHANCED DEVIATION BADGES */
+    .dev-badge { font-size: 0.75rem; font-weight: 900; padding: 3px 6px; border-radius: 4px; margin-left: 8px; font-family: 'Orbitron'; letter-spacing: 0.5px; }
+    .dev-pos { background: #238636; color: #fff; border: 1px solid var(--neon-live); }
+    .dev-neg { background: #da3633; color: #fff; border: 1px solid #ff4d4d; }
 
     .btn-main { padding: 15px 25px; background: var(--grad); color: #fff; border: none; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; margin: 5px; transition: 0.3s; }
-    .btn-main:hover { transform: translateY(-2px); filter: brightness(1.2); }
+    .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
 
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
     .team-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid #222; }
-    .stat-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem; border-bottom: 1px solid #1a1d23; padding-bottom: 4px; align-items: center; }
-    .val-xg { color: var(--p); font-weight: 800; font-family: 'Orbitron'; }
+    .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; border-bottom: 1px solid #1a1d23; padding-bottom: 5px; align-items: center; }
+    .val-xg { color: var(--p); font-weight: 800; font-family: 'Orbitron'; font-size: 1rem; }
     .val-split { color: var(--magenta); font-weight: 800; font-family: 'Orbitron'; }
     
     .live-pulse { color: var(--neon-live); animation: pulse 1s infinite; font-weight: 900; font-size: 2.5rem;}
@@ -49,13 +49,12 @@
     
     .form-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; margin-right: 3px; color:#fff;}
     .form-W { background: #238636; } .form-D { background: #666; } .form-L { background: #da3633; }
-    .impact-alert { background: rgba(218, 54, 51, 0.1); border: 1px solid var(--alert); color: var(--alert); padding: 10px; border-radius: 6px; font-size: 0.75rem; margin-top: 10px; font-weight: 700; }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4700.16</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4700.17</h1>
     <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" 
            style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;">
   </div>
@@ -63,7 +62,7 @@
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding: 20px 0;">
-        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">SOVEREIGN</span></h1>
+        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">v4700.17</span></h1>
       </header>
 
       <div style="display:flex; justify-content:center; flex-wrap: wrap; margin-bottom:20px;">
@@ -86,7 +85,6 @@
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
     const LEAGUES = [39, 40, 41, 140, 141, 135, 78, 79, 61, 62, 253, 262, 128, 197, 318, 94, 88, 144, 2, 3, 84, 203, 357];
-    let auditData = [];
 
     async function apiReq(path) {
       const r = await fetch(`${API}/${path}`, { headers: {"x-apisports-key": KEY} });
@@ -100,15 +98,18 @@
       const base_xg = parseFloat(s.goals?.for?.average?.total || 1.10);
       const base_xga = parseFloat(s.goals?.against?.average?.total || 1.10);
 
-      // 2. Last 6 General
-      const fRes = await apiReq(`fixtures?team=${teamId}&last=6&status=FT`);
-      const fixs = fRes.response || [];
+      // 2. Fetch last 15 fixtures to filter Split (Home or Away only)
+      const fRes = await apiReq(`fixtures?team=${teamId}&last=15&status=FT`);
+      const allFixs = fRes.response || [];
+      const last6General = allFixs.slice(0, 6);
+      
+      // 3. Precise Split Filtering
+      const last6Split = allFixs.filter(f => {
+          if(venue === 'home') return f.teams.home.id === teamId;
+          return f.teams.away.id === teamId;
+      }).slice(0, 6);
 
-      // 3. Split Stats (Venue specific)
-      const spRes = await apiReq(`fixtures?team=${teamId}&last=6&status=FT&venue=${venue}`);
-      const splitFixs = spRes.response || [];
-
-      async function processFixtures(list) {
+      async function calculateMetrics(list) {
         let xgSum = 0, xgaSum = 0, corSum = 0, crdSum = 0, count = 0;
         for(let f of list) {
           const stRes = await apiReq(`fixtures/statistics?fixture=${f.fixture.id}`);
@@ -116,8 +117,8 @@
             let my = stRes.response.find(x => x.team.id === teamId).statistics;
             let op = stRes.response.find(x => x.team.id !== teamId).statistics;
             let gV = (a, t) => { let o = a.find(x => x.type === t); return (o && o.value) ? parseFloat(o.value) : 0; };
-            let valXG = gV(my, "Expected Goals") || (gV(my, "Shots on Goal") * 0.15);
-            xgSum += valXG; xgaSum += (gV(op, "Expected Goals") || 0.8);
+            xgSum += (gV(my, "Expected Goals") || (gV(my, "Shots on Goal") * 0.15));
+            xgaSum += (gV(op, "Expected Goals") || 0.8);
             corSum += gV(my, "Corner Kicks"); crdSum += (gV(my, "Yellow Cards") + gV(my, "Red Cards"));
             count++;
           }
@@ -126,12 +127,12 @@
         return { xg: (xgSum/count || 1.0).toFixed(2), xga: (xgaSum/count || 1.0).toFixed(2), cor: (corSum/count || 4).toFixed(1), crd: (crdSum/count || 2).toFixed(1) };
       }
 
-      const form = await processFixtures(fixs);
-      const split = await processFixtures(splitFixs);
+      const form = await calculateMetrics(last6General);
+      const split = await calculateMetrics(last6Split);
 
       const getDev = (curr, base) => {
         let d = ((curr - base) / base * 100).toFixed(1);
-        return `<span class="dev-badge ${d > 0 ? 'dev-pos' : 'dev-neg'}">${d > 0 ? '+' : ''}${d}%</span>`;
+        return `<span class="dev-badge ${d >= 0 ? 'dev-pos' : 'dev-neg'}">${d > 0 ? '+' : ''}${d}%</span>`;
       };
 
       return {
@@ -140,7 +141,7 @@
         devXG: getDev(form.xg, base_xg), devXGA: getDev(form.xga, base_xga),
         splitXG: split.xg, splitXGA: split.xga,
         corners: form.cor, cards: form.crd,
-        history: fixs.map(f => {
+        history: last6General.map(f => {
           let isH = f.teams.home.id === teamId;
           return isH ? (f.goals.home > f.goals.away ? 'W' : (f.goals.home < f.goals.away ? 'L' : 'D')) : (f.goals.away > f.goals.home ? 'W' : (f.goals.away < f.goals.home ? 'L' : 'D'));
         }).reverse()
@@ -150,22 +151,18 @@
     async function runScan(mode) {
       document.getElementById('loader').style.display = 'block';
       const disp = document.getElementById('display'); disp.innerHTML = "";
-      const lab = document.getElementById('labSection'); lab.innerHTML = "";
       const date = new Date().toISOString().split('T')[0];
       const res = await apiReq(`fixtures?date=${date}`);
       const matches = (res.response || []).filter(m => LEAGUES.includes(m.league.id)).slice(0, 15);
-      auditData = [];
 
       for(let i=0; i<matches.length; i++) {
         let m = matches[i];
         document.getElementById('bar').style.width = ((i+1)/matches.length * 100) + "%";
-        document.getElementById('status').innerText = `ANALYZING: ${m.teams.home.name}`;
+        document.getElementById('status').innerText = `AUDITING: ${m.teams.home.name}`;
 
         let intel = null;
         if(mode === 'pre') {
           intel = { h: await getTeamData(m.teams.home.id, m.league.id, m.league.season, 'home'), a: await getTeamData(m.teams.away.id, m.league.id, m.league.season, 'away') };
-          const line = await apiReq(`fixtures/lineups?fixture=${m.fixture.id}`);
-          intel.injuries = line.response?.reduce((a,c) => a + (c.substitutes?.length < 6 ? 1 : 0), 0) || 0;
         } else {
           const sR = await apiReq(`fixtures/statistics?fixture=${m.fixture.id}`);
           if(sR.response && sR.response.length === 2) {
@@ -174,30 +171,13 @@
                       a: { danger: gV(sR.response[1].statistics, "Dangerous Attacks"), shots: gV(sR.response[1].statistics, "Shots on Goal"), corners: gV(sR.response[1].statistics, "Corner Kicks"), poss: gV(sR.response[1].statistics, "Ball Possession") } };
           }
         }
-        auditData.push({ m, intel });
         renderMatch(m, intel, mode);
       }
-      if(mode === 'pre') renderAuditLab();
       document.getElementById('loader').style.display = 'none';
-    }
-
-    function renderAuditLab() {
-      let totalG = auditData.reduce((a,c) => a + (c.m.goals.home || 0) + (c.m.goals.away || 0), 0);
-      let avgG = (totalG / auditData.length).toFixed(2);
-      document.getElementById('labSection').innerHTML = `
-        <div class="lab-audit-panel">
-          <h2 class="orbitron" style="color:var(--gold); text-align:center; margin:0 0 15px 0;">🔬 DATA LAB AUDIT</h2>
-          <div class="audit-grid">
-            <div class="audit-box"><div style="font-size:0.6rem;">MATCHES</div><div class="audit-value">${auditData.length}</div></div>
-            <div class="audit-box"><div style="font-size:0.6rem;">AVG ACTUAL GOALS</div><div class="audit-value">${avgG}</div></div>
-            <div class="audit-box"><div style="font-size:0.6rem;">ALGO STATUS</div><div class="audit-value" style="color:var(--neon-live)">ACTIVE</div></div>
-          </div>
-        </div>`;
     }
 
     function renderMatch(m, s, mode) {
       const isLive = ["1H","2H","HT","LIVE"].includes(m.fixture.status.short);
-      const isFT = m.fixture.status.short === "FT";
       
       let html = `
         <div class="cyber-card ${isLive ? 'live-glow' : ''}">
@@ -216,7 +196,7 @@
               <div class="team-box">
                 <div style="color:var(--p); font-size:0.7rem; font-weight:900; margin-bottom:10px;">🏠 HOME STRATEGY</div>
                 ${s.h.history.map(f => `<span class="form-dot form-${f}">${f}</span>`).join('')}
-                <div class="stat-row" style="margin-top:10px;"><span>Season Baseline:</span> <div class="season-xg-box">${s.h.seasonXG} / ${s.h.seasonXGA}</div></div>
+                <div class="stat-row" style="margin-top:12px;"><span>Season Baseline:</span> <div><span class="season-xg-red">${s.h.seasonXG}</span><span class="season-xga-plain">/ ${s.h.seasonXGA}</span></div></div>
                 <div class="stat-row"><span>Form (L6) xG:</span> <div><span class="val-xg">${s.h.formXG}</span> ${s.h.devXG}</div></div>
                 <div class="stat-row"><span>Form (L6) xGA:</span> <div><span class="val-xg">${s.h.formXGA}</span> ${s.h.devXGA}</div></div>
                 <div class="stat-row"><span>Split (ONLY HOME):</span> <span class="val-split">${s.h.splitXG} / ${s.h.splitXGA}</span></div>
@@ -225,7 +205,7 @@
               <div class="team-box">
                 <div style="color:var(--magenta); font-size:0.7rem; font-weight:900; margin-bottom:10px;">✈️ AWAY STRATEGY</div>
                 ${s.a.history.map(f => `<span class="form-dot form-${f}">${f}</span>`).join('')}
-                <div class="stat-row" style="margin-top:10px;"><span>Season Baseline:</span> <div class="season-xg-box">${s.a.seasonXG} / ${s.a.seasonXGA}</div></div>
+                <div class="stat-row" style="margin-top:12px;"><span>Season Baseline:</span> <div><span class="season-xg-red">${s.a.seasonXG}</span><span class="season-xga-plain">/ ${s.a.seasonXGA}</span></div></div>
                 <div class="stat-row"><span>Form (L6) xG:</span> <div><span class="val-xg">${s.a.formXG}</span> ${s.a.devXG}</div></div>
                 <div class="stat-row"><span>Form (L6) xGA:</span> <div><span class="val-xg">${s.a.formXGA}</span> ${s.a.devXGA}</div></div>
                 <div class="stat-row"><span>Split (ONLY AWAY):</span> <span class="val-split">${s.a.splitXG} / ${s.a.splitXGA}</span></div>
@@ -245,12 +225,11 @@
               </div>
             `}
           </div>
-          ${mode === 'pre' && s.injuries > 0 ? `<div class="impact-alert">⚠️ IMPACT REPORT: ${s.injuries} squad deviations detected.</div>` : ''}
         </div>`;
       document.getElementById('display').innerHTML += html;
     }
 
-    function exportPDF() { html2pdf().from(document.getElementById('app')).save('Apex_Strategy_Audit.pdf'); }
+    function exportPDF() { html2pdf().from(document.getElementById('display')).save('Apex_Precision_Report.pdf'); }
   </script>
 </body>
 </html>
