@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+code = r'''<!DOCTYPE html>
 <html lang="el">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4703.11 - Greek UI Edition</title>
+  <title>Predictor Pro v4703.12 Final - Greek UI Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -20,6 +20,9 @@
       --txt-muted: #8b949e;
       --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
       --magenta: #ff00ff;
+      --ok: #238636;
+      --warn: #d29922;
+      --soft: #161b22;
     }
 
     * { box-sizing: border-box; }
@@ -35,7 +38,7 @@
     .orbitron { font-family: 'Orbitron', sans-serif; }
 
     .container {
-      max-width: 1080px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 15px;
     }
@@ -53,7 +56,7 @@
       border-left-color: var(--neon-live);
       box-shadow: 0 0 15px rgba(57, 255, 20, 0.1);
     }
-    
+
     .season-xg-red {
       background: var(--alert);
       color: #fff;
@@ -70,7 +73,7 @@
       font-family: 'Orbitron', sans-serif;
       margin-left: 5px;
     }
-    
+
     .dev-badge {
       font-size: 0.75rem;
       font-weight: 900;
@@ -163,7 +166,7 @@
       font-family: 'Orbitron', sans-serif;
       font-size: 1rem;
     }
-    
+
     .val-split {
       color: var(--split-color);
       font-weight: 900;
@@ -289,7 +292,7 @@
       margin-bottom: 15px;
       font-size: 0.9rem;
     }
-    
+
     .toolbar {
       display: flex;
       justify-content: center;
@@ -363,9 +366,7 @@
       margin-bottom: 5px;
     }
 
-    .verify-line:last-child {
-      margin-bottom: 0;
-    }
+    .verify-line:last-child { margin-bottom: 0; }
 
     .market-tag {
       display: inline-block;
@@ -380,17 +381,47 @@
       margin-left: 6px;
     }
 
+    .confidence-chip {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #333;
+      background: #11161c;
+      font-size: 0.72rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      margin-left: 6px;
+    }
+
+    .confidence-high { color: var(--neon-live); border-color: rgba(57,255,20,.35); }
+    .confidence-mid  { color: var(--gold); border-color: rgba(245,158,11,.35); }
+    .confidence-low  { color: #ff7b72; border-color: rgba(255,123,114,.35); }
+
+    .top-pick-box {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(0,242,255,0.06);
+      border: 1px solid rgba(0,242,255,0.2);
+    }
+
+    .top-pick-title {
+      color: var(--p);
+      font-weight: 900;
+      font-size: 0.75rem;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 8px;
+    }
+
     @media (max-width: 900px) {
-      .stats-grid, .audit-grid {
-        grid-template-columns: 1fr;
-      }
+      .stats-grid, .audit-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4703.11</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4703.12 FINAL</h1>
     <input
       type="password"
       id="pin"
@@ -398,19 +429,19 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">Greek UI Edition - Probability Engine + Verification Layer</div>
+    <div class="small-note">Greek UI Edition - Final Probability + Verification Layer</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">SELECTIVE</span></h1>
-        <div class="status-line">v4703.11 Greek UI / League Filter / Probability Engine</div>
+        <div class="status-line">v4703.12 Final / League Filter / Probability Engine / Confidence Score</div>
       </header>
 
       <div class="toolbar">
         <input type="date" id="scanDate" class="date-input">
-        
+
         <select id="leagueFilter" class="league-select">
           <option value="ALL">🌐 Όλα τα Πρωταθλήματα</option>
         </select>
@@ -448,35 +479,20 @@
   <script>
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
-    
+
     const LEAGUES_DATA = [
-      {id: 39, name: "🇬🇧 Premier League"},
-      {id: 40, name: "🇬🇧 Championship"},
-      {id: 41, name: "🇬🇧 League One"},
-      {id: 140, name: "🇪🇸 La Liga"},
-      {id: 141, name: "🇪🇸 La Liga 2"},
-      {id: 135, name: "🇮🇹 Serie A"},
-      {id: 136, name: "🇮🇹 Serie B"},
-      {id: 78, name: "🇩🇪 Bundesliga"},
-      {id: 79, name: "🇩🇪 2. Bundesliga"},
-      {id: 61, name: "🇫🇷 Ligue 1"},
-      {id: 62, name: "🇫🇷 Ligue 2"},
-      {id: 253, name: "🇺🇸 MLS"},
-      {id: 262, name: "🇲🇽 Liga MX"},
-      {id: 128, name: "🇦🇷 Argentina Liga Prof."},
-      {id: 197, name: "🇬🇷 Greece Super League"},
-      {id: 318, name: "🇨🇾 Cyprus 1st Div"},
-      {id: 281, name: "🇨🇾 Cyprus Division 1"},
-      {id: 94, name: "🇵🇹 Portugal Primeira"},
-      {id: 88, name: "🇳🇱 Eredivisie"},
-      {id: 144, name: "🇧🇪 Belgium Jupiler"},
-      {id: 203, name: "🇹🇷 Turkey Süper Lig"},
-      {id: 357, name: "🇮🇪 Ireland Premier"},
-      {id: 2, name: "🏆 Champions League"},
-      {id: 3, name: "🏆 Europa League"},
-      {id: 84, name: "🏆 Conference League"}
+      {id: 39, name: "🇬🇧 Premier League"}, {id: 40, name: "🇬🇧 Championship"}, {id: 41, name: "🇬🇧 League One"},
+      {id: 140, name: "🇪🇸 La Liga"}, {id: 141, name: "🇪🇸 La Liga 2"},
+      {id: 135, name: "🇮🇹 Serie A"}, {id: 136, name: "🇮🇹 Serie B"},
+      {id: 78, name: "🇩🇪 Bundesliga"}, {id: 79, name: "🇩🇪 2. Bundesliga"},
+      {id: 61, name: "🇫🇷 Ligue 1"}, {id: 62, name: "🇫🇷 Ligue 2"},
+      {id: 253, name: "🇺🇸 MLS"}, {id: 262, name: "🇲🇽 Liga MX"}, {id: 128, name: "🇦🇷 Argentina Liga Prof."},
+      {id: 197, name: "🇬🇷 Greece Super League"}, {id: 318, name: "🇨🇾 Cyprus 1st Div"}, {id: 281, name: "🇨🇾 Cyprus Division 1"},
+      {id: 94, name: "🇵🇹 Portugal Primeira"}, {id: 88, name: "🇳🇱 Eredivisie"}, {id: 144, name: "🇧🇪 Belgium Jupiler"},
+      {id: 203, name: "🇹🇷 Turkey Süper Lig"}, {id: 357, name: "🇮🇪 Ireland Premier"},
+      {id: 2, name: "🏆 Champions League"}, {id: 3, name: "🏆 Europa League"}, {id: 84, name: "🏆 Conference League"}
     ];
-    
+
     const LEAGUES = LEAGUES_DATA.map(l => l.id);
 
     const MAX_PRE_MATCHES = 100;
@@ -485,9 +501,10 @@
     const LAST_SPLIT = 6;
     const REQUEST_DELAY_MS = 260;
     const REQUEST_TIMEOUT_MS = 12000;
+    const POISSON_MAX_GOALS = 8;
 
-    const LS_PRED = "omega_prediction_store_v470311";
-    const LS_AUDIT = "omega_audit_store_v470311";
+    const LS_PRED = "omega_prediction_store_v470312";
+    const LS_AUDIT = "omega_audit_store_v470312";
 
     let memoryBank = [];
     let statsCache = new Map();
@@ -556,11 +573,8 @@
     }
 
     function getPredictionStore() {
-      try {
-        return JSON.parse(localStorage.getItem(LS_PRED) || "{}");
-      } catch {
-        return {};
-      }
+      try { return JSON.parse(localStorage.getItem(LS_PRED) || "{}"); }
+      catch { return {}; }
     }
 
     function savePredictionStore(store) {
@@ -569,11 +583,8 @@
     }
 
     function getAuditStore() {
-      try {
-        return JSON.parse(localStorage.getItem(LS_AUDIT) || "{}");
-      } catch {
-        return {};
-      }
+      try { return JSON.parse(localStorage.getItem(LS_AUDIT) || "{}"); }
+      catch { return {}; }
     }
 
     function saveAuditStore(store) {
@@ -624,10 +635,7 @@
         return await response.json() || { response: [] };
       } catch (err) {
         console.error("API ERROR:", path, err);
-        return {
-          response: [],
-          errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown error") }
-        };
+        return { response: [], errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown error") } };
       }
     }
 
@@ -668,15 +676,11 @@
     }
 
     function getTeamGoalsInFixture(fixture, teamId) {
-      return fixture?.teams?.home?.id === teamId
-        ? (fixture?.goals?.home ?? 0)
-        : (fixture?.goals?.away ?? 0);
+      return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.home ?? 0) : (fixture?.goals?.away ?? 0);
     }
 
     function getOpponentGoalsInFixture(fixture, teamId) {
-      return fixture?.teams?.home?.id === teamId
-        ? (fixture?.goals?.away ?? 0)
-        : (fixture?.goals?.home ?? 0);
+      return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.away ?? 0) : (fixture?.goals?.home ?? 0);
     }
 
     function estimateXGFromStats(statsArr, goalsFor = 0) {
@@ -700,7 +704,7 @@
 
       return estimated;
     }
-    
+
     function getFormHistory(fixtures, teamId) {
       return fixtures.map(f => {
         const isHome = f.teams.home.id === teamId;
@@ -739,7 +743,7 @@
       return (Math.exp(-lambda) * Math.pow(lambda, k)) / fact;
     }
 
-    function buildPoissonMatrix(homeLambda, awayLambda, maxGoals = 6) {
+    function buildPoissonMatrix(homeLambda, awayLambda, maxGoals = POISSON_MAX_GOALS) {
       const matrix = [];
       for (let h = 0; h <= maxGoals; h++) {
         const row = [];
@@ -749,6 +753,15 @@
         matrix.push(row);
       }
       return matrix;
+    }
+
+    function normalizeMatrix(matrix) {
+      let total = 0;
+      for (let h = 0; h < matrix.length; h++) {
+        for (let a = 0; a < matrix[h].length; a++) total += matrix[h][a];
+      }
+      if (!total || total <= 0) return matrix;
+      return matrix.map(row => row.map(v => v / total));
     }
 
     function sumMatrixByCondition(matrix, predicate) {
@@ -788,8 +801,8 @@
         0.10 * hSplitXGA +
         0.10 * aSeasonXG;
 
-      expectedHomeGoals = clamp(expectedHomeGoals, 0.20, 4.50);
-      expectedAwayGoals = clamp(expectedAwayGoals, 0.20, 4.50);
+      expectedHomeGoals = clamp(expectedHomeGoals, 0.20, 4.80);
+      expectedAwayGoals = clamp(expectedAwayGoals, 0.20, 4.80);
 
       return {
         expectedHomeGoals: Number(expectedHomeGoals.toFixed(2)),
@@ -797,9 +810,36 @@
       };
     }
 
+    function pct(n) {
+      return Number((n * 100).toFixed(1));
+    }
+
+    function getConfidenceLabel(score) {
+      if (score >= 72) return { label: "HIGH", cls: "confidence-high" };
+      if (score >= 58) return { label: "MEDIUM", cls: "confidence-mid" };
+      return { label: "LOW", cls: "confidence-low" };
+    }
+
+    function calcConfidenceScore(probs) {
+      const arr = [
+        { market: "1", prob: probs.p1 },
+        { market: "X", prob: probs.pX },
+        { market: "2", prob: probs.p2 },
+        { market: "Over 2.5", prob: probs.pOver25 },
+        { market: "BTTS", prob: probs.pBTTS }
+      ].sort((a, b) => b.prob - a.prob);
+
+      const top = arr[0]?.prob || 0;
+      const second = arr[1]?.prob || 0;
+      const spread = top - second;
+      const raw = (top * 0.70) + (spread * 0.30);
+      return Number(clamp(raw, 0, 100).toFixed(1));
+    }
+
     function calcMatchProbabilities(intel) {
       const { expectedHomeGoals, expectedAwayGoals } = calcExpectedGoalsFromIntel(intel);
-      const matrix = buildPoissonMatrix(expectedHomeGoals, expectedAwayGoals, 6);
+      let matrix = buildPoissonMatrix(expectedHomeGoals, expectedAwayGoals, POISSON_MAX_GOALS);
+      matrix = normalizeMatrix(matrix);
 
       const p1 = sumMatrixByCondition(matrix, (h, a) => h > a);
       const pX = sumMatrixByCondition(matrix, (h, a) => h === a);
@@ -812,13 +852,13 @@
       const probs = {
         expectedHomeGoals,
         expectedAwayGoals,
-        p1: Number((p1 * 100).toFixed(1)),
-        pX: Number((pX * 100).toFixed(1)),
-        p2: Number((p2 * 100).toFixed(1)),
-        pOver25: Number((pOver25 * 100).toFixed(1)),
-        pBTTS: Number((pBTTS * 100).toFixed(1)),
-        pHomeOver15: Number((pHomeOver15 * 100).toFixed(1)),
-        pAwayOver05: Number((pAwayOver05 * 100).toFixed(1))
+        p1: pct(p1),
+        pX: pct(pX),
+        p2: pct(p2),
+        pOver25: pct(pOver25),
+        pBTTS: pct(pBTTS),
+        pHomeOver15: pct(pHomeOver15),
+        pAwayOver05: pct(pAwayOver05)
       };
 
       const marketScores = [
@@ -831,6 +871,12 @@
 
       probs.topMarket = marketScores[0]?.market || "-";
       probs.topMarketProb = marketScores[0]?.prob || 0;
+      probs.secondMarket = marketScores[1]?.market || "-";
+      probs.secondMarketProb = marketScores[1]?.prob || 0;
+      probs.confidenceScore = calcConfidenceScore(probs);
+      const conf = getConfidenceLabel(probs.confidenceScore);
+      probs.confidenceLabel = conf.label;
+      probs.confidenceClass = conf.cls;
 
       return probs;
     }
@@ -842,25 +888,20 @@
 
     function getHistoricalVerificationForMarket(market, prob) {
       const audits = flattenAllAudits();
-      if (!audits.length) return { sample: 0, hitRate: null };
+      if (!audits.length) return { sample: 0, hitRate: null, bucketLabel: null };
 
       const { start, end } = getBucket(prob);
-
       const filtered = audits.filter(row => {
         let p = null;
-
         if (market === "1") p = Number(row.p1);
         else if (market === "X") p = Number(row.pX);
         else if (market === "2") p = Number(row.p2);
         else if (market === "Over 2.5") p = Number(row.pOver25);
         else if (market === "BTTS") p = Number(row.pBTTS);
-
         return Number.isFinite(p) && p >= start && p < end;
       });
 
-      if (!filtered.length) {
-        return { sample: 0, hitRate: null, bucketLabel: `${start}-${end}%` };
-      }
+      if (!filtered.length) return { sample: 0, hitRate: null, bucketLabel: `${start}-${end}%` };
 
       let hits = 0;
 
@@ -880,11 +921,7 @@
       }
 
       const hitRate = filtered.length ? Number(((hits / filtered.length) * 100).toFixed(1)) : null;
-      return {
-        sample: filtered.length,
-        hitRate,
-        bucketLabel: `${start}-${end}%`
-      };
+      return { sample: filtered.length, hitRate, bucketLabel: `${start}-${end}%` };
     }
 
     function buildVerificationSummary(probs) {
@@ -918,14 +955,10 @@
         const oppGoals = getOpponentGoalsInFixture(fixture, teamId);
 
         let myXG = statVal(my, "Expected Goals");
-        if (!myXG || myXG <= 0) {
-          myXG = estimateXGFromStats(my, myGoals);
-        }
+        if (!myXG || myXG <= 0) myXG = estimateXGFromStats(my, myGoals);
 
         let oppXG = statVal(op, "Expected Goals");
-        if (!oppXG || oppXG <= 0) {
-          oppXG = estimateXGFromStats(op, oppGoals);
-        }
+        if (!oppXG || oppXG <= 0) oppXG = estimateXGFromStats(op, oppGoals);
 
         xgSum += myXG;
         xgaSum += oppXG;
@@ -949,9 +982,7 @@
       ]);
 
       const generalLast = allFixs.slice(0, LAST_GENERAL);
-      const splitLast = allFixs
-        .filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId)
-        .slice(0, LAST_SPLIT);
+      const splitLast = allFixs.filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId).slice(0, LAST_SPLIT);
 
       const [form, split] = await Promise.all([
         batchCalculate(generalLast, teamId),
@@ -987,13 +1018,8 @@
     function buildMatchCard(m, s, mode) {
       const isLive = isLiveStatus(m.fixture.status.short);
 
-      const homeOverHigh = mode === "pre" && s?.h && s?.a
-        ? buildOverSignal(s.h.formXG, s.a.formXGA)
-        : false;
-
-      const awayOverHigh = mode === "pre" && s?.h && s?.a
-        ? buildOverSignal(s.a.formXG, s.h.formXGA)
-        : false;
+      const homeOverHigh = mode === "pre" && s?.h && s?.a ? buildOverSignal(s.h.formXG, s.a.formXGA) : false;
+      const awayOverHigh = mode === "pre" && s?.h && s?.a ? buildOverSignal(s.a.formXG, s.h.formXGA) : false;
 
       const probs = mode === "pre" ? s?.probs : null;
       const verify = probs ? buildVerificationSummary(probs) : null;
@@ -1101,7 +1127,6 @@
               <div class="team-box" style="grid-column: span 2;">
                 <div class="prob-panel">
                   <div class="prob-title">📊 ΠΙΘΑΝΟΤΗΤΕΣ ΑΓΟΡΩΝ</div>
-
                   <div class="prob-row"><span>Expected Goals:</span><span class="prob-val">${probs?.expectedHomeGoals ?? "-"} - ${probs?.expectedAwayGoals ?? "-"}</span></div>
                   <div class="prob-row"><span>1 / X / 2:</span><span class="prob-val">${probs?.p1 ?? "-"}% / ${probs?.pX ?? "-"}% / ${probs?.p2 ?? "-"}%</span></div>
                   <div class="prob-row"><span>Over 2.5:</span><span class="prob-val">${probs?.pOver25 ?? "-"}%</span></div>
@@ -1110,17 +1135,23 @@
                   <div class="prob-row"><span>Away Over 0.5:</span><span class="prob-val">${probs?.pAwayOver05 ?? "-"}%</span></div>
                 </div>
 
-                <div class="verify-box">
+                <div class="top-pick-box">
+                  <div class="top-pick-title">🎯 ΚΥΡΙΟ ΣΗΜΑ ΜΟΝΤΕΛΟΥ</div>
                   <div class="verify-line">
-                    Κύριο σημείο:
+                    Main Market:
                     <span class="market-tag">${escapeHtml(probs?.topMarket || "-")}</span>
                     <span class="market-tag">${probs?.topMarketProb ?? "-"}%</span>
+                    <span class="confidence-chip ${probs?.confidenceClass || ""}">${escapeHtml(probs?.confidenceLabel || "-")} ${probs?.confidenceScore ?? "-"}</span>
                   </div>
+                  <div class="verify-line" style="color:var(--txt-muted);">
+                    2nd Market: ${escapeHtml(probs?.secondMarket || "-")} (${probs?.secondMarketProb ?? "-"}%)
+                  </div>
+                </div>
+
+                <div class="verify-box">
                   <div class="verify-line">
                     Ιστορική επαλήθευση παρόμοιων προβλέψεων:
-                    <strong style="color:var(--gold);">
-                      ${verify?.hitRate != null ? `${verify.hitRate}%` : "N/A"}
-                    </strong>
+                    <strong style="color:var(--gold);">${verify?.hitRate != null ? `${verify.hitRate}%` : "N/A"}</strong>
                   </div>
                   <div class="verify-line" style="color:var(--txt-muted);">
                     Δείγμα: ${verify?.sample ?? 0} αγώνες ${verify?.bucketLabel ? `| Bucket ${verify.bucketLabel}` : ""}
@@ -1158,35 +1189,35 @@
       const labSection = document.getElementById("labSection");
       display.innerHTML = "";
       labSection.innerHTML = "";
-      
+
       try {
         const selectedDate = getSelectedDate();
         const selectedLeague = document.getElementById("leagueFilter").value;
         refreshStoreBadges();
-        
+
         if (mode === "pre") {
           memoryBank = [];
           statsCache.clear();
         }
-        
+
         const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
-        
+
         let matches = (fixturesResp.response || []).filter(m => {
           if (selectedLeague === "ALL") return LEAGUES.includes(m.league.id);
           return m.league.id === parseInt(selectedLeague);
         });
-        
+
         if (mode === "live") {
           matches = matches.filter(m => isLiveStatus(m.fixture.status.short)).slice(0, MAX_LIVE_MATCHES);
         } else {
           matches = matches.slice(0, MAX_PRE_MATCHES);
         }
-        
+
         if (!matches.length) {
           display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν διαθέσιμοι αγώνες.</h3></div>`;
           return;
         }
-        
+
         let htmlBuffer = "";
 
         if (mode === "pre") {
@@ -1195,14 +1226,14 @@
           else if (!predStore[selectedDate]) predStore[selectedDate] = [];
           savePredictionStore(predStore);
         }
-        
+
         for (let i = 0; i < matches.length; i++) {
           const m = matches[i];
           const pct = Math.round(((i + 1) / matches.length) * 100);
           setProgress(pct, `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
 
           let intel = null;
-          
+
           if (mode === "pre") {
             const [intelHome, intelAway] = await Promise.all([
               getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
@@ -1215,7 +1246,7 @@
 
             memoryBank.push({ m, stats: intel });
             const predStore = getPredictionStore();
-            
+
             if (!predStore[selectedDate].some(x => x.fixtureId === m.fixture.id)) {
               predStore[selectedDate].push({
                 date: selectedDate,
@@ -1259,6 +1290,10 @@
                 pAwayOver05: probs.pAwayOver05,
                 topMarket: probs.topMarket,
                 topMarketProb: probs.topMarketProb,
+                secondMarket: probs.secondMarket,
+                secondMarketProb: probs.secondMarketProb,
+                confidenceScore: probs.confidenceScore,
+                confidenceLabel: probs.confidenceLabel,
 
                 highOverSignalHome: Number(intel.h.formXG) > 2 && Number(intel.a.formXGA) > 1.5,
                 highOverSignalAway: Number(intel.a.formXG) > 2 && Number(intel.h.formXGA) > 1.5,
@@ -1317,12 +1352,12 @@
       const predStore = getPredictionStore();
       const auditStore = getAuditStore();
       const dayPredictions = predStore[selectedDate] || [];
-      
+
       if (!dayPredictions.length) {
         showError(`Δεν υπάρχουν αποθηκευμένες αναλύσεις για ${selectedDate}.`);
         return;
       }
-      
+
       isRunning = true;
       setButtonsDisabled(true);
       setLoader(true, `ΑΞΙΟΛΟΓΗΣΗ ΔΕΔΟΜΕΝΩΝ...`);
@@ -1331,45 +1366,50 @@
       const labSection = document.getElementById("labSection");
       display.innerHTML = "";
       labSection.innerHTML = "";
-      
+
       try {
         let htmlBuffer = "";
         let evaluated = 0;
         let totalActualGoals = 0;
         let totalPredGoals = 0;
         let totalAbsError = 0;
-        let over25Hits = 0;
-        let bttsHits = 0;
+        let topMarketHits = 0;
 
         auditStore[selectedDate] = [];
-        
+
         for (let i = 0; i < dayPredictions.length; i++) {
           const entry = dayPredictions[i];
           setProgress(Math.round(((i + 1) / dayPredictions.length) * 100), `ΑΞΙΟΛΟΓΗΣΗ: ${entry.homeTeam} vs ${entry.awayTeam}`);
-          
+
           const res = await apiReq(`fixtures?id=${entry.fixtureId}`);
           const f = res?.response?.[0];
           if (!f || f.fixture.status.short !== "FT") continue;
-          
+
           const actualHome = f.goals.home ?? 0;
           const actualAway = f.goals.away ?? 0;
           const actualTotal = actualHome + actualAway;
           const predTotal = Number(entry.expectedHomeGoals || 0) + Number(entry.expectedAwayGoals || 0);
           const absError = Math.abs(predTotal - actualTotal);
-          
+
           totalActualGoals += actualTotal;
           totalPredGoals += predTotal;
           totalAbsError += absError;
           evaluated++;
 
-          if ((entry.pOver25 || 0) >= 50 && actualTotal > 2.5) over25Hits++;
-          if ((entry.pBTTS || 0) >= 50 && actualHome > 0 && actualAway > 0) bttsHits++;
-          
           const hit1 = actualHome > actualAway;
           const hitX = actualHome === actualAway;
           const hit2 = actualAway > actualHome;
           const hitOver25 = actualTotal >= 3;
           const hitBTTS = actualHome > 0 && actualAway > 0;
+
+          let topMarketHit = false;
+          if (entry.topMarket === "1") topMarketHit = hit1;
+          else if (entry.topMarket === "X") topMarketHit = hitX;
+          else if (entry.topMarket === "2") topMarketHit = hit2;
+          else if (entry.topMarket === "Over 2.5") topMarketHit = hitOver25;
+          else if (entry.topMarket === "BTTS") topMarketHit = hitBTTS;
+
+          if (topMarketHit) topMarketHits++;
 
           auditStore[selectedDate].push({
             ...entry,
@@ -1382,6 +1422,7 @@
             hit2,
             hitOver25,
             hitBTTS,
+            topMarketHit,
             auditedAt: new Date().toISOString()
           });
 
@@ -1393,10 +1434,11 @@
                 <div><span style="color:var(--p)">Expected Goals:</span> ${(Number(entry.expectedHomeGoals || 0) + Number(entry.expectedAwayGoals || 0)).toFixed(2)}</div>
                 <div><span style="color:var(--neon-live)">Πραγματικά Γκολ:</span> ${actualTotal}</div>
                 <div><span style="color:var(--gold)">Κύριο Market:</span> ${escapeHtml(entry.topMarket || "-")} (${Number(entry.topMarketProb || 0).toFixed(1)}%)</div>
+                <div><span style="color:${topMarketHit ? '#39ff14' : '#ff7b72'}">Αποτέλεσμα Market:</span> ${topMarketHit ? "ΕΠΑΛΗΘΕΥΤΗΚΕ" : "ΔΕΝ ΕΠΑΛΗΘΕΥΤΗΚΕ"}</div>
               </div>
             </div>`;
         }
-        
+
         saveAuditStore(auditStore);
 
         if (evaluated > 0) {
@@ -1408,6 +1450,9 @@
                 <div class="audit-box"><div class="audit-label">Μ.Ο. ΠΡΑΓΜΑΤΙΚΩΝ ΓΚΟΛ</div><div class="audit-value">${(totalActualGoals / evaluated).toFixed(2)}</div></div>
                 <div class="audit-box"><div class="audit-label">Μ.Ο. EXPECTED GOALS</div><div class="audit-value">${(totalPredGoals / evaluated).toFixed(2)}</div></div>
                 <div class="audit-box"><div class="audit-label">Μ.Ο. ΑΠΟΚΛΙΣΗΣ</div><div class="audit-value">${(totalAbsError / evaluated).toFixed(2)}</div></div>
+              </div>
+              <div style="margin-top:18px; text-align:center; font-weight:800;">
+                Επιτυχία κύριου market: <span style="color:var(--neon-live);">${((topMarketHits / evaluated) * 100).toFixed(1)}%</span>
               </div>
             </div>`;
 
@@ -1452,7 +1497,6 @@
     function exportTrainingJSON() {
       const r = flattenAuditStore();
       if (!r.length) return showError("Δεν υπάρχουν δεδομένα.");
-
       downloadTextFile(`omega_training_${getTodayISO()}.json`, JSON.stringify(r, null, 2));
       showSuccess(`Εξήχθησαν ${r.length} εγγραφές.`);
     }
@@ -1465,7 +1509,8 @@
         "date","league","homeTeam","awayTeam",
         "expectedHomeGoals","expectedAwayGoals",
         "p1","pX","p2","pOver25","pBTTS",
-        "actualHomeGoals","actualAwayGoals"
+        "topMarket","topMarketProb","confidenceScore","confidenceLabel",
+        "actualHomeGoals","actualAwayGoals","actualTotalGoals","topMarketHit"
       ];
 
       const c = [
@@ -1515,7 +1560,7 @@
         clearSuccess();
         refreshStoreBadges();
       });
-      
+
       const select = document.getElementById("leagueFilter");
       LEAGUES_DATA.forEach(l => {
         const opt = document.createElement("option");
@@ -1529,3 +1574,8 @@
   </script>
 </body>
 </html>
+'''
+path = "/mnt/data/omega_v4703_12_final.txt"
+with open(path, "w", encoding="utf-8") as f:
+    f.write(code)
+print(path)
