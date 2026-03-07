@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4703.00 - Selective Engine</title>
+  <title>Predictor Pro v4703.10 - Greek UI Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root {
       --bg: #010409; --card: #0d1117; --border: #30363d;
-      --p: #00f2ff; --magenta: #ff00ff; --gold: #f59e0b;
+      --p: #00f2ff; --split-color: #fbbf24; --gold: #f59e0b;
       --neon-live: #39ff14; --alert: #da3633; --txt-muted: #8b949e;
       --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
     }
@@ -41,7 +41,9 @@
     .team-box { background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; border: 1px solid #222; }
     .stat-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: 0.85rem; border-bottom: 1px solid #1a1d23; padding-bottom: 5px; align-items: center; }
     .val-xg { color: var(--p); font-weight: 800; font-family: 'Orbitron', sans-serif; font-size: 1rem; }
-    .val-split { color: var(--magenta); font-weight: 900; font-family: 'Orbitron', sans-serif; border: 1px solid var(--magenta); padding: 2px 6px; border-radius: 4px; }
+    
+    /* ΝΕΟ ΧΡΩΜΑ ΓΙΑ ΤΟ SPLIT */
+    .val-split { color: var(--split-color); font-weight: 900; font-family: 'Orbitron', sans-serif; border: 1px solid var(--split-color); padding: 2px 6px; border-radius: 4px; background: rgba(251, 191, 36, 0.1); }
     
     .live-pulse { color: var(--neon-live); animation: pulse 1s infinite; font-weight: 900; font-size: 2.5rem; }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
@@ -69,16 +71,16 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4703.00</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4703.10</h1>
     <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;" >
-    <div class="small-note">Selective Engine - Save API requests by filtering leagues</div>
+    <div class="small-note">Greek UI Edition - Enhanced readability</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">SELECTIVE</span></h1>
-        <div class="status-line">v4703.00 League Filter Engine</div>
+        <div class="status-line">v4703.10 Greek UI / League Filter</div>
       </header>
 
       <div class="toolbar">
@@ -98,9 +100,9 @@
       </div>
 
       <div style="text-align:center; margin-bottom:18px;">
-        <span class="pill">Prediction Store: <span id="predCountBadge">0</span></span>
-        <span class="pill">Audit Store: <span id="auditCountBadge">0</span></span>
-        <span class="pill">Selected Date: <span id="selectedDateBadge">-</span></span>
+        <span class="pill">Προβλέψεις: <span id="predCountBadge">0</span></span>
+        <span class="pill">Αξιολογήσεις (Audit): <span id="auditCountBadge">0</span></span>
+        <span class="pill">Επιλεγμένη Ημ/νία: <span id="selectedDateBadge">-</span></span>
       </div>
 
       <div id="errorBox"></div>
@@ -122,7 +124,6 @@
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
     
-    // Αντιστοίχιση ID με Όνομα για το Dropdown
     const LEAGUES_DATA = [
       {id: 39, name: "🇬🇧 Premier League"}, {id: 40, name: "🇬🇧 Championship"}, {id: 41, name: "🇬🇧 League One"},
       {id: 140, name: "🇪🇸 La Liga"}, {id: 141, name: "🇪🇸 La Liga 2"},
@@ -244,12 +245,13 @@
 
     function getTeamGoalsInFixture(fixture, teamId) { return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.home ?? 0) : (fixture?.goals?.away ?? 0); }
     
+    // ΑΛΛΑΓΗ ΣΕ ΕΛΛΗΝΙΚΑ: Νίκη (Ν), Ισοπαλία (Ι), Ήττα (Η)
     function getFormHistory(fixtures, teamId) {
       return fixtures.map(f => {
         const isHome = f.teams.home.id === teamId;
         const myGoals = isHome ? (f.goals.home ?? 0) : (f.goals.away ?? 0);
         const oppGoals = isHome ? (f.goals.away ?? 0) : (f.goals.home ?? 0);
-        return myGoals > oppGoals ? "W" : (myGoals < oppGoals ? "L" : "D");
+        return myGoals > oppGoals ? {res: "Ν", cls: "W"} : (myGoals < oppGoals ? {res: "Η", cls: "L"} : {res: "Ι", cls: "D"});
       }).reverse();
     }
 
@@ -303,34 +305,34 @@
           <div class="stats-grid">
             ${mode === "pre" ? `
               <div class="team-box">
-                <div style="color:var(--p); font-size:0.7rem; font-weight:900; margin-bottom:10px;">🏠 HOME ANALYTICS</div>
-                ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f}">${f}</span>`).join("")}
-                <div class="stat-row" style="margin-top:12px;"><span>Season Baseline:</span><div><span class="season-xg-red">${s?.h?.seasonXG || "1.10"}</span><span class="season-xga-plain">/ ${s?.h?.seasonXGA || "1.10"}</span></div></div>
-                <div class="stat-row"><span>Form (L6) xG:</span><div><span class="val-xg">${s?.h?.formXG || "1.00"}</span> ${s?.h?.devXG || ""}</div></div>
-                <div class="stat-row"><span>Form (L6) xGA:</span><div><span class="val-xg">${s?.h?.formXGA || "1.00"}</span> ${s?.h?.devXGA || ""}</div></div>
-                <div class="stat-row"><span>Split (ONLY AT HOME):</span><span class="val-split">${s?.h?.splitXG || "1.00"} / ${s?.h?.splitXGA || "1.00"}</span></div>
-                <div class="stat-row" style="border:none;"><span>Avg Stats:</span><span style="font-weight:800;">🚩${s?.h?.corners || "0.0"} | 🟨${s?.h?.cards || "0.0"}</span></div>
+                <div style="color:var(--p); font-size:0.75rem; font-weight:900; margin-bottom:10px;">🏠 ΑΝΑΛΥΣΗ ΓΗΠΕΔΟΥΧΟΥ</div>
+                ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
+                <div class="stat-row" style="margin-top:12px;"><span>Μέσος Όρος Σεζόν:</span><div><span class="season-xg-red">${s?.h?.seasonXG || "1.10"}</span><span class="season-xga-plain">/ ${s?.h?.seasonXGA || "1.10"}</span></div></div>
+                <div class="stat-row"><span>xG Υπέρ (Τελευταία 6):</span><div><span class="val-xg">${s?.h?.formXG || "1.00"}</span> ${s?.h?.devXG || ""}</div></div>
+                <div class="stat-row"><span>xGA Κατά (Τελευταία 6):</span><div><span class="val-xg">${s?.h?.formXGA || "1.00"}</span> ${s?.h?.devXGA || ""}</div></div>
+                <div class="stat-row"><span>Ειδική Φόρμα (ΜΟΝΟ ΕΝΤΟΣ):</span><span class="val-split">${s?.h?.splitXG || "1.00"} / ${s?.h?.splitXGA || "1.00"}</span></div>
+                <div class="stat-row" style="border:none;"><span>Μ.Ο. (Κόρνερ | Κάρτες):</span><span style="font-weight:800;">🚩${s?.h?.corners || "0.0"} | 🟨${s?.h?.cards || "0.0"}</span></div>
               </div>
               <div class="team-box">
-                <div style="color:var(--magenta); font-size:0.7rem; font-weight:900; margin-bottom:10px;">✈️ AWAY ANALYTICS</div>
-                ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f}">${f}</span>`).join("")}
-                <div class="stat-row" style="margin-top:12px;"><span>Season Baseline:</span><div><span class="season-xg-red">${s?.a?.seasonXG || "1.10"}</span><span class="season-xga-plain">/ ${s?.a?.seasonXGA || "1.10"}</span></div></div>
-                <div class="stat-row"><span>Form (L6) xG:</span><div><span class="val-xg">${s?.a?.formXG || "1.00"}</span> ${s?.a?.devXG || ""}</div></div>
-                <div class="stat-row"><span>Form (L6) xGA:</span><div><span class="val-xg">${s?.a?.formXGA || "1.00"}</span> ${s?.a?.devXGA || ""}</div></div>
-                <div class="stat-row"><span>Split (ONLY AWAY):</span><span class="val-split">${s?.a?.splitXG || "1.00"} / ${s?.a?.splitXGA || "1.00"}</span></div>
-                <div class="stat-row" style="border:none;"><span>Avg Stats:</span><span style="font-weight:800;">🚩${s?.a?.corners || "0.0"} | 🟨${s?.a?.cards || "0.0"}</span></div>
+                <div style="color:var(--magenta); font-size:0.75rem; font-weight:900; margin-bottom:10px;">✈️ ΑΝΑΛΥΣΗ ΦΙΛΟΞΕΝΟΥΜΕΝΗΣ</div>
+                ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
+                <div class="stat-row" style="margin-top:12px;"><span>Μέσος Όρος Σεζόν:</span><div><span class="season-xg-red">${s?.a?.seasonXG || "1.10"}</span><span class="season-xga-plain">/ ${s?.a?.seasonXGA || "1.10"}</span></div></div>
+                <div class="stat-row"><span>xG Υπέρ (Τελευταία 6):</span><div><span class="val-xg">${s?.a?.formXG || "1.00"}</span> ${s?.a?.devXG || ""}</div></div>
+                <div class="stat-row"><span>xGA Κατά (Τελευταία 6):</span><div><span class="val-xg">${s?.a?.formXGA || "1.00"}</span> ${s?.a?.devXGA || ""}</div></div>
+                <div class="stat-row"><span>Ειδική Φόρμα (ΜΟΝΟ ΕΚΤΟΣ):</span><span class="val-split">${s?.a?.splitXG || "1.00"} / ${s?.a?.splitXGA || "1.00"}</span></div>
+                <div class="stat-row" style="border:none;"><span>Μ.Ο. (Κόρνερ | Κάρτες):</span><span style="font-weight:800;">🚩${s?.a?.corners || "0.0"} | 🟨${s?.a?.cards || "0.0"}</span></div>
               </div>
             ` : `
               <div class="team-box" style="grid-column: span 2;">
                 ${s ? `
                   <div style="display:flex; justify-content:space-between; margin-bottom:10px; text-align:center; gap:10px;">
-                    <div>POSS: <span class="val-xg">${s.h.poss}%</span></div>
-                    <div style="color:var(--gold); font-weight:900;">PRESSURE INDEX: ${Math.round(s.h.danger / 2)} - ${Math.round(s.a.danger / 2)}</div>
-                    <div>POSS: <span class="val-xg">${s.a.poss}%</span></div>
+                    <div>ΚΑΤΟΧΗ: <span class="val-xg">${s.h.poss}%</span></div>
+                    <div style="color:var(--gold); font-weight:900;">ΔΕΙΚΤΗΣ ΠΙΕΣΗΣ: ${Math.round(s.h.danger / 2)} - ${Math.round(s.a.danger / 2)}</div>
+                    <div>ΚΑΤΟΧΗ: <span class="val-xg">${s.a.poss}%</span></div>
                   </div>
-                  <div class="stat-row"><span>Dangerous Attacks / Shots:</span><span class="val-xg">${s.h.danger}(${s.h.shots}) - ${s.a.danger}(${s.a.shots})</span></div>
-                  <div class="stat-row"><span>Corners (Live):</span><span style="color:#fff; font-weight:800;">🚩 ${s.h.corners} - ${s.a.corners}</span></div>
-                ` : `<div style="text-align:center; color:var(--txt-muted);">NO LIVE STATS AVAILABLE</div>`}
+                  <div class="stat-row"><span>Επικίνδυνες Επιθέσεις / Σουτ:</span><span class="val-xg">${s.h.danger}(${s.h.shots}) - ${s.a.danger}(${s.a.shots})</span></div>
+                  <div class="stat-row"><span>Κόρνερ (Live):</span><span style="color:#fff; font-weight:800;">🚩 ${s.h.corners} - ${s.a.corners}</span></div>
+                ` : `<div style="text-align:center; color:var(--txt-muted);">ΤΑ LIVE ΣΤΑΤΙΣΤΙΚΑ ΔΕΝ ΕΙΝΑΙ ΑΚΟΜΑ ΔΙΑΘΕΣΙΜΑ</div>`}
               </div>
             `}
           </div>
@@ -341,7 +343,7 @@
     async function runScan(mode) {
       if (isRunning) return;
       isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true);
-      setLoader(true, mode === "pre" ? "BOOTING PRE-MATCH SNAPSHOT..." : "BOOTING LIVE RADAR...");
+      setLoader(true, mode === "pre" ? "ΕΚΚΙΝΗΣΗ ΑΝΑΛΥΣΗΣ PRE-MATCH..." : "ΕΚΚΙΝΗΣΗ LIVE RADAR...");
       const display = document.getElementById("display"); const labSection = document.getElementById("labSection");
       display.innerHTML = ""; labSection.innerHTML = "";
       
@@ -354,7 +356,6 @@
         
         const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
         
-        // ΦΙΛΤΡΟ ΠΡΩΤΑΘΛΗΜΑΤΩΝ (Η Σημαντική Αλλαγή!)
         let matches = (fixturesResp.response || []).filter(m => {
           if (selectedLeague === "ALL") return LEAGUES.includes(m.league.id);
           return m.league.id === parseInt(selectedLeague);
@@ -374,8 +375,6 @@
         let htmlBuffer = "";
         if (mode === "pre") {
           const predStore = getPredictionStore();
-          // Clear previous data for this specific date ONLY IF searching ALL leagues.
-          // Otherwise append to existing date data.
           if(selectedLeague === "ALL") predStore[selectedDate] = []; 
           else if(!predStore[selectedDate]) predStore[selectedDate] = [];
           savePredictionStore(predStore);
@@ -384,7 +383,7 @@
         for (let i = 0; i < matches.length; i++) {
           const m = matches[i];
           const pct = Math.round(((i + 1) / matches.length) * 100);
-          setProgress(pct, `ANALYZING: ${m.teams.home.name} vs ${m.teams.away.name}`);
+          setProgress(pct, `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
           let intel = null;
           
           if (mode === "pre") {
@@ -396,7 +395,6 @@
             memoryBank.push({ m, stats: intel });
             const predStore = getPredictionStore();
             
-            // Avoid duplicate entries if user scans same league multiple times
             if(!predStore[selectedDate].some(x => x.fixtureId === m.fixture.id)) {
                 predStore[selectedDate].push({
                   date: selectedDate, fixtureId: m.fixture.id, leagueId: m.league.id, league: m.league.name, season: m.league.season,
@@ -427,7 +425,7 @@
         }
         display.innerHTML = htmlBuffer;
         refreshStoreBadges();
-        if (mode === "pre") showSuccess(`Αποθηκεύτηκαν τα predictions. Μπορείς να τρέξεις audit!`);
+        if (mode === "pre") showSuccess(`Αποθηκεύτηκαν επιτυχώς οι προβλέψεις!`);
       } catch (err) { console.error("SCAN ERROR:", err); showError(`Σφάλμα: ${err?.message}`); } 
       finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
     }
@@ -439,9 +437,9 @@
       const predStore = getPredictionStore(); const auditStore = getAuditStore();
       const dayPredictions = predStore[selectedDate] || [];
       
-      if (!dayPredictions.length) { showError(`Δεν υπάρχουν predictions για ${selectedDate}.`); return; }
+      if (!dayPredictions.length) { showError(`Δεν υπάρχουν αποθηκευμένες αναλύσεις για ${selectedDate}.`); return; }
       
-      isRunning = true; setButtonsDisabled(true); setLoader(true, `AUDITING...`);
+      isRunning = true; setButtonsDisabled(true); setLoader(true, `ΑΞΙΟΛΟΓΗΣΗ ΔΕΔΟΜΕΝΩΝ...`);
       const display = document.getElementById("display"); const labSection = document.getElementById("labSection");
       display.innerHTML = ""; labSection.innerHTML = "";
       
@@ -451,7 +449,7 @@
         
         for (let i = 0; i < dayPredictions.length; i++) {
           const entry = dayPredictions[i];
-          setProgress(Math.round(((i + 1) / dayPredictions.length) * 100), `AUDITING: ${entry.homeTeam} vs ${entry.awayTeam}`);
+          setProgress(Math.round(((i + 1) / dayPredictions.length) * 100), `ΑΞΙΟΛΟΓΗΣΗ: ${entry.homeTeam} vs ${entry.awayTeam}`);
           
           const res = await apiReq(`fixtures?id=${entry.fixtureId}`);
           const f = res?.response?.[0];
@@ -471,8 +469,8 @@
               <div style="font-size:0.72rem; color:var(--txt-muted);">${escapeHtml(entry.league)} | ${escapeHtml(entry.date)}</div>
               <h3 class="orbitron" style="margin:6px 0;">${escapeHtml(entry.homeTeam)} ${actualHome} - ${actualAway} ${escapeHtml(entry.awayTeam)}</h3>
               <div style="margin-top:10px; font-size:0.84rem; line-height:1.7;">
-                <div><span style="color:var(--p)">Predicted Total xG:</span> ${predTotal.toFixed(2)}</div>
-                <div><span style="color:var(--neon-live)">Actual Goals:</span> ${actualTotal}</div>
+                <div><span style="color:var(--p)">Προβλεπόμενα Συνολικά xG:</span> ${predTotal.toFixed(2)}</div>
+                <div><span style="color:var(--neon-live)">Πραγματικά Γκολ:</span> ${actualTotal}</div>
               </div>
             </div>`;
         }
@@ -483,14 +481,14 @@
             <div class="lab-audit-panel">
               <h2 class="orbitron" style="color:var(--gold); text-align:center; margin-top:0;">🔬 DATA LAB AUDIT</h2>
               <div class="audit-grid">
-                <div class="audit-box"><div class="audit-label">MATCHES EVALUATED</div><div class="audit-value">${evaluated}</div></div>
-                <div class="audit-box"><div class="audit-label">AVG ACTUAL GOALS</div><div class="audit-value">${(totalActualGoals / evaluated).toFixed(2)}</div></div>
-                <div class="audit-box"><div class="audit-label">AVG PREDICTED xG</div><div class="audit-value">${(totalPredGoals / evaluated).toFixed(2)}</div></div>
-                <div class="audit-box"><div class="audit-label">MAE TOTAL GOALS</div><div class="audit-value">${(totalAbsError / evaluated).toFixed(2)}</div></div>
+                <div class="audit-box"><div class="audit-label">ΑΞΙΟΛΟΓΗΜΕΝΟΙ ΑΓΩΝΕΣ</div><div class="audit-value">${evaluated}</div></div>
+                <div class="audit-box"><div class="audit-label">Μ.Ο. ΠΡΑΓΜΑΤΙΚΩΝ ΓΚΟΛ</div><div class="audit-value">${(totalActualGoals / evaluated).toFixed(2)}</div></div>
+                <div class="audit-box"><div class="audit-label">Μ.Ο. ΠΡΟΒΛΕΨΗΣ xG</div><div class="audit-value">${(totalPredGoals / evaluated).toFixed(2)}</div></div>
+                <div class="audit-box"><div class="audit-label">ΑΠΟΚΛΙΣΗ ΣΦΑΛΜΑΤΟΣ</div><div class="audit-value">${(totalAbsError / evaluated).toFixed(2)}</div></div>
               </div>
             </div>`;
-          display.innerHTML = htmlBuffer; showSuccess(`Το audit ολοκληρώθηκε.`);
-        } else { display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--alert);">Δεν υπάρχουν FT αγώνες.</h3></div>`; }
+          display.innerHTML = htmlBuffer; showSuccess(`Η αξιολόγηση ολοκληρώθηκε επιτυχώς.`);
+        } else { display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--alert);">Δεν υπάρχουν ακόμα ολοκληρωμένοι αγώνες.</h3></div>`; }
         refreshStoreBadges();
       } catch (err) { console.error("AUDIT ERROR:", err); showError(`Σφάλμα: ${err?.message}`); } 
       finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
