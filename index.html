@@ -1168,6 +1168,7 @@
                   </div>
                   <div class="stat-row"><span>Επικίνδυνες Επιθέσεις / Σουτ:</span><span class="val-xg">${s.h.danger}(${s.h.shots}) - ${s.a.danger}(${s.a.shots})</span></div>
                   <div class="stat-row"><span>Κόρνερ (Live):</span><span style="color:#fff; font-weight:800;">🚩 ${s.h.corners} - ${s.a.corners}</span></div>
+                  <div class="stat-row" style="border-bottom:none; margin-bottom:0;"><span>Κάρτες (Live):</span><span style="color:#fff; font-weight:800;">🟨 ${s.h.yellow ?? 0} - ${s.a.yellow ?? 0} &nbsp;|&nbsp; 🟥 ${s.h.red ?? 0} - ${s.a.red ?? 0}</span></div>
                 ` : `<div style="text-align:center; color:var(--txt-muted);">ΤΑ LIVE ΣΤΑΤΙΣΤΙΚΑ ΔΕΝ ΕΙΝΑΙ ΑΚΟΜΑ ΔΙΑΘΕΣΙΜΑ</div>`}
               </div>
             `}
@@ -1305,21 +1306,30 @@
             savePredictionStore(predStore);
           } else {
             const sR = await getFixtureStats(m.fixture.id);
-            if (sR.response && sR.response.length === 2) {
-              const homeStats = sR.response[0].statistics || [];
-              const awayStats = sR.response[1].statistics || [];
+
+            if (sR?.response && sR.response.length >= 2) {
+              const homeObj = sR.response.find(x => x.team?.id === m.teams.home.id);
+              const awayObj = sR.response.find(x => x.team?.id === m.teams.away.id);
+
+              const homeStats = homeObj?.statistics || [];
+              const awayStats = awayObj?.statistics || [];
+
               intel = {
                 h: {
                   danger: statVal(homeStats, "Dangerous Attacks"),
                   shots: statVal(homeStats, "Shots on Goal"),
                   corners: statVal(homeStats, "Corner Kicks"),
-                  poss: statVal(homeStats, "Ball Possession")
+                  poss: statVal(homeStats, "Ball Possession"),
+                  yellow: statVal(homeStats, "Yellow Cards"),
+                  red: statVal(homeStats, "Red Cards")
                 },
                 a: {
                   danger: statVal(awayStats, "Dangerous Attacks"),
                   shots: statVal(awayStats, "Shots on Goal"),
                   corners: statVal(awayStats, "Corner Kicks"),
-                  poss: statVal(awayStats, "Ball Possession")
+                  poss: statVal(awayStats, "Ball Possession"),
+                  yellow: statVal(awayStats, "Yellow Cards"),
+                  red: statVal(awayStats, "Red Cards")
                 }
               };
             }
