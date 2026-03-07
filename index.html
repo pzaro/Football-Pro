@@ -3,47 +3,176 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4703.10 - Greek UI Edition</title>
+  <title>Predictor Pro v4703.11 - Greek UI Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root {
-      --bg: #010409; --card: #0d1117; --border: #30363d;
-      --p: #00f2ff; --split-color: #fbbf24; --gold: #f59e0b;
-      --neon-live: #39ff14; --alert: #da3633; --txt-muted: #8b949e;
+      --bg: #010409;
+      --card: #0d1117;
+      --border: #30363d;
+      --p: #00f2ff;
+      --split-color: #fbbf24;
+      --gold: #f59e0b;
+      --neon-live: #39ff14;
+      --alert: #da3633;
+      --txt-muted: #8b949e;
       --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
       --magenta: #ff00ff;
     }
+
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f0f6fc; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: #f0f6fc;
+      margin: 0;
+      padding: 0;
+    }
+
     .orbitron { font-family: 'Orbitron', sans-serif; }
-    .container { max-width: 1080px; margin: 0 auto; padding: 15px; }
 
-    .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--p); }
-    .live-glow { border-left-color: var(--neon-live); box-shadow: 0 0 15px rgba(57, 255, 20, 0.1); }
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 15px;
+    }
+
+    .cyber-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid var(--p);
+    }
+
+    .live-glow {
+      border-left-color: var(--neon-live);
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.1);
+    }
     
-    .season-xg-red { background: var(--alert); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 900; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; }
-    .season-xga-plain { color: #8b949e; font-weight: 600; font-family: 'Orbitron', sans-serif; margin-left: 5px; }
+    .season-xg-red {
+      background: var(--alert);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .season-xga-plain {
+      color: #8b949e;
+      font-weight: 600;
+      font-family: 'Orbitron', sans-serif;
+      margin-left: 5px;
+    }
     
-    .dev-badge { font-size: 0.75rem; font-weight: 900; padding: 3px 6px; border-radius: 4px; margin-left: 8px; font-family: 'Orbitron', sans-serif; }
-    .dev-pos { background: #238636; color: #fff; border: 1px solid var(--neon-live); }
-    .dev-neg { background: #da3633; color: #fff; border: 1px solid #ff4d4d; }
+    .dev-badge {
+      font-size: 0.75rem;
+      font-weight: 900;
+      padding: 3px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+      font-family: 'Orbitron', sans-serif;
+    }
 
-    .btn-main { padding: 14px 20px; background: var(--grad); color: #fff; border: none; border-radius: 8px; font-weight: 900; font-family: 'Orbitron', sans-serif; cursor: pointer; text-transform: uppercase; margin: 5px; transition: 0.25s; font-size: 0.84rem; }
-    .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
-    .btn-main:disabled { opacity: 0.5; cursor: not-allowed; transform: none; filter: none; }
+    .dev-pos {
+      background: #238636;
+      color: #fff;
+      border: 1px solid var(--neon-live);
+    }
 
-    .date-input, .league-select { background: #000; color: var(--p); border: 1px solid var(--p); padding: 13px 14px; border-radius: 8px; font-family: 'Orbitron', sans-serif; font-size: 0.95rem; }
+    .dev-neg {
+      background: #da3633;
+      color: #fff;
+      border: 1px solid #ff4d4d;
+    }
+
+    .btn-main {
+      padding: 14px 20px;
+      background: var(--grad);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      cursor: pointer;
+      text-transform: uppercase;
+      margin: 5px;
+      transition: 0.25s;
+      font-size: 0.84rem;
+    }
+
+    .btn-main:hover {
+      filter: brightness(1.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-main:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      filter: none;
+    }
+
+    .date-input, .league-select {
+      background: #000;
+      color: var(--p);
+      border: 1px solid var(--p);
+      padding: 13px 14px;
+      border-radius: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+    }
+
     .date-input { min-width: 180px; }
     .league-select { min-width: 220px; outline: none; cursor: pointer; }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-    .team-box { background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; border: 1px solid #222; }
-    .stat-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: 0.85rem; border-bottom: 1px solid #1a1d23; padding-bottom: 5px; align-items: center; }
-    .val-xg { color: var(--p); font-weight: 800; font-family: 'Orbitron', sans-serif; font-size: 1rem; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .team-box {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #222;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #1a1d23;
+      padding-bottom: 5px;
+      align-items: center;
+    }
+
+    .val-xg {
+      color: var(--p);
+      font-weight: 800;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+    }
     
-    .val-split { color: var(--split-color); font-weight: 900; font-family: 'Orbitron', sans-serif; border: 1px solid var(--split-color); padding: 2px 6px; border-radius: 4px; background: rgba(251, 191, 36, 0.1); }
+    .val-split {
+      color: var(--split-color);
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      border: 1px solid var(--split-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(251, 191, 36, 0.1);
+    }
 
     .over-flag {
       margin-top: 12px;
@@ -60,42 +189,223 @@
       box-shadow: 0 0 14px rgba(57,255,20,.08);
     }
 
-    .live-pulse { color: var(--neon-live); animation: pulse 1s infinite; font-weight: 900; font-size: 2.5rem; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+    .live-pulse {
+      color: var(--neon-live);
+      animation: pulse 1s infinite;
+      font-weight: 900;
+      font-size: 2.5rem;
+    }
 
-    .form-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; margin-right: 3px; color: #fff; }
-    .form-W { background: #238636; } .form-D { background: #666; } .form-L { background: #da3633; }
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
 
-    .lab-audit-panel { background: #000; border: 2px solid var(--gold); border-radius: 16px; padding: 20px; margin-bottom: 30px; box-shadow: 0 0 30px rgba(245, 158, 11, 0.12); }
-    .audit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
-    .audit-box { background: #161b22; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
-    .audit-label { font-size: 0.65rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 1px; }
-    .audit-value { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; color: var(--gold); font-weight: 900; margin: 5px 0; }
+    .form-dot {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 18px;
+      font-size: 0.6rem;
+      font-weight: 900;
+      margin-right: 3px;
+      color: #fff;
+    }
 
-    .status-line { margin-top: 6px; color: var(--txt-muted); font-size: 0.8rem; }
-    .small-note { color: var(--txt-muted); font-size: 0.75rem; margin-top: 8px; }
-    .error-box { background: rgba(218, 54, 51, 0.08); border: 1px solid rgba(218, 54, 51, 0.5); color: #ffb3b3; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 0.9rem; }
-    .success-box { background: rgba(35, 134, 54, 0.1); border: 1px solid rgba(35, 134, 54, 0.5); color: #b7f7c4; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 0.9rem; }
+    .form-W { background: #238636; }
+    .form-D { background: #666; }
+    .form-L { background: #da3633; }
+
+    .lab-audit-panel {
+      background: #000;
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.12);
+    }
+
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .audit-box {
+      background: #161b22;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #333;
+    }
+
+    .audit-label {
+      font-size: 0.65rem;
+      color: var(--txt-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .audit-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      font-weight: 900;
+      margin: 5px 0;
+    }
+
+    .status-line {
+      margin-top: 6px;
+      color: var(--txt-muted);
+      font-size: 0.8rem;
+    }
+
+    .small-note {
+      color: var(--txt-muted);
+      font-size: 0.75rem;
+      margin-top: 8px;
+    }
+
+    .error-box {
+      background: rgba(218, 54, 51, 0.08);
+      border: 1px solid rgba(218, 54, 51, 0.5);
+      color: #ffb3b3;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+
+    .success-box {
+      background: rgba(35, 134, 54, 0.1);
+      border: 1px solid rgba(35, 134, 54, 0.5);
+      color: #b7f7c4;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
     
-    .toolbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; }
-    .pill { display: inline-block; padding: 4px 8px; border-radius: 20px; background: #161b22; border: 1px solid #333; color: var(--txt-muted); font-size: 0.72rem; margin-right: 6px; }
+    .toolbar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
 
-    @media (max-width: 900px) { .stats-grid, .audit-grid { grid-template-columns: 1fr; } }
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 20px;
+      background: #161b22;
+      border: 1px solid #333;
+      color: var(--txt-muted);
+      font-size: 0.72rem;
+      margin-right: 6px;
+    }
+
+    .prob-panel {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid #2a2f37;
+    }
+
+    .prob-title {
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: .5px;
+    }
+
+    .prob-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+      font-size: 0.82rem;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #1a1d23;
+    }
+
+    .prob-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .prob-val {
+      color: var(--p);
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .verify-box {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .verify-line {
+      font-size: 0.78rem;
+      color: #f0f6fc;
+      margin-bottom: 5px;
+    }
+
+    .verify-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .market-tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #161b22;
+      border: 1px solid #333;
+      color: var(--gold);
+      font-size: 0.68rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      margin-left: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid, .audit-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4703.10</h1>
-    <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;" >
-    <div class="small-note">Greek UI Edition - Enhanced readability</div>
+    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4703.11</h1>
+    <input
+      type="password"
+      id="pin"
+      placeholder="PIN"
+      oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
+      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
+    >
+    <div class="small-note">Greek UI Edition - Probability Engine + Verification Layer</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">SELECTIVE</span></h1>
-        <div class="status-line">v4703.10 Greek UI / League Filter</div>
+        <div class="status-line">v4703.11 Greek UI / League Filter / Probability Engine</div>
       </header>
 
       <div class="toolbar">
@@ -140,16 +450,31 @@
     const API = "https://v3.football.api-sports.io";
     
     const LEAGUES_DATA = [
-      {id: 39, name: "🇬🇧 Premier League"}, {id: 40, name: "🇬🇧 Championship"}, {id: 41, name: "🇬🇧 League One"},
-      {id: 140, name: "🇪🇸 La Liga"}, {id: 141, name: "🇪🇸 La Liga 2"},
-      {id: 135, name: "🇮🇹 Serie A"}, {id: 136, name: "🇮🇹 Serie B"},
-      {id: 78, name: "🇩🇪 Bundesliga"}, {id: 79, name: "🇩🇪 2. Bundesliga"},
-      {id: 61, name: "🇫🇷 Ligue 1"}, {id: 62, name: "🇫🇷 Ligue 2"},
-      {id: 253, name: "🇺🇸 MLS"}, {id: 262, name: "🇲🇽 Liga MX"}, {id: 128, name: "🇦🇷 Argentina Liga Prof."},
-      {id: 197, name: "🇬🇷 Greece Super League"}, {id: 318, name: "🇨🇾 Cyprus 1st Div"}, {id: 281, name: "🇨🇾 Cyprus Division 1"},
-      {id: 94, name: "🇵🇹 Portugal Primeira"}, {id: 88, name: "🇳🇱 Eredivisie"}, {id: 144, name: "🇧🇪 Belgium Jupiler"},
-      {id: 203, name: "🇹🇷 Turkey Süper Lig"}, {id: 357, name: "🇮🇪 Ireland Premier"},
-      {id: 2, name: "🏆 Champions League"}, {id: 3, name: "🏆 Europa League"}, {id: 84, name: "🏆 Conference League"}
+      {id: 39, name: "🇬🇧 Premier League"},
+      {id: 40, name: "🇬🇧 Championship"},
+      {id: 41, name: "🇬🇧 League One"},
+      {id: 140, name: "🇪🇸 La Liga"},
+      {id: 141, name: "🇪🇸 La Liga 2"},
+      {id: 135, name: "🇮🇹 Serie A"},
+      {id: 136, name: "🇮🇹 Serie B"},
+      {id: 78, name: "🇩🇪 Bundesliga"},
+      {id: 79, name: "🇩🇪 2. Bundesliga"},
+      {id: 61, name: "🇫🇷 Ligue 1"},
+      {id: 62, name: "🇫🇷 Ligue 2"},
+      {id: 253, name: "🇺🇸 MLS"},
+      {id: 262, name: "🇲🇽 Liga MX"},
+      {id: 128, name: "🇦🇷 Argentina Liga Prof."},
+      {id: 197, name: "🇬🇷 Greece Super League"},
+      {id: 318, name: "🇨🇾 Cyprus 1st Div"},
+      {id: 281, name: "🇨🇾 Cyprus Division 1"},
+      {id: 94, name: "🇵🇹 Portugal Primeira"},
+      {id: 88, name: "🇳🇱 Eredivisie"},
+      {id: 144, name: "🇧🇪 Belgium Jupiler"},
+      {id: 203, name: "🇹🇷 Turkey Süper Lig"},
+      {id: 357, name: "🇮🇪 Ireland Premier"},
+      {id: 2, name: "🏆 Champions League"},
+      {id: 3, name: "🏆 Europa League"},
+      {id: 84, name: "🏆 Conference League"}
     ];
     
     const LEAGUES = LEAGUES_DATA.map(l => l.id);
@@ -161,8 +486,8 @@
     const REQUEST_DELAY_MS = 260;
     const REQUEST_TIMEOUT_MS = 12000;
 
-    const LS_PRED = "omega_prediction_store_v4703";
-    const LS_AUDIT = "omega_audit_store_v4703";
+    const LS_PRED = "omega_prediction_store_v470311";
+    const LS_AUDIT = "omega_audit_store_v470311";
 
     let memoryBank = [];
     let statsCache = new Map();
@@ -171,7 +496,9 @@
     let isRunning = false;
     let globalRequestCounter = 0;
 
-    function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     function setLoader(show, text = "") {
       document.getElementById("loader").style.display = show ? "block" : "none";
@@ -229,8 +556,11 @@
     }
 
     function getPredictionStore() {
-      try { return JSON.parse(localStorage.getItem(LS_PRED) || "{}"); }
-      catch { return {}; }
+      try {
+        return JSON.parse(localStorage.getItem(LS_PRED) || "{}");
+      } catch {
+        return {};
+      }
     }
 
     function savePredictionStore(store) {
@@ -239,8 +569,11 @@
     }
 
     function getAuditStore() {
-      try { return JSON.parse(localStorage.getItem(LS_AUDIT) || "{}"); }
-      catch { return {}; }
+      try {
+        return JSON.parse(localStorage.getItem(LS_AUDIT) || "{}");
+      } catch {
+        return {};
+      }
     }
 
     function saveAuditStore(store) {
@@ -252,7 +585,6 @@
       const date = getSelectedDate();
       const predStore = getPredictionStore();
       const auditStore = getAuditStore();
-
       const predCount = Array.isArray(predStore[date]) ? predStore[date].length : 0;
       const auditCount = Array.isArray(auditStore[date]) ? auditStore[date].length : 0;
 
@@ -278,9 +610,7 @@
     async function apiReq(path) {
       const url = `${API}/${path}`;
       try {
-        const response = await throttledFetch(url, {
-          headers: { "x-apisports-key": KEY }
-        });
+        const response = await throttledFetch(url, { headers: { "x-apisports-key": KEY } });
 
         if (!response.ok) {
           if (response.status === 429) {
@@ -311,8 +641,6 @@
       return response;
     }
 
-    // ΔΙΟΡΘΩΣΗ:
-    // Φέρνουμε τελευταία ματς ΜΟΝΟ από το ίδιο πρωτάθλημα/σεζόν.
     async function getLastFixtures(teamId, leagueId, season) {
       const key = `team_last_${teamId}_${leagueId}_${season}`;
       if (lastFixturesCache.has(key)) return lastFixturesCache.get(key);
@@ -351,7 +679,6 @@
         : (fixture?.goals?.home ?? 0);
     }
 
-    // fallback estimator για xG όταν λείπει το "Expected Goals"
     function estimateXGFromStats(statsArr, goalsFor = 0) {
       const shotsOnGoal = statVal(statsArr, "Shots on Goal");
       const shotsOffGoal = statVal(statsArr, "Shots off Goal");
@@ -392,8 +719,179 @@
       return `<span class="dev-badge ${d >= 0 ? "dev-pos" : "dev-neg"}">${d > 0 ? "+" : ""}${d}%</span>`;
     }
 
-    // ΔΙΟΡΘΩΣΗ:
-    // Υπολογίζουμε xGA με πραγματικό αντίπαλο xG ή αντίστοιχο fallback estimator.
+    function clamp(n, min, max) {
+      return Math.max(min, Math.min(max, n));
+    }
+
+    function flattenAllAudits() {
+      const store = getAuditStore();
+      const rows = [];
+      Object.keys(store).forEach(date => {
+        if (Array.isArray(store[date])) rows.push(...store[date]);
+      });
+      return rows;
+    }
+
+    function poissonPMF(k, lambda) {
+      if (lambda <= 0) return k === 0 ? 1 : 0;
+      let fact = 1;
+      for (let i = 2; i <= k; i++) fact *= i;
+      return (Math.exp(-lambda) * Math.pow(lambda, k)) / fact;
+    }
+
+    function buildPoissonMatrix(homeLambda, awayLambda, maxGoals = 6) {
+      const matrix = [];
+      for (let h = 0; h <= maxGoals; h++) {
+        const row = [];
+        for (let a = 0; a <= maxGoals; a++) {
+          row.push(poissonPMF(h, homeLambda) * poissonPMF(a, awayLambda));
+        }
+        matrix.push(row);
+      }
+      return matrix;
+    }
+
+    function sumMatrixByCondition(matrix, predicate) {
+      let sum = 0;
+      for (let h = 0; h < matrix.length; h++) {
+        for (let a = 0; a < matrix[h].length; a++) {
+          if (predicate(h, a)) sum += matrix[h][a];
+        }
+      }
+      return sum;
+    }
+
+    function calcExpectedGoalsFromIntel(intel) {
+      const hFormXG = Number(intel?.h?.formXG || 1.0);
+      const hSplitXG = Number(intel?.h?.splitXG || 1.0);
+      const hFormXGA = Number(intel?.h?.formXGA || 1.0);
+      const hSplitXGA = Number(intel?.h?.splitXGA || 1.0);
+      const hSeasonXG = Number(intel?.h?.seasonXG || 1.0);
+
+      const aFormXG = Number(intel?.a?.formXG || 1.0);
+      const aSplitXG = Number(intel?.a?.splitXG || 1.0);
+      const aFormXGA = Number(intel?.a?.formXGA || 1.0);
+      const aSplitXGA = Number(intel?.a?.splitXGA || 1.0);
+      const aSeasonXG = Number(intel?.a?.seasonXG || 1.0);
+
+      let expectedHomeGoals =
+        0.35 * hFormXG +
+        0.25 * hSplitXG +
+        0.20 * aFormXGA +
+        0.10 * aSplitXGA +
+        0.10 * hSeasonXG;
+
+      let expectedAwayGoals =
+        0.35 * aFormXG +
+        0.25 * aSplitXG +
+        0.20 * hFormXGA +
+        0.10 * hSplitXGA +
+        0.10 * aSeasonXG;
+
+      expectedHomeGoals = clamp(expectedHomeGoals, 0.20, 4.50);
+      expectedAwayGoals = clamp(expectedAwayGoals, 0.20, 4.50);
+
+      return {
+        expectedHomeGoals: Number(expectedHomeGoals.toFixed(2)),
+        expectedAwayGoals: Number(expectedAwayGoals.toFixed(2))
+      };
+    }
+
+    function calcMatchProbabilities(intel) {
+      const { expectedHomeGoals, expectedAwayGoals } = calcExpectedGoalsFromIntel(intel);
+      const matrix = buildPoissonMatrix(expectedHomeGoals, expectedAwayGoals, 6);
+
+      const p1 = sumMatrixByCondition(matrix, (h, a) => h > a);
+      const pX = sumMatrixByCondition(matrix, (h, a) => h === a);
+      const p2 = sumMatrixByCondition(matrix, (h, a) => h < a);
+      const pOver25 = sumMatrixByCondition(matrix, (h, a) => (h + a) >= 3);
+      const pBTTS = sumMatrixByCondition(matrix, (h, a) => h >= 1 && a >= 1);
+      const pHomeOver15 = sumMatrixByCondition(matrix, (h, a) => h >= 2);
+      const pAwayOver05 = sumMatrixByCondition(matrix, (h, a) => a >= 1);
+
+      const probs = {
+        expectedHomeGoals,
+        expectedAwayGoals,
+        p1: Number((p1 * 100).toFixed(1)),
+        pX: Number((pX * 100).toFixed(1)),
+        p2: Number((p2 * 100).toFixed(1)),
+        pOver25: Number((pOver25 * 100).toFixed(1)),
+        pBTTS: Number((pBTTS * 100).toFixed(1)),
+        pHomeOver15: Number((pHomeOver15 * 100).toFixed(1)),
+        pAwayOver05: Number((pAwayOver05 * 100).toFixed(1))
+      };
+
+      const marketScores = [
+        { market: "1", prob: probs.p1 },
+        { market: "X", prob: probs.pX },
+        { market: "2", prob: probs.p2 },
+        { market: "Over 2.5", prob: probs.pOver25 },
+        { market: "BTTS", prob: probs.pBTTS }
+      ].sort((a, b) => b.prob - a.prob);
+
+      probs.topMarket = marketScores[0]?.market || "-";
+      probs.topMarketProb = marketScores[0]?.prob || 0;
+
+      return probs;
+    }
+
+    function getBucket(prob) {
+      const start = Math.floor(prob / 5) * 5;
+      return { start, end: start + 5 };
+    }
+
+    function getHistoricalVerificationForMarket(market, prob) {
+      const audits = flattenAllAudits();
+      if (!audits.length) return { sample: 0, hitRate: null };
+
+      const { start, end } = getBucket(prob);
+
+      const filtered = audits.filter(row => {
+        let p = null;
+
+        if (market === "1") p = Number(row.p1);
+        else if (market === "X") p = Number(row.pX);
+        else if (market === "2") p = Number(row.p2);
+        else if (market === "Over 2.5") p = Number(row.pOver25);
+        else if (market === "BTTS") p = Number(row.pBTTS);
+
+        return Number.isFinite(p) && p >= start && p < end;
+      });
+
+      if (!filtered.length) {
+        return { sample: 0, hitRate: null, bucketLabel: `${start}-${end}%` };
+      }
+
+      let hits = 0;
+
+      for (const row of filtered) {
+        const home = Number(row.actualHomeGoals ?? -1);
+        const away = Number(row.actualAwayGoals ?? -1);
+        if (home < 0 || away < 0) continue;
+
+        let ok = false;
+        if (market === "1") ok = home > away;
+        else if (market === "X") ok = home === away;
+        else if (market === "2") ok = away > home;
+        else if (market === "Over 2.5") ok = (home + away) >= 3;
+        else if (market === "BTTS") ok = home > 0 && away > 0;
+
+        if (ok) hits++;
+      }
+
+      const hitRate = filtered.length ? Number(((hits / filtered.length) * 100).toFixed(1)) : null;
+      return {
+        sample: filtered.length,
+        hitRate,
+        bucketLabel: `${start}-${end}%`
+      };
+    }
+
+    function buildVerificationSummary(probs) {
+      if (!probs?.topMarket) return null;
+      return getHistoricalVerificationForMarket(probs.topMarket, probs.topMarketProb);
+    }
+
     async function batchCalculate(list, teamId) {
       if (!list.length) {
         return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
@@ -497,6 +995,9 @@
         ? buildOverSignal(s.a.formXG, s.h.formXGA)
         : false;
 
+      const probs = mode === "pre" ? s?.probs : null;
+      const verify = probs ? buildVerificationSummary(probs) : null;
+
       return `
         <div class="cyber-card ${isLive ? "live-glow" : ""}">
           <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
@@ -531,16 +1032,12 @@
 
                 <div class="stat-row">
                   <span>xG Υπέρ (Τελευταία 6):</span>
-                  <div>
-                    <span class="val-xg">${s?.h?.formXG || "1.00"}</span> ${s?.h?.devXG || ""}
-                  </div>
+                  <div><span class="val-xg">${s?.h?.formXG || "1.00"}</span> ${s?.h?.devXG || ""}</div>
                 </div>
 
                 <div class="stat-row">
                   <span>xGA Κατά (Τελευταία 6):</span>
-                  <div>
-                    <span class="val-xg">${s?.h?.formXGA || "1.00"}</span> ${s?.h?.devXGA || ""}
-                  </div>
+                  <div><span class="val-xg">${s?.h?.formXGA || "1.00"}</span> ${s?.h?.devXGA || ""}</div>
                 </div>
 
                 <div class="stat-row">
@@ -575,16 +1072,12 @@
 
                 <div class="stat-row">
                   <span>xG Υπέρ (Τελευταία 6):</span>
-                  <div>
-                    <span class="val-xg">${s?.a?.formXG || "1.00"}</span> ${s?.a?.devXG || ""}
-                  </div>
+                  <div><span class="val-xg">${s?.a?.formXG || "1.00"}</span> ${s?.a?.devXG || ""}</div>
                 </div>
 
                 <div class="stat-row">
                   <span>xGA Κατά (Τελευταία 6):</span>
-                  <div>
-                    <span class="val-xg">${s?.a?.formXGA || "1.00"}</span> ${s?.a?.devXGA || ""}
-                  </div>
+                  <div><span class="val-xg">${s?.a?.formXGA || "1.00"}</span> ${s?.a?.devXGA || ""}</div>
                 </div>
 
                 <div class="stat-row">
@@ -603,6 +1096,36 @@
                 </div>
 
                 ${awayOverHigh ? `<div class="over-flag">ΠΙΘΑΝΟΤΗΤΑ OVER: ΥΨΗΛΗ</div>` : ""}
+              </div>
+
+              <div class="team-box" style="grid-column: span 2;">
+                <div class="prob-panel">
+                  <div class="prob-title">📊 ΠΙΘΑΝΟΤΗΤΕΣ ΑΓΟΡΩΝ</div>
+
+                  <div class="prob-row"><span>Expected Goals:</span><span class="prob-val">${probs?.expectedHomeGoals ?? "-"} - ${probs?.expectedAwayGoals ?? "-"}</span></div>
+                  <div class="prob-row"><span>1 / X / 2:</span><span class="prob-val">${probs?.p1 ?? "-"}% / ${probs?.pX ?? "-"}% / ${probs?.p2 ?? "-"}%</span></div>
+                  <div class="prob-row"><span>Over 2.5:</span><span class="prob-val">${probs?.pOver25 ?? "-"}%</span></div>
+                  <div class="prob-row"><span>BTTS:</span><span class="prob-val">${probs?.pBTTS ?? "-"}%</span></div>
+                  <div class="prob-row"><span>Home Over 1.5:</span><span class="prob-val">${probs?.pHomeOver15 ?? "-"}%</span></div>
+                  <div class="prob-row"><span>Away Over 0.5:</span><span class="prob-val">${probs?.pAwayOver05 ?? "-"}%</span></div>
+                </div>
+
+                <div class="verify-box">
+                  <div class="verify-line">
+                    Κύριο σημείο:
+                    <span class="market-tag">${escapeHtml(probs?.topMarket || "-")}</span>
+                    <span class="market-tag">${probs?.topMarketProb ?? "-"}%</span>
+                  </div>
+                  <div class="verify-line">
+                    Ιστορική επαλήθευση παρόμοιων προβλέψεων:
+                    <strong style="color:var(--gold);">
+                      ${verify?.hitRate != null ? `${verify.hitRate}%` : "N/A"}
+                    </strong>
+                  </div>
+                  <div class="verify-line" style="color:var(--txt-muted);">
+                    Δείγμα: ${verify?.sample ?? 0} αγώνες ${verify?.bucketLabel ? `| Bucket ${verify.bucketLabel}` : ""}
+                  </div>
+                </div>
               </div>
             ` : `
               <div class="team-box" style="grid-column: span 2;">
@@ -624,6 +1147,7 @@
 
     async function runScan(mode) {
       if (isRunning) return;
+
       isRunning = true;
       clearError();
       clearSuccess();
@@ -676,6 +1200,7 @@
           const m = matches[i];
           const pct = Math.round(((i + 1) / matches.length) * 100);
           setProgress(pct, `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
+
           let intel = null;
           
           if (mode === "pre") {
@@ -685,8 +1210,10 @@
             ]);
 
             intel = { h: intelHome, a: intelAway };
-            memoryBank.push({ m, stats: intel });
+            const probs = calcMatchProbabilities(intel);
+            intel.probs = probs;
 
+            memoryBank.push({ m, stats: intel });
             const predStore = getPredictionStore();
             
             if (!predStore[selectedDate].some(x => x.fixtureId === m.fixture.id)) {
@@ -700,24 +1227,42 @@
                 awayTeam: m.teams.away.name,
                 statusAtScan: m.fixture.status.short,
                 kickoff: m.fixture.date,
+
                 predictedHomeXG: parseFloat(intel.h.formXG) || 0,
                 predictedAwayXG: parseFloat(intel.a.formXG) || 0,
                 predictedHomeXGA: parseFloat(intel.h.formXGA) || 0,
                 predictedAwayXGA: parseFloat(intel.a.formXGA) || 0,
+
                 splitHomeXG: parseFloat(intel.h.splitXG) || 0,
                 splitAwayXG: parseFloat(intel.a.splitXG) || 0,
                 splitHomeXGA: parseFloat(intel.h.splitXGA) || 0,
                 splitAwayXGA: parseFloat(intel.a.splitXGA) || 0,
+
                 seasonHomeXG: parseFloat(intel.h.seasonXG) || 0,
                 seasonAwayXG: parseFloat(intel.a.seasonXG) || 0,
                 seasonHomeXGA: parseFloat(intel.h.seasonXGA) || 0,
                 seasonAwayXGA: parseFloat(intel.a.seasonXGA) || 0,
+
                 cornersHome: parseFloat(intel.h.corners) || 0,
                 cornersAway: parseFloat(intel.a.corners) || 0,
                 cardsHome: parseFloat(intel.h.cards) || 0,
                 cardsAway: parseFloat(intel.a.cards) || 0,
+
+                expectedHomeGoals: probs.expectedHomeGoals,
+                expectedAwayGoals: probs.expectedAwayGoals,
+                p1: probs.p1,
+                pX: probs.pX,
+                p2: probs.p2,
+                pOver25: probs.pOver25,
+                pBTTS: probs.pBTTS,
+                pHomeOver15: probs.pHomeOver15,
+                pAwayOver05: probs.pAwayOver05,
+                topMarket: probs.topMarket,
+                topMarketProb: probs.topMarketProb,
+
                 highOverSignalHome: Number(intel.h.formXG) > 2 && Number(intel.a.formXGA) > 1.5,
                 highOverSignalAway: Number(intel.a.formXG) > 2 && Number(intel.h.formXGA) > 1.5,
+
                 scanTimestamp: new Date().toISOString()
               });
             }
@@ -809,7 +1354,7 @@
           const actualHome = f.goals.home ?? 0;
           const actualAway = f.goals.away ?? 0;
           const actualTotal = actualHome + actualAway;
-          const predTotal = Number(entry.predictedHomeXG || 0) + Number(entry.predictedAwayXG || 0);
+          const predTotal = Number(entry.expectedHomeGoals || 0) + Number(entry.expectedAwayGoals || 0);
           const absError = Math.abs(predTotal - actualTotal);
           
           totalActualGoals += actualTotal;
@@ -817,15 +1362,26 @@
           totalAbsError += absError;
           evaluated++;
 
-          if ((predTotal > 2.5) === (actualTotal > 2.5)) over25Hits++;
-          if ((entry.predictedHomeXG > 0.7 && entry.predictedAwayXG > 0.7) === (actualHome > 0 && actualAway > 0)) bttsHits++;
+          if ((entry.pOver25 || 0) >= 50 && actualTotal > 2.5) over25Hits++;
+          if ((entry.pBTTS || 0) >= 50 && actualHome > 0 && actualAway > 0) bttsHits++;
           
+          const hit1 = actualHome > actualAway;
+          const hitX = actualHome === actualAway;
+          const hit2 = actualAway > actualHome;
+          const hitOver25 = actualTotal >= 3;
+          const hitBTTS = actualHome > 0 && actualAway > 0;
+
           auditStore[selectedDate].push({
             ...entry,
             actualHomeGoals: actualHome,
             actualAwayGoals: actualAway,
             actualTotalGoals: actualTotal,
             absErrorTotalGoals: absError,
+            hit1,
+            hitX,
+            hit2,
+            hitOver25,
+            hitBTTS,
             auditedAt: new Date().toISOString()
           });
 
@@ -834,8 +1390,9 @@
               <div style="font-size:0.72rem; color:var(--txt-muted);">${escapeHtml(entry.league)} | ${escapeHtml(entry.date)}</div>
               <h3 class="orbitron" style="margin:6px 0;">${escapeHtml(entry.homeTeam)} ${actualHome} - ${actualAway} ${escapeHtml(entry.awayTeam)}</h3>
               <div style="margin-top:10px; font-size:0.84rem; line-height:1.7;">
-                <div><span style="color:var(--p)">Προβλεπόμενα Συνολικά xG:</span> ${predTotal.toFixed(2)}</div>
+                <div><span style="color:var(--p)">Expected Goals:</span> ${(Number(entry.expectedHomeGoals || 0) + Number(entry.expectedAwayGoals || 0)).toFixed(2)}</div>
                 <div><span style="color:var(--neon-live)">Πραγματικά Γκολ:</span> ${actualTotal}</div>
+                <div><span style="color:var(--gold)">Κύριο Market:</span> ${escapeHtml(entry.topMarket || "-")} (${Number(entry.topMarketProb || 0).toFixed(1)}%)</div>
               </div>
             </div>`;
         }
@@ -849,8 +1406,8 @@
               <div class="audit-grid">
                 <div class="audit-box"><div class="audit-label">ΑΞΙΟΛΟΓΗΜΕΝΟΙ ΑΓΩΝΕΣ</div><div class="audit-value">${evaluated}</div></div>
                 <div class="audit-box"><div class="audit-label">Μ.Ο. ΠΡΑΓΜΑΤΙΚΩΝ ΓΚΟΛ</div><div class="audit-value">${(totalActualGoals / evaluated).toFixed(2)}</div></div>
-                <div class="audit-box"><div class="audit-label">Μ.Ο. ΠΡΟΒΛΕΨΗΣ xG</div><div class="audit-value">${(totalPredGoals / evaluated).toFixed(2)}</div></div>
-                <div class="audit-box"><div class="audit-label">ΑΠΟΚΛΙΣΗ ΣΦΑΛΜΑΤΟΣ</div><div class="audit-value">${(totalAbsError / evaluated).toFixed(2)}</div></div>
+                <div class="audit-box"><div class="audit-label">Μ.Ο. EXPECTED GOALS</div><div class="audit-value">${(totalPredGoals / evaluated).toFixed(2)}</div></div>
+                <div class="audit-box"><div class="audit-label">Μ.Ο. ΑΠΟΚΛΙΣΗΣ</div><div class="audit-value">${(totalAbsError / evaluated).toFixed(2)}</div></div>
               </div>
             </div>`;
 
@@ -880,21 +1437,22 @@
       return r;
     }
 
-    function downloadTextFile(f, c, m = "application/json;charset=utf-8;") {
-      const b = new Blob([c], { type: m });
-      const u = URL.createObjectURL(b);
+    function downloadTextFile(filename, content, mime = "application/json;charset=utf-8;") {
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = u;
-      a.download = f;
+      a.href = url;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       a.remove();
-      URL.revokeObjectURL(u);
+      URL.revokeObjectURL(url);
     }
 
     function exportTrainingJSON() {
       const r = flattenAuditStore();
       if (!r.length) return showError("Δεν υπάρχουν δεδομένα.");
+
       downloadTextFile(`omega_training_${getTodayISO()}.json`, JSON.stringify(r, null, 2));
       showSuccess(`Εξήχθησαν ${r.length} εγγραφές.`);
     }
@@ -903,7 +1461,13 @@
       const r = flattenAuditStore();
       if (!r.length) return showError("Δεν υπάρχουν δεδομένα.");
 
-      const h = ["date","league","homeTeam","awayTeam","predictedHomeXG","predictedAwayXG","actualHomeGoals","actualAwayGoals"];
+      const h = [
+        "date","league","homeTeam","awayTeam",
+        "expectedHomeGoals","expectedAwayGoals",
+        "p1","pX","p2","pOver25","pBTTS",
+        "actualHomeGoals","actualAwayGoals"
+      ];
+
       const c = [
         h.join(","),
         ...r.map(row => h.map(key => `"${String(row[key] ?? "").replaceAll('"', '""')}"`).join(","))
@@ -917,10 +1481,13 @@
       const d = getSelectedDate();
       const p = getPredictionStore();
       const a = getAuditStore();
+
       delete p[d];
       delete a[d];
+
       savePredictionStore(p);
       saveAuditStore(a);
+
       memoryBank = [];
       document.getElementById("display").innerHTML = "";
       document.getElementById("labSection").innerHTML = "";
