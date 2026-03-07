@@ -13,6 +13,7 @@
       --p: #00f2ff; --split-color: #fbbf24; --gold: #f59e0b;
       --neon-live: #39ff14; --alert: #da3633; --txt-muted: #8b949e;
       --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
+      --magenta: #ff00ff;
     }
     * { box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f0f6fc; margin: 0; padding: 0; }
@@ -42,9 +43,23 @@
     .stat-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: 0.85rem; border-bottom: 1px solid #1a1d23; padding-bottom: 5px; align-items: center; }
     .val-xg { color: var(--p); font-weight: 800; font-family: 'Orbitron', sans-serif; font-size: 1rem; }
     
-    /* ΝΕΟ ΧΡΩΜΑ ΓΙΑ ΤΟ SPLIT */
     .val-split { color: var(--split-color); font-weight: 900; font-family: 'Orbitron', sans-serif; border: 1px solid var(--split-color); padding: 2px 6px; border-radius: 4px; background: rgba(251, 191, 36, 0.1); }
-    
+
+    .over-flag {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-weight: 900;
+      font-size: 0.78rem;
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(57,255,20,.35);
+      background: rgba(57,255,20,.10);
+      color: var(--neon-live);
+      box-shadow: 0 0 14px rgba(57,255,20,.08);
+    }
+
     .live-pulse { color: var(--neon-live); animation: pulse 1s infinite; font-weight: 900; font-size: 2.5rem; }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
@@ -146,11 +161,15 @@
     const REQUEST_DELAY_MS = 260;
     const REQUEST_TIMEOUT_MS = 12000;
 
-    const LS_PRED = "omega_prediction_store_v4702";
-    const LS_AUDIT = "omega_audit_store_v4702";
+    const LS_PRED = "omega_prediction_store_v4703";
+    const LS_AUDIT = "omega_audit_store_v4703";
 
-    let memoryBank = []; let statsCache = new Map(); let teamStatsCache = new Map(); let lastFixturesCache = new Map();
-    let isRunning = false; let globalRequestCounter = 0;
+    let memoryBank = [];
+    let statsCache = new Map();
+    let teamStatsCache = new Map();
+    let lastFixturesCache = new Map();
+    let isRunning = false;
+    let globalRequestCounter = 0;
 
     function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
@@ -172,86 +191,198 @@
       });
     }
 
-    function showError(message) { document.getElementById("errorBox").innerHTML = `<div class="error-box">${escapeHtml(message)}</div>`; }
-    function clearError() { document.getElementById("errorBox").innerHTML = ""; }
-    function showSuccess(message) { document.getElementById("successBox").innerHTML = `<div class="success-box">${escapeHtml(message)}</div>`; }
-    function clearSuccess() { document.getElementById("successBox").innerHTML = ""; }
-    function escapeHtml(str) { return String(str ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;"); }
+    function showError(message) {
+      document.getElementById("errorBox").innerHTML = `<div class="error-box">${escapeHtml(message)}</div>`;
+    }
+
+    function clearError() {
+      document.getElementById("errorBox").innerHTML = "";
+    }
+
+    function showSuccess(message) {
+      document.getElementById("successBox").innerHTML = `<div class="success-box">${escapeHtml(message)}</div>`;
+    }
+
+    function clearSuccess() {
+      document.getElementById("successBox").innerHTML = "";
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
     function getTodayISO() {
-      const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, "0"); const day = String(d.getDate()).padStart(2, "0");
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${day}`;
     }
 
-    function getSelectedDate() { return document.getElementById("scanDate")?.value || getTodayISO(); }
-    function getPredictionStore() { try { return JSON.parse(localStorage.getItem(LS_PRED) || "{}"); } catch { return {}; } }
-    function savePredictionStore(store) { localStorage.setItem(LS_PRED, JSON.stringify(store)); refreshStoreBadges(); }
-    function getAuditStore() { try { return JSON.parse(localStorage.getItem(LS_AUDIT) || "{}"); } catch { return {}; } }
-    function saveAuditStore(store) { localStorage.setItem(LS_AUDIT, JSON.stringify(store)); refreshStoreBadges(); }
+    function getSelectedDate() {
+      return document.getElementById("scanDate")?.value || getTodayISO();
+    }
+
+    function getPredictionStore() {
+      try { return JSON.parse(localStorage.getItem(LS_PRED) || "{}"); }
+      catch { return {}; }
+    }
+
+    function savePredictionStore(store) {
+      localStorage.setItem(LS_PRED, JSON.stringify(store));
+      refreshStoreBadges();
+    }
+
+    function getAuditStore() {
+      try { return JSON.parse(localStorage.getItem(LS_AUDIT) || "{}"); }
+      catch { return {}; }
+    }
+
+    function saveAuditStore(store) {
+      localStorage.setItem(LS_AUDIT, JSON.stringify(store));
+      refreshStoreBadges();
+    }
 
     function refreshStoreBadges() {
-      const date = getSelectedDate(); const predStore = getPredictionStore(); const auditStore = getAuditStore();
+      const date = getSelectedDate();
+      const predStore = getPredictionStore();
+      const auditStore = getAuditStore();
+
       const predCount = Array.isArray(predStore[date]) ? predStore[date].length : 0;
       const auditCount = Array.isArray(auditStore[date]) ? auditStore[date].length : 0;
-      document.getElementById("predCountBadge").innerText = predCount; document.getElementById("auditCountBadge").innerText = auditCount; document.getElementById("selectedDateBadge").innerText = date;
+
+      document.getElementById("predCountBadge").innerText = predCount;
+      document.getElementById("auditCountBadge").innerText = auditCount;
+      document.getElementById("selectedDateBadge").innerText = date;
     }
 
     async function throttledFetch(url, options = {}, timeout = REQUEST_TIMEOUT_MS) {
-      globalRequestCounter++; await sleep(REQUEST_DELAY_MS);
-      const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), timeout);
-      try { return await fetch(url, { ...options, signal: controller.signal }); } finally { clearTimeout(timer); }
+      globalRequestCounter++;
+      await sleep(REQUEST_DELAY_MS);
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeout);
+
+      try {
+        return await fetch(url, { ...options, signal: controller.signal });
+      } finally {
+        clearTimeout(timer);
+      }
     }
 
     async function apiReq(path) {
       const url = `${API}/${path}`;
       try {
-        const response = await throttledFetch(url, { headers: { "x-apisports-key": KEY } });
+        const response = await throttledFetch(url, {
+          headers: { "x-apisports-key": KEY }
+        });
+
         if (!response.ok) {
-          if (response.status === 429) { console.warn("RATE LIMIT:", path); return { response: [], errors: { rateLimit: true, status: 429 } }; }
-          console.warn("HTTP ERROR:", response.status, path); return { response: [], errors: { status: response.status } };
+          if (response.status === 429) {
+            console.warn("RATE LIMIT:", path);
+            return { response: [], errors: { rateLimit: true, status: 429 } };
+          }
+          console.warn("HTTP ERROR:", response.status, path);
+          return { response: [], errors: { status: response.status } };
         }
+
         return await response.json() || { response: [] };
       } catch (err) {
-        console.error("API ERROR:", path, err); return { response: [], errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown error") } };
+        console.error("API ERROR:", path, err);
+        return {
+          response: [],
+          errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown error") }
+        };
       }
     }
 
     async function getTeamSeasonStats(teamId, leagueId, season) {
       const key = `${teamId}_${leagueId}_${season}`;
       if (teamStatsCache.has(key)) return teamStatsCache.get(key);
+
       const data = await apiReq(`teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`);
-      const response = data?.response || {}; teamStatsCache.set(key, response); return response;
+      const response = data?.response || {};
+      teamStatsCache.set(key, response);
+      return response;
     }
 
-    async function getLastFixtures(teamId) {
-      const key = `team_last_${teamId}`;
+    // ΔΙΟΡΘΩΣΗ:
+    // Φέρνουμε τελευταία ματς ΜΟΝΟ από το ίδιο πρωτάθλημα/σεζόν.
+    async function getLastFixtures(teamId, leagueId, season) {
+      const key = `team_last_${teamId}_${leagueId}_${season}`;
       if (lastFixturesCache.has(key)) return lastFixturesCache.get(key);
-      const data = await apiReq(`fixtures?team=${teamId}&last=20&status=FT`);
-      const response = data?.response || []; lastFixturesCache.set(key, response); return response;
+
+      const data = await apiReq(`fixtures?team=${teamId}&league=${leagueId}&season=${season}&last=20&status=FT`);
+      const response = data?.response || [];
+      lastFixturesCache.set(key, response);
+      return response;
     }
 
     async function getFixtureStats(fixtureId) {
       if (statsCache.has(fixtureId)) return statsCache.get(fixtureId);
       const data = await apiReq(`fixtures/statistics?fixture=${fixtureId}`);
-      statsCache.set(fixtureId, data); return data;
+      statsCache.set(fixtureId, data);
+      return data;
     }
 
     function statVal(statsArr, type) {
       if (!Array.isArray(statsArr)) return 0;
       const item = statsArr.find(x => x.type === type);
       if (!item || item.value == null) return 0;
-      const num = parseFloat(String(item.value).replace("%", "").trim()); return Number.isFinite(num) ? num : 0;
+
+      const num = parseFloat(String(item.value).replace("%", "").trim());
+      return Number.isFinite(num) ? num : 0;
     }
 
-    function getTeamGoalsInFixture(fixture, teamId) { return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.home ?? 0) : (fixture?.goals?.away ?? 0); }
+    function getTeamGoalsInFixture(fixture, teamId) {
+      return fixture?.teams?.home?.id === teamId
+        ? (fixture?.goals?.home ?? 0)
+        : (fixture?.goals?.away ?? 0);
+    }
+
+    function getOpponentGoalsInFixture(fixture, teamId) {
+      return fixture?.teams?.home?.id === teamId
+        ? (fixture?.goals?.away ?? 0)
+        : (fixture?.goals?.home ?? 0);
+    }
+
+    // fallback estimator για xG όταν λείπει το "Expected Goals"
+    function estimateXGFromStats(statsArr, goalsFor = 0) {
+      const shotsOnGoal = statVal(statsArr, "Shots on Goal");
+      const shotsOffGoal = statVal(statsArr, "Shots off Goal");
+      const totalShots = statVal(statsArr, "Total Shots");
+      const dangerous = statVal(statsArr, "Dangerous Attacks");
+      const corners = statVal(statsArr, "Corner Kicks");
+
+      let estimated =
+        (shotsOnGoal * 0.18) +
+        (shotsOffGoal * 0.07) +
+        (Math.max(totalShots - shotsOnGoal - shotsOffGoal, 0) * 0.03) +
+        (dangerous * 0.008) +
+        (corners * 0.025) +
+        (goalsFor * 0.35);
+
+      if (!Number.isFinite(estimated) || estimated <= 0) {
+        estimated = goalsFor > 0 ? (0.70 + goalsFor * 0.30) : 0.70;
+      }
+
+      return estimated;
+    }
     
-    // ΑΛΛΑΓΗ ΣΕ ΕΛΛΗΝΙΚΑ: Νίκη (Ν), Ισοπαλία (Ι), Ήττα (Η)
     function getFormHistory(fixtures, teamId) {
       return fixtures.map(f => {
         const isHome = f.teams.home.id === teamId;
         const myGoals = isHome ? (f.goals.home ?? 0) : (f.goals.away ?? 0);
         const oppGoals = isHome ? (f.goals.away ?? 0) : (f.goals.home ?? 0);
-        return myGoals > oppGoals ? {res: "Ν", cls: "W"} : (myGoals < oppGoals ? {res: "Η", cls: "L"} : {res: "Ι", cls: "D"});
+
+        return myGoals > oppGoals
+          ? { res: "Ν", cls: "W" }
+          : (myGoals < oppGoals ? { res: "Η", cls: "L" } : { res: "Ι", cls: "D" });
       }).reverse();
     }
 
@@ -261,66 +392,217 @@
       return `<span class="dev-badge ${d >= 0 ? "dev-pos" : "dev-neg"}">${d > 0 ? "+" : ""}${d}%</span>`;
     }
 
+    // ΔΙΟΡΘΩΣΗ:
+    // Υπολογίζουμε xGA με πραγματικό αντίπαλο xG ή αντίστοιχο fallback estimator.
     async function batchCalculate(list, teamId) {
-      if (!list.length) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
-      let xgSum = 0; let xgaSum = 0; let corSum = 0; let crdSum = 0; let count = 0;
+      if (!list.length) {
+        return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
+      }
+
+      let xgSum = 0;
+      let xgaSum = 0;
+      let corSum = 0;
+      let crdSum = 0;
+      let count = 0;
+
       for (const fixture of list) {
         const statResp = await getFixtureStats(fixture.fixture.id);
         if (!statResp?.response || statResp.response.length < 2) continue;
-        const myObj = statResp.response.find(x => x.team.id === teamId); const opObj = statResp.response.find(x => x.team.id !== teamId);
+
+        const myObj = statResp.response.find(x => x.team.id === teamId);
+        const opObj = statResp.response.find(x => x.team.id !== teamId);
         if (!myObj || !opObj) continue;
-        const my = myObj.statistics || []; const op = opObj.statistics || [];
+
+        const my = myObj.statistics || [];
+        const op = opObj.statistics || [];
+
+        const myGoals = getTeamGoalsInFixture(fixture, teamId);
+        const oppGoals = getOpponentGoalsInFixture(fixture, teamId);
+
         let myXG = statVal(my, "Expected Goals");
-        if (myXG === 0) myXG = (statVal(my, "Shots on Goal") * 0.18) + (getTeamGoalsInFixture(fixture, teamId) * 0.4);
-        xgSum += myXG; xgaSum += (statVal(op, "Expected Goals") || 0.9);
-        corSum += statVal(my, "Corner Kicks"); crdSum += statVal(my, "Yellow Cards") + statVal(my, "Red Cards"); count++;
+        if (!myXG || myXG <= 0) {
+          myXG = estimateXGFromStats(my, myGoals);
+        }
+
+        let oppXG = statVal(op, "Expected Goals");
+        if (!oppXG || oppXG <= 0) {
+          oppXG = estimateXGFromStats(op, oppGoals);
+        }
+
+        xgSum += myXG;
+        xgaSum += oppXG;
+        corSum += statVal(my, "Corner Kicks");
+        crdSum += statVal(my, "Yellow Cards") + statVal(my, "Red Cards");
+        count++;
       }
-      return { xg: count > 0 ? (xgSum / count).toFixed(2) : "1.00", xga: count > 0 ? (xgaSum / count).toFixed(2) : "1.00", cor: count > 0 ? (corSum / count).toFixed(1) : "4.0", crd: count > 0 ? (crdSum / count).toFixed(1) : "2.0" };
+
+      return {
+        xg: count > 0 ? (xgSum / count).toFixed(2) : "1.00",
+        xga: count > 0 ? (xgaSum / count).toFixed(2) : "1.00",
+        cor: count > 0 ? (corSum / count).toFixed(1) : "4.0",
+        crd: count > 0 ? (crdSum / count).toFixed(1) : "2.0"
+      };
     }
 
     async function getTeamData(teamId, leagueId, season, venueType) {
-      const [seasonStats, allFixs] = await Promise.all([getTeamSeasonStats(teamId, leagueId, season), getLastFixtures(teamId)]);
+      const [seasonStats, allFixs] = await Promise.all([
+        getTeamSeasonStats(teamId, leagueId, season),
+        getLastFixtures(teamId, leagueId, season)
+      ]);
+
       const generalLast = allFixs.slice(0, LAST_GENERAL);
-      const splitLast = allFixs.filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId).slice(0, LAST_SPLIT);
-      const [form, split] = await Promise.all([batchCalculate(generalLast, teamId), batchCalculate(splitLast, teamId)]);
-      const baseXG = parseFloat(seasonStats?.goals?.for?.average?.total) || 1.10; const baseXGA = parseFloat(seasonStats?.goals?.against?.average?.total) || 1.10;
-      return { seasonXG: baseXG.toFixed(2), seasonXGA: baseXGA.toFixed(2), formXG: form.xg, formXGA: form.xga, devXG: getDev(form.xg, baseXG), devXGA: getDev(form.xga, baseXGA), splitXG: split.xg, splitXGA: split.xga, corners: form.cor, cards: form.crd, history: getFormHistory(generalLast, teamId) };
+      const splitLast = allFixs
+        .filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId)
+        .slice(0, LAST_SPLIT);
+
+      const [form, split] = await Promise.all([
+        batchCalculate(generalLast, teamId),
+        batchCalculate(splitLast, teamId)
+      ]);
+
+      const baseXG = parseFloat(seasonStats?.goals?.for?.average?.total) || 1.10;
+      const baseXGA = parseFloat(seasonStats?.goals?.against?.average?.total) || 1.10;
+
+      return {
+        seasonXG: baseXG.toFixed(2),
+        seasonXGA: baseXGA.toFixed(2),
+        formXG: form.xg,
+        formXGA: form.xga,
+        devXG: getDev(form.xg, baseXG),
+        devXGA: getDev(form.xga, baseXGA),
+        splitXG: split.xg,
+        splitXGA: split.xga,
+        corners: form.cor,
+        cards: form.crd,
+        history: getFormHistory(generalLast, teamId)
+      };
     }
 
-    function isLiveStatus(short) { return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short); }
+    function isLiveStatus(short) {
+      return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short);
+    }
+
+    function buildOverSignal(teamXG, oppXGA) {
+      return Number(teamXG) > 2 && Number(oppXGA) > 1.5;
+    }
 
     function buildMatchCard(m, s, mode) {
       const isLive = isLiveStatus(m.fixture.status.short);
+
+      const homeOverHigh = mode === "pre" && s?.h && s?.a
+        ? buildOverSignal(s.h.formXG, s.a.formXGA)
+        : false;
+
+      const awayOverHigh = mode === "pre" && s?.h && s?.a
+        ? buildOverSignal(s.a.formXG, s.h.formXGA)
+        : false;
+
       return `
         <div class="cyber-card ${isLive ? "live-glow" : ""}">
           <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
             <div>
-              <span style="background:#222; padding:4px 8px; border-radius:4px;">${isLive ? `${m.fixture.status.elapsed || 0}'` : escapeHtml(m.fixture.status.short)}</span>
-              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
+              <span style="background:#222; padding:4px 8px; border-radius:4px;">
+                ${isLive ? `${m.fixture.status.elapsed || 0}'` : escapeHtml(m.fixture.status.short)}
+              </span>
+              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">
+                ${escapeHtml(m.league.name)}
+              </div>
               <h2 class="orbitron" style="margin:5px 0;">${escapeHtml(m.teams.home.name)}</h2>
               <h2 class="orbitron" style="margin:2px 0;">${escapeHtml(m.teams.away.name)}</h2>
             </div>
-            <div class="${isLive ? "live-pulse" : ""}" style="font-size:2.5rem; font-weight:900;">${m.goals.home ?? 0} - ${m.goals.away ?? 0}</div>
+            <div class="${isLive ? "live-pulse" : ""}" style="font-size:2.5rem; font-weight:900;">
+              ${m.goals.home ?? 0} - ${m.goals.away ?? 0}
+            </div>
           </div>
+
           <div class="stats-grid">
             ${mode === "pre" ? `
               <div class="team-box">
                 <div style="color:var(--p); font-size:0.75rem; font-weight:900; margin-bottom:10px;">🏠 ΑΝΑΛΥΣΗ ΓΗΠΕΔΟΥΧΟΥ</div>
                 ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
-                <div class="stat-row" style="margin-top:12px;"><span>Μέσος Όρος Σεζόν:</span><div><span class="season-xg-red">${s?.h?.seasonXG || "1.10"}</span><span class="season-xga-plain">/ ${s?.h?.seasonXGA || "1.10"}</span></div></div>
-                <div class="stat-row"><span>xG Υπέρ (Τελευταία 6):</span><div><span class="val-xg">${s?.h?.formXG || "1.00"}</span> ${s?.h?.devXG || ""}</div></div>
-                <div class="stat-row"><span>xGA Κατά (Τελευταία 6):</span><div><span class="val-xg">${s?.h?.formXGA || "1.00"}</span> ${s?.h?.devXGA || ""}</div></div>
-                <div class="stat-row"><span>Ειδική Φόρμα (ΜΟΝΟ ΕΝΤΟΣ):</span><span class="val-split">${s?.h?.splitXG || "1.00"} / ${s?.h?.splitXGA || "1.00"}</span></div>
-                <div class="stat-row" style="border:none;"><span>Μ.Ο. (Κόρνερ | Κάρτες):</span><span style="font-weight:800;">🚩${s?.h?.corners || "0.0"} | 🟨${s?.h?.cards || "0.0"}</span></div>
+
+                <div class="stat-row" style="margin-top:12px;">
+                  <span>Μέσος Όρος Σεζόν:</span>
+                  <div>
+                    <span class="season-xg-red">${s?.h?.seasonXG || "1.10"}</span>
+                    <span class="season-xga-plain">/ ${s?.h?.seasonXGA || "1.10"}</span>
+                  </div>
+                </div>
+
+                <div class="stat-row">
+                  <span>xG Υπέρ (Τελευταία 6):</span>
+                  <div>
+                    <span class="val-xg">${s?.h?.formXG || "1.00"}</span> ${s?.h?.devXG || ""}
+                  </div>
+                </div>
+
+                <div class="stat-row">
+                  <span>xGA Κατά (Τελευταία 6):</span>
+                  <div>
+                    <span class="val-xg">${s?.h?.formXGA || "1.00"}</span> ${s?.h?.devXGA || ""}
+                  </div>
+                </div>
+
+                <div class="stat-row">
+                  <span>Ειδική Φόρμα (ΜΟΝΟ ΕΝΤΟΣ):</span>
+                  <span class="val-split">${s?.h?.splitXG || "1.00"} / ${s?.h?.splitXGA || "1.00"}</span>
+                </div>
+
+                <div class="stat-row">
+                  <span>Μ.Ο. Κόρνερ:</span>
+                  <span style="font-weight:800;">🚩 ${s?.h?.corners || "0.0"}</span>
+                </div>
+
+                <div class="stat-row" style="border-bottom:none; margin-bottom:0;">
+                  <span>Μ.Ο. Κάρτες:</span>
+                  <span style="font-weight:800;">🟨 ${s?.h?.cards || "0.0"}</span>
+                </div>
+
+                ${homeOverHigh ? `<div class="over-flag">ΠΙΘΑΝΟΤΗΤΑ OVER: ΥΨΗΛΗ</div>` : ""}
               </div>
+
               <div class="team-box">
                 <div style="color:var(--magenta); font-size:0.75rem; font-weight:900; margin-bottom:10px;">✈️ ΑΝΑΛΥΣΗ ΦΙΛΟΞΕΝΟΥΜΕΝΗΣ</div>
                 ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
-                <div class="stat-row" style="margin-top:12px;"><span>Μέσος Όρος Σεζόν:</span><div><span class="season-xg-red">${s?.a?.seasonXG || "1.10"}</span><span class="season-xga-plain">/ ${s?.a?.seasonXGA || "1.10"}</span></div></div>
-                <div class="stat-row"><span>xG Υπέρ (Τελευταία 6):</span><div><span class="val-xg">${s?.a?.formXG || "1.00"}</span> ${s?.a?.devXG || ""}</div></div>
-                <div class="stat-row"><span>xGA Κατά (Τελευταία 6):</span><div><span class="val-xg">${s?.a?.formXGA || "1.00"}</span> ${s?.a?.devXGA || ""}</div></div>
-                <div class="stat-row"><span>Ειδική Φόρμα (ΜΟΝΟ ΕΚΤΟΣ):</span><span class="val-split">${s?.a?.splitXG || "1.00"} / ${s?.a?.splitXGA || "1.00"}</span></div>
-                <div class="stat-row" style="border:none;"><span>Μ.Ο. (Κόρνερ | Κάρτες):</span><span style="font-weight:800;">🚩${s?.a?.corners || "0.0"} | 🟨${s?.a?.cards || "0.0"}</span></div>
+
+                <div class="stat-row" style="margin-top:12px;">
+                  <span>Μέσος Όρος Σεζόν:</span>
+                  <div>
+                    <span class="season-xg-red">${s?.a?.seasonXG || "1.10"}</span>
+                    <span class="season-xga-plain">/ ${s?.a?.seasonXGA || "1.10"}</span>
+                  </div>
+                </div>
+
+                <div class="stat-row">
+                  <span>xG Υπέρ (Τελευταία 6):</span>
+                  <div>
+                    <span class="val-xg">${s?.a?.formXG || "1.00"}</span> ${s?.a?.devXG || ""}
+                  </div>
+                </div>
+
+                <div class="stat-row">
+                  <span>xGA Κατά (Τελευταία 6):</span>
+                  <div>
+                    <span class="val-xg">${s?.a?.formXGA || "1.00"}</span> ${s?.a?.devXGA || ""}
+                  </div>
+                </div>
+
+                <div class="stat-row">
+                  <span>Ειδική Φόρμα (ΜΟΝΟ ΕΚΤΟΣ):</span>
+                  <span class="val-split">${s?.a?.splitXG || "1.00"} / ${s?.a?.splitXGA || "1.00"}</span>
+                </div>
+
+                <div class="stat-row">
+                  <span>Μ.Ο. Κόρνερ:</span>
+                  <span style="font-weight:800;">🚩 ${s?.a?.corners || "0.0"}</span>
+                </div>
+
+                <div class="stat-row" style="border-bottom:none; margin-bottom:0;">
+                  <span>Μ.Ο. Κάρτες:</span>
+                  <span style="font-weight:800;">🟨 ${s?.a?.cards || "0.0"}</span>
+                </div>
+
+                ${awayOverHigh ? `<div class="over-flag">ΠΙΘΑΝΟΤΗΤΑ OVER: ΥΨΗΛΗ</div>` : ""}
               </div>
             ` : `
               <div class="team-box" style="grid-column: span 2;">
@@ -342,17 +624,26 @@
 
     async function runScan(mode) {
       if (isRunning) return;
-      isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true);
+      isRunning = true;
+      clearError();
+      clearSuccess();
+      setButtonsDisabled(true);
       setLoader(true, mode === "pre" ? "ΕΚΚΙΝΗΣΗ ΑΝΑΛΥΣΗΣ PRE-MATCH..." : "ΕΚΚΙΝΗΣΗ LIVE RADAR...");
-      const display = document.getElementById("display"); const labSection = document.getElementById("labSection");
-      display.innerHTML = ""; labSection.innerHTML = "";
+
+      const display = document.getElementById("display");
+      const labSection = document.getElementById("labSection");
+      display.innerHTML = "";
+      labSection.innerHTML = "";
       
       try {
         const selectedDate = getSelectedDate();
         const selectedLeague = document.getElementById("leagueFilter").value;
         refreshStoreBadges();
         
-        if (mode === "pre") { memoryBank = []; statsCache.clear(); }
+        if (mode === "pre") {
+          memoryBank = [];
+          statsCache.clear();
+        }
         
         const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
         
@@ -373,10 +664,11 @@
         }
         
         let htmlBuffer = "";
+
         if (mode === "pre") {
           const predStore = getPredictionStore();
-          if(selectedLeague === "ALL") predStore[selectedDate] = []; 
-          else if(!predStore[selectedDate]) predStore[selectedDate] = [];
+          if (selectedLeague === "ALL") predStore[selectedDate] = [];
+          else if (!predStore[selectedDate]) predStore[selectedDate] = [];
           savePredictionStore(predStore);
         }
         
@@ -391,60 +683,119 @@
               getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
               getTeamData(m.teams.away.id, m.league.id, m.league.season, "away")
             ]);
+
             intel = { h: intelHome, a: intelAway };
             memoryBank.push({ m, stats: intel });
+
             const predStore = getPredictionStore();
             
-            if(!predStore[selectedDate].some(x => x.fixtureId === m.fixture.id)) {
-                predStore[selectedDate].push({
-                  date: selectedDate, fixtureId: m.fixture.id, leagueId: m.league.id, league: m.league.name, season: m.league.season,
-                  homeTeam: m.teams.home.name, awayTeam: m.teams.away.name, statusAtScan: m.fixture.status.short, kickoff: m.fixture.date,
-                  predictedHomeXG: parseFloat(intel.h.formXG) || 0, predictedAwayXG: parseFloat(intel.a.formXG) || 0,
-                  predictedHomeXGA: parseFloat(intel.h.formXGA) || 0, predictedAwayXGA: parseFloat(intel.a.formXGA) || 0,
-                  splitHomeXG: parseFloat(intel.h.splitXG) || 0, splitAwayXG: parseFloat(intel.a.splitXG) || 0,
-                  splitHomeXGA: parseFloat(intel.h.splitXGA) || 0, splitAwayXGA: parseFloat(intel.a.splitXGA) || 0,
-                  seasonHomeXG: parseFloat(intel.h.seasonXG) || 0, seasonAwayXG: parseFloat(intel.a.seasonXG) || 0,
-                  seasonHomeXGA: parseFloat(intel.h.seasonXGA) || 0, seasonAwayXGA: parseFloat(intel.a.seasonXGA) || 0,
-                  cornersHome: parseFloat(intel.h.corners) || 0, cornersAway: parseFloat(intel.a.corners) || 0,
-                  cardsHome: parseFloat(intel.h.cards) || 0, cardsAway: parseFloat(intel.a.cards) || 0,
-                  scanTimestamp: new Date().toISOString()
-                });
+            if (!predStore[selectedDate].some(x => x.fixtureId === m.fixture.id)) {
+              predStore[selectedDate].push({
+                date: selectedDate,
+                fixtureId: m.fixture.id,
+                leagueId: m.league.id,
+                league: m.league.name,
+                season: m.league.season,
+                homeTeam: m.teams.home.name,
+                awayTeam: m.teams.away.name,
+                statusAtScan: m.fixture.status.short,
+                kickoff: m.fixture.date,
+                predictedHomeXG: parseFloat(intel.h.formXG) || 0,
+                predictedAwayXG: parseFloat(intel.a.formXG) || 0,
+                predictedHomeXGA: parseFloat(intel.h.formXGA) || 0,
+                predictedAwayXGA: parseFloat(intel.a.formXGA) || 0,
+                splitHomeXG: parseFloat(intel.h.splitXG) || 0,
+                splitAwayXG: parseFloat(intel.a.splitXG) || 0,
+                splitHomeXGA: parseFloat(intel.h.splitXGA) || 0,
+                splitAwayXGA: parseFloat(intel.a.splitXGA) || 0,
+                seasonHomeXG: parseFloat(intel.h.seasonXG) || 0,
+                seasonAwayXG: parseFloat(intel.a.seasonXG) || 0,
+                seasonHomeXGA: parseFloat(intel.h.seasonXGA) || 0,
+                seasonAwayXGA: parseFloat(intel.a.seasonXGA) || 0,
+                cornersHome: parseFloat(intel.h.corners) || 0,
+                cornersAway: parseFloat(intel.a.corners) || 0,
+                cardsHome: parseFloat(intel.h.cards) || 0,
+                cardsAway: parseFloat(intel.a.cards) || 0,
+                highOverSignalHome: Number(intel.h.formXG) > 2 && Number(intel.a.formXGA) > 1.5,
+                highOverSignalAway: Number(intel.a.formXG) > 2 && Number(intel.h.formXGA) > 1.5,
+                scanTimestamp: new Date().toISOString()
+              });
             }
+
             savePredictionStore(predStore);
           } else {
             const sR = await getFixtureStats(m.fixture.id);
             if (sR.response && sR.response.length === 2) {
-              const homeStats = sR.response[0].statistics || []; const awayStats = sR.response[1].statistics || [];
+              const homeStats = sR.response[0].statistics || [];
+              const awayStats = sR.response[1].statistics || [];
               intel = {
-                h: { danger: statVal(homeStats, "Dangerous Attacks"), shots: statVal(homeStats, "Shots on Goal"), corners: statVal(homeStats, "Corner Kicks"), poss: statVal(homeStats, "Ball Possession") },
-                a: { danger: statVal(awayStats, "Dangerous Attacks"), shots: statVal(awayStats, "Shots on Goal"), corners: statVal(awayStats, "Corner Kicks"), poss: statVal(awayStats, "Ball Possession") }
+                h: {
+                  danger: statVal(homeStats, "Dangerous Attacks"),
+                  shots: statVal(homeStats, "Shots on Goal"),
+                  corners: statVal(homeStats, "Corner Kicks"),
+                  poss: statVal(homeStats, "Ball Possession")
+                },
+                a: {
+                  danger: statVal(awayStats, "Dangerous Attacks"),
+                  shots: statVal(awayStats, "Shots on Goal"),
+                  corners: statVal(awayStats, "Corner Kicks"),
+                  poss: statVal(awayStats, "Ball Possession")
+                }
               };
             }
           }
+
           htmlBuffer += buildMatchCard(m, intel, mode);
         }
+
         display.innerHTML = htmlBuffer;
         refreshStoreBadges();
+
         if (mode === "pre") showSuccess(`Αποθηκεύτηκαν επιτυχώς οι προβλέψεις!`);
-      } catch (err) { console.error("SCAN ERROR:", err); showError(`Σφάλμα: ${err?.message}`); } 
-      finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
+      } catch (err) {
+        console.error("SCAN ERROR:", err);
+        showError(`Σφάλμα: ${err?.message}`);
+      } finally {
+        setLoader(false);
+        setButtonsDisabled(false);
+        isRunning = false;
+      }
     }
 
     async function runAudit() {
       if (isRunning) return;
-      clearError(); clearSuccess();
+
+      clearError();
+      clearSuccess();
+
       const selectedDate = getSelectedDate();
-      const predStore = getPredictionStore(); const auditStore = getAuditStore();
+      const predStore = getPredictionStore();
+      const auditStore = getAuditStore();
       const dayPredictions = predStore[selectedDate] || [];
       
-      if (!dayPredictions.length) { showError(`Δεν υπάρχουν αποθηκευμένες αναλύσεις για ${selectedDate}.`); return; }
+      if (!dayPredictions.length) {
+        showError(`Δεν υπάρχουν αποθηκευμένες αναλύσεις για ${selectedDate}.`);
+        return;
+      }
       
-      isRunning = true; setButtonsDisabled(true); setLoader(true, `ΑΞΙΟΛΟΓΗΣΗ ΔΕΔΟΜΕΝΩΝ...`);
-      const display = document.getElementById("display"); const labSection = document.getElementById("labSection");
-      display.innerHTML = ""; labSection.innerHTML = "";
+      isRunning = true;
+      setButtonsDisabled(true);
+      setLoader(true, `ΑΞΙΟΛΟΓΗΣΗ ΔΕΔΟΜΕΝΩΝ...`);
+
+      const display = document.getElementById("display");
+      const labSection = document.getElementById("labSection");
+      display.innerHTML = "";
+      labSection.innerHTML = "";
       
       try {
-        let htmlBuffer = ""; let evaluated = 0; let totalActualGoals = 0; let totalPredGoals = 0; let totalAbsError = 0; let over25Hits = 0; let bttsHits = 0;
+        let htmlBuffer = "";
+        let evaluated = 0;
+        let totalActualGoals = 0;
+        let totalPredGoals = 0;
+        let totalAbsError = 0;
+        let over25Hits = 0;
+        let bttsHits = 0;
+
         auditStore[selectedDate] = [];
         
         for (let i = 0; i < dayPredictions.length; i++) {
@@ -455,15 +806,29 @@
           const f = res?.response?.[0];
           if (!f || f.fixture.status.short !== "FT") continue;
           
-          const actualHome = f.goals.home ?? 0; const actualAway = f.goals.away ?? 0; const actualTotal = actualHome + actualAway;
+          const actualHome = f.goals.home ?? 0;
+          const actualAway = f.goals.away ?? 0;
+          const actualTotal = actualHome + actualAway;
           const predTotal = Number(entry.predictedHomeXG || 0) + Number(entry.predictedAwayXG || 0);
           const absError = Math.abs(predTotal - actualTotal);
           
-          totalActualGoals += actualTotal; totalPredGoals += predTotal; totalAbsError += absError; evaluated++;
-          if (predTotal > 2.5 === actualTotal > 2.5) over25Hits++;
+          totalActualGoals += actualTotal;
+          totalPredGoals += predTotal;
+          totalAbsError += absError;
+          evaluated++;
+
+          if ((predTotal > 2.5) === (actualTotal > 2.5)) over25Hits++;
           if ((entry.predictedHomeXG > 0.7 && entry.predictedAwayXG > 0.7) === (actualHome > 0 && actualAway > 0)) bttsHits++;
           
-          auditStore[selectedDate].push({ ...entry, actualHomeGoals: actualHome, actualAwayGoals: actualAway, actualTotalGoals: actualTotal, absErrorTotalGoals: absError, auditedAt: new Date().toISOString() });
+          auditStore[selectedDate].push({
+            ...entry,
+            actualHomeGoals: actualHome,
+            actualAwayGoals: actualAway,
+            actualTotalGoals: actualTotal,
+            absErrorTotalGoals: absError,
+            auditedAt: new Date().toISOString()
+          });
+
           htmlBuffer += `
             <div class="cyber-card" style="border-left-color: var(--gold);">
               <div style="font-size:0.72rem; color:var(--txt-muted);">${escapeHtml(entry.league)} | ${escapeHtml(entry.date)}</div>
@@ -476,6 +841,7 @@
         }
         
         saveAuditStore(auditStore);
+
         if (evaluated > 0) {
           labSection.innerHTML = `
             <div class="lab-audit-panel">
@@ -487,29 +853,110 @@
                 <div class="audit-box"><div class="audit-label">ΑΠΟΚΛΙΣΗ ΣΦΑΛΜΑΤΟΣ</div><div class="audit-value">${(totalAbsError / evaluated).toFixed(2)}</div></div>
               </div>
             </div>`;
-          display.innerHTML = htmlBuffer; showSuccess(`Η αξιολόγηση ολοκληρώθηκε επιτυχώς.`);
-        } else { display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--alert);">Δεν υπάρχουν ακόμα ολοκληρωμένοι αγώνες.</h3></div>`; }
+
+          display.innerHTML = htmlBuffer;
+          showSuccess(`Η αξιολόγηση ολοκληρώθηκε επιτυχώς.`);
+        } else {
+          display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--alert);">Δεν υπάρχουν ακόμα ολοκληρωμένοι αγώνες.</h3></div>`;
+        }
+
         refreshStoreBadges();
-      } catch (err) { console.error("AUDIT ERROR:", err); showError(`Σφάλμα: ${err?.message}`); } 
-      finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
+      } catch (err) {
+        console.error("AUDIT ERROR:", err);
+        showError(`Σφάλμα: ${err?.message}`);
+      } finally {
+        setLoader(false);
+        setButtonsDisabled(false);
+        isRunning = false;
+      }
     }
 
-    function flattenAuditStore() { const a = getAuditStore(); const r = []; Object.keys(a).sort().forEach(d => { if (Array.isArray(a[d])) r.push(...a[d]); }); return r; }
-    function downloadTextFile(f, c, m = "application/json;charset=utf-8;") { const b = new Blob([c], { type: m }); const u = URL.createObjectURL(b); const a = document.createElement("a"); a.href = u; a.download = f; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(u); }
-    function exportTrainingJSON() { const r = flattenAuditStore(); if (!r.length) return showError("Δεν υπάρχουν δεδομένα."); downloadTextFile(`omega_training_${getTodayISO()}.json`, JSON.stringify(r, null, 2)); showSuccess(`Εξήχθησαν ${r.length} εγγραφές.`); }
-    function exportTrainingCSV() { const r = flattenAuditStore(); if (!r.length) return showError("Δεν υπάρχουν δεδομένα."); const h = ["date","league","homeTeam","awayTeam","predictedHomeXG","predictedAwayXG","actualHomeGoals","actualAwayGoals"]; const c = [h.join(","), ...r.map(row => h.map(key => `"${String(row[key] ?? "").replaceAll('"', '""')}"`).join(","))].join("\n"); downloadTextFile(`omega_training_${getTodayISO()}.csv`, c, "text/csv;charset=utf-8;"); showSuccess(`Εξήχθησαν ${r.length} εγγραφές.`); }
-    function clearSelectedDateData() { const d = getSelectedDate(); const p = getPredictionStore(); const a = getAuditStore(); delete p[d]; delete a[d]; savePredictionStore(p); saveAuditStore(a); memoryBank = []; document.getElementById("display").innerHTML = ""; document.getElementById("labSection").innerHTML = ""; showSuccess(`Τα δεδομένα διεγράφησαν.`); }
-    function exportPDF() { const app = document.getElementById("app"); if (!app) return; html2pdf().set({ margin: 8, filename: `Omega_${getSelectedDate()}.pdf`, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(app).save(); }
+    function flattenAuditStore() {
+      const a = getAuditStore();
+      const r = [];
+      Object.keys(a).sort().forEach(d => {
+        if (Array.isArray(a[d])) r.push(...a[d]);
+      });
+      return r;
+    }
+
+    function downloadTextFile(f, c, m = "application/json;charset=utf-8;") {
+      const b = new Blob([c], { type: m });
+      const u = URL.createObjectURL(b);
+      const a = document.createElement("a");
+      a.href = u;
+      a.download = f;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(u);
+    }
+
+    function exportTrainingJSON() {
+      const r = flattenAuditStore();
+      if (!r.length) return showError("Δεν υπάρχουν δεδομένα.");
+      downloadTextFile(`omega_training_${getTodayISO()}.json`, JSON.stringify(r, null, 2));
+      showSuccess(`Εξήχθησαν ${r.length} εγγραφές.`);
+    }
+
+    function exportTrainingCSV() {
+      const r = flattenAuditStore();
+      if (!r.length) return showError("Δεν υπάρχουν δεδομένα.");
+
+      const h = ["date","league","homeTeam","awayTeam","predictedHomeXG","predictedAwayXG","actualHomeGoals","actualAwayGoals"];
+      const c = [
+        h.join(","),
+        ...r.map(row => h.map(key => `"${String(row[key] ?? "").replaceAll('"', '""')}"`).join(","))
+      ].join("\n");
+
+      downloadTextFile(`omega_training_${getTodayISO()}.csv`, c, "text/csv;charset=utf-8;");
+      showSuccess(`Εξήχθησαν ${r.length} εγγραφές.`);
+    }
+
+    function clearSelectedDateData() {
+      const d = getSelectedDate();
+      const p = getPredictionStore();
+      const a = getAuditStore();
+      delete p[d];
+      delete a[d];
+      savePredictionStore(p);
+      saveAuditStore(a);
+      memoryBank = [];
+      document.getElementById("display").innerHTML = "";
+      document.getElementById("labSection").innerHTML = "";
+      showSuccess(`Τα δεδομένα διεγράφησαν.`);
+    }
+
+    function exportPDF() {
+      const app = document.getElementById("app");
+      if (!app) return;
+
+      html2pdf().set({
+        margin: 8,
+        filename: `Omega_${getSelectedDate()}.pdf`,
+        image: { type: "jpeg", quality: 0.96 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      }).from(app).save();
+    }
 
     window.addEventListener("DOMContentLoaded", () => {
-      const dateEl = document.getElementById("scanDate"); dateEl.value = getTodayISO();
-      dateEl.addEventListener("change", () => { clearError(); clearSuccess(); refreshStoreBadges(); });
+      const dateEl = document.getElementById("scanDate");
+      dateEl.value = getTodayISO();
+      dateEl.addEventListener("change", () => {
+        clearError();
+        clearSuccess();
+        refreshStoreBadges();
+      });
       
       const select = document.getElementById("leagueFilter");
       LEAGUES_DATA.forEach(l => {
         const opt = document.createElement("option");
-        opt.value = l.id; opt.textContent = l.name; select.appendChild(opt);
+        opt.value = l.id;
+        opt.textContent = l.name;
+        select.appendChild(opt);
       });
+
       refreshStoreBadges();
     });
   </script>
