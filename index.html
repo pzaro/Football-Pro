@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4705.10 - Master Algorithm Final</title>
+  <title>Predictor Pro v4706.00 - Master Algorithm WallBet Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -22,12 +22,15 @@
       --pick-bg: rgba(57, 255, 20, 0.1);
       --pick-border: #39ff14;
       --magenta: #ff00ff;
+      --soft-red: rgba(218, 54, 51, 0.08);
+      --soft-gold: rgba(245, 158, 11, 0.08);
+      --soft-cyan: rgba(0, 242, 255, 0.08);
     }
 
     * { box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f0f6fc; margin: 0; padding: 0; }
     .orbitron { font-family: 'Orbitron', sans-serif; }
-    .container { max-width: 1080px; margin: 0 auto; padding: 15px; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 15px; }
 
     .cyber-card {
       background: var(--card);
@@ -36,6 +39,23 @@
       padding: 20px;
       margin-bottom: 20px;
       border-left: 5px solid var(--p);
+    }
+
+    .section-panel {
+      background: #0b1016;
+      border: 1px solid #26303b;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--gold);
+      font-size: 1rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      letter-spacing: .5px;
     }
 
     .omega-pick {
@@ -161,7 +181,7 @@
       filter: none;
     }
 
-    .date-input, .league-select {
+    .date-input, .league-select, .stake-input {
       background: #000;
       color: var(--p);
       border: 1px solid var(--p);
@@ -173,6 +193,7 @@
 
     .league-select { min-width: 220px; cursor: pointer; }
     .date-input { min-width: 180px; }
+    .stake-input { width: 120px; }
 
     .stats-grid {
       display: grid;
@@ -203,6 +224,14 @@
       border-bottom: none;
       margin-bottom: 0;
       padding-bottom: 0;
+    }
+
+    .minor-row {
+      font-size: 0.76rem;
+      color: var(--txt-muted);
+      margin-top: -2px;
+      margin-bottom: 8px;
+      text-align: right;
     }
 
     .form-dot {
@@ -247,15 +276,112 @@
       font-size: 0.9rem;
     }
 
+    .top-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .rank-card {
+      background: #11161d;
+      border: 1px solid #2e3742;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .rank-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .rank-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      background: var(--soft-gold);
+      color: var(--gold);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .score-chip {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      background: var(--soft-cyan);
+      color: var(--p);
+      border: 1px solid rgba(0, 242, 255, 0.25);
+    }
+
+    .wallbet-box {
+      background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(0,242,255,0.08));
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .wallbet-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      color: var(--gold);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .wallbet-leg {
+      background: rgba(0,0,0,0.28);
+      border: 1px solid #313a44;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .bank-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .bank-box {
+      background: #11161c;
+      border: 1px solid #2e3742;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .bank-label {
+      font-size: 0.7rem;
+      color: var(--txt-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .bank-value {
+      margin-top: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      font-weight: 900;
+    }
+
     @media (max-width: 900px) {
-      .stats-grid { grid-template-columns: 1fr; }
+      .stats-grid, .bank-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4705.10</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.00</h1>
     <input
       type="password"
       id="pin"
@@ -263,14 +389,14 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">Master Algorithm - Final Fixed Version</div>
+    <div class="small-note">WallBet Edition / Top Markets / Cards Split</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top: 6px; color: var(--txt-muted); font-size: 0.8rem;">v4705.10 Smart League Rules / Fixed xGA</div>
+        <div style="margin-top: 6px; color: var(--txt-muted); font-size: 0.8rem;">v4706.00 Top 5 + WallBet + Bank Tracking</div>
       </header>
 
       <div class="toolbar">
@@ -278,7 +404,9 @@
         <select id="leagueFilter" class="league-select">
           <option value="ALL">🌐 Όλα τα Πρωταθλήματα</option>
         </select>
+        <input type="number" id="wallbetStake" class="stake-input" value="10" min="1" step="1" placeholder="Stake">
         <button class="btn-main" id="btnPre" onclick="runScan()">🚀 ΕΥΡΕΣΗ ΣΗΜΕΙΩΝ (SCAN)</button>
+        <button class="btn-main" id="btnSaveWallbet" style="background:#b45309;" onclick="saveWallBet()">💾 SAVE WALLBET</button>
         <button class="btn-main" id="btnPdf" style="background:#222;" onclick="exportPDF()">📄 SAVE PDF</button>
       </div>
 
@@ -291,6 +419,9 @@
         <p id="status" class="orbitron" style="font-size:0.7rem; color:var(--p); margin-top:8px;"></p>
       </div>
 
+      <div id="topSection"></div>
+      <div id="wallbetSection"></div>
+      <div id="bankSection"></div>
       <div id="display"></div>
     </div>
   </div>
@@ -324,11 +455,15 @@
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470600";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470600";
 
     let statsCache = new Map();
     let teamStatsCache = new Map();
     let lastFixturesCache = new Map();
     let isRunning = false;
+    let latestTopLists = { over25: [], btts: [], cards4: [] };
+    let latestWallBet = null;
 
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -354,7 +489,7 @@
     }
 
     function setButtonsDisabled(disabled) {
-      ["btnPre", "btnPdf", "leagueFilter"].forEach(id => {
+      ["btnPre", "btnPdf", "btnSaveWallbet", "leagueFilter"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.disabled = disabled;
       });
@@ -377,6 +512,52 @@
       return `${y}-${m}-${day}`;
     }
 
+    function safeNum(x, d = 0) {
+      const n = Number(x);
+      return Number.isFinite(n) ? n : d;
+    }
+
+    function getWallBetBank() {
+      try {
+        return JSON.parse(localStorage.getItem(LS_WALLBET_BANK) || '{"totalBets":0,"stakeSum":0,"profit":0,"wins":0,"losses":0}');
+      } catch {
+        return { totalBets: 0, stakeSum: 0, profit: 0, wins: 0, losses: 0 };
+      }
+    }
+
+    function saveWallBetBank(v) {
+      localStorage.setItem(LS_WALLBET_BANK, JSON.stringify(v));
+    }
+
+    function renderBankSection() {
+      const bank = getWallBetBank();
+      const roi = bank.stakeSum > 0 ? ((bank.profit / bank.stakeSum) * 100).toFixed(1) : "0.0";
+
+      document.getElementById("bankSection").innerHTML = `
+        <div class="section-panel">
+          <div class="section-title">🏦 WALLBET ΤΑΜΕΙΟ</div>
+          <div class="bank-grid">
+            <div class="bank-box">
+              <div class="bank-label">Σύνολο Δελτίων</div>
+              <div class="bank-value">${bank.totalBets}</div>
+            </div>
+            <div class="bank-box">
+              <div class="bank-label">Συνολικό Ποντάρισμα</div>
+              <div class="bank-value">${bank.stakeSum.toFixed(2)}</div>
+            </div>
+            <div class="bank-box">
+              <div class="bank-label">Καθαρό Κέρδος</div>
+              <div class="bank-value">${bank.profit.toFixed(2)}</div>
+            </div>
+            <div class="bank-box">
+              <div class="bank-label">ROI %</div>
+              <div class="bank-value">${roi}%</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     async function throttledFetch(url, timeout = REQUEST_TIMEOUT_MS) {
       await sleep(REQUEST_DELAY_MS);
       const controller = new AbortController();
@@ -394,9 +575,7 @@
     async function apiReq(path) {
       try {
         const response = await throttledFetch(`${API}/${path}`);
-        if (!response.ok) {
-          return { response: [], errors: { status: response.status } };
-        }
+        if (!response.ok) return { response: [], errors: { status: response.status } };
         return await response.json() || { response: [] };
       } catch (err) {
         return { response: [], errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown") } };
@@ -464,9 +643,7 @@
         (corners * 0.025) +
         (goals * 0.35);
 
-      if (!Number.isFinite(xg) || xg <= 0) {
-        xg = goals > 0 ? (0.70 + goals * 0.30) : 0.70;
-      }
+      if (!Number.isFinite(xg) || xg <= 0) xg = goals > 0 ? (0.70 + goals * 0.30) : 0.70;
       return xg;
     }
 
@@ -487,15 +664,9 @@
     }
 
     async function batchCalculate(list, teamId) {
-      if (!list.length) {
-        return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
-      }
+      if (!list.length) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
 
-      let xgSum = 0;
-      let xgaSum = 0;
-      let corSum = 0;
-      let crdSum = 0;
-      let count = 0;
+      let xgSum = 0, xgaSum = 0, corSum = 0, crdSum = 0, count = 0;
 
       for (const f of list) {
         const st = await getFixtureStats(f.fixture.id);
@@ -559,14 +730,65 @@
         splitXGA: split.xga,
         corners: form.cor,
         cards: form.crd,
+        splitCards: split.crd,
         history: getFormHistory(genLast, teamId)
       };
     }
 
-    function generateOmegaPick(hStats, aStats, leagueId) {
-      let hXG = parseFloat(hStats.formXG);
-      let aXG = parseFloat(aStats.formXG);
+    function computeMarketScores(hStats, aStats, leagueId) {
+      let hXG = safeNum(hStats.formXG);
+      let aXG = safeNum(aStats.formXG);
       let totalXG = hXG + aXG;
+
+      const hSplitXG = safeNum(hStats.splitXG);
+      const aSplitXG = safeNum(aStats.splitXG);
+      const hXGA = safeNum(hStats.formXGA);
+      const aXGA = safeNum(aStats.formXGA);
+      const hCards = safeNum(hStats.cards);
+      const aCards = safeNum(aStats.cards);
+      const hSplitCards = safeNum(hStats.splitCards);
+      const aSplitCards = safeNum(aStats.splitCards);
+
+      const trapLeagues = [40, 41, 136, 141, 79, 62];
+      const goldLeagues = [78, 262, 88];
+      const tightLeagues = [61, 94, 197, 135];
+
+      if (trapLeagues.includes(leagueId)) {
+        totalXG *= 0.80; hXG *= 0.80; aXG *= 0.80;
+      } else if (tightLeagues.includes(leagueId)) {
+        totalXG *= 0.85; hXG *= 0.85; aXG *= 0.85;
+      } else if (goldLeagues.includes(leagueId)) {
+        totalXG *= 1.05;
+      }
+
+      const over25Score =
+        (totalXG * 26) +
+        ((hSplitXG + aSplitXG) * 10) +
+        ((aXGA + hXGA) * 7);
+
+      const bttsScore =
+        (Math.min(hXG, aXG) * 40) +
+        ((hXGA + aXGA) * 12) +
+        (Math.min(hSplitXG, aSplitXG) * 12);
+
+      const cards4Score =
+        ((hCards + aCards) * 18) +
+        ((hSplitCards + aSplitCards) * 14);
+
+      return {
+        over25Score: Number(over25Score.toFixed(2)),
+        bttsScore: Number(bttsScore.toFixed(2)),
+        cards4Score: Number(cards4Score.toFixed(2)),
+        adjTotalXG: Number(totalXG.toFixed(2))
+      };
+    }
+
+    function generateOmegaPick(hStats, aStats, leagueId) {
+      const scores = computeMarketScores(hStats, aStats, leagueId);
+
+      const hXG = safeNum(hStats.formXG);
+      const aXG = safeNum(aStats.formXG);
+      const totalXG = scores.adjTotalXG;
 
       if (!Number.isFinite(totalXG) || totalXG < 0.90) {
         return {
@@ -576,57 +798,38 @@
         };
       }
 
-      const trapLeagues = [40, 41, 136, 141, 79, 62];
-      const goldLeagues = [78, 262, 88];
-      const tightLeagues = [61, 94, 197, 135];
-
-      if (trapLeagues.includes(leagueId)) {
-        totalXG *= 0.80;
-        hXG *= 0.80;
-        aXG *= 0.80;
-      } else if (tightLeagues.includes(leagueId)) {
-        totalXG *= 0.85;
-        hXG *= 0.85;
-        aXG *= 0.85;
-      } else if (goldLeagues.includes(leagueId)) {
-        totalXG *= 1.05;
-      }
-
       let pick = "";
       let reason = "";
       let noBet = false;
 
-      if (totalXG >= 3.35) {
+      if (scores.over25Score >= 100) {
         pick = "🔥 OVER 2.5 GOALS";
-        reason = `Εξαιρετικός ρυθμός. Το προσαρμοσμένο xG δείχνει ${totalXG.toFixed(2)} γκολ.`;
-      } else if (totalXG >= 2.65 && hXG >= 1.25 && aXG >= 1.25) {
+        reason = `Ισχυρό προφίλ παραγωγικότητας. Adjusted xG: ${totalXG.toFixed(2)} | Score: ${scores.over25Score}`;
+      } else if (scores.bttsScore >= 88) {
         pick = "🎯 GOAL/GOAL (BTTS)";
-        reason = `Και οι δύο ομάδες σκοράρουν, αλλά οι άμυνες δεν διαλύονται εύκολα. Ασφάλεια έναντι του Over.`;
-      } else if (hXG > (aXG + 1.20) && parseFloat(hStats.splitXG) > 1.80) {
+        reason = `Και οι δύο ομάδες έχουν αρκετή επιθετική βάση και δίνουν φάσεις. Score: ${scores.bttsScore}`;
+      } else if (hXG > (aXG + 1.20) && safeNum(hStats.splitXG) > 1.80) {
         pick = "🏠 ΑΣΟΣ (1)";
         reason = `Ξεκάθαρη εντός έδρας υπεροχή (Split xG Εντός: ${hStats.splitXG}).`;
-      } else if (aXG > (hXG + 1.10) && parseFloat(aStats.splitXG) > 1.65) {
+      } else if (aXG > (hXG + 1.10) && safeNum(aStats.splitXG) > 1.65) {
         pick = "✈️ ΔΙΠΛΟ (2)";
         reason = `Η φιλοξενούμενη εμφανίζει καθαρή επιθετική υπεροχή και σταθερό εκτός έδρας split.`;
+      } else if (scores.cards4Score >= 95) {
+        pick = "🟨 OVER 4 ΚΑΡΤΕΣ";
+        reason = `Υψηλή ένταση και πειθαρχικό ρίσκο. Cards Score: ${scores.cards4Score}`;
       } else if (totalXG < 2.15) {
         pick = "🛡️ UNDER 2.5 GOALS";
-        reason = `Πολύ κλειστό ματς, τακτική προσέγγιση (Total xG: ${totalXG.toFixed(2)}).`;
+        reason = `Πολύ κλειστό ματς, τακτική προσέγγιση (Adjusted xG: ${totalXG.toFixed(2)}).`;
       } else {
-        const totalCards = parseFloat(hStats.cards) + parseFloat(aStats.cards);
-        if (totalCards > 5.5) {
-          pick = "🟨 OVER ΚΑΡΤΕΣ";
-          reason = `Οι ομάδες κάνουν πολλά σκληρά φάουλ (Μ.Ο. ${totalCards.toFixed(1)} κάρτες/ματς).`;
-        } else {
-          pick = "⚖️ NO BET (ΑΠΟΧΗ)";
-          reason = `Ισορροπημένα στατιστικά. Καμία μαθηματική αξία για στοιχηματισμό.`;
-          noBet = true;
-        }
+        pick = "⚖️ NO BET (ΑΠΟΧΗ)";
+        reason = `Ισορροπημένα στατιστικά. Καμία μαθηματική αξία για στοιχηματισμό.`;
+        noBet = true;
       }
 
       return { pick, reason, noBet };
     }
 
-    function buildMatchCard(m, s) {
+    function buildMatchCard(m, s, scores) {
       const omega = generateOmegaPick(s.h, s.a, m.league.id);
 
       return `
@@ -638,7 +841,11 @@
               <h2 class="orbitron" style="margin:5px 0;">${escapeHtml(m.teams.home.name)}</h2>
               <h2 class="orbitron" style="margin:2px 0;">${escapeHtml(m.teams.away.name)}</h2>
             </div>
-            <div style="font-size:2rem; font-weight:900;">VS</div>
+            <div style="text-align:right;">
+              <div class="score-chip">O2.5 ${scores.over25Score}</div>
+              <div class="score-chip" style="margin-top:6px;">BTTS ${scores.bttsScore}</div>
+              <div class="score-chip" style="margin-top:6px;">C4+ ${scores.cards4Score}</div>
+            </div>
           </div>
 
           <div class="omega-pick ${omega.noBet ? 'no-bet' : ''}">
@@ -675,6 +882,7 @@
                 <span>Κάρτες:</span>
                 <span style="font-weight:800;">🟨 ${s?.h?.cards}</span>
               </div>
+              <div class="minor-row">ΜΟ κάρτες μόνο εντός: ${s?.h?.splitCards}</div>
             </div>
 
             <div class="team-box">
@@ -704,10 +912,132 @@
                 <span>Κάρτες:</span>
                 <span style="font-weight:800;">🟨 ${s?.a?.cards}</span>
               </div>
+              <div class="minor-row">ΜΟ κάρτες μόνο εκτός: ${s?.a?.splitCards}</div>
             </div>
           </div>
         </div>
       `;
+    }
+
+    function rankItemHTML(item, idx, label, scoreKey) {
+      return `
+        <div class="rank-card">
+          <div class="rank-head">
+            <div>
+              <span class="rank-badge">#${idx + 1} ${label}</span>
+            </div>
+            <div class="score-chip">${item[scoreKey]}</div>
+          </div>
+          <div style="font-weight:800;">${escapeHtml(item.homeTeam)} vs ${escapeHtml(item.awayTeam)}</div>
+          <div style="color:var(--txt-muted); font-size:0.8rem; margin-top:4px;">${escapeHtml(item.league)}</div>
+        </div>
+      `;
+    }
+
+    function renderTopSections() {
+      document.getElementById("topSection").innerHTML = `
+        <div class="section-panel">
+          <div class="section-title">🏆 TOP 5 OVER 2.5</div>
+          <div class="top-list">
+            ${latestTopLists.over25.map((x, i) => rankItemHTML(x, i, "OVER 2.5", "over25Score")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}
+          </div>
+        </div>
+
+        <div class="section-panel">
+          <div class="section-title">🎯 TOP 5 BTTS</div>
+          <div class="top-list">
+            ${latestTopLists.btts.map((x, i) => rankItemHTML(x, i, "BTTS", "bttsScore")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}
+          </div>
+        </div>
+
+        <div class="section-panel">
+          <div class="section-title">🟨 TOP 5 OVER 4 ΚΑΡΤΕΣ</div>
+          <div class="top-list">
+            ${latestTopLists.cards4.map((x, i) => rankItemHTML(x, i, "OVER 4 ΚΑΡΤΕΣ", "cards4Score")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}
+          </div>
+        </div>
+      `;
+    }
+
+    function buildWallBet() {
+      const candidates = [
+        ...latestTopLists.over25.map(x => ({ ...x, market: "OVER 2.5", mainScore: x.over25Score })),
+        ...latestTopLists.btts.map(x => ({ ...x, market: "BTTS", mainScore: x.bttsScore })),
+        ...latestTopLists.cards4.map(x => ({ ...x, market: "OVER 4 ΚΑΡΤΕΣ", mainScore: x.cards4Score }))
+      ];
+
+      const unique = [];
+      const used = new Set();
+
+      for (const c of candidates.sort((a, b) => b.mainScore - a.mainScore)) {
+        const key = `${c.fixtureId}_${c.market}`;
+        if (used.has(key)) continue;
+        used.add(key);
+        unique.push(c);
+      }
+
+      if (unique.length < 2) return null;
+
+      const leg1 = unique[0];
+      const leg2 = unique.find(x => x.fixtureId !== leg1.fixtureId) || unique[1];
+      if (!leg2) return null;
+
+      const estimatedScore = Number((leg1.mainScore + leg2.mainScore).toFixed(2));
+      return {
+        date: getTodayISO(),
+        stake: safeNum(document.getElementById("wallbetStake")?.value, 10),
+        legs: [leg1, leg2],
+        estimatedScore
+      };
+    }
+
+    function renderWallBet() {
+      latestWallBet = buildWallBet();
+
+      if (!latestWallBet) {
+        document.getElementById("wallbetSection").innerHTML = `
+          <div class="section-panel">
+            <div class="wallbet-title">🧱 WALLBET ΤΗΣ ΗΜΕΡΑΣ</div>
+            <div style="color:var(--txt-muted);">Δεν βρέθηκαν αρκετά ισχυρές επιλογές.</div>
+          </div>
+        `;
+        return;
+      }
+
+      document.getElementById("wallbetSection").innerHTML = `
+        <div class="section-panel wallbet-box">
+          <div class="wallbet-title">🧱 WALLBET ΤΗΣ ΗΜΕΡΑΣ</div>
+          ${latestWallBet.legs.map((leg, i) => `
+            <div class="wallbet-leg">
+              <div style="font-weight:900; color:var(--gold); margin-bottom:6px;">Leg ${i + 1}: ${escapeHtml(leg.market)}</div>
+              <div style="font-weight:800;">${escapeHtml(leg.homeTeam)} vs ${escapeHtml(leg.awayTeam)}</div>
+              <div style="color:var(--txt-muted); font-size:0.82rem; margin-top:4px;">${escapeHtml(leg.league)}</div>
+              <div style="margin-top:6px;" class="score-chip">Score ${leg.mainScore}</div>
+            </div>
+          `).join("")}
+          <div style="margin-top:10px; font-weight:800;">
+            Stake: <span style="color:var(--p);">${latestWallBet.stake.toFixed(2)}</span>
+            &nbsp; | &nbsp;
+            Combined Strength: <span style="color:var(--gold);">${latestWallBet.estimatedScore}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function saveWallBet() {
+      if (!latestWallBet) {
+        showError("Δεν υπάρχει διαθέσιμο WallBet για αποθήκευση.");
+        return;
+      }
+
+      localStorage.setItem(LS_WALLBET_LAST, JSON.stringify(latestWallBet));
+
+      const bank = getWallBetBank();
+      bank.totalBets += 1;
+      bank.stakeSum += safeNum(latestWallBet.stake, 10);
+      saveWallBetBank(bank);
+      renderBankSection();
+      clearError();
     }
 
     async function runScan() {
@@ -720,6 +1050,8 @@
 
       const display = document.getElementById("display");
       display.innerHTML = "";
+      document.getElementById("topSection").innerHTML = "";
+      document.getElementById("wallbetSection").innerHTML = "";
 
       try {
         const selectedDate = document.getElementById("scanDate").value || getTodayISO();
@@ -737,6 +1069,8 @@
         }
 
         let htmlBuffer = "";
+        const scoredMatches = [];
+
         for (let i = 0; i < matches.length; i++) {
           const m = matches[i];
           setProgress(Math.round(((i + 1) / matches.length) * 100), `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
@@ -746,9 +1080,28 @@
             getTeamData(m.teams.away.id, m.league.id, m.league.season, "away")
           ]);
 
-          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway });
+          const scores = computeMarketScores(intelHome, intelAway, m.league.id);
+
+          scoredMatches.push({
+            fixtureId: m.fixture.id,
+            homeTeam: m.teams.home.name,
+            awayTeam: m.teams.away.name,
+            league: m.league.name,
+            leagueId: m.league.id,
+            over25Score: scores.over25Score,
+            bttsScore: scores.bttsScore,
+            cards4Score: scores.cards4Score
+          });
+
+          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores);
         }
 
+        latestTopLists.over25 = [...scoredMatches].sort((a, b) => b.over25Score - a.over25Score).slice(0, 5);
+        latestTopLists.btts = [...scoredMatches].sort((a, b) => b.bttsScore - a.bttsScore).slice(0, 5);
+        latestTopLists.cards4 = [...scoredMatches].sort((a, b) => b.cards4Score - a.cards4Score).slice(0, 5);
+
+        renderTopSections();
+        renderWallBet();
         display.innerHTML = htmlBuffer;
       } catch (err) {
         showError(`Σφάλμα: ${err?.message || "Άγνωστο σφάλμα"}`);
@@ -762,7 +1115,7 @@
     function exportPDF() {
       html2pdf().set({
         margin: 8,
-        filename: `Value_Bets_${getTodayISO()}.pdf`,
+        filename: `WallBet_${getTodayISO()}.pdf`,
         image: { type: "jpeg", quality: 0.96 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
@@ -778,6 +1131,7 @@
         opt.textContent = l.name;
         select.appendChild(opt);
       });
+      renderBankSection();
     });
   </script>
 </body>
