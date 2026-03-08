@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4703.12 Final - Greek UI Edition</title>
+  <title>Predictor Pro v4705.10 - Master Algorithm Final</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -19,29 +19,15 @@
       --alert: #da3633;
       --txt-muted: #8b949e;
       --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
+      --pick-bg: rgba(57, 255, 20, 0.1);
+      --pick-border: #39ff14;
       --magenta: #ff00ff;
-      --ok: #238636;
-      --warn: #d29922;
-      --soft: #161b22;
     }
 
     * { box-sizing: border-box; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: #f0f6fc;
-      margin: 0;
-      padding: 0;
-    }
-
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f0f6fc; margin: 0; padding: 0; }
     .orbitron { font-family: 'Orbitron', sans-serif; }
-
-    .container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 15px;
-    }
+    .container { max-width: 1080px; margin: 0 auto; padding: 15px; }
 
     .cyber-card {
       background: var(--card);
@@ -52,9 +38,48 @@
       border-left: 5px solid var(--p);
     }
 
-    .live-glow {
-      border-left-color: var(--neon-live);
-      box-shadow: 0 0 15px rgba(57, 255, 20, 0.1);
+    .omega-pick {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--pick-bg);
+      border: 1px dashed var(--pick-border);
+      text-align: center;
+    }
+
+    .omega-pick.no-bet {
+      background: rgba(218, 54, 51, 0.1);
+      border-color: var(--alert);
+    }
+
+    .omega-pick.no-bet .pick-value {
+      color: #ffb3b3;
+      text-shadow: none;
+    }
+
+    .pick-title {
+      font-size: 0.75rem;
+      color: var(--neon-live);
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .omega-pick.no-bet .pick-title { color: var(--alert); }
+
+    .pick-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      color: #fff;
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+    }
+
+    .pick-reason {
+      font-size: 0.75rem;
+      color: var(--txt-muted);
+      margin-top: 4px;
     }
 
     .season-xg-red {
@@ -72,6 +97,23 @@
       font-weight: 600;
       font-family: 'Orbitron', sans-serif;
       margin-left: 5px;
+    }
+
+    .val-xg {
+      color: var(--p);
+      font-weight: 800;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+    }
+
+    .val-split {
+      color: var(--split-color);
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      border: 1px solid var(--split-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(251, 191, 36, 0.1);
     }
 
     .dev-badge {
@@ -110,10 +152,7 @@
       font-size: 0.84rem;
     }
 
-    .btn-main:hover {
-      filter: brightness(1.15);
-      transform: translateY(-2px);
-    }
+    .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
 
     .btn-main:disabled {
       opacity: 0.5;
@@ -132,8 +171,8 @@
       font-size: 0.95rem;
     }
 
+    .league-select { min-width: 220px; cursor: pointer; }
     .date-input { min-width: 180px; }
-    .league-select { min-width: 220px; outline: none; cursor: pointer; }
 
     .stats-grid {
       display: grid;
@@ -160,49 +199,10 @@
       align-items: center;
     }
 
-    .val-xg {
-      color: var(--p);
-      font-weight: 800;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1rem;
-    }
-
-    .val-split {
-      color: var(--split-color);
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      border: 1px solid var(--split-color);
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: rgba(251, 191, 36, 0.1);
-    }
-
-    .over-flag {
-      margin-top: 12px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-weight: 900;
-      font-size: 0.78rem;
-      font-family: 'Orbitron', sans-serif;
-      text-align: center;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(57,255,20,.35);
-      background: rgba(57,255,20,.10);
-      color: var(--neon-live);
-      box-shadow: 0 0 14px rgba(57,255,20,.08);
-    }
-
-    .live-pulse {
-      color: var(--neon-live);
-      animation: pulse 1s infinite;
-      font-weight: 900;
-      font-size: 2.5rem;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.4; }
-      100% { opacity: 1; }
+    .stat-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
 
     .form-dot {
@@ -222,55 +222,19 @@
     .form-D { background: #666; }
     .form-L { background: #da3633; }
 
-    .lab-audit-panel {
-      background: #000;
-      border: 2px solid var(--gold);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 0 30px rgba(245, 158, 11, 0.12);
-    }
-
-    .audit-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .audit-box {
-      background: #161b22;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-      border: 1px solid #333;
-    }
-
-    .audit-label {
-      font-size: 0.65rem;
-      color: var(--txt-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .audit-value {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.4rem;
-      color: var(--gold);
-      font-weight: 900;
-      margin: 5px 0;
-    }
-
-    .status-line {
-      margin-top: 6px;
-      color: var(--txt-muted);
-      font-size: 0.8rem;
+    .toolbar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
     }
 
     .small-note {
       color: var(--txt-muted);
-      font-size: 0.75rem;
-      margin-top: 8px;
+      font-size: 0.8rem;
+      margin-top: 10px;
     }
 
     .error-box {
@@ -283,145 +247,15 @@
       font-size: 0.9rem;
     }
 
-    .success-box {
-      background: rgba(35, 134, 54, 0.1);
-      border: 1px solid rgba(35, 134, 54, 0.5);
-      color: #b7f7c4;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      font-size: 0.9rem;
-    }
-
-    .toolbar {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-      align-items: center;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 20px;
-      background: #161b22;
-      border: 1px solid #333;
-      color: var(--txt-muted);
-      font-size: 0.72rem;
-      margin-right: 6px;
-    }
-
-    .prob-panel {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid #2a2f37;
-    }
-
-    .prob-title {
-      font-size: 0.72rem;
-      font-weight: 900;
-      color: var(--gold);
-      margin-bottom: 10px;
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: .5px;
-    }
-
-    .prob-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 7px;
-      font-size: 0.82rem;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #1a1d23;
-    }
-
-    .prob-row:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .prob-val {
-      color: var(--p);
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .verify-box {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 10px;
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-    }
-
-    .verify-line {
-      font-size: 0.78rem;
-      color: #f0f6fc;
-      margin-bottom: 5px;
-    }
-
-    .verify-line:last-child { margin-bottom: 0; }
-
-    .market-tag {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: #161b22;
-      border: 1px solid #333;
-      color: var(--gold);
-      font-size: 0.68rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      margin-left: 6px;
-    }
-
-    .confidence-chip {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid #333;
-      background: #11161c;
-      font-size: 0.72rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      margin-left: 6px;
-    }
-
-    .confidence-high { color: var(--neon-live); border-color: rgba(57,255,20,.35); }
-    .confidence-mid  { color: var(--gold); border-color: rgba(245,158,11,.35); }
-    .confidence-low  { color: #ff7b72; border-color: rgba(255,123,114,.35); }
-
-    .top-pick-box {
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 10px;
-      background: rgba(0,242,255,0.06);
-      border: 1px solid rgba(0,242,255,0.2);
-    }
-
-    .top-pick-title {
-      color: var(--p);
-      font-weight: 900;
-      font-size: 0.75rem;
-      font-family: 'Orbitron', sans-serif;
-      margin-bottom: 8px;
-    }
-
     @media (max-width: 900px) {
-      .stats-grid, .audit-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX ALPHA OMEGA v4703.12 FINAL</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4705.10</h1>
     <input
       type="password"
       id="pin"
@@ -429,40 +263,26 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">Greek UI Edition - Final Probability + Verification Layer</div>
+    <div class="small-note">Master Algorithm - Final Fixed Version</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
-        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">SELECTIVE</span></h1>
-        <div class="status-line">v4703.12 Final / League Filter / Probability Engine / Confidence Score</div>
+        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
+        <div style="margin-top: 6px; color: var(--txt-muted); font-size: 0.8rem;">v4705.10 Smart League Rules / Fixed xGA</div>
       </header>
 
       <div class="toolbar">
         <input type="date" id="scanDate" class="date-input">
-
         <select id="leagueFilter" class="league-select">
           <option value="ALL">🌐 Όλα τα Πρωταθλήματα</option>
         </select>
-
-        <button class="btn-main" id="btnPre" onclick="runScan('pre')">🚀 PRE-MATCH SNAPSHOT</button>
-        <button class="btn-main" id="btnLive" style="background:#da3633;" onclick="runScan('live')">🔴 LIVE RADAR</button>
-        <button class="btn-main" id="btnAudit" style="background:var(--gold); color:#000;" onclick="runAudit()">🔍 DATA LAB AUDIT</button>
+        <button class="btn-main" id="btnPre" onclick="runScan()">🚀 ΕΥΡΕΣΗ ΣΗΜΕΙΩΝ (SCAN)</button>
         <button class="btn-main" id="btnPdf" style="background:#222;" onclick="exportPDF()">📄 SAVE PDF</button>
-        <button class="btn-main" id="btnExportTrain" style="background:#0f766e;" onclick="exportTrainingJSON()">🧠 EXPORT JSON</button>
-        <button class="btn-main" id="btnExportCSV" style="background:#1d4ed8;" onclick="exportTrainingCSV()">📊 EXPORT CSV</button>
-        <button class="btn-main" id="btnClearDay" style="background:#7c2d12;" onclick="clearSelectedDateData()">🗑 CLEAR DATE</button>
-      </div>
-
-      <div style="text-align:center; margin-bottom:18px;">
-        <span class="pill">Προβλέψεις: <span id="predCountBadge">0</span></span>
-        <span class="pill">Αξιολογήσεις (Audit): <span id="auditCountBadge">0</span></span>
-        <span class="pill">Επιλεγμένη Ημ/νία: <span id="selectedDateBadge">-</span></span>
       </div>
 
       <div id="errorBox"></div>
-      <div id="successBox"></div>
 
       <div id="loader" style="display:none; text-align:center; margin-bottom:20px;">
         <div style="width:100%; background:#222; height:8px; border-radius:4px; overflow:hidden;">
@@ -471,7 +291,6 @@
         <p id="status" class="orbitron" style="font-size:0.7rem; color:var(--p); margin-top:8px;"></p>
       </div>
 
-      <div id="labSection"></div>
       <div id="display"></div>
     </div>
   </div>
@@ -481,40 +300,46 @@
     const API = "https://v3.football.api-sports.io";
 
     const LEAGUES_DATA = [
-      {id: 39, name: "🇬🇧 Premier League"}, {id: 40, name: "🇬🇧 Championship"}, {id: 41, name: "🇬🇧 League One"},
-      {id: 140, name: "🇪🇸 La Liga"}, {id: 141, name: "🇪🇸 La Liga 2"},
-      {id: 135, name: "🇮🇹 Serie A"}, {id: 136, name: "🇮🇹 Serie B"},
-      {id: 78, name: "🇩🇪 Bundesliga"}, {id: 79, name: "🇩🇪 2. Bundesliga"},
-      {id: 61, name: "🇫🇷 Ligue 1"}, {id: 62, name: "🇫🇷 Ligue 2"},
-      {id: 253, name: "🇺🇸 MLS"}, {id: 262, name: "🇲🇽 Liga MX"}, {id: 128, name: "🇦🇷 Argentina Liga Prof."},
-      {id: 197, name: "🇬🇷 Greece Super League"}, {id: 318, name: "🇨🇾 Cyprus 1st Div"}, {id: 281, name: "🇨🇾 Cyprus Division 1"},
-      {id: 94, name: "🇵🇹 Portugal Primeira"}, {id: 88, name: "🇳🇱 Eredivisie"}, {id: 144, name: "🇧🇪 Belgium Jupiler"},
-      {id: 203, name: "🇹🇷 Turkey Süper Lig"}, {id: 357, name: "🇮🇪 Ireland Premier"},
-      {id: 2, name: "🏆 Champions League"}, {id: 3, name: "🏆 Europa League"}, {id: 84, name: "🏆 Conference League"}
+      {id: 39, name: "🇬🇧 Premier League"},
+      {id: 40, name: "🇬🇧 Championship"},
+      {id: 41, name: "🇬🇧 League One"},
+      {id: 140, name: "🇪🇸 La Liga"},
+      {id: 141, name: "🇪🇸 La Liga 2"},
+      {id: 135, name: "🇮🇹 Serie A"},
+      {id: 136, name: "🇮🇹 Serie B"},
+      {id: 78, name: "🇩🇪 Bundesliga"},
+      {id: 79, name: "🇩🇪 2. Bundesliga"},
+      {id: 61, name: "🇫🇷 Ligue 1"},
+      {id: 62, name: "🇫🇷 Ligue 2"},
+      {id: 88, name: "🇳🇱 Eredivisie"},
+      {id: 144, name: "🇧🇪 Belgium Jupiler"},
+      {id: 203, name: "🇹🇷 Turkey Süper Lig"},
+      {id: 262, name: "🇲🇽 Liga MX"},
+      {id: 197, name: "🇬🇷 Greece Super League"}
     ];
-
     const LEAGUES = LEAGUES_DATA.map(l => l.id);
 
-    const MAX_PRE_MATCHES = 100;
-    const MAX_LIVE_MATCHES = 50;
-    const LAST_GENERAL = 6;
-    const LAST_SPLIT = 6;
     const REQUEST_DELAY_MS = 260;
     const REQUEST_TIMEOUT_MS = 12000;
-    const POISSON_MAX_GOALS = 8;
+    const LAST_GENERAL = 6;
+    const LAST_SPLIT = 6;
+    const MAX_MATCHES = 100;
 
-    const LS_PRED = "omega_prediction_store_v470312";
-    const LS_AUDIT = "omega_audit_store_v470312";
-
-    let memoryBank = [];
     let statsCache = new Map();
     let teamStatsCache = new Map();
     let lastFixturesCache = new Map();
     let isRunning = false;
-    let globalRequestCounter = 0;
 
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function showError(msg) {
+      document.getElementById("errorBox").innerHTML = `<div class="error-box">${escapeHtml(msg)}</div>`;
+    }
+
+    function clearError() {
+      document.getElementById("errorBox").innerHTML = "";
     }
 
     function setLoader(show, text = "") {
@@ -529,26 +354,10 @@
     }
 
     function setButtonsDisabled(disabled) {
-      ["btnPre", "btnLive", "btnAudit", "btnPdf", "btnExportTrain", "btnExportCSV", "btnClearDay", "leagueFilter"].forEach(id => {
+      ["btnPre", "btnPdf", "leagueFilter"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.disabled = disabled;
       });
-    }
-
-    function showError(message) {
-      document.getElementById("errorBox").innerHTML = `<div class="error-box">${escapeHtml(message)}</div>`;
-    }
-
-    function clearError() {
-      document.getElementById("errorBox").innerHTML = "";
-    }
-
-    function showSuccess(message) {
-      document.getElementById("successBox").innerHTML = `<div class="success-box">${escapeHtml(message)}</div>`;
-    }
-
-    function clearSuccess() {
-      document.getElementById("successBox").innerHTML = "";
     }
 
     function escapeHtml(str) {
@@ -568,74 +377,29 @@
       return `${y}-${m}-${day}`;
     }
 
-    function getSelectedDate() {
-      return document.getElementById("scanDate")?.value || getTodayISO();
-    }
-
-    function getPredictionStore() {
-      try { return JSON.parse(localStorage.getItem(LS_PRED) || "{}"); }
-      catch { return {}; }
-    }
-
-    function savePredictionStore(store) {
-      localStorage.setItem(LS_PRED, JSON.stringify(store));
-      refreshStoreBadges();
-    }
-
-    function getAuditStore() {
-      try { return JSON.parse(localStorage.getItem(LS_AUDIT) || "{}"); }
-      catch { return {}; }
-    }
-
-    function saveAuditStore(store) {
-      localStorage.setItem(LS_AUDIT, JSON.stringify(store));
-      refreshStoreBadges();
-    }
-
-    function refreshStoreBadges() {
-      const date = getSelectedDate();
-      const predStore = getPredictionStore();
-      const auditStore = getAuditStore();
-      const predCount = Array.isArray(predStore[date]) ? predStore[date].length : 0;
-      const auditCount = Array.isArray(auditStore[date]) ? auditStore[date].length : 0;
-
-      document.getElementById("predCountBadge").innerText = predCount;
-      document.getElementById("auditCountBadge").innerText = auditCount;
-      document.getElementById("selectedDateBadge").innerText = date;
-    }
-
-    async function throttledFetch(url, options = {}, timeout = REQUEST_TIMEOUT_MS) {
-      globalRequestCounter++;
+    async function throttledFetch(url, timeout = REQUEST_TIMEOUT_MS) {
       await sleep(REQUEST_DELAY_MS);
-
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeout);
-
       try {
-        return await fetch(url, { ...options, signal: controller.signal });
+        return await fetch(url, {
+          headers: { "x-apisports-key": KEY },
+          signal: controller.signal
+        });
       } finally {
         clearTimeout(timer);
       }
     }
 
     async function apiReq(path) {
-      const url = `${API}/${path}`;
       try {
-        const response = await throttledFetch(url, { headers: { "x-apisports-key": KEY } });
-
+        const response = await throttledFetch(`${API}/${path}`);
         if (!response.ok) {
-          if (response.status === 429) {
-            console.warn("RATE LIMIT:", path);
-            return { response: [], errors: { rateLimit: true, status: 429 } };
-          }
-          console.warn("HTTP ERROR:", response.status, path);
           return { response: [], errors: { status: response.status } };
         }
-
         return await response.json() || { response: [] };
       } catch (err) {
-        console.error("API ERROR:", path, err);
-        return { response: [], errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown error") } };
+        return { response: [], errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown") } };
       }
     }
 
@@ -670,50 +434,49 @@
       if (!Array.isArray(statsArr)) return 0;
       const item = statsArr.find(x => x.type === type);
       if (!item || item.value == null) return 0;
-
-      const num = parseFloat(String(item.value).replace("%", "").trim());
-      return Number.isFinite(num) ? num : 0;
+      return parseFloat(String(item.value).replace("%", "").trim()) || 0;
     }
 
-    function getTeamGoalsInFixture(fixture, teamId) {
-      return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.home ?? 0) : (fixture?.goals?.away ?? 0);
+    function getTeamGoals(fixture, teamId) {
+      return fixture?.teams?.home?.id === teamId
+        ? (fixture?.goals?.home ?? 0)
+        : (fixture?.goals?.away ?? 0);
     }
 
-    function getOpponentGoalsInFixture(fixture, teamId) {
-      return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.away ?? 0) : (fixture?.goals?.home ?? 0);
+    function getOpponentGoals(fixture, teamId) {
+      return fixture?.teams?.home?.id === teamId
+        ? (fixture?.goals?.away ?? 0)
+        : (fixture?.goals?.home ?? 0);
     }
 
-    function estimateXGFromStats(statsArr, goalsFor = 0) {
+    function estimateXG(statsArr, goals = 0) {
       const shotsOnGoal = statVal(statsArr, "Shots on Goal");
       const shotsOffGoal = statVal(statsArr, "Shots off Goal");
       const totalShots = statVal(statsArr, "Total Shots");
       const dangerous = statVal(statsArr, "Dangerous Attacks");
       const corners = statVal(statsArr, "Corner Kicks");
 
-      let estimated =
+      let xg =
         (shotsOnGoal * 0.18) +
         (shotsOffGoal * 0.07) +
         (Math.max(totalShots - shotsOnGoal - shotsOffGoal, 0) * 0.03) +
         (dangerous * 0.008) +
         (corners * 0.025) +
-        (goalsFor * 0.35);
+        (goals * 0.35);
 
-      if (!Number.isFinite(estimated) || estimated <= 0) {
-        estimated = goalsFor > 0 ? (0.70 + goalsFor * 0.30) : 0.70;
+      if (!Number.isFinite(xg) || xg <= 0) {
+        xg = goals > 0 ? (0.70 + goals * 0.30) : 0.70;
       }
-
-      return estimated;
+      return xg;
     }
 
     function getFormHistory(fixtures, teamId) {
       return fixtures.map(f => {
-        const isHome = f.teams.home.id === teamId;
-        const myGoals = isHome ? (f.goals.home ?? 0) : (f.goals.away ?? 0);
-        const oppGoals = isHome ? (f.goals.away ?? 0) : (f.goals.home ?? 0);
-
-        return myGoals > oppGoals
+        const myG = getTeamGoals(f, teamId);
+        const opG = getOpponentGoals(f, teamId);
+        return myG > opG
           ? { res: "Ν", cls: "W" }
-          : (myGoals < oppGoals ? { res: "Η", cls: "L" } : { res: "Ι", cls: "D" });
+          : (myG < opG ? { res: "Η", cls: "L" } : { res: "Ι", cls: "D" });
       }).reverse();
     }
 
@@ -721,212 +484,6 @@
       if (!base || base <= 0) return `<span class="dev-badge dev-pos">N/A</span>`;
       const d = (((parseFloat(curr) - base) / base) * 100).toFixed(1);
       return `<span class="dev-badge ${d >= 0 ? "dev-pos" : "dev-neg"}">${d > 0 ? "+" : ""}${d}%</span>`;
-    }
-
-    function clamp(n, min, max) {
-      return Math.max(min, Math.min(max, n));
-    }
-
-    function flattenAllAudits() {
-      const store = getAuditStore();
-      const rows = [];
-      Object.keys(store).forEach(date => {
-        if (Array.isArray(store[date])) rows.push(...store[date]);
-      });
-      return rows;
-    }
-
-    function poissonPMF(k, lambda) {
-      if (lambda <= 0) return k === 0 ? 1 : 0;
-      let fact = 1;
-      for (let i = 2; i <= k; i++) fact *= i;
-      return (Math.exp(-lambda) * Math.pow(lambda, k)) / fact;
-    }
-
-    function buildPoissonMatrix(homeLambda, awayLambda, maxGoals = POISSON_MAX_GOALS) {
-      const matrix = [];
-      for (let h = 0; h <= maxGoals; h++) {
-        const row = [];
-        for (let a = 0; a <= maxGoals; a++) {
-          row.push(poissonPMF(h, homeLambda) * poissonPMF(a, awayLambda));
-        }
-        matrix.push(row);
-      }
-      return matrix;
-    }
-
-    function normalizeMatrix(matrix) {
-      let total = 0;
-      for (let h = 0; h < matrix.length; h++) {
-        for (let a = 0; a < matrix[h].length; a++) total += matrix[h][a];
-      }
-      if (!total || total <= 0) return matrix;
-      return matrix.map(row => row.map(v => v / total));
-    }
-
-    function sumMatrixByCondition(matrix, predicate) {
-      let sum = 0;
-      for (let h = 0; h < matrix.length; h++) {
-        for (let a = 0; a < matrix[h].length; a++) {
-          if (predicate(h, a)) sum += matrix[h][a];
-        }
-      }
-      return sum;
-    }
-
-    function calcExpectedGoalsFromIntel(intel) {
-      const hFormXG = Number(intel?.h?.formXG || 1.0);
-      const hSplitXG = Number(intel?.h?.splitXG || 1.0);
-      const hFormXGA = Number(intel?.h?.formXGA || 1.0);
-      const hSplitXGA = Number(intel?.h?.splitXGA || 1.0);
-      const hSeasonXG = Number(intel?.h?.seasonXG || 1.0);
-
-      const aFormXG = Number(intel?.a?.formXG || 1.0);
-      const aSplitXG = Number(intel?.a?.splitXG || 1.0);
-      const aFormXGA = Number(intel?.a?.formXGA || 1.0);
-      const aSplitXGA = Number(intel?.a?.splitXGA || 1.0);
-      const aSeasonXG = Number(intel?.a?.seasonXG || 1.0);
-
-      let expectedHomeGoals =
-        0.35 * hFormXG +
-        0.25 * hSplitXG +
-        0.20 * aFormXGA +
-        0.10 * aSplitXGA +
-        0.10 * hSeasonXG;
-
-      let expectedAwayGoals =
-        0.35 * aFormXG +
-        0.25 * aSplitXG +
-        0.20 * hFormXGA +
-        0.10 * hSplitXGA +
-        0.10 * aSeasonXG;
-
-      expectedHomeGoals = clamp(expectedHomeGoals, 0.20, 4.80);
-      expectedAwayGoals = clamp(expectedAwayGoals, 0.20, 4.80);
-
-      return {
-        expectedHomeGoals: Number(expectedHomeGoals.toFixed(2)),
-        expectedAwayGoals: Number(expectedAwayGoals.toFixed(2))
-      };
-    }
-
-    function pct(n) {
-      return Number((n * 100).toFixed(1));
-    }
-
-    function getConfidenceLabel(score) {
-      if (score >= 72) return { label: "HIGH", cls: "confidence-high" };
-      if (score >= 58) return { label: "MEDIUM", cls: "confidence-mid" };
-      return { label: "LOW", cls: "confidence-low" };
-    }
-
-    function calcConfidenceScore(probs) {
-      const arr = [
-        { market: "1", prob: probs.p1 },
-        { market: "X", prob: probs.pX },
-        { market: "2", prob: probs.p2 },
-        { market: "Over 2.5", prob: probs.pOver25 },
-        { market: "BTTS", prob: probs.pBTTS }
-      ].sort((a, b) => b.prob - a.prob);
-
-      const top = arr[0]?.prob || 0;
-      const second = arr[1]?.prob || 0;
-      const spread = top - second;
-      const raw = (top * 0.70) + (spread * 0.30);
-      return Number(clamp(raw, 0, 100).toFixed(1));
-    }
-
-    function calcMatchProbabilities(intel) {
-      const { expectedHomeGoals, expectedAwayGoals } = calcExpectedGoalsFromIntel(intel);
-      let matrix = buildPoissonMatrix(expectedHomeGoals, expectedAwayGoals, POISSON_MAX_GOALS);
-      matrix = normalizeMatrix(matrix);
-
-      const p1 = sumMatrixByCondition(matrix, (h, a) => h > a);
-      const pX = sumMatrixByCondition(matrix, (h, a) => h === a);
-      const p2 = sumMatrixByCondition(matrix, (h, a) => h < a);
-      const pOver25 = sumMatrixByCondition(matrix, (h, a) => (h + a) >= 3);
-      const pBTTS = sumMatrixByCondition(matrix, (h, a) => h >= 1 && a >= 1);
-      const pHomeOver15 = sumMatrixByCondition(matrix, (h, a) => h >= 2);
-      const pAwayOver05 = sumMatrixByCondition(matrix, (h, a) => a >= 1);
-
-      const probs = {
-        expectedHomeGoals,
-        expectedAwayGoals,
-        p1: pct(p1),
-        pX: pct(pX),
-        p2: pct(p2),
-        pOver25: pct(pOver25),
-        pBTTS: pct(pBTTS),
-        pHomeOver15: pct(pHomeOver15),
-        pAwayOver05: pct(pAwayOver05)
-      };
-
-      const marketScores = [
-        { market: "1", prob: probs.p1 },
-        { market: "X", prob: probs.pX },
-        { market: "2", prob: probs.p2 },
-        { market: "Over 2.5", prob: probs.pOver25 },
-        { market: "BTTS", prob: probs.pBTTS }
-      ].sort((a, b) => b.prob - a.prob);
-
-      probs.topMarket = marketScores[0]?.market || "-";
-      probs.topMarketProb = marketScores[0]?.prob || 0;
-      probs.secondMarket = marketScores[1]?.market || "-";
-      probs.secondMarketProb = marketScores[1]?.prob || 0;
-      probs.confidenceScore = calcConfidenceScore(probs);
-      const conf = getConfidenceLabel(probs.confidenceScore);
-      probs.confidenceLabel = conf.label;
-      probs.confidenceClass = conf.cls;
-
-      return probs;
-    }
-
-    function getBucket(prob) {
-      const start = Math.floor(prob / 5) * 5;
-      return { start, end: start + 5 };
-    }
-
-    function getHistoricalVerificationForMarket(market, prob) {
-      const audits = flattenAllAudits();
-      if (!audits.length) return { sample: 0, hitRate: null, bucketLabel: null };
-
-      const { start, end } = getBucket(prob);
-      const filtered = audits.filter(row => {
-        let p = null;
-        if (market === "1") p = Number(row.p1);
-        else if (market === "X") p = Number(row.pX);
-        else if (market === "2") p = Number(row.p2);
-        else if (market === "Over 2.5") p = Number(row.pOver25);
-        else if (market === "BTTS") p = Number(row.pBTTS);
-        return Number.isFinite(p) && p >= start && p < end;
-      });
-
-      if (!filtered.length) return { sample: 0, hitRate: null, bucketLabel: `${start}-${end}%` };
-
-      let hits = 0;
-
-      for (const row of filtered) {
-        const home = Number(row.actualHomeGoals ?? -1);
-        const away = Number(row.actualAwayGoals ?? -1);
-        if (home < 0 || away < 0) continue;
-
-        let ok = false;
-        if (market === "1") ok = home > away;
-        else if (market === "X") ok = home === away;
-        else if (market === "2") ok = away > home;
-        else if (market === "Over 2.5") ok = (home + away) >= 3;
-        else if (market === "BTTS") ok = home > 0 && away > 0;
-
-        if (ok) hits++;
-      }
-
-      const hitRate = filtered.length ? Number(((hits / filtered.length) * 100).toFixed(1)) : null;
-      return { sample: filtered.length, hitRate, bucketLabel: `${start}-${end}%` };
-    }
-
-    function buildVerificationSummary(probs) {
-      if (!probs?.topMarket) return null;
-      return getHistoricalVerificationForMarket(probs.topMarket, probs.topMarketProb);
     }
 
     async function batchCalculate(list, teamId) {
@@ -940,25 +497,22 @@
       let crdSum = 0;
       let count = 0;
 
-      for (const fixture of list) {
-        const statResp = await getFixtureStats(fixture.fixture.id);
-        if (!statResp?.response || statResp.response.length < 2) continue;
+      for (const f of list) {
+        const st = await getFixtureStats(f.fixture.id);
+        if (!st?.response || st.response.length < 2) continue;
 
-        const myObj = statResp.response.find(x => x.team.id === teamId);
-        const opObj = statResp.response.find(x => x.team.id !== teamId);
+        const myObj = st.response.find(x => x.team.id === teamId);
+        const opObj = st.response.find(x => x.team.id !== teamId);
         if (!myObj || !opObj) continue;
 
         const my = myObj.statistics || [];
         const op = opObj.statistics || [];
 
-        const myGoals = getTeamGoalsInFixture(fixture, teamId);
-        const oppGoals = getOpponentGoalsInFixture(fixture, teamId);
-
         let myXG = statVal(my, "Expected Goals");
-        if (!myXG || myXG <= 0) myXG = estimateXGFromStats(my, myGoals);
+        if (myXG <= 0) myXG = estimateXG(my, getTeamGoals(f, teamId));
 
         let oppXG = statVal(op, "Expected Goals");
-        if (!oppXG || oppXG <= 0) oppXG = estimateXGFromStats(op, oppGoals);
+        if (oppXG <= 0) oppXG = estimateXG(op, getOpponentGoals(f, teamId));
 
         xgSum += myXG;
         xgaSum += oppXG;
@@ -968,10 +522,10 @@
       }
 
       return {
-        xg: count > 0 ? (xgSum / count).toFixed(2) : "1.00",
-        xga: count > 0 ? (xgaSum / count).toFixed(2) : "1.00",
-        cor: count > 0 ? (corSum / count).toFixed(1) : "4.0",
-        crd: count > 0 ? (crdSum / count).toFixed(1) : "2.0"
+        xg: count > 0 ? (xgSum / count).toFixed(2) : "0.00",
+        xga: count > 0 ? (xgaSum / count).toFixed(2) : "0.00",
+        cor: count > 0 ? (corSum / count).toFixed(1) : "0.0",
+        crd: count > 0 ? (crdSum / count).toFixed(1) : "0.0"
       };
     }
 
@@ -981,11 +535,13 @@
         getLastFixtures(teamId, leagueId, season)
       ]);
 
-      const generalLast = allFixs.slice(0, LAST_GENERAL);
-      const splitLast = allFixs.filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId).slice(0, LAST_SPLIT);
+      const genLast = allFixs.slice(0, LAST_GENERAL);
+      const splitLast = allFixs
+        .filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId)
+        .slice(0, LAST_SPLIT);
 
       const [form, split] = await Promise.all([
-        batchCalculate(generalLast, teamId),
+        batchCalculate(genLast, teamId),
         batchCalculate(splitLast, teamId)
       ]);
 
@@ -1003,574 +559,218 @@
         splitXGA: split.xga,
         corners: form.cor,
         cards: form.crd,
-        history: getFormHistory(generalLast, teamId)
+        history: getFormHistory(genLast, teamId)
       };
     }
 
-    function isLiveStatus(short) {
-      return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short);
+    function generateOmegaPick(hStats, aStats, leagueId) {
+      let hXG = parseFloat(hStats.formXG);
+      let aXG = parseFloat(aStats.formXG);
+      let totalXG = hXG + aXG;
+
+      if (!Number.isFinite(totalXG) || totalXG < 0.90) {
+        return {
+          pick: "⚠️ NO DATA (ΑΓΝΟΗΣΕ ΤΟ ΜΑΤΣ)",
+          reason: "Το σύστημα της API δεν έχει προσκομίσει επαρκή στατιστικά xG για αυτές τις ομάδες.",
+          noBet: true
+        };
+      }
+
+      const trapLeagues = [40, 41, 136, 141, 79, 62];
+      const goldLeagues = [78, 262, 88];
+      const tightLeagues = [61, 94, 197, 135];
+
+      if (trapLeagues.includes(leagueId)) {
+        totalXG *= 0.80;
+        hXG *= 0.80;
+        aXG *= 0.80;
+      } else if (tightLeagues.includes(leagueId)) {
+        totalXG *= 0.85;
+        hXG *= 0.85;
+        aXG *= 0.85;
+      } else if (goldLeagues.includes(leagueId)) {
+        totalXG *= 1.05;
+      }
+
+      let pick = "";
+      let reason = "";
+      let noBet = false;
+
+      if (totalXG >= 3.35) {
+        pick = "🔥 OVER 2.5 GOALS";
+        reason = `Εξαιρετικός ρυθμός. Το προσαρμοσμένο xG δείχνει ${totalXG.toFixed(2)} γκολ.`;
+      } else if (totalXG >= 2.65 && hXG >= 1.25 && aXG >= 1.25) {
+        pick = "🎯 GOAL/GOAL (BTTS)";
+        reason = `Και οι δύο ομάδες σκοράρουν, αλλά οι άμυνες δεν διαλύονται εύκολα. Ασφάλεια έναντι του Over.`;
+      } else if (hXG > (aXG + 1.20) && parseFloat(hStats.splitXG) > 1.80) {
+        pick = "🏠 ΑΣΟΣ (1)";
+        reason = `Ξεκάθαρη εντός έδρας υπεροχή (Split xG Εντός: ${hStats.splitXG}).`;
+      } else if (aXG > (hXG + 1.10) && parseFloat(aStats.splitXG) > 1.65) {
+        pick = "✈️ ΔΙΠΛΟ (2)";
+        reason = `Η φιλοξενούμενη εμφανίζει καθαρή επιθετική υπεροχή και σταθερό εκτός έδρας split.`;
+      } else if (totalXG < 2.15) {
+        pick = "🛡️ UNDER 2.5 GOALS";
+        reason = `Πολύ κλειστό ματς, τακτική προσέγγιση (Total xG: ${totalXG.toFixed(2)}).`;
+      } else {
+        const totalCards = parseFloat(hStats.cards) + parseFloat(aStats.cards);
+        if (totalCards > 5.5) {
+          pick = "🟨 OVER ΚΑΡΤΕΣ";
+          reason = `Οι ομάδες κάνουν πολλά σκληρά φάουλ (Μ.Ο. ${totalCards.toFixed(1)} κάρτες/ματς).`;
+        } else {
+          pick = "⚖️ NO BET (ΑΠΟΧΗ)";
+          reason = `Ισορροπημένα στατιστικά. Καμία μαθηματική αξία για στοιχηματισμό.`;
+          noBet = true;
+        }
+      }
+
+      return { pick, reason, noBet };
     }
 
-    function buildOverSignal(teamXG, oppXGA) {
-      return Number(teamXG) > 2 && Number(oppXGA) > 1.5;
-    }
-
-    function buildMatchCard(m, s, mode) {
-      const isLive = isLiveStatus(m.fixture.status.short);
-
-      const homeOverHigh = mode === "pre" && s?.h && s?.a ? buildOverSignal(s.h.formXG, s.a.formXGA) : false;
-      const awayOverHigh = mode === "pre" && s?.h && s?.a ? buildOverSignal(s.a.formXG, s.h.formXGA) : false;
-
-      const probs = mode === "pre" ? s?.probs : null;
-      const verify = probs ? buildVerificationSummary(probs) : null;
+    function buildMatchCard(m, s) {
+      const omega = generateOmegaPick(s.h, s.a, m.league.id);
 
       return `
-        <div class="cyber-card ${isLive ? "live-glow" : ""}">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
+        <div class="cyber-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <span style="background:#222; padding:4px 8px; border-radius:4px;">
-                ${isLive ? `${m.fixture.status.elapsed || 0}'` : escapeHtml(m.fixture.status.short)}
-              </span>
-              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">
-                ${escapeHtml(m.league.name)}
-              </div>
+              <span style="background:#222; padding:4px 8px; border-radius:4px;">${escapeHtml(m.fixture.status.short)}</span>
+              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
               <h2 class="orbitron" style="margin:5px 0;">${escapeHtml(m.teams.home.name)}</h2>
               <h2 class="orbitron" style="margin:2px 0;">${escapeHtml(m.teams.away.name)}</h2>
             </div>
-            <div class="${isLive ? "live-pulse" : ""}" style="font-size:2.5rem; font-weight:900;">
-              ${m.goals.home ?? 0} - ${m.goals.away ?? 0}
-            </div>
+            <div style="font-size:2rem; font-weight:900;">VS</div>
+          </div>
+
+          <div class="omega-pick ${omega.noBet ? 'no-bet' : ''}">
+             <div class="pick-title">💡 ΠΡΟΤΕΙΝΟΜΕΝΟ ΣΤΟΙΧΗΜΑ (VALUE)</div>
+             <div class="pick-value">${omega.pick}</div>
+             <div class="pick-reason">${omega.reason}</div>
           </div>
 
           <div class="stats-grid">
-            ${mode === "pre" ? `
-              <div class="team-box">
-                <div style="color:var(--p); font-size:0.75rem; font-weight:900; margin-bottom:10px;">🏠 ΑΝΑΛΥΣΗ ΓΗΠΕΔΟΥΧΟΥ</div>
-                ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
-
-                <div class="stat-row" style="margin-top:12px;">
-                  <span>Μέσος Όρος Σεζόν:</span>
-                  <div>
-                    <span class="season-xg-red">${s?.h?.seasonXG || "1.10"}</span>
-                    <span class="season-xga-plain">/ ${s?.h?.seasonXGA || "1.10"}</span>
-                  </div>
-                </div>
-
-                <div class="stat-row">
-                  <span>xG Υπέρ (Τελευταία 6):</span>
-                  <div><span class="val-xg">${s?.h?.formXG || "1.00"}</span> ${s?.h?.devXG || ""}</div>
-                </div>
-
-                <div class="stat-row">
-                  <span>xGA Κατά (Τελευταία 6):</span>
-                  <div><span class="val-xg">${s?.h?.formXGA || "1.00"}</span> ${s?.h?.devXGA || ""}</div>
-                </div>
-
-                <div class="stat-row">
-                  <span>Ειδική Φόρμα (ΜΟΝΟ ΕΝΤΟΣ):</span>
-                  <span class="val-split">${s?.h?.splitXG || "1.00"} / ${s?.h?.splitXGA || "1.00"}</span>
-                </div>
-
-                <div class="stat-row">
-                  <span>Μ.Ο. Κόρνερ:</span>
-                  <span style="font-weight:800;">🚩 ${s?.h?.corners || "0.0"}</span>
-                </div>
-
-                <div class="stat-row" style="border-bottom:none; margin-bottom:0;">
-                  <span>Μ.Ο. Κάρτες:</span>
-                  <span style="font-weight:800;">🟨 ${s?.h?.cards || "0.0"}</span>
-                </div>
-
-                ${homeOverHigh ? `<div class="over-flag">ΠΙΘΑΝΟΤΗΤΑ OVER: ΥΨΗΛΗ</div>` : ""}
+            <div class="team-box">
+              <div style="color:var(--p); font-size:0.75rem; font-weight:900; margin-bottom:10px;">🏠 ${escapeHtml(m.teams.home.name)}</div>
+              ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
+              <div class="stat-row" style="margin-top:12px;">
+                <span>Μέσος Όρος Σεζόν:</span>
+                <div><span class="season-xg-red">${s?.h?.seasonXG}</span><span class="season-xga-plain">/ ${s?.h?.seasonXGA}</span></div>
               </div>
-
-              <div class="team-box">
-                <div style="color:var(--magenta); font-size:0.75rem; font-weight:900; margin-bottom:10px;">✈️ ΑΝΑΛΥΣΗ ΦΙΛΟΞΕΝΟΥΜΕΝΗΣ</div>
-                ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
-
-                <div class="stat-row" style="margin-top:12px;">
-                  <span>Μέσος Όρος Σεζόν:</span>
-                  <div>
-                    <span class="season-xg-red">${s?.a?.seasonXG || "1.10"}</span>
-                    <span class="season-xga-plain">/ ${s?.a?.seasonXGA || "1.10"}</span>
-                  </div>
-                </div>
-
-                <div class="stat-row">
-                  <span>xG Υπέρ (Τελευταία 6):</span>
-                  <div><span class="val-xg">${s?.a?.formXG || "1.00"}</span> ${s?.a?.devXG || ""}</div>
-                </div>
-
-                <div class="stat-row">
-                  <span>xGA Κατά (Τελευταία 6):</span>
-                  <div><span class="val-xg">${s?.a?.formXGA || "1.00"}</span> ${s?.a?.devXGA || ""}</div>
-                </div>
-
-                <div class="stat-row">
-                  <span>Ειδική Φόρμα (ΜΟΝΟ ΕΚΤΟΣ):</span>
-                  <span class="val-split">${s?.a?.splitXG || "1.00"} / ${s?.a?.splitXGA || "1.00"}</span>
-                </div>
-
-                <div class="stat-row">
-                  <span>Μ.Ο. Κόρνερ:</span>
-                  <span style="font-weight:800;">🚩 ${s?.a?.corners || "0.0"}</span>
-                </div>
-
-                <div class="stat-row" style="border-bottom:none; margin-bottom:0;">
-                  <span>Μ.Ο. Κάρτες:</span>
-                  <span style="font-weight:800;">🟨 ${s?.a?.cards || "0.0"}</span>
-                </div>
-
-                ${awayOverHigh ? `<div class="over-flag">ΠΙΘΑΝΟΤΗΤΑ OVER: ΥΨΗΛΗ</div>` : ""}
+              <div class="stat-row">
+                <span>xG Υπέρ (Φόρμα):</span>
+                <div><span class="val-xg">${s?.h?.formXG}</span> ${s?.h?.devXG}</div>
               </div>
-
-              <div class="team-box" style="grid-column: span 2;">
-                <div class="prob-panel">
-                  <div class="prob-title">📊 ΠΙΘΑΝΟΤΗΤΕΣ ΑΓΟΡΩΝ</div>
-                  <div class="prob-row"><span>Expected Goals:</span><span class="prob-val">${probs?.expectedHomeGoals ?? "-"} - ${probs?.expectedAwayGoals ?? "-"}</span></div>
-                  <div class="prob-row"><span>1 / X / 2:</span><span class="prob-val">${probs?.p1 ?? "-"}% / ${probs?.pX ?? "-"}% / ${probs?.p2 ?? "-"}%</span></div>
-                  <div class="prob-row"><span>Over 2.5:</span><span class="prob-val">${probs?.pOver25 ?? "-"}%</span></div>
-                  <div class="prob-row"><span>BTTS:</span><span class="prob-val">${probs?.pBTTS ?? "-"}%</span></div>
-                  <div class="prob-row"><span>Home Over 1.5:</span><span class="prob-val">${probs?.pHomeOver15 ?? "-"}%</span></div>
-                  <div class="prob-row"><span>Away Over 0.5:</span><span class="prob-val">${probs?.pAwayOver05 ?? "-"}%</span></div>
-                </div>
-
-                <div class="top-pick-box">
-                  <div class="top-pick-title">🎯 ΚΥΡΙΟ ΣΗΜΑ ΜΟΝΤΕΛΟΥ</div>
-                  <div class="verify-line">
-                    Main Market:
-                    <span class="market-tag">${escapeHtml(probs?.topMarket || "-")}</span>
-                    <span class="market-tag">${probs?.topMarketProb ?? "-"}%</span>
-                    <span class="confidence-chip ${probs?.confidenceClass || ""}">${escapeHtml(probs?.confidenceLabel || "-")} ${probs?.confidenceScore ?? "-"}</span>
-                  </div>
-                  <div class="verify-line" style="color:var(--txt-muted);">
-                    2nd Market: ${escapeHtml(probs?.secondMarket || "-")} (${probs?.secondMarketProb ?? "-"}%)
-                  </div>
-                </div>
-
-                <div class="verify-box">
-                  <div class="verify-line">
-                    Ιστορική επαλήθευση παρόμοιων προβλέψεων:
-                    <strong style="color:var(--gold);">${verify?.hitRate != null ? `${verify.hitRate}%` : "N/A"}</strong>
-                  </div>
-                  <div class="verify-line" style="color:var(--txt-muted);">
-                    Δείγμα: ${verify?.sample ?? 0} αγώνες ${verify?.bucketLabel ? `| Bucket ${verify.bucketLabel}` : ""}
-                  </div>
-                </div>
+              <div class="stat-row">
+                <span>xGA Κατά:</span>
+                <div><span class="val-xg">${s?.h?.formXGA}</span> ${s?.h?.devXGA}</div>
               </div>
-            ` : `
-              <div class="team-box" style="grid-column: span 2;">
-                ${s ? `
-                  <div style="display:flex; justify-content:space-between; margin-bottom:10px; text-align:center; gap:10px;">
-                    <div>ΚΑΤΟΧΗ: <span class="val-xg">${s.h.poss}%</span></div>
-                    <div style="color:var(--gold); font-weight:900;">ΔΕΙΚΤΗΣ ΠΙΕΣΗΣ: ${Math.round(s.h.danger / 2)} - ${Math.round(s.a.danger / 2)}</div>
-                    <div>ΚΑΤΟΧΗ: <span class="val-xg">${s.a.poss}%</span></div>
-                  </div>
-                  <div class="stat-row"><span>Επικίνδυνες Επιθέσεις / Σουτ:</span><span class="val-xg">${s.h.danger}(${s.h.shots}) - ${s.a.danger}(${s.a.shots})</span></div>
-                  <div class="stat-row"><span>Κόρνερ (Live):</span><span style="color:#fff; font-weight:800;">🚩 ${s.h.corners} - ${s.a.corners}</span></div>
-                  <div class="stat-row" style="border-bottom:none; margin-bottom:0;"><span>Κάρτες (Live):</span><span style="color:#fff; font-weight:800;">🟨 ${s.h.yellow ?? 0} - ${s.a.yellow ?? 0} &nbsp;|&nbsp; 🟥 ${s.h.red ?? 0} - ${s.a.red ?? 0}</span></div>
-                ` : `<div style="text-align:center; color:var(--txt-muted);">ΤΑ LIVE ΣΤΑΤΙΣΤΙΚΑ ΔΕΝ ΕΙΝΑΙ ΑΚΟΜΑ ΔΙΑΘΕΣΙΜΑ</div>`}
+              <div class="stat-row">
+                <span>ΜΟΝΟ ΕΝΤΟΣ:</span>
+                <span class="val-split">${s?.h?.splitXG} / ${s?.h?.splitXGA}</span>
               </div>
-            `}
+              <div class="stat-row">
+                <span>Κόρνερ:</span>
+                <span style="font-weight:800;">🚩 ${s?.h?.corners}</span>
+              </div>
+              <div class="stat-row">
+                <span>Κάρτες:</span>
+                <span style="font-weight:800;">🟨 ${s?.h?.cards}</span>
+              </div>
+            </div>
+
+            <div class="team-box">
+              <div style="color:var(--magenta); font-size:0.75rem; font-weight:900; margin-bottom:10px;">✈️ ${escapeHtml(m.teams.away.name)}</div>
+              ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
+              <div class="stat-row" style="margin-top:12px;">
+                <span>Μέσος Όρος Σεζόν:</span>
+                <div><span class="season-xg-red">${s?.a?.seasonXG}</span><span class="season-xga-plain">/ ${s?.a?.seasonXGA}</span></div>
+              </div>
+              <div class="stat-row">
+                <span>xG Υπέρ (Φόρμα):</span>
+                <div><span class="val-xg">${s?.a?.formXG}</span> ${s?.a?.devXG}</div>
+              </div>
+              <div class="stat-row">
+                <span>xGA Κατά:</span>
+                <div><span class="val-xg">${s?.a?.formXGA}</span> ${s?.a?.devXGA}</div>
+              </div>
+              <div class="stat-row">
+                <span>ΜΟΝΟ ΕΚΤΟΣ:</span>
+                <span class="val-split">${s?.a?.splitXG} / ${s?.a?.splitXGA}</span>
+              </div>
+              <div class="stat-row">
+                <span>Κόρνερ:</span>
+                <span style="font-weight:800;">🚩 ${s?.a?.corners}</span>
+              </div>
+              <div class="stat-row">
+                <span>Κάρτες:</span>
+                <span style="font-weight:800;">🟨 ${s?.a?.cards}</span>
+              </div>
+            </div>
           </div>
         </div>
       `;
     }
 
-    async function runScan(mode) {
+    async function runScan() {
       if (isRunning) return;
 
       isRunning = true;
       clearError();
-      clearSuccess();
       setButtonsDisabled(true);
-      setLoader(true, mode === "pre" ? "ΕΚΚΙΝΗΣΗ ΑΝΑΛΥΣΗΣ PRE-MATCH..." : "ΕΚΚΙΝΗΣΗ LIVE RADAR...");
+      setLoader(true, "ΑΝΑΖΗΤΗΣΗ ΣΗΜΕΙΩΝ ΜΕ ΑΞΙΑ...");
 
       const display = document.getElementById("display");
-      const labSection = document.getElementById("labSection");
       display.innerHTML = "";
-      labSection.innerHTML = "";
 
       try {
-        const selectedDate = getSelectedDate();
+        const selectedDate = document.getElementById("scanDate").value || getTodayISO();
         const selectedLeague = document.getElementById("leagueFilter").value;
-        refreshStoreBadges();
-
-        if (mode === "pre") {
-          memoryBank = [];
-          statsCache.clear();
-        }
 
         const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
-
         let matches = (fixturesResp.response || []).filter(m => {
           if (selectedLeague === "ALL") return LEAGUES.includes(m.league.id);
-          return m.league.id === parseInt(selectedLeague);
-        });
-
-        if (mode === "live") {
-          matches = matches.filter(m => isLiveStatus(m.fixture.status.short)).slice(0, MAX_LIVE_MATCHES);
-        } else {
-          matches = matches.slice(0, MAX_PRE_MATCHES);
-        }
+          return m.league.id === parseInt(selectedLeague, 10);
+        }).slice(0, MAX_MATCHES);
 
         if (!matches.length) {
-          display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν διαθέσιμοι αγώνες.</h3></div>`;
+          display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν αγώνες.</h3></div>`;
           return;
         }
 
         let htmlBuffer = "";
-
-        if (mode === "pre") {
-          const predStore = getPredictionStore();
-          if (selectedLeague === "ALL") predStore[selectedDate] = [];
-          else if (!predStore[selectedDate]) predStore[selectedDate] = [];
-          savePredictionStore(predStore);
-        }
-
         for (let i = 0; i < matches.length; i++) {
           const m = matches[i];
-          const pct = Math.round(((i + 1) / matches.length) * 100);
-          setProgress(pct, `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
+          setProgress(Math.round(((i + 1) / matches.length) * 100), `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
 
-          let intel = null;
+          const [intelHome, intelAway] = await Promise.all([
+            getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
+            getTeamData(m.teams.away.id, m.league.id, m.league.season, "away")
+          ]);
 
-          if (mode === "pre") {
-            const [intelHome, intelAway] = await Promise.all([
-              getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
-              getTeamData(m.teams.away.id, m.league.id, m.league.season, "away")
-            ]);
-
-            intel = { h: intelHome, a: intelAway };
-            const probs = calcMatchProbabilities(intel);
-            intel.probs = probs;
-
-            memoryBank.push({ m, stats: intel });
-            const predStore = getPredictionStore();
-
-            if (!predStore[selectedDate].some(x => x.fixtureId === m.fixture.id)) {
-              predStore[selectedDate].push({
-                date: selectedDate,
-                fixtureId: m.fixture.id,
-                leagueId: m.league.id,
-                league: m.league.name,
-                season: m.league.season,
-                homeTeam: m.teams.home.name,
-                awayTeam: m.teams.away.name,
-                statusAtScan: m.fixture.status.short,
-                kickoff: m.fixture.date,
-
-                predictedHomeXG: parseFloat(intel.h.formXG) || 0,
-                predictedAwayXG: parseFloat(intel.a.formXG) || 0,
-                predictedHomeXGA: parseFloat(intel.h.formXGA) || 0,
-                predictedAwayXGA: parseFloat(intel.a.formXGA) || 0,
-
-                splitHomeXG: parseFloat(intel.h.splitXG) || 0,
-                splitAwayXG: parseFloat(intel.a.splitXG) || 0,
-                splitHomeXGA: parseFloat(intel.h.splitXGA) || 0,
-                splitAwayXGA: parseFloat(intel.a.splitXGA) || 0,
-
-                seasonHomeXG: parseFloat(intel.h.seasonXG) || 0,
-                seasonAwayXG: parseFloat(intel.a.seasonXG) || 0,
-                seasonHomeXGA: parseFloat(intel.h.seasonXGA) || 0,
-                seasonAwayXGA: parseFloat(intel.a.seasonXGA) || 0,
-
-                cornersHome: parseFloat(intel.h.corners) || 0,
-                cornersAway: parseFloat(intel.a.corners) || 0,
-                cardsHome: parseFloat(intel.h.cards) || 0,
-                cardsAway: parseFloat(intel.a.cards) || 0,
-
-                expectedHomeGoals: probs.expectedHomeGoals,
-                expectedAwayGoals: probs.expectedAwayGoals,
-                p1: probs.p1,
-                pX: probs.pX,
-                p2: probs.p2,
-                pOver25: probs.pOver25,
-                pBTTS: probs.pBTTS,
-                pHomeOver15: probs.pHomeOver15,
-                pAwayOver05: probs.pAwayOver05,
-                topMarket: probs.topMarket,
-                topMarketProb: probs.topMarketProb,
-                secondMarket: probs.secondMarket,
-                secondMarketProb: probs.secondMarketProb,
-                confidenceScore: probs.confidenceScore,
-                confidenceLabel: probs.confidenceLabel,
-
-                highOverSignalHome: Number(intel.h.formXG) > 2 && Number(intel.a.formXGA) > 1.5,
-                highOverSignalAway: Number(intel.a.formXG) > 2 && Number(intel.h.formXGA) > 1.5,
-
-                scanTimestamp: new Date().toISOString()
-              });
-            }
-
-            savePredictionStore(predStore);
-          } else {
-            const sR = await getFixtureStats(m.fixture.id);
-
-            if (sR?.response && sR.response.length >= 2) {
-              const homeObj = sR.response.find(x => x.team?.id === m.teams.home.id);
-              const awayObj = sR.response.find(x => x.team?.id === m.teams.away.id);
-
-              const homeStats = homeObj?.statistics || [];
-              const awayStats = awayObj?.statistics || [];
-
-              intel = {
-                h: {
-                  danger: statVal(homeStats, "Dangerous Attacks"),
-                  shots: statVal(homeStats, "Shots on Goal"),
-                  corners: statVal(homeStats, "Corner Kicks"),
-                  poss: statVal(homeStats, "Ball Possession"),
-                  yellow: statVal(homeStats, "Yellow Cards"),
-                  red: statVal(homeStats, "Red Cards")
-                },
-                a: {
-                  danger: statVal(awayStats, "Dangerous Attacks"),
-                  shots: statVal(awayStats, "Shots on Goal"),
-                  corners: statVal(awayStats, "Corner Kicks"),
-                  poss: statVal(awayStats, "Ball Possession"),
-                  yellow: statVal(awayStats, "Yellow Cards"),
-                  red: statVal(awayStats, "Red Cards")
-                }
-              };
-            }
-          }
-
-          htmlBuffer += buildMatchCard(m, intel, mode);
+          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway });
         }
 
         display.innerHTML = htmlBuffer;
-        refreshStoreBadges();
-
-        if (mode === "pre") showSuccess(`Αποθηκεύτηκαν επιτυχώς οι προβλέψεις!`);
       } catch (err) {
-        console.error("SCAN ERROR:", err);
-        showError(`Σφάλμα: ${err?.message}`);
+        showError(`Σφάλμα: ${err?.message || "Άγνωστο σφάλμα"}`);
       } finally {
         setLoader(false);
         setButtonsDisabled(false);
         isRunning = false;
       }
-    }
-
-    async function runAudit() {
-      if (isRunning) return;
-
-      clearError();
-      clearSuccess();
-
-      const selectedDate = getSelectedDate();
-      const predStore = getPredictionStore();
-      const auditStore = getAuditStore();
-      const dayPredictions = predStore[selectedDate] || [];
-
-      if (!dayPredictions.length) {
-        showError(`Δεν υπάρχουν αποθηκευμένες αναλύσεις για ${selectedDate}.`);
-        return;
-      }
-
-      isRunning = true;
-      setButtonsDisabled(true);
-      setLoader(true, `ΑΞΙΟΛΟΓΗΣΗ ΔΕΔΟΜΕΝΩΝ...`);
-
-      const display = document.getElementById("display");
-      const labSection = document.getElementById("labSection");
-      display.innerHTML = "";
-      labSection.innerHTML = "";
-
-      try {
-        let htmlBuffer = "";
-        let evaluated = 0;
-        let totalActualGoals = 0;
-        let totalPredGoals = 0;
-        let totalAbsError = 0;
-        let topMarketHits = 0;
-
-        auditStore[selectedDate] = [];
-
-        for (let i = 0; i < dayPredictions.length; i++) {
-          const entry = dayPredictions[i];
-          setProgress(Math.round(((i + 1) / dayPredictions.length) * 100), `ΑΞΙΟΛΟΓΗΣΗ: ${entry.homeTeam} vs ${entry.awayTeam}`);
-
-          const res = await apiReq(`fixtures?id=${entry.fixtureId}`);
-          const f = res?.response?.[0];
-          if (!f || f.fixture.status.short !== "FT") continue;
-
-          const actualHome = f.goals.home ?? 0;
-          const actualAway = f.goals.away ?? 0;
-          const actualTotal = actualHome + actualAway;
-          const predTotal = Number(entry.expectedHomeGoals || 0) + Number(entry.expectedAwayGoals || 0);
-          const absError = Math.abs(predTotal - actualTotal);
-
-          totalActualGoals += actualTotal;
-          totalPredGoals += predTotal;
-          totalAbsError += absError;
-          evaluated++;
-
-          const hit1 = actualHome > actualAway;
-          const hitX = actualHome === actualAway;
-          const hit2 = actualAway > actualHome;
-          const hitOver25 = actualTotal >= 3;
-          const hitBTTS = actualHome > 0 && actualAway > 0;
-
-          let topMarketHit = false;
-          if (entry.topMarket === "1") topMarketHit = hit1;
-          else if (entry.topMarket === "X") topMarketHit = hitX;
-          else if (entry.topMarket === "2") topMarketHit = hit2;
-          else if (entry.topMarket === "Over 2.5") topMarketHit = hitOver25;
-          else if (entry.topMarket === "BTTS") topMarketHit = hitBTTS;
-
-          if (topMarketHit) topMarketHits++;
-
-          auditStore[selectedDate].push({
-            ...entry,
-            actualHomeGoals: actualHome,
-            actualAwayGoals: actualAway,
-            actualTotalGoals: actualTotal,
-            absErrorTotalGoals: absError,
-            hit1,
-            hitX,
-            hit2,
-            hitOver25,
-            hitBTTS,
-            topMarketHit,
-            auditedAt: new Date().toISOString()
-          });
-
-          htmlBuffer += `
-            <div class="cyber-card" style="border-left-color: var(--gold);">
-              <div style="font-size:0.72rem; color:var(--txt-muted);">${escapeHtml(entry.league)} | ${escapeHtml(entry.date)}</div>
-              <h3 class="orbitron" style="margin:6px 0;">${escapeHtml(entry.homeTeam)} ${actualHome} - ${actualAway} ${escapeHtml(entry.awayTeam)}</h3>
-              <div style="margin-top:10px; font-size:0.84rem; line-height:1.7;">
-                <div><span style="color:var(--p)">Expected Goals:</span> ${(Number(entry.expectedHomeGoals || 0) + Number(entry.expectedAwayGoals || 0)).toFixed(2)}</div>
-                <div><span style="color:var(--neon-live)">Πραγματικά Γκολ:</span> ${actualTotal}</div>
-                <div><span style="color:var(--gold)">Κύριο Market:</span> ${escapeHtml(entry.topMarket || "-")} (${Number(entry.topMarketProb || 0).toFixed(1)}%)</div>
-                <div><span style="color:${topMarketHit ? '#39ff14' : '#ff7b72'}">Αποτέλεσμα Market:</span> ${topMarketHit ? "ΕΠΑΛΗΘΕΥΤΗΚΕ" : "ΔΕΝ ΕΠΑΛΗΘΕΥΤΗΚΕ"}</div>
-              </div>
-            </div>`;
-        }
-
-        saveAuditStore(auditStore);
-
-        if (evaluated > 0) {
-          labSection.innerHTML = `
-            <div class="lab-audit-panel">
-              <h2 class="orbitron" style="color:var(--gold); text-align:center; margin-top:0;">🔬 DATA LAB AUDIT</h2>
-              <div class="audit-grid">
-                <div class="audit-box"><div class="audit-label">ΑΞΙΟΛΟΓΗΜΕΝΟΙ ΑΓΩΝΕΣ</div><div class="audit-value">${evaluated}</div></div>
-                <div class="audit-box"><div class="audit-label">Μ.Ο. ΠΡΑΓΜΑΤΙΚΩΝ ΓΚΟΛ</div><div class="audit-value">${(totalActualGoals / evaluated).toFixed(2)}</div></div>
-                <div class="audit-box"><div class="audit-label">Μ.Ο. EXPECTED GOALS</div><div class="audit-value">${(totalPredGoals / evaluated).toFixed(2)}</div></div>
-                <div class="audit-box"><div class="audit-label">Μ.Ο. ΑΠΟΚΛΙΣΗΣ</div><div class="audit-value">${(totalAbsError / evaluated).toFixed(2)}</div></div>
-              </div>
-              <div style="margin-top:18px; text-align:center; font-weight:800;">
-                Επιτυχία κύριου market: <span style="color:var(--neon-live);">${((topMarketHits / evaluated) * 100).toFixed(1)}%</span>
-              </div>
-            </div>`;
-
-          display.innerHTML = htmlBuffer;
-          showSuccess(`Η αξιολόγηση ολοκληρώθηκε επιτυχώς.`);
-        } else {
-          display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--alert);">Δεν υπάρχουν ακόμα ολοκληρωμένοι αγώνες.</h3></div>`;
-        }
-
-        refreshStoreBadges();
-      } catch (err) {
-        console.error("AUDIT ERROR:", err);
-        showError(`Σφάλμα: ${err?.message}`);
-      } finally {
-        setLoader(false);
-        setButtonsDisabled(false);
-        isRunning = false;
-      }
-    }
-
-    function flattenAuditStore() {
-      const a = getAuditStore();
-      const r = [];
-      Object.keys(a).sort().forEach(d => {
-        if (Array.isArray(a[d])) r.push(...a[d]);
-      });
-      return r;
-    }
-
-    function downloadTextFile(filename, content, mime = "application/json;charset=utf-8;") {
-      const blob = new Blob([content], { type: mime });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function exportTrainingJSON() {
-      const r = flattenAuditStore();
-      if (!r.length) return showError("Δεν υπάρχουν δεδομένα.");
-      downloadTextFile(`omega_training_${getTodayISO()}.json`, JSON.stringify(r, null, 2));
-      showSuccess(`Εξήχθησαν ${r.length} εγγραφές.`);
-    }
-
-    function exportTrainingCSV() {
-      const r = flattenAuditStore();
-      if (!r.length) return showError("Δεν υπάρχουν δεδομένα.");
-
-      const h = [
-        "date","league","homeTeam","awayTeam",
-        "expectedHomeGoals","expectedAwayGoals",
-        "p1","pX","p2","pOver25","pBTTS",
-        "topMarket","topMarketProb","confidenceScore","confidenceLabel",
-        "actualHomeGoals","actualAwayGoals","actualTotalGoals","topMarketHit"
-      ];
-
-      const c = [
-        h.join(","),
-        ...r.map(row => h.map(key => `"${String(row[key] ?? "").replaceAll('"', '""')}"`).join(","))
-      ].join("\n");
-
-      downloadTextFile(`omega_training_${getTodayISO()}.csv`, c, "text/csv;charset=utf-8;");
-      showSuccess(`Εξήχθησαν ${r.length} εγγραφές.`);
-    }
-
-    function clearSelectedDateData() {
-      const d = getSelectedDate();
-      const p = getPredictionStore();
-      const a = getAuditStore();
-
-      delete p[d];
-      delete a[d];
-
-      savePredictionStore(p);
-      saveAuditStore(a);
-
-      memoryBank = [];
-      document.getElementById("display").innerHTML = "";
-      document.getElementById("labSection").innerHTML = "";
-      showSuccess(`Τα δεδομένα διεγράφησαν.`);
     }
 
     function exportPDF() {
-      const app = document.getElementById("app");
-      if (!app) return;
-
       html2pdf().set({
         margin: 8,
-        filename: `Omega_${getSelectedDate()}.pdf`,
+        filename: `Value_Bets_${getTodayISO()}.pdf`,
         image: { type: "jpeg", quality: 0.96 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-      }).from(app).save();
+      }).from(document.getElementById("app")).save();
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      const dateEl = document.getElementById("scanDate");
-      dateEl.value = getTodayISO();
-      dateEl.addEventListener("change", () => {
-        clearError();
-        clearSuccess();
-        refreshStoreBadges();
-      });
-
+      document.getElementById("scanDate").value = getTodayISO();
       const select = document.getElementById("leagueFilter");
       LEAGUES_DATA.forEach(l => {
         const opt = document.createElement("option");
@@ -1578,8 +778,6 @@
         opt.textContent = l.name;
         select.appendChild(opt);
       });
-
-      refreshStoreBadges();
     });
   </script>
 </body>
