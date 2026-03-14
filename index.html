@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4706.10 - LiveScore + Standings Edition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <title>Predictor Pro v4706.20 - Premium LiveScore + Standings + H2H + WallBet</title>
+
+  <!-- Premium / more legible font pairing -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
@@ -17,9 +19,9 @@
       --gold: #f59e0b;
       --neon-live: #39ff14;
       --alert: #da3633;
-      --txt-muted: #8b949e;
+      --txt-muted: #9aa4b2;
       --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
-      --pick-bg: rgba(57, 255, 20, 0.1);
+      --pick-bg: rgba(57, 255, 20, 0.10);
       --pick-border: #39ff14;
       --magenta: #ff00ff;
       --soft-red: rgba(218, 54, 51, 0.08);
@@ -28,30 +30,46 @@
     }
 
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f0f6fc; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--bg);
+      color: #f0f6fc;
+      margin: 0;
+      padding: 0;
+      letter-spacing: 0.1px;
+    }
+
     .orbitron { font-family: 'Orbitron', sans-serif; }
-    .container { max-width: 1180px; margin: 0 auto; padding: 15px; }
+
+    .container {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 16px;
+    }
 
     .cyber-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 14px;
+      padding: 22px;
       margin-bottom: 20px;
       border-left: 5px solid var(--p);
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
     }
 
     .live-card {
       border-left-color: var(--neon-live);
-      box-shadow: 0 0 18px rgba(57,255,20,.08);
+      box-shadow: 0 0 18px rgba(57,255,20,.08), 0 10px 30px rgba(0,0,0,.18);
     }
 
     .section-panel {
       background: #0b1016;
       border: 1px solid #26303b;
-      border-radius: 14px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: 18px;
       margin-bottom: 20px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.16);
     }
 
     .section-title {
@@ -60,20 +78,20 @@
       font-size: 1rem;
       font-weight: 900;
       margin-bottom: 12px;
-      letter-spacing: .5px;
+      letter-spacing: .6px;
     }
 
     .omega-pick {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 8px;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 10px;
       background: var(--pick-bg);
       border: 1px dashed var(--pick-border);
       text-align: center;
     }
 
     .omega-pick.no-bet {
-      background: rgba(218, 54, 51, 0.1);
+      background: rgba(218, 54, 51, 0.10);
       border-color: var(--alert);
     }
 
@@ -83,35 +101,37 @@
     }
 
     .pick-title {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       color: var(--neon-live);
       font-weight: 900;
       letter-spacing: 1px;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       text-transform: uppercase;
+      font-family: 'Orbitron', sans-serif;
     }
 
     .omega-pick.no-bet .pick-title { color: var(--alert); }
 
     .pick-value {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       color: #fff;
       font-weight: 900;
       text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
     }
 
     .pick-reason {
-      font-size: 0.75rem;
+      font-size: 0.79rem;
       color: var(--txt-muted);
-      margin-top: 4px;
+      margin-top: 5px;
+      line-height: 1.45;
     }
 
     .season-xg-red {
       background: var(--alert);
       color: #fff;
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 3px 8px;
+      border-radius: 5px;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
       font-size: 0.9rem;
@@ -119,7 +139,7 @@
 
     .season-xga-plain {
       color: #8b949e;
-      font-weight: 600;
+      font-weight: 700;
       font-family: 'Orbitron', sans-serif;
       margin-left: 5px;
     }
@@ -136,16 +156,16 @@
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
       border: 1px solid var(--split-color);
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 2px 7px;
+      border-radius: 5px;
       background: rgba(251, 191, 36, 0.1);
     }
 
     .dev-badge {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 900;
       padding: 3px 6px;
-      border-radius: 4px;
+      border-radius: 5px;
       margin-left: 8px;
       font-family: 'Orbitron', sans-serif;
     }
@@ -167,14 +187,15 @@
       background: var(--grad);
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
       cursor: pointer;
       text-transform: uppercase;
       margin: 5px;
       transition: 0.25s;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,.22);
     }
 
     .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
@@ -191,12 +212,13 @@
       color: var(--p);
       border: 1px solid var(--p);
       padding: 13px 14px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.93rem;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
     }
 
-    .league-select { min-width: 220px; cursor: pointer; }
+    .league-select { min-width: 230px; cursor: pointer; }
     .date-input { min-width: 180px; }
     .stake-input { width: 120px; }
 
@@ -208,9 +230,9 @@
     }
 
     .team-box {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.42);
       padding: 15px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid #222;
     }
 
@@ -219,10 +241,11 @@
       justify-content: space-between;
       gap: 10px;
       margin-bottom: 8px;
-      font-size: 0.85rem;
+      font-size: 0.86rem;
       border-bottom: 1px solid #1a1d23;
-      padding-bottom: 5px;
+      padding-bottom: 6px;
       align-items: center;
+      line-height: 1.4;
     }
 
     .stat-row:last-child {
@@ -232,11 +255,12 @@
     }
 
     .minor-row {
-      font-size: 0.76rem;
+      font-size: 0.77rem;
       color: var(--txt-muted);
       margin-top: -2px;
       margin-bottom: 8px;
       text-align: right;
+      line-height: 1.4;
     }
 
     .form-dot {
@@ -250,6 +274,7 @@
       font-weight: 900;
       margin-right: 3px;
       color: #fff;
+      font-family: 'Orbitron', sans-serif;
     }
 
     .form-W { background: #238636; }
@@ -267,8 +292,9 @@
 
     .small-note {
       color: var(--txt-muted);
-      font-size: 0.8rem;
+      font-size: 0.84rem;
       margin-top: 10px;
+      line-height: 1.45;
     }
 
     .error-box {
@@ -278,7 +304,7 @@
       padding: 12px;
       border-radius: 10px;
       margin-bottom: 15px;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
     }
 
     .top-list {
@@ -290,7 +316,7 @@
     .rank-card {
       background: #11161d;
       border: 1px solid #2e3742;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 12px;
     }
 
@@ -306,7 +332,7 @@
       display: inline-block;
       padding: 3px 8px;
       border-radius: 999px;
-      font-size: 0.72rem;
+      font-size: 0.71rem;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
       background: var(--soft-gold);
@@ -318,7 +344,7 @@
       display: inline-block;
       padding: 4px 8px;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
       background: var(--soft-cyan);
@@ -330,7 +356,7 @@
       display: inline-block;
       padding: 4px 8px;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
       background: rgba(57,255,20,.12);
@@ -342,7 +368,7 @@
       display: inline-block;
       padding: 3px 8px;
       border-radius: 999px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
       background: rgba(245,158,11,.12);
@@ -354,7 +380,7 @@
     .wallbet-box {
       background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(0,242,255,0.08));
       border: 1px solid rgba(245, 158, 11, 0.35);
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 16px;
     }
 
@@ -369,7 +395,7 @@
     .wallbet-leg {
       background: rgba(0,0,0,0.28);
       border: 1px solid #313a44;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 12px;
       margin-bottom: 10px;
     }
@@ -383,7 +409,7 @@
     .bank-box {
       background: #11161c;
       border: 1px solid #2e3742;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 12px;
       text-align: center;
     }
@@ -405,9 +431,61 @@
 
     .live-score-big {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.1rem;
+      font-size: 2.15rem;
       font-weight: 900;
       color: var(--neon-live);
+      text-shadow: 0 0 12px rgba(57,255,20,.18);
+    }
+
+    .h2h-box {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+    }
+
+    .h2h-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .h2h-line {
+      font-size: 0.82rem;
+      margin-bottom: 5px;
+      color: #f0f6fc;
+      line-height: 1.45;
+    }
+
+    .h2h-line:last-child { margin-bottom: 0; }
+
+    .tip-links {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tip-link {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(0,242,255,.08);
+      border: 1px solid rgba(0,242,255,.22);
+      color: var(--p);
+      text-decoration: none;
+      font-size: 0.73rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      transition: .18s;
+    }
+
+    .tip-link:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
     }
 
     @media (max-width: 900px) {
@@ -418,7 +496,7 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.10</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.20</h1>
     <input
       type="password"
       id="pin"
@@ -426,14 +504,14 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">LiveScore + Standings + WallBet</div>
+    <div class="small-note">Premium font edition · LiveScore · Standings · H2H · WallBet · MLS</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top: 6px; color: var(--txt-muted); font-size: 0.8rem;">v4706.10 LiveScore + Top 5 + WallBet + Standings</div>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.20 Premium LiveScore + Top 5 + WallBet + Standings + H2H + Tip Links</div>
       </header>
 
       <div class="toolbar">
@@ -454,7 +532,7 @@
         <div style="width:100%; background:#222; height:8px; border-radius:4px; overflow:hidden;">
           <div id="bar" style="width:0%; height:100%; background:var(--grad); transition:0.3s;"></div>
         </div>
-        <p id="status" class="orbitron" style="font-size:0.7rem; color:var(--p); margin-top:8px;"></p>
+        <p id="status" class="orbitron" style="font-size:0.72rem; color:var(--p); margin-top:8px;"></p>
       </div>
 
       <div id="topSection"></div>
@@ -483,6 +561,7 @@
       {id: 88, name: "🇳🇱 Eredivisie"},
       {id: 144, name: "🇧🇪 Belgium Jupiler"},
       {id: 203, name: "🇹🇷 Turkey Süper Lig"},
+      {id: 253, name: "🇺🇸 MLS"},
       {id: 262, name: "🇲🇽 Liga MX"},
       {id: 197, name: "🇬🇷 Greece Super League"}
     ];
@@ -493,13 +572,14 @@
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470610";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470610";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470620";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470620";
 
     let statsCache = new Map();
     let teamStatsCache = new Map();
     let lastFixturesCache = new Map();
     let standingsCache = new Map();
+    let h2hCache = new Map();
     let isRunning = false;
     let latestTopLists = { over25: [], btts: [], cards4: [] };
     let latestWallBet = null;
@@ -662,6 +742,19 @@
       return standings;
     }
 
+    async function getHeadToHead(team1Id, team2Id, leagueId = null, season = null) {
+      const key = `${team1Id}_${team2Id}_${leagueId || "all"}_${season || "all"}`;
+      if (h2hCache.has(key)) return h2hCache.get(key);
+
+      let path = `fixtures/headtohead?h2h=${team1Id}-${team2Id}`;
+      if (leagueId && season) path += `&league=${leagueId}&season=${season}`;
+
+      const data = await apiReq(path);
+      const response = data?.response || [];
+      h2hCache.set(key, response);
+      return response;
+    }
+
     function getTeamRankFromStandings(standings, teamId) {
       const row = standings.find(x => x.team?.id === teamId);
       return row?.rank ?? null;
@@ -703,6 +796,63 @@
 
       if (!Number.isFinite(xg) || xg <= 0) xg = goals > 0 ? (0.70 + goals * 0.30) : 0.70;
       return xg;
+    }
+
+    function getWinnerTeamIdFromFixture(f) {
+      const hg = f?.goals?.home ?? 0;
+      const ag = f?.goals?.away ?? 0;
+      if (hg > ag) return f?.teams?.home?.id;
+      if (ag > hg) return f?.teams?.away?.id;
+      return null;
+    }
+
+    function summarizeH2H(h2hFixtures, homeTeamId, awayTeamId) {
+      if (!Array.isArray(h2hFixtures) || !h2hFixtures.length) {
+        return {
+          matches: 0,
+          homeWins: 0,
+          awayWins: 0,
+          draws: 0,
+          goalsHome: 0,
+          goalsAway: 0,
+          lastResults: []
+        };
+      }
+
+      let homeWins = 0;
+      let awayWins = 0;
+      let draws = 0;
+      let goalsHome = 0;
+      let goalsAway = 0;
+      const lastResults = [];
+
+      for (const f of h2hFixtures.slice(0, 8)) {
+        const winnerId = getWinnerTeamIdFromFixture(f);
+        const hg = f?.goals?.home ?? 0;
+        const ag = f?.goals?.away ?? 0;
+
+        const homeGoalsThisH2H = f?.teams?.home?.id === homeTeamId ? hg : ag;
+        const awayGoalsThisH2H = f?.teams?.home?.id === awayTeamId ? hg : ag;
+
+        goalsHome += homeGoalsThisH2H;
+        goalsAway += awayGoalsThisH2H;
+
+        if (winnerId === homeTeamId) homeWins++;
+        else if (winnerId === awayTeamId) awayWins++;
+        else draws++;
+
+        lastResults.push(`${homeGoalsThisH2H}-${awayGoalsThisH2H}`);
+      }
+
+      return {
+        matches: h2hFixtures.slice(0, 8).length,
+        homeWins,
+        awayWins,
+        draws,
+        goalsHome,
+        goalsAway,
+        lastResults
+      };
     }
 
     function getFormHistory(fixtures, teamId) {
@@ -808,7 +958,7 @@
       const aSplitCards = safeNum(aStats.splitCards);
 
       const trapLeagues = [40, 41, 136, 141, 79, 62];
-      const goldLeagues = [78, 262, 88];
+      const goldLeagues = [78, 262, 88, 253];
       const tightLeagues = [61, 94, 197, 135];
 
       if (trapLeagues.includes(leagueId)) {
@@ -887,17 +1037,37 @@
       return { pick, reason, noBet };
     }
 
-    function buildMatchCard(m, s, scores, standings) {
+    function slugifyForSites(text) {
+      return String(text || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/&/g, " and ")
+        .replace(/[^a-zA-Z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .toLowerCase();
+    }
+
+    function buildTipLinks(homeName, awayName) {
+      const query = encodeURIComponent(`${homeName} vs ${awayName}`);
+      return {
+        forebet: `https://www.forebet.com/en/search?keyword=${query}`,
+        windrawwin: `https://www.windrawwin.com/search/?q=${query}`,
+        predictz: `https://www.predictz.com/search/?q=${query}`
+      };
+    }
+
+    function buildMatchCard(m, s, scores, standings, h2hSummary) {
       const omega = generateOmegaPick(s.h, s.a, m.league.id);
       const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
       const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
+      const tipLinks = buildTipLinks(m.teams.home.name, m.teams.away.name);
 
       return `
         <div class="cyber-card">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
             <div>
               <span style="background:#222; padding:4px 8px; border-radius:4px;">${escapeHtml(m.fixture.status.short)}</span>
-              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
+              <div style="color:var(--gold); font-size:0.72rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
               <h2 class="orbitron" style="margin:5px 0;">
                 ${escapeHtml(m.teams.home.name)}
                 ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
@@ -920,9 +1090,25 @@
             <div class="pick-reason">${omega.reason}</div>
           </div>
 
+          <div class="h2h-box">
+            <div class="h2h-title">📚 ΠΡΟΪΣΤΟΡΙΑ (H2H)</div>
+            <div class="h2h-line">Αγώνες: <strong>${h2hSummary?.matches ?? 0}</strong></div>
+            <div class="h2h-line">${escapeHtml(m.teams.home.name)} νίκες: <strong>${h2hSummary?.homeWins ?? 0}</strong></div>
+            <div class="h2h-line">${escapeHtml(m.teams.away.name)} νίκες: <strong>${h2hSummary?.awayWins ?? 0}</strong></div>
+            <div class="h2h-line">Ισοπαλίες: <strong>${h2hSummary?.draws ?? 0}</strong></div>
+            <div class="h2h-line">Γκολ: <strong>${h2hSummary?.goalsHome ?? 0} - ${h2hSummary?.goalsAway ?? 0}</strong></div>
+            <div class="h2h-line">Τελευταία σκορ: <strong>${(h2hSummary?.lastResults || []).join(", ") || "-"}</strong></div>
+          </div>
+
+          <div class="tip-links">
+            <a class="tip-link" href="${tipLinks.forebet}" target="_blank" rel="noopener noreferrer">FOREBET</a>
+            <a class="tip-link" href="${tipLinks.windrawwin}" target="_blank" rel="noopener noreferrer">WINDRAWWIN</a>
+            <a class="tip-link" href="${tipLinks.predictz}" target="_blank" rel="noopener noreferrer">PREDICTZ</a>
+          </div>
+
           <div class="stats-grid">
             <div class="team-box">
-              <div style="color:var(--p); font-size:0.75rem; font-weight:900; margin-bottom:10px;">
+              <div style="color:var(--p); font-size:0.76rem; font-weight:900; margin-bottom:10px;">
                 🏠 ${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
               </div>
               ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
@@ -954,7 +1140,7 @@
             </div>
 
             <div class="team-box">
-              <div style="color:var(--magenta); font-size:0.75rem; font-weight:900; margin-bottom:10px;">
+              <div style="color:var(--magenta); font-size:0.76rem; font-weight:900; margin-bottom:10px;">
                 ✈️ ${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
               </div>
               ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
@@ -989,7 +1175,7 @@
       `;
     }
 
-    function buildLiveCard(m, s, standings) {
+    function buildLiveCard(m, s, standings, h2hSummary) {
       const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
       const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
 
@@ -998,7 +1184,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
             <div>
               <span class="live-chip">${escapeHtml(m.fixture.status.short)} ${m.fixture.status.elapsed || 0}'</span>
-              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
+              <div style="color:var(--gold); font-size:0.72rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
               <h2 class="orbitron" style="margin:5px 0;">
                 ${escapeHtml(m.teams.home.name)}
                 ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
@@ -1009,6 +1195,18 @@
               </h2>
             </div>
             <div class="live-score-big">${m.goals.home ?? 0} - ${m.goals.away ?? 0}</div>
+          </div>
+
+          <div class="h2h-box" style="margin-top:14px;">
+            <div class="h2h-title">📚 ΠΡΟΪΣΤΟΡΙΑ (H2H)</div>
+            <div class="h2h-line">
+              ${escapeHtml(m.teams.home.name)} νίκες: <strong>${h2hSummary?.homeWins ?? 0}</strong>
+              &nbsp; | &nbsp;
+              Ισοπαλίες: <strong>${h2hSummary?.draws ?? 0}</strong>
+              &nbsp; | &nbsp;
+              ${escapeHtml(m.teams.away.name)} νίκες: <strong>${h2hSummary?.awayWins ?? 0}</strong>
+            </div>
+            <div class="h2h-line">Τελευταία σκορ: <strong>${(h2hSummary?.lastResults || []).join(", ") || "-"}</strong></div>
           </div>
 
           <div class="stats-grid">
@@ -1200,13 +1398,15 @@
           const m = matches[i];
           setProgress(Math.round(((i + 1) / matches.length) * 100), `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
 
-          const [intelHome, intelAway, standings] = await Promise.all([
+          const [intelHome, intelAway, standings, h2hFixtures] = await Promise.all([
             getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
             getTeamData(m.teams.away.id, m.league.id, m.league.season, "away"),
-            getLeagueStandings(m.league.id, m.league.season)
+            getLeagueStandings(m.league.id, m.league.season),
+            getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)
           ]);
 
           const scores = computeMarketScores(intelHome, intelAway, m.league.id);
+          const h2hSummary = summarizeH2H(h2hFixtures, m.teams.home.id, m.teams.away.id);
 
           scoredMatches.push({
             fixtureId: m.fixture.id,
@@ -1221,7 +1421,7 @@
             cards4Score: scores.cards4Score
           });
 
-          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores, standings);
+          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores, standings, h2hSummary);
         }
 
         latestTopLists.over25 = [...scoredMatches].sort((a, b) => b.over25Score - a.over25Score).slice(0, 5);
@@ -1276,9 +1476,10 @@
           const m = matches[i];
           setProgress(Math.round(((i + 1) / matches.length) * 100), `LIVE: ${m.teams.home.name} vs ${m.teams.away.name}`);
 
-          const [statResp, standings] = await Promise.all([
+          const [statResp, standings, h2hFixtures] = await Promise.all([
             getFixtureStats(m.fixture.id),
-            getLeagueStandings(m.league.id, m.league.season)
+            getLeagueStandings(m.league.id, m.league.season),
+            getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)
           ]);
 
           let liveStats = null;
@@ -1309,7 +1510,8 @@
             };
           }
 
-          htmlBuffer += buildLiveCard(m, liveStats, standings);
+          const h2hSummary = summarizeH2H(h2hFixtures, m.teams.home.id, m.teams.away.id);
+          htmlBuffer += buildLiveCard(m, liveStats, standings, h2hSummary);
         }
 
         display.innerHTML = htmlBuffer;
