@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4706.00 - Master Algorithm WallBet Edition</title>
+  <title>Predictor Pro v4706.10 - LiveScore + Standings Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -39,6 +39,11 @@
       padding: 20px;
       margin-bottom: 20px;
       border-left: 5px solid var(--p);
+    }
+
+    .live-card {
+      border-left-color: var(--neon-live);
+      box-shadow: 0 0 18px rgba(57,255,20,.08);
     }
 
     .section-panel {
@@ -321,6 +326,31 @@
       border: 1px solid rgba(0, 242, 255, 0.25);
     }
 
+    .live-chip {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      background: rgba(57,255,20,.12);
+      color: var(--neon-live);
+      border: 1px solid rgba(57,255,20,.25);
+    }
+
+    .standing-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      background: rgba(245,158,11,.12);
+      color: var(--gold);
+      border: 1px solid rgba(245,158,11,.25);
+      margin-left: 8px;
+    }
+
     .wallbet-box {
       background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(0,242,255,0.08));
       border: 1px solid rgba(245, 158, 11, 0.35);
@@ -373,6 +403,13 @@
       font-weight: 900;
     }
 
+    .live-score-big {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: var(--neon-live);
+    }
+
     @media (max-width: 900px) {
       .stats-grid, .bank-grid { grid-template-columns: 1fr; }
     }
@@ -381,7 +418,7 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.00</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.10</h1>
     <input
       type="password"
       id="pin"
@@ -389,14 +426,14 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">WallBet Edition / Top Markets / Cards Split</div>
+    <div class="small-note">LiveScore + Standings + WallBet</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top: 6px; color: var(--txt-muted); font-size: 0.8rem;">v4706.00 Top 5 + WallBet + Bank Tracking</div>
+        <div style="margin-top: 6px; color: var(--txt-muted); font-size: 0.8rem;">v4706.10 LiveScore + Top 5 + WallBet + Standings</div>
       </header>
 
       <div class="toolbar">
@@ -405,7 +442,8 @@
           <option value="ALL">🌐 Όλα τα Πρωταθλήματα</option>
         </select>
         <input type="number" id="wallbetStake" class="stake-input" value="10" min="1" step="1" placeholder="Stake">
-        <button class="btn-main" id="btnPre" onclick="runScan()">🚀 ΕΥΡΕΣΗ ΣΗΜΕΙΩΝ (SCAN)</button>
+        <button class="btn-main" id="btnPre" onclick="runScan()">🚀 SCAN</button>
+        <button class="btn-main" id="btnLive" style="background:#da3633;" onclick="runLiveScan()">🔴 LIVE SCORE</button>
         <button class="btn-main" id="btnSaveWallbet" style="background:#b45309;" onclick="saveWallBet()">💾 SAVE WALLBET</button>
         <button class="btn-main" id="btnPdf" style="background:#222;" onclick="exportPDF()">📄 SAVE PDF</button>
       </div>
@@ -455,12 +493,13 @@
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470600";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470600";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470610";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470610";
 
     let statsCache = new Map();
     let teamStatsCache = new Map();
     let lastFixturesCache = new Map();
+    let standingsCache = new Map();
     let isRunning = false;
     let latestTopLists = { over25: [], btts: [], cards4: [] };
     let latestWallBet = null;
@@ -489,7 +528,7 @@
     }
 
     function setButtonsDisabled(disabled) {
-      ["btnPre", "btnPdf", "btnSaveWallbet", "leagueFilter"].forEach(id => {
+      ["btnPre", "btnLive", "btnPdf", "btnSaveWallbet", "leagueFilter"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.disabled = disabled;
       });
@@ -515,6 +554,10 @@
     function safeNum(x, d = 0) {
       const n = Number(x);
       return Number.isFinite(n) ? n : d;
+    }
+
+    function isLiveStatus(short) {
+      return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short);
     }
 
     function getWallBetBank() {
@@ -607,6 +650,21 @@
       const data = await apiReq(`fixtures/statistics?fixture=${fixtureId}`);
       statsCache.set(fixtureId, data);
       return data;
+    }
+
+    async function getLeagueStandings(leagueId, season) {
+      const key = `${leagueId}_${season}`;
+      if (standingsCache.has(key)) return standingsCache.get(key);
+
+      const data = await apiReq(`standings?league=${leagueId}&season=${season}`);
+      const standings = data?.response?.[0]?.league?.standings?.[0] || [];
+      standingsCache.set(key, standings);
+      return standings;
+    }
+
+    function getTeamRankFromStandings(standings, teamId) {
+      const row = standings.find(x => x.team?.id === teamId);
+      return row?.rank ?? null;
     }
 
     function statVal(statsArr, type) {
@@ -829,8 +887,10 @@
       return { pick, reason, noBet };
     }
 
-    function buildMatchCard(m, s, scores) {
+    function buildMatchCard(m, s, scores, standings) {
       const omega = generateOmegaPick(s.h, s.a, m.league.id);
+      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
+      const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
 
       return `
         <div class="cyber-card">
@@ -838,8 +898,14 @@
             <div>
               <span style="background:#222; padding:4px 8px; border-radius:4px;">${escapeHtml(m.fixture.status.short)}</span>
               <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
-              <h2 class="orbitron" style="margin:5px 0;">${escapeHtml(m.teams.home.name)}</h2>
-              <h2 class="orbitron" style="margin:2px 0;">${escapeHtml(m.teams.away.name)}</h2>
+              <h2 class="orbitron" style="margin:5px 0;">
+                ${escapeHtml(m.teams.home.name)}
+                ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
+              </h2>
+              <h2 class="orbitron" style="margin:2px 0;">
+                ${escapeHtml(m.teams.away.name)}
+                ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
+              </h2>
             </div>
             <div style="text-align:right;">
               <div class="score-chip">O2.5 ${scores.over25Score}</div>
@@ -849,14 +915,16 @@
           </div>
 
           <div class="omega-pick ${omega.noBet ? 'no-bet' : ''}">
-             <div class="pick-title">💡 ΠΡΟΤΕΙΝΟΜΕΝΟ ΣΤΟΙΧΗΜΑ (VALUE)</div>
-             <div class="pick-value">${omega.pick}</div>
-             <div class="pick-reason">${omega.reason}</div>
+            <div class="pick-title">💡 ΠΡΟΤΕΙΝΟΜΕΝΟ ΣΤΟΙΧΗΜΑ (VALUE)</div>
+            <div class="pick-value">${omega.pick}</div>
+            <div class="pick-reason">${omega.reason}</div>
           </div>
 
           <div class="stats-grid">
             <div class="team-box">
-              <div style="color:var(--p); font-size:0.75rem; font-weight:900; margin-bottom:10px;">🏠 ${escapeHtml(m.teams.home.name)}</div>
+              <div style="color:var(--p); font-size:0.75rem; font-weight:900; margin-bottom:10px;">
+                🏠 ${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
+              </div>
               ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
               <div class="stat-row" style="margin-top:12px;">
                 <span>Μέσος Όρος Σεζόν:</span>
@@ -886,7 +954,9 @@
             </div>
 
             <div class="team-box">
-              <div style="color:var(--magenta); font-size:0.75rem; font-weight:900; margin-bottom:10px;">✈️ ${escapeHtml(m.teams.away.name)}</div>
+              <div style="color:var(--magenta); font-size:0.75rem; font-weight:900; margin-bottom:10px;">
+                ✈️ ${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
+              </div>
               ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
               <div class="stat-row" style="margin-top:12px;">
                 <span>Μέσος Όρος Σεζόν:</span>
@@ -919,16 +989,67 @@
       `;
     }
 
+    function buildLiveCard(m, s, standings) {
+      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
+      const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
+
+      return `
+        <div class="cyber-card live-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
+            <div>
+              <span class="live-chip">${escapeHtml(m.fixture.status.short)} ${m.fixture.status.elapsed || 0}'</span>
+              <div style="color:var(--gold); font-size:0.7rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
+              <h2 class="orbitron" style="margin:5px 0;">
+                ${escapeHtml(m.teams.home.name)}
+                ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
+              </h2>
+              <h2 class="orbitron" style="margin:2px 0;">
+                ${escapeHtml(m.teams.away.name)}
+                ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
+              </h2>
+            </div>
+            <div class="live-score-big">${m.goals.home ?? 0} - ${m.goals.away ?? 0}</div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="team-box">
+              <div style="color:var(--p); font-weight:900; margin-bottom:10px;">
+                🏠 LIVE HOME ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
+              </div>
+              <div class="stat-row"><span>Κατοχή</span><span class="val-xg">${s?.h?.poss ?? 0}%</span></div>
+              <div class="stat-row"><span>Σουτ στην εστία</span><span class="val-xg">${s?.h?.shots ?? 0}</span></div>
+              <div class="stat-row"><span>Επικίνδυνες επιθέσεις</span><span class="val-xg">${s?.h?.danger ?? 0}</span></div>
+              <div class="stat-row"><span>Κόρνερ</span><span>🚩 ${s?.h?.corners ?? 0}</span></div>
+              <div class="stat-row"><span>Κάρτες</span><span>🟨 ${s?.h?.yellow ?? 0} | 🟥 ${s?.h?.red ?? 0}</span></div>
+            </div>
+
+            <div class="team-box">
+              <div style="color:var(--magenta); font-weight:900; margin-bottom:10px;">
+                ✈️ LIVE AWAY ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
+              </div>
+              <div class="stat-row"><span>Κατοχή</span><span class="val-xg">${s?.a?.poss ?? 0}%</span></div>
+              <div class="stat-row"><span>Σουτ στην εστία</span><span class="val-xg">${s?.a?.shots ?? 0}</span></div>
+              <div class="stat-row"><span>Επικίνδυνες επιθέσεις</span><span class="val-xg">${s?.a?.danger ?? 0}</span></div>
+              <div class="stat-row"><span>Κόρνερ</span><span>🚩 ${s?.a?.corners ?? 0}</span></div>
+              <div class="stat-row"><span>Κάρτες</span><span>🟨 ${s?.a?.yellow ?? 0} | 🟥 ${s?.a?.red ?? 0}</span></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function rankItemHTML(item, idx, label, scoreKey) {
       return `
         <div class="rank-card">
           <div class="rank-head">
-            <div>
-              <span class="rank-badge">#${idx + 1} ${label}</span>
-            </div>
+            <div><span class="rank-badge">#${idx + 1} ${label}</span></div>
             <div class="score-chip">${item[scoreKey]}</div>
           </div>
-          <div style="font-weight:800;">${escapeHtml(item.homeTeam)} vs ${escapeHtml(item.awayTeam)}</div>
+          <div style="font-weight:800;">
+            ${escapeHtml(item.homeTeam)} ${item.homeRank ? `<span class="standing-pill">#${item.homeRank}</span>` : ""}
+            vs
+            ${escapeHtml(item.awayTeam)} ${item.awayRank ? `<span class="standing-pill">#${item.awayRank}</span>` : ""}
+          </div>
           <div style="color:var(--txt-muted); font-size:0.8rem; margin-top:4px;">${escapeHtml(item.league)}</div>
         </div>
       `;
@@ -1010,7 +1131,11 @@
           ${latestWallBet.legs.map((leg, i) => `
             <div class="wallbet-leg">
               <div style="font-weight:900; color:var(--gold); margin-bottom:6px;">Leg ${i + 1}: ${escapeHtml(leg.market)}</div>
-              <div style="font-weight:800;">${escapeHtml(leg.homeTeam)} vs ${escapeHtml(leg.awayTeam)}</div>
+              <div style="font-weight:800;">
+                ${escapeHtml(leg.homeTeam)} ${leg.homeRank ? `<span class="standing-pill">#${leg.homeRank}</span>` : ""}
+                vs
+                ${escapeHtml(leg.awayTeam)} ${leg.awayRank ? `<span class="standing-pill">#${leg.awayRank}</span>` : ""}
+              </div>
               <div style="color:var(--txt-muted); font-size:0.82rem; margin-top:4px;">${escapeHtml(leg.league)}</div>
               <div style="margin-top:6px;" class="score-chip">Score ${leg.mainScore}</div>
             </div>
@@ -1075,9 +1200,10 @@
           const m = matches[i];
           setProgress(Math.round(((i + 1) / matches.length) * 100), `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
 
-          const [intelHome, intelAway] = await Promise.all([
+          const [intelHome, intelAway, standings] = await Promise.all([
             getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
-            getTeamData(m.teams.away.id, m.league.id, m.league.season, "away")
+            getTeamData(m.teams.away.id, m.league.id, m.league.season, "away"),
+            getLeagueStandings(m.league.id, m.league.season)
           ]);
 
           const scores = computeMarketScores(intelHome, intelAway, m.league.id);
@@ -1088,12 +1214,14 @@
             awayTeam: m.teams.away.name,
             league: m.league.name,
             leagueId: m.league.id,
+            homeRank: getTeamRankFromStandings(standings, m.teams.home.id),
+            awayRank: getTeamRankFromStandings(standings, m.teams.away.id),
             over25Score: scores.over25Score,
             bttsScore: scores.bttsScore,
             cards4Score: scores.cards4Score
           });
 
-          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores);
+          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores, standings);
         }
 
         latestTopLists.over25 = [...scoredMatches].sort((a, b) => b.over25Score - a.over25Score).slice(0, 5);
@@ -1112,10 +1240,92 @@
       }
     }
 
+    async function runLiveScan() {
+      if (isRunning) return;
+
+      isRunning = true;
+      clearError();
+      setButtonsDisabled(true);
+      setLoader(true, "ΑΝΑΖΗΤΗΣΗ LIVE ΑΓΩΝΩΝ...");
+
+      const display = document.getElementById("display");
+      display.innerHTML = "";
+      document.getElementById("topSection").innerHTML = "";
+      document.getElementById("wallbetSection").innerHTML = "";
+
+      try {
+        const selectedDate = document.getElementById("scanDate").value || getTodayISO();
+        const selectedLeague = document.getElementById("leagueFilter").value;
+
+        const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
+        let matches = (fixturesResp.response || []).filter(m => {
+          const leagueOk = selectedLeague === "ALL"
+            ? LEAGUES.includes(m.league.id)
+            : m.league.id === parseInt(selectedLeague, 10);
+          return leagueOk && isLiveStatus(m.fixture.status.short);
+        });
+
+        if (!matches.length) {
+          display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν υπάρχουν live αγώνες.</h3></div>`;
+          return;
+        }
+
+        let htmlBuffer = "";
+
+        for (let i = 0; i < matches.length; i++) {
+          const m = matches[i];
+          setProgress(Math.round(((i + 1) / matches.length) * 100), `LIVE: ${m.teams.home.name} vs ${m.teams.away.name}`);
+
+          const [statResp, standings] = await Promise.all([
+            getFixtureStats(m.fixture.id),
+            getLeagueStandings(m.league.id, m.league.season)
+          ]);
+
+          let liveStats = null;
+          if (statResp?.response && statResp.response.length >= 2) {
+            const homeObj = statResp.response.find(x => x.team?.id === m.teams.home.id);
+            const awayObj = statResp.response.find(x => x.team?.id === m.teams.away.id);
+
+            const homeStats = homeObj?.statistics || [];
+            const awayStats = awayObj?.statistics || [];
+
+            liveStats = {
+              h: {
+                corners: statVal(homeStats, "Corner Kicks"),
+                yellow: statVal(homeStats, "Yellow Cards"),
+                red: statVal(homeStats, "Red Cards"),
+                shots: statVal(homeStats, "Shots on Goal"),
+                danger: statVal(homeStats, "Dangerous Attacks"),
+                poss: statVal(homeStats, "Ball Possession")
+              },
+              a: {
+                corners: statVal(awayStats, "Corner Kicks"),
+                yellow: statVal(awayStats, "Yellow Cards"),
+                red: statVal(awayStats, "Red Cards"),
+                shots: statVal(awayStats, "Shots on Goal"),
+                danger: statVal(awayStats, "Dangerous Attacks"),
+                poss: statVal(awayStats, "Ball Possession")
+              }
+            };
+          }
+
+          htmlBuffer += buildLiveCard(m, liveStats, standings);
+        }
+
+        display.innerHTML = htmlBuffer;
+      } catch (err) {
+        showError(`Σφάλμα live: ${err?.message || "Άγνωστο σφάλμα"}`);
+      } finally {
+        setLoader(false);
+        setButtonsDisabled(false);
+        isRunning = false;
+      }
+    }
+
     function exportPDF() {
       html2pdf().set({
         margin: 8,
-        filename: `WallBet_${getTodayISO()}.pdf`,
+        filename: `Omega_${getTodayISO()}.pdf`,
         image: { type: "jpeg", quality: 0.96 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
