@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4706.20 - Premium LiveScore + Standings + H2H + WallBet</title>
+  <title>Predictor Pro v4706.21 - Premium LiveScore + Standings + H2H + WallBet</title>
 
-  <!-- Premium / more legible font pairing -->
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -366,15 +365,16 @@
 
     .standing-pill {
       display: inline-block;
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: 999px;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
-      background: rgba(245,158,11,.12);
-      color: var(--gold);
-      border: 1px solid rgba(245,158,11,.25);
+      background: rgba(245,158,11,.18);
+      color: #ffd27a;
+      border: 1px solid rgba(245,158,11,.45);
       margin-left: 8px;
+      box-shadow: 0 0 10px rgba(245,158,11,.12);
     }
 
     .wallbet-box {
@@ -496,7 +496,7 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.20</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.21</h1>
     <input
       type="password"
       id="pin"
@@ -504,14 +504,14 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">Premium font edition · LiveScore · Standings · H2H · WallBet · MLS</div>
+    <div class="small-note">Premium font edition · Fixed standings · Fixed tip links · LiveScore · Standings · H2H · WallBet · MLS</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.20 Premium LiveScore + Top 5 + WallBet + Standings + H2H + Tip Links</div>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.21 Premium LiveScore + Top 5 + WallBet + Standings + H2H + Tip Links</div>
       </header>
 
       <div class="toolbar">
@@ -572,8 +572,8 @@
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470620";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470620";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470621";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470621";
 
     let statsCache = new Map();
     let teamStatsCache = new Map();
@@ -737,9 +737,11 @@
       if (standingsCache.has(key)) return standingsCache.get(key);
 
       const data = await apiReq(`standings?league=${leagueId}&season=${season}`);
-      const standings = data?.response?.[0]?.league?.standings?.[0] || [];
-      standingsCache.set(key, standings);
-      return standings;
+      const rawStandings = data?.response?.[0]?.league?.standings || [];
+      const flattened = Array.isArray(rawStandings) ? rawStandings.flat().filter(Boolean) : [];
+
+      standingsCache.set(key, flattened);
+      return flattened;
     }
 
     async function getHeadToHead(team1Id, team2Id, leagueId = null, season = null) {
@@ -756,7 +758,8 @@
     }
 
     function getTeamRankFromStandings(standings, teamId) {
-      const row = standings.find(x => x.team?.id === teamId);
+      if (!Array.isArray(standings)) return null;
+      const row = standings.find(x => String(x?.team?.id) === String(teamId));
       return row?.rank ?? null;
     }
 
@@ -1037,22 +1040,12 @@
       return { pick, reason, noBet };
     }
 
-    function slugifyForSites(text) {
-      return String(text || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/&/g, " and ")
-        .replace(/[^a-zA-Z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-        .toLowerCase();
-    }
-
     function buildTipLinks(homeName, awayName) {
       const query = encodeURIComponent(`${homeName} vs ${awayName}`);
       return {
-        forebet: `https://www.forebet.com/en/search?keyword=${query}`,
-        windrawwin: `https://www.windrawwin.com/search/?q=${query}`,
-        predictz: `https://www.predictz.com/search/?q=${query}`
+        forebet: `https://www.google.com/search?q=site%3Aforebet.com+${query}`,
+        windrawwin: `https://www.google.com/search?q=site%3Awindrawwin.com+${query}`,
+        predictz: `https://www.google.com/search?q=site%3Apredictz.com+${query}`
       };
     }
 
