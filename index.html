@@ -546,26 +546,36 @@
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
 
-    const LEAGUES_DATA = [
-      {id: 39, name: "🇬🇧 Premier League"},
-      {id: 40, name: "🇬🇧 Championship"},
-      {id: 41, name: "🇬🇧 League One"},
-      {id: 140, name: "🇪🇸 La Liga"},
-      {id: 141, name: "🇪🇸 La Liga 2"},
-      {id: 135, name: "🇮🇹 Serie A"},
-      {id: 136, name: "🇮🇹 Serie B"},
-      {id: 78, name: "🇩🇪 Bundesliga"},
-      {id: 79, name: "🇩🇪 2. Bundesliga"},
-      {id: 61, name: "🇫🇷 Ligue 1"},
-      {id: 62, name: "🇫🇷 Ligue 2"},
-      {id: 88, name: "🇳🇱 Eredivisie"},
-      {id: 144, name: "🇧🇪 Belgium Jupiler"},
-      {id: 203, name: "🇹🇷 Turkey Süper Lig"},
-      {id: 253, name: "🇺🇸 MLS"},
-      {id: 262, name: "🇲🇽 Liga MX"},
-      {id: 197, name: "🇬🇷 Greece Super League"}
-    ];
-    const LEAGUES = LEAGUES_DATA.map(l => l.id);
+    <script>
+  const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
+  const API = "https://v3.football.api-sports.io";
+
+  const LEAGUES_DATA = [
+    {id: 2, name: "🏆 UEFA Champions League"},
+    {id: 3, name: "🏆 UEFA Europa League"},
+    {id: 848, name: "🏆 UEFA Europa Conference League"},
+
+    {id: 39, name: "🇬🇧 Premier League"},
+    {id: 40, name: "🇬🇧 Championship"},
+    {id: 41, name: "🇬🇧 League One"},
+    {id: 140, name: "🇪🇸 La Liga"},
+    {id: 141, name: "🇪🇸 La Liga 2"},
+    {id: 135, name: "🇮🇹 Serie A"},
+    {id: 136, name: "🇮🇹 Serie B"},
+    {id: 78, name: "🇩🇪 Bundesliga"},
+    {id: 79, name: "🇩🇪 2. Bundesliga"},
+    {id: 61, name: "🇫🇷 Ligue 1"},
+    {id: 62, name: "🇫🇷 Ligue 2"},
+    {id: 88, name: "🇳🇱 Eredivisie"},
+    {id: 144, name: "🇧🇪 Belgium Jupiler"},
+    {id: 203, name: "🇹🇷 Turkey Süper Lig"},
+    {id: 253, name: "🇺🇸 MLS"},
+    {id: 262, name: "🇲🇽 Liga MX"},
+    {id: 197, name: "🇬🇷 Greece Super League"}
+  ];
+
+  const LEAGUES = LEAGUES_DATA.map(l => l.id);
+</script>
 
     const REQUEST_DELAY_MS = 260;
     const REQUEST_TIMEOUT_MS = 12000;
