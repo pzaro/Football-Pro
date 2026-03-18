@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4706.22 - Premium LiveScore + Standings + H2H + WallBet + Europe</title>
+  <title>Predictor Pro v4706.23 - Premium LiveScore + Exact Score + Corners + Europe</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -496,7 +496,7 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.22</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.23</h1>
     <input
       type="password"
       id="pin"
@@ -504,14 +504,14 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">Premium font edition · Fixed standings · Fixed tip links · LiveScore · Standings · H2H · WallBet · MLS · Europe</div>
+    <div class="small-note">Premium font edition · Fixed standings · Fixed tip links · LiveScore · Exact Score · Corners · Europe</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.22 Premium LiveScore + Top 5 + WallBet + Standings + H2H + Tip Links + Europe</div>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.23 Premium LiveScore + Exact Score + Corners + WallBet + Europe</div>
       </header>
 
       <div class="toolbar">
@@ -577,8 +577,8 @@
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470622";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470622";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470623";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470623";
 
     let statsCache = new Map();
     let teamStatsCache = new Map();
@@ -641,8 +641,34 @@
       return Number.isFinite(n) ? n : d;
     }
 
+    function clamp(n, min, max) {
+      return Math.max(min, Math.min(max, n));
+    }
+
     function isLiveStatus(short) {
       return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short);
+    }
+
+    function isFinishedStatus(short) {
+      return ["FT", "AET", "PEN"].includes(short);
+    }
+
+    function buildFixtureScoreHTML(m) {
+      const hg = m?.goals?.home;
+      const ag = m?.goals?.away;
+      const short = m?.fixture?.status?.short || "";
+
+      if (hg == null || ag == null) return "";
+
+      if (isLiveStatus(short)) {
+        return `<div class="live-score-big">${hg} - ${ag}</div>`;
+      }
+
+      if (isFinishedStatus(short)) {
+        return `<div class="live-score-big" style="color:var(--gold); text-shadow:none;">${hg} - ${ag}</div>`;
+      }
+
+      return `<div class="live-score-big" style="color:#c9d1d9; text-shadow:none;">${hg} - ${ag}</div>`;
     }
 
     function getWallBetBank() {
@@ -1045,6 +1071,65 @@
       return { pick, reason, noBet };
     }
 
+    function predictExactScoreAndCorners(hStats, aStats) {
+      const hFormXG = safeNum(hStats.formXG);
+      const aFormXG = safeNum(aStats.formXG);
+      const hSplitXG = safeNum(hStats.splitXG);
+      const aSplitXG = safeNum(aStats.splitXG);
+      const hFormXGA = safeNum(hStats.formXGA);
+      const aFormXGA = safeNum(aStats.formXGA);
+      const hCorners = safeNum(hStats.corners);
+      const aCorners = safeNum(aStats.corners);
+
+      const homeGoalExp = clamp(
+        (hFormXG * 0.42) + (hSplitXG * 0.38) + (aFormXGA * 0.20),
+        0.2, 4.2
+      );
+
+      const awayGoalExp = clamp(
+        (aFormXG * 0.42) + (aSplitXG * 0.38) + (hFormXGA * 0.20),
+        0.2, 4.2
+      );
+
+      let homeGoals = Math.round(homeGoalExp);
+      let awayGoals = Math.round(awayGoalExp);
+
+      if (Math.abs(homeGoalExp - awayGoalExp) < 0.18) {
+        homeGoals = Math.round(homeGoalExp);
+        awayGoals = Math.round(awayGoalExp);
+      }
+
+      homeGoals = clamp(homeGoals, 0, 5);
+      awayGoals = clamp(awayGoals, 0, 5);
+
+      const totalCornersExp = clamp(
+        ((hCorners + aCorners) * 0.72) + ((hSplitXG + aSplitXG) * 0.95),
+        5, 16
+      );
+
+      const homeCornerShareBase = clamp(
+        (homeGoalExp + hSplitXG + 0.35) / Math.max(homeGoalExp + awayGoalExp + hSplitXG + aSplitXG + 0.7, 0.1),
+        0.35, 0.65
+      );
+
+      let homeCornersPred = Math.round(totalCornersExp * homeCornerShareBase);
+      let awayCornersPred = Math.round(totalCornersExp - homeCornersPred);
+
+      if (homeCornersPred < 2) homeCornersPred = 2;
+      if (awayCornersPred < 2) awayCornersPred = 2;
+
+      const totalCornersPred = homeCornersPred + awayCornersPred;
+
+      return {
+        homeGoalExp: homeGoalExp.toFixed(2),
+        awayGoalExp: awayGoalExp.toFixed(2),
+        exactScore: `${homeGoals}-${awayGoals}`,
+        totalCorners: totalCornersPred,
+        homeCorners: homeCornersPred,
+        awayCorners: awayCornersPred
+      };
+    }
+
     function buildTipLinks(homeName, awayName) {
       const query = encodeURIComponent(`${homeName} vs ${awayName}`);
       return {
@@ -1059,6 +1144,7 @@
       const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
       const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
       const tipLinks = buildTipLinks(m.teams.home.name, m.teams.away.name);
+      const pred = predictExactScoreAndCorners(s.h, s.a);
 
       return `
         <div class="cyber-card">
@@ -1076,7 +1162,8 @@
               </h2>
             </div>
             <div style="text-align:right;">
-              <div class="score-chip">O2.5 ${scores.over25Score}</div>
+              ${buildFixtureScoreHTML(m)}
+              <div class="score-chip" style="margin-top:8px;">O2.5 ${scores.over25Score}</div>
               <div class="score-chip" style="margin-top:6px;">BTTS ${scores.bttsScore}</div>
               <div class="score-chip" style="margin-top:6px;">C4+ ${scores.cards4Score}</div>
             </div>
@@ -1086,6 +1173,32 @@
             <div class="pick-title">💡 ΠΡΟΤΕΙΝΟΜΕΝΟ ΣΤΟΙΧΗΜΑ (VALUE)</div>
             <div class="pick-value">${omega.pick}</div>
             <div class="pick-reason">${omega.reason}</div>
+          </div>
+
+          <div class="section-panel" style="margin-top:14px; padding:14px;">
+            <div class="section-title" style="font-size:0.86rem; margin-bottom:10px;">🔮 ΠΡΟΒΛΕΨΗ ΑΚΡΙΒΟΥΣ ΣΚΟΡ & ΚΟΡΝΕΡ</div>
+            <div class="stats-grid" style="margin-top:0;">
+              <div class="team-box">
+                <div class="stat-row">
+                  <span>Πιθανό ακριβές σκορ</span>
+                  <span class="val-split">${pred.exactScore}</span>
+                </div>
+                <div class="stat-row">
+                  <span>Expected Goals</span>
+                  <span class="val-xg">${pred.homeGoalExp} - ${pred.awayGoalExp}</span>
+                </div>
+              </div>
+              <div class="team-box">
+                <div class="stat-row">
+                  <span>Πρόβλεψη συνολικών κόρνερ</span>
+                  <span class="val-split">${pred.totalCorners}</span>
+                </div>
+                <div class="stat-row">
+                  <span>Κατανομή κόρνερ</span>
+                  <span class="val-xg">${pred.homeCorners} - ${pred.awayCorners}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="h2h-box">
@@ -1177,6 +1290,21 @@
       const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
       const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
 
+      const homeShots = safeNum(s?.h?.shots);
+      const awayShots = safeNum(s?.a?.shots);
+      const homeDanger = safeNum(s?.h?.danger);
+      const awayDanger = safeNum(s?.a?.danger);
+      const homeCorners = safeNum(s?.h?.corners);
+      const awayCorners = safeNum(s?.a?.corners);
+
+      const liveHomeExp = clamp((homeShots * 0.22) + (homeDanger * 0.012), 0, 4.5);
+      const liveAwayExp = clamp((awayShots * 0.22) + (awayDanger * 0.012), 0, 4.5);
+
+      const livePredHome = clamp(Math.round(Math.max((m.goals.home ?? 0), liveHomeExp)), 0, 6);
+      const livePredAway = clamp(Math.round(Math.max((m.goals.away ?? 0), liveAwayExp)), 0, 6);
+
+      const liveCornersPred = Math.max(homeCorners + awayCorners, Math.round((homeCorners + awayCorners) * 1.25));
+
       return `
         <div class="cyber-card live-card">
           <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
@@ -1192,7 +1320,27 @@
                 ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
               </h2>
             </div>
-            <div class="live-score-big">${m.goals.home ?? 0} - ${m.goals.away ?? 0}</div>
+            <div style="text-align:right;">
+              ${buildFixtureScoreHTML(m)}
+            </div>
+          </div>
+
+          <div class="section-panel" style="margin-top:14px; padding:14px;">
+            <div class="section-title" style="font-size:0.86rem; margin-bottom:10px;">🔴 LIVE ΠΡΟΒΛΕΨΗ ΤΕΛΙΚΟΥ ΣΚΟΡ & ΚΟΡΝΕΡ</div>
+            <div class="stats-grid" style="margin-top:0;">
+              <div class="team-box">
+                <div class="stat-row">
+                  <span>Live πρόβλεψη τελικού σκορ</span>
+                  <span class="val-split">${livePredHome}-${livePredAway}</span>
+                </div>
+              </div>
+              <div class="team-box">
+                <div class="stat-row">
+                  <span>Live πρόβλεψη τελικών κόρνερ</span>
+                  <span class="val-split">${liveCornersPred}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="h2h-box" style="margin-top:14px;">
@@ -1382,7 +1530,22 @@
         let matches = (fixturesResp.response || []).filter(m => {
           if (selectedLeague === "ALL") return LEAGUES.includes(m.league.id);
           return m.league.id === parseInt(selectedLeague, 10);
-        }).slice(0, MAX_MATCHES);
+        });
+
+        matches.sort((a, b) => {
+          const aLive = isLiveStatus(a.fixture.status.short) ? 1 : 0;
+          const bLive = isLiveStatus(b.fixture.status.short) ? 1 : 0;
+
+          const aFinished = isFinishedStatus(a.fixture.status.short) ? 1 : 0;
+          const bFinished = isFinishedStatus(b.fixture.status.short) ? 1 : 0;
+
+          if (aLive !== bLive) return bLive - aLive;
+          if (aFinished !== bFinished) return bFinished - aFinished;
+
+          return (a.fixture.timestamp || 0) - (b.fixture.timestamp || 0);
+        });
+
+        matches = matches.slice(0, MAX_MATCHES);
 
         if (!matches.length) {
           display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν αγώνες.</h3></div>`;
