@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4706.21 - Premium LiveScore + Standings + H2H + WallBet</title>
+  <title>Predictor Pro v4706.22 - Premium LiveScore + Standings + H2H + WallBet + Europe</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -217,7 +217,7 @@
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
     }
 
-    .league-select { min-width: 230px; cursor: pointer; }
+    .league-select { min-width: 250px; cursor: pointer; }
     .date-input { min-width: 180px; }
     .stake-input { width: 120px; }
 
@@ -496,7 +496,7 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.21</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.22</h1>
     <input
       type="password"
       id="pin"
@@ -504,20 +504,20 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">Premium font edition · Fixed standings · Fixed tip links · LiveScore · Standings · H2H · WallBet · MLS</div>
+    <div class="small-note">Premium font edition · Fixed standings · Fixed tip links · LiveScore · Standings · H2H · WallBet · MLS · Europe</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.21 Premium LiveScore + Top 5 + WallBet + Standings + H2H + Tip Links</div>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.22 Premium LiveScore + Top 5 + WallBet + Standings + H2H + Tip Links + Europe</div>
       </header>
 
       <div class="toolbar">
         <input type="date" id="scanDate" class="date-input">
         <select id="leagueFilter" class="league-select">
-          <option value="ALL">🌐 Όλα τα Πρωταθλήματα</option>
+          <option value="ALL">🌐 Όλες οι Διοργανώσεις</option>
         </select>
         <input type="number" id="wallbetStake" class="stake-input" value="10" min="1" step="1" placeholder="Stake">
         <button class="btn-main" id="btnPre" onclick="runScan()">🚀 SCAN</button>
@@ -542,50 +542,43 @@
     </div>
   </div>
 
- <script>
-  const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-  const API = "https://v3.football.api-sports.io";
+  <script>
+    const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
+    const API = "https://v3.football.api-sports.io";
 
-  const LEAGUES_DATA = [
-    {id: 2, name: "🏆 UEFA Champions League"},
-    {id: 3, name: "🏆 UEFA Europa League"},
-    {id: 848, name: "🏆 UEFA Europa Conference League"},
-    {id: 39, name: "🇬🇧 Premier League"},
-    {id: 40, name: "🇬🇧 Championship"},
-    {id: 41, name: "🇬🇧 League One"},
-    {id: 140, name: "🇪🇸 La Liga"},
-    {id: 141, name: "🇪🇸 La Liga 2"},
-    {id: 135, name: "🇮🇹 Serie A"},
-    {id: 136, name: "🇮🇹 Serie B"},
-    {id: 78, name: "🇩🇪 Bundesliga"},
-    {id: 79, name: "🇩🇪 2. Bundesliga"},
-    {id: 61, name: "🇫🇷 Ligue 1"},
-    {id: 62, name: "🇫🇷 Ligue 2"},
-    {id: 88, name: "🇳🇱 Eredivisie"},
-    {id: 144, name: "🇧🇪 Belgium Jupiler"},
-    {id: 203, name: "🇹🇷 Turkey Süper Lig"},
-    {id: 253, name: "🇺🇸 MLS"},
-    {id: 262, name: "🇲🇽 Liga MX"},
-    {id: 197, name: "🇬🇷 Greece Super League"}
-  ];
+    const LEAGUES_DATA = [
+      {id: 2, name: "🏆 UEFA Champions League"},
+      {id: 3, name: "🏆 UEFA Europa League"},
+      {id: 848, name: "🏆 UEFA Europa Conference League"},
 
-  const LEAGUES = LEAGUES_DATA.map(l => l.id);
+      {id: 39, name: "🇬🇧 Premier League"},
+      {id: 40, name: "🇬🇧 Championship"},
+      {id: 41, name: "🇬🇧 League One"},
+      {id: 140, name: "🇪🇸 La Liga"},
+      {id: 141, name: "🇪🇸 La Liga 2"},
+      {id: 135, name: "🇮🇹 Serie A"},
+      {id: 136, name: "🇮🇹 Serie B"},
+      {id: 78, name: "🇩🇪 Bundesliga"},
+      {id: 79, name: "🇩🇪 2. Bundesliga"},
+      {id: 61, name: "🇫🇷 Ligue 1"},
+      {id: 62, name: "🇫🇷 Ligue 2"},
+      {id: 88, name: "🇳🇱 Eredivisie"},
+      {id: 144, name: "🇧🇪 Belgium Jupiler"},
+      {id: 203, name: "🇹🇷 Turkey Süper Lig"},
+      {id: 253, name: "🇺🇸 MLS"},
+      {id: 262, name: "🇲🇽 Liga MX"},
+      {id: 197, name: "🇬🇷 Greece Super League"}
+    ];
 
-  const REQUEST_DELAY_MS = 260;
-  const REQUEST_TIMEOUT_MS = 12000;
-  const LAST_GENERAL = 6;
-  const LAST_SPLIT = 6;
-  const MAX_MATCHES = 100;
-  const LS_WALLBET_BANK = "omega_wallbet_bank_v470621";
-  const LS_WALLBET_LAST = "omega_wallbet_last_v470621";
+    const LEAGUES = LEAGUES_DATA.map(l => l.id);
 
     const REQUEST_DELAY_MS = 260;
     const REQUEST_TIMEOUT_MS = 12000;
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470621";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470621";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470622";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470622";
 
     let statsCache = new Map();
     let teamStatsCache = new Map();
@@ -770,7 +763,7 @@
     }
 
     function getTeamRankFromStandings(standings, teamId) {
-      if (!Array.isArray(standings)) return null;
+      if (!Array.isArray(standings) || !standings.length) return null;
       const row = standings.find(x => String(x?.team?.id) === String(teamId));
       return row?.rank ?? null;
     }
@@ -974,7 +967,7 @@
 
       const trapLeagues = [40, 41, 136, 141, 79, 62];
       const goldLeagues = [78, 262, 88, 253];
-      const tightLeagues = [61, 94, 197, 135];
+      const tightLeagues = [61, 94, 197, 135, 2, 3, 848];
 
       if (trapLeagues.includes(leagueId)) {
         totalXG *= 0.80; hXG *= 0.80; aXG *= 0.80;
