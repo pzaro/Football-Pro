@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4706.30 - Audit 30D + Over 3.5</title>
+  <title>Predictor Pro v4706.40 - Audit 30D + Over 3.5 + Value Odds Finder</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -26,6 +26,7 @@
       --soft-red: rgba(218, 54, 51, 0.08);
       --soft-gold: rgba(245, 158, 11, 0.08);
       --soft-cyan: rgba(0, 242, 255, 0.08);
+      --soft-green: rgba(57, 255, 20, 0.08);
     }
 
     * { box-sizing: border-box; }
@@ -42,7 +43,7 @@
     .orbitron { font-family: 'Orbitron', sans-serif; }
 
     .container {
-      max-width: 1240px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 16px;
     }
@@ -158,6 +159,18 @@
       padding: 2px 7px;
       border-radius: 5px;
       background: rgba(251, 191, 36, 0.1);
+    }
+
+    .value-chip {
+      color: #a7ffcf;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      border: 1px solid rgba(57,255,20,.45);
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(57,255,20,.10);
+      display: inline-block;
+      font-size: 0.76rem;
     }
 
     .dev-badge {
@@ -539,15 +552,24 @@
       font-weight: 800;
     }
 
+    .filters-inline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     @media (max-width: 900px) {
       .stats-grid, .bank-grid { grid-template-columns: 1fr; }
+      .stake-input { width: 100%; }
     }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.30</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.40</h1>
     <input
       type="password"
       id="pin"
@@ -555,14 +577,14 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">Over 3.5 + Audit 30 ημερών + Exact Score + Corners</div>
+    <div class="small-note">Over 3.5 + Audit 30 ημερών + Exact Score + Corners + Value Odds Finder</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.30 Over 3.5 + Audit 30D + Exact Score + Corners</div>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.40 Over 3.5 + Audit 30D + Value Odds Finder</div>
       </header>
 
       <div class="toolbar">
@@ -571,6 +593,9 @@
           <option value="ALL">🌐 Όλες οι Διοργανώσεις</option>
         </select>
         <input type="number" id="wallbetStake" class="stake-input" value="10" min="1" step="1" placeholder="Stake">
+        <input type="number" id="targetOdd" class="stake-input" value="1.90" min="1.10" step="0.01" placeholder="Target Odd">
+        <input type="number" id="minOdd" class="stake-input" value="1.70" min="1.10" step="0.01" placeholder="Min Odd">
+        <input type="number" id="maxOdd" class="stake-input" value="2.20" min="1.10" step="0.01" placeholder="Max Odd">
         <button class="btn-main" id="btnPre" onclick="runScan()">🚀 SCAN</button>
         <button class="btn-main" id="btnLive" style="background:#da3633;" onclick="runLiveScan()">🔴 LIVE SCORE</button>
         <button class="btn-main" id="btnAudit" style="background:#7c3aed;" onclick="run30DayAudit()">📊 AUDIT 30D</button>
@@ -630,17 +655,26 @@
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470630";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470630";
-    const LS_PREDICTIONS = "omega_predictions_v470630";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470640";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470640";
+    const LS_PREDICTIONS = "omega_predictions_v470640";
 
     let statsCache = new Map();
     let teamStatsCache = new Map();
     let lastFixturesCache = new Map();
     let standingsCache = new Map();
     let h2hCache = new Map();
+    let oddsCache = new Map();
     let isRunning = false;
-    let latestTopLists = { over25: [], over35: [], btts: [], cards4: [] };
+
+    let latestTopLists = {
+      over25: [],
+      over35: [],
+      btts: [],
+      cards4: [],
+      valuePicks: []
+    };
+
     let latestWallBet = null;
 
     function sleep(ms) {
@@ -742,11 +776,8 @@
     function upsertPrediction(record) {
       const store = getPredictionStore();
       const idx = store.findIndex(x => String(x.fixtureId) === String(record.fixtureId));
-      if (idx >= 0) {
-        store[idx] = record;
-      } else {
-        store.push(record);
-      }
+      if (idx >= 0) store[idx] = record;
+      else store.push(record);
       savePredictionStore(store);
     }
 
@@ -864,6 +895,14 @@
       const data = await apiReq(path);
       const response = data?.response || [];
       h2hCache.set(key, response);
+      return response;
+    }
+
+    async function getFixtureOdds(fixtureId) {
+      if (oddsCache.has(fixtureId)) return oddsCache.get(fixtureId);
+      const data = await apiReq(`odds?fixture=${fixtureId}`);
+      const response = data?.response || [];
+      oddsCache.set(fixtureId, response);
       return response;
     }
 
@@ -1170,6 +1209,202 @@
       };
     }
 
+    function normalizeLabel(v) {
+      return String(v || "")
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function extractInterestingOdds(oddsResponse) {
+      const results = [];
+      const pushMarket = (market, odd, bookmaker) => {
+        const nOdd = parseFloat(odd);
+        if (!Number.isFinite(nOdd) || nOdd <= 1.01) return;
+        results.push({ market, odd: nOdd, bookmaker: bookmaker || "-" });
+      };
+
+      for (const block of oddsResponse || []) {
+        const bookmakers = block?.bookmakers || [];
+
+        for (const bm of bookmakers) {
+          const bets = bm?.bets || [];
+
+          for (const bet of bets) {
+            const betName = normalizeLabel(bet?.name);
+            const values = bet?.values || [];
+
+            for (const val of values) {
+              const label = normalizeLabel(val?.value);
+              const odd = val?.odd;
+
+              if (
+                betName.includes("match winner") ||
+                betName === "winner" ||
+                betName.includes("1x2")
+              ) {
+                if (["home", "1"].includes(label)) pushMarket("HOME", odd, bm.name);
+                if (["away", "2"].includes(label)) pushMarket("AWAY", odd, bm.name);
+                if (["draw", "x"].includes(label)) pushMarket("DRAW", odd, bm.name);
+              }
+
+              if (
+                betName.includes("both teams score") ||
+                betName.includes("both teams to score") ||
+                betName.includes("btts")
+              ) {
+                if (label === "yes") pushMarket("BTTS_YES", odd, bm.name);
+                if (label === "no") pushMarket("BTTS_NO", odd, bm.name);
+              }
+
+              if (
+                betName.includes("goals over/under") ||
+                betName.includes("over/under") ||
+                betName.includes("total goals")
+              ) {
+                if (label.includes("over 2.5")) pushMarket("OVER_2_5", odd, bm.name);
+                if (label.includes("under 2.5")) pushMarket("UNDER_2_5", odd, bm.name);
+                if (label.includes("over 3.5")) pushMarket("OVER_3_5", odd, bm.name);
+                if (label.includes("under 3.5")) pushMarket("UNDER_3_5", odd, bm.name);
+              }
+
+              if (
+                betName.includes("cards over/under") ||
+                betName.includes("total cards")
+              ) {
+                if (label.includes("over 4.5")) pushMarket("CARDS_OVER_4_5", odd, bm.name);
+                if (label.includes("over 3.5")) pushMarket("CARDS_OVER_3_5", odd, bm.name);
+              }
+            }
+          }
+        }
+      }
+
+      const bestPerMarket = new Map();
+      for (const item of results) {
+        const prev = bestPerMarket.get(item.market);
+        if (!prev || item.odd > prev.odd) bestPerMarket.set(item.market, item);
+      }
+
+      return [...bestPerMarket.values()];
+    }
+
+    function getBestModelMarkets(scores, hStats, aStats) {
+      const picks = [];
+      const hXG = safeNum(hStats.formXG);
+      const aXG = safeNum(aStats.formXG);
+      const diff = hXG - aXG;
+
+      if (scores.over35Score >= 118) {
+        picks.push({ market: "OVER_3_5", modelScore: scores.over35Score, reason: "Ισχυρό over 3.5 προφίλ" });
+      }
+
+      if (scores.over25Score >= 100) {
+        picks.push({ market: "OVER_2_5", modelScore: scores.over25Score, reason: "Ισχυρό over 2.5 προφίλ" });
+      }
+
+      if (scores.bttsScore >= 88) {
+        picks.push({ market: "BTTS_YES", modelScore: scores.bttsScore, reason: "Ισχυρό BTTS προφίλ" });
+      }
+
+      if (hXG > (aXG + 1.20) && safeNum(hStats.splitXG) > 1.80) {
+        picks.push({
+          market: "HOME",
+          modelScore: Number((92 + (diff * 14) + safeNum(hStats.splitXG) * 4).toFixed(2)),
+          reason: "Εντός έδρας υπεροχή"
+        });
+      }
+
+      if (aXG > (hXG + 1.10) && safeNum(aStats.splitXG) > 1.65) {
+        picks.push({
+          market: "AWAY",
+          modelScore: Number((92 + ((-diff) * 14) + safeNum(aStats.splitXG) * 4).toFixed(2)),
+          reason: "Εκτός έδρας υπεροχή"
+        });
+      }
+
+      if (scores.cards4Score >= 95) {
+        picks.push({
+          market: "CARDS_OVER_4_5",
+          modelScore: scores.cards4Score,
+          reason: "Υψηλή ένταση καρτών"
+        });
+      } else if (scores.cards4Score >= 82) {
+        picks.push({
+          market: "CARDS_OVER_3_5",
+          modelScore: scores.cards4Score,
+          reason: "Σχετικά ισχυρό cards profile"
+        });
+      }
+
+      if (scores.over25Score < 92 && scores.adjTotalXG < 2.15) {
+        picks.push({
+          market: "UNDER_2_5",
+          modelScore: Number((96 - (scores.adjTotalXG * 10)).toFixed(2)),
+          reason: "Κλειστό ματς / χαμηλό xG"
+        });
+      }
+
+      return picks.sort((a, b) => b.modelScore - a.modelScore);
+    }
+
+    function marketToLabel(market) {
+      const map = {
+        HOME: "1",
+        AWAY: "2",
+        DRAW: "X",
+        OVER_2_5: "OVER 2.5",
+        UNDER_2_5: "UNDER 2.5",
+        OVER_3_5: "OVER 3.5",
+        UNDER_3_5: "UNDER 3.5",
+        BTTS_YES: "BTTS YES",
+        BTTS_NO: "BTTS NO",
+        CARDS_OVER_3_5: "OVER 3.5 ΚΑΡΤΕΣ",
+        CARDS_OVER_4_5: "OVER 4.5 ΚΑΡΤΕΣ"
+      };
+      return map[market] || market;
+    }
+
+    function pickClosestValueOption(modelMarkets, oddsMarkets, targetOdd, minOdd, maxOdd) {
+      let best = null;
+      const filteredOdds = oddsMarkets.filter(o => o.odd >= minOdd && o.odd <= maxOdd);
+
+      for (const mm of modelMarkets) {
+        const matchedOdds = filteredOdds.filter(o => o.market === mm.market);
+        for (const o of matchedOdds) {
+          const oddDistance = Math.abs(o.odd - targetOdd);
+          const impliedProb = 1 / o.odd;
+          const pseudoProb = clamp(mm.modelScore / 100, 0.15, 0.92);
+          const edge = pseudoProb - impliedProb;
+
+          const finalScore =
+            (mm.modelScore * 0.72) +
+            (edge * 100 * 0.9) -
+            (oddDistance * 25);
+
+          if (!best || finalScore > best.finalScore) {
+            best = {
+              market: mm.market,
+              odd: o.odd,
+              bookmaker: o.bookmaker,
+              modelScore: mm.modelScore,
+              reason: mm.reason,
+              targetOdd,
+              minOdd,
+              maxOdd,
+              oddDistance,
+              impliedProb,
+              pseudoProb,
+              edge,
+              finalScore: Number(finalScore.toFixed(2))
+            };
+          }
+        }
+      }
+
+      return best;
+    }
+
     function buildTipLinks(homeName, awayName) {
       const query = encodeURIComponent(`${homeName} vs ${awayName}`);
       return {
@@ -1179,7 +1414,7 @@
       };
     }
 
-    function savePredictionSnapshot(m, scores, pred, standings) {
+    function savePredictionSnapshot(m, scores, pred, standings, valuePick = null) {
       const record = {
         fixtureId: m.fixture.id,
         date: m.fixture.date,
@@ -1199,19 +1434,73 @@
         cornersPred: pred.totalCorners,
         homeGoalExp: pred.homeGoalExp,
         awayGoalExp: pred.awayGoalExp,
+        bestValueMarket: valuePick?.market || null,
+        bestValueOdd: valuePick?.odd || null,
+        bestValueScore: valuePick?.finalScore || null,
         savedAt: new Date().toISOString()
       };
       upsertPrediction(record);
     }
 
-    function buildMatchCard(m, s, scores, standings, h2hSummary) {
+    function buildValueBlock(valuePick) {
+      if (!valuePick) {
+        return `
+          <div class="section-panel" style="margin-top:14px; padding:14px;">
+            <div class="section-title" style="font-size:0.86rem; margin-bottom:10px;">💎 VALUE ODDS FINDER</div>
+            <div style="color:var(--txt-muted); font-size:0.82rem;">Δεν βρέθηκε κατάλληλη επιλογή στην επιθυμητή απόδοση.</div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="section-panel" style="margin-top:14px; padding:14px; background:linear-gradient(135deg, rgba(57,255,20,0.07), rgba(0,242,255,0.06)); border-color:rgba(57,255,20,.25);">
+          <div class="section-title" style="font-size:0.86rem; margin-bottom:10px;">💎 VALUE ODDS FINDER</div>
+          <div class="stats-grid" style="margin-top:0;">
+            <div class="team-box">
+              <div class="stat-row">
+                <span>Προτεινόμενη αγορά</span>
+                <span class="val-split">${escapeHtml(marketToLabel(valuePick.market))}</span>
+              </div>
+              <div class="stat-row">
+                <span>Απόδοση</span>
+                <span class="val-xg">@ ${Number(valuePick.odd).toFixed(2)}</span>
+              </div>
+              <div class="stat-row">
+                <span>Bookmaker</span>
+                <span>${escapeHtml(valuePick.bookmaker || "-")}</span>
+              </div>
+            </div>
+            <div class="team-box">
+              <div class="stat-row">
+                <span>Value Score</span>
+                <span class="value-chip">${valuePick.finalScore}</span>
+              </div>
+              <div class="stat-row">
+                <span>Model Score</span>
+                <span class="val-xg">${Number(valuePick.modelScore).toFixed(2)}</span>
+              </div>
+              <div class="stat-row">
+                <span>Απόκλιση από target</span>
+                <span>${Number(valuePick.oddDistance).toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+          <div class="small-note">
+            Target odd: ${Number(valuePick.targetOdd).toFixed(2)} | Range: ${Number(valuePick.minOdd).toFixed(2)} - ${Number(valuePick.maxOdd).toFixed(2)} |
+            Edge index: ${(valuePick.edge * 100).toFixed(1)} | ${escapeHtml(valuePick.reason || "")}
+          </div>
+        </div>
+      `;
+    }
+
+    function buildMatchCard(m, s, scores, standings, h2hSummary, valuePick) {
       const omega = generateOmegaPick(s.h, s.a, m.league.id);
       const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
       const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
       const tipLinks = buildTipLinks(m.teams.home.name, m.teams.away.name);
       const pred = predictExactScoreAndCorners(s.h, s.a);
 
-      savePredictionSnapshot(m, scores, pred, standings);
+      savePredictionSnapshot(m, scores, pred, standings, valuePick);
 
       return `
         <div class="cyber-card">
@@ -1242,6 +1531,8 @@
             <div class="pick-value">${omega.pick}</div>
             <div class="pick-reason">${omega.reason}</div>
           </div>
+
+          ${buildValueBlock(valuePick)}
 
           <div class="section-panel" style="margin-top:14px; padding:14px;">
             <div class="section-title" style="font-size:0.86rem; margin-bottom:10px;">🔮 ΠΡΟΒΛΕΨΗ ΑΚΡΙΒΟΥΣ ΣΚΟΡ & ΚΟΡΝΕΡ</div>
@@ -1466,8 +1757,44 @@
       `;
     }
 
+    function valueRankItemHTML(item, idx) {
+      return `
+        <div class="rank-card" style="border-color: rgba(57,255,20,.22); background: linear-gradient(135deg, rgba(57,255,20,0.05), rgba(0,242,255,0.04));">
+          <div class="rank-head">
+            <div><span class="rank-badge">#${idx + 1} VALUE</span></div>
+            <div class="score-chip">${item.finalScore}</div>
+          </div>
+          <div style="font-weight:800;">
+            ${escapeHtml(item.homeTeam)} ${item.homeRank ? `<span class="standing-pill">#${item.homeRank}</span>` : ""}
+            vs
+            ${escapeHtml(item.awayTeam)} ${item.awayRank ? `<span class="standing-pill">#${item.awayRank}</span>` : ""}
+          </div>
+          <div style="margin-top:8px;">
+            <span class="val-split">${escapeHtml(marketToLabel(item.market))}</span>
+            &nbsp;
+            <span class="value-chip">@ ${Number(item.odd).toFixed(2)}</span>
+          </div>
+          <div style="color:var(--txt-muted); font-size:0.8rem; margin-top:6px;">${escapeHtml(item.league)} • ${escapeHtml(item.bookmaker || "-")}</div>
+          <div style="color:var(--txt-muted); font-size:0.78rem; margin-top:4px;">
+            Model: ${Number(item.modelScore).toFixed(2)} | Δtarget: ${Number(item.oddDistance).toFixed(2)} | Edge: ${(item.edge * 100).toFixed(1)}
+          </div>
+        </div>
+      `;
+    }
+
     function renderTopSections() {
+      const targetOdd = safeNum(document.getElementById("targetOdd")?.value, 1.90);
+      const minOdd = safeNum(document.getElementById("minOdd")?.value, 1.70);
+      const maxOdd = safeNum(document.getElementById("maxOdd")?.value, 2.20);
+
       document.getElementById("topSection").innerHTML = `
+        <div class="section-panel">
+          <div class="section-title">💎 BEST VALUE PICKS (${targetOdd.toFixed(2)} | ${minOdd.toFixed(2)} - ${maxOdd.toFixed(2)})</div>
+          <div class="top-list">
+            ${(latestTopLists.valuePicks || []).map((x, i) => valueRankItemHTML(x, i)).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν κατάλληλες επιλογές.</div>'}
+          </div>
+        </div>
+
         <div class="section-panel">
           <div class="section-title">🏆 TOP 5 OVER 2.5</div>
           <div class="top-list">
@@ -1503,7 +1830,8 @@
         ...latestTopLists.over25.map(x => ({ ...x, market: "OVER 2.5", mainScore: x.over25Score })),
         ...latestTopLists.over35.map(x => ({ ...x, market: "OVER 3.5", mainScore: x.over35Score })),
         ...latestTopLists.btts.map(x => ({ ...x, market: "BTTS", mainScore: x.bttsScore })),
-        ...latestTopLists.cards4.map(x => ({ ...x, market: "OVER 4 ΚΑΡΤΕΣ", mainScore: x.cards4Score }))
+        ...latestTopLists.cards4.map(x => ({ ...x, market: "OVER 4 ΚΑΡΤΕΣ", mainScore: x.cards4Score })),
+        ...latestTopLists.valuePicks.slice(0, 6).map(x => ({ ...x, market: marketToLabel(x.market), mainScore: x.finalScore }))
       ];
 
       const unique = [];
@@ -1556,7 +1884,7 @@
                 ${escapeHtml(leg.awayTeam)} ${leg.awayRank ? `<span class="standing-pill">#${leg.awayRank}</span>` : ""}
               </div>
               <div style="color:var(--txt-muted); font-size:0.82rem; margin-top:4px;">${escapeHtml(leg.league)}</div>
-              <div style="margin-top:6px;" class="score-chip">Score ${leg.mainScore}</div>
+              <div style="margin-top:6px;" class="score-chip">Score ${Number(leg.mainScore).toFixed(2)}</div>
             </div>
           `).join("")}
           <div style="margin-top:10px; font-weight:800;">
@@ -1621,7 +1949,9 @@
           over35Hits: 0,
           bttsHits: 0,
           exactHits: 0,
-          cornersAbsErrorSum: 0
+          cornersAbsErrorSum: 0,
+          cornersValidGames: 0,
+          valueLinesTracked: 0
         };
 
         for (let i = 0; i < candidates.length; i++) {
@@ -1660,6 +1990,7 @@
           if (actualCorners != null && Number.isFinite(actualCorners)) {
             cornersError = Math.abs(safeNum(p.cornersPred) - actualCorners);
             totals.cornersAbsErrorSum += cornersError;
+            totals.cornersValidGames += 1;
           }
 
           totals.games += 1;
@@ -1667,6 +1998,7 @@
           if (hitOver35) totals.over35Hits += 1;
           if (hitBTTS) totals.bttsHits += 1;
           if (hitExact) totals.exactHits += 1;
+          if (p.bestValueMarket) totals.valueLinesTracked += 1;
 
           rows.push({
             date: p.date?.slice(0, 10) || "",
@@ -1686,7 +2018,9 @@
             hitExact,
             predCorners: p.cornersPred,
             actualCorners: actualCorners == null ? "-" : actualCorners,
-            cornersError: cornersError == null ? "-" : cornersError.toFixed(1)
+            cornersError: cornersError == null ? "-" : cornersError.toFixed(1),
+            valueMarket: p.bestValueMarket ? marketToLabel(p.bestValueMarket) : "-",
+            valueOdd: p.bestValueOdd ? Number(p.bestValueOdd).toFixed(2) : "-"
           });
         }
 
@@ -1704,7 +2038,9 @@
         const over35Acc = ((totals.over35Hits / totals.games) * 100).toFixed(1);
         const bttsAcc = ((totals.bttsHits / totals.games) * 100).toFixed(1);
         const exactAcc = ((totals.exactHits / totals.games) * 100).toFixed(1);
-        const cornersMae = (totals.cornersAbsErrorSum / totals.games).toFixed(2);
+        const cornersMae = totals.cornersValidGames > 0
+          ? (totals.cornersAbsErrorSum / totals.cornersValidGames).toFixed(2)
+          : "-";
 
         document.getElementById("auditSection").innerHTML = `
           <div class="section-panel">
@@ -1743,8 +2079,8 @@
                 <div class="bank-value">${totals.over25Hits}/${totals.games}</div>
               </div>
               <div class="bank-box">
-                <div class="bank-label">Hits Over 3.5</div>
-                <div class="bank-value">${totals.over35Hits}/${totals.games}</div>
+                <div class="bank-label">Tracked Value Picks</div>
+                <div class="bank-value">${totals.valueLinesTracked}</div>
               </div>
             </div>
 
@@ -1770,6 +2106,8 @@
                     <th>Corners Pred</th>
                     <th>Corners Act</th>
                     <th>Error</th>
+                    <th>Value Market</th>
+                    <th>Odd</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1793,6 +2131,8 @@
                       <td>${escapeHtml(String(r.predCorners))}</td>
                       <td>${escapeHtml(String(r.actualCorners))}</td>
                       <td>${escapeHtml(String(r.cornersError))}</td>
+                      <td>${escapeHtml(String(r.valueMarket))}</td>
+                      <td>${escapeHtml(String(r.valueOdd))}</td>
                     </tr>
                   `).join("")}
                 </tbody>
@@ -1809,15 +2149,6 @@
         setButtonsDisabled(false);
         isRunning = false;
       }
-    }
-
-    function buildLiveScoreBlock(scores) {
-      return `
-        <div class="score-chip" style="margin-top:8px;">O2.5 ${scores.over25Score}</div>
-        <div class="score-chip" style="margin-top:6px;">O3.5 ${scores.over35Score}</div>
-        <div class="score-chip" style="margin-top:6px;">BTTS ${scores.bttsScore}</div>
-        <div class="score-chip" style="margin-top:6px;">C4+ ${scores.cards4Score}</div>
-      `;
     }
 
     async function runScan() {
@@ -1838,6 +2169,17 @@
       try {
         const selectedDate = document.getElementById("scanDate").value || getTodayISO();
         const selectedLeague = document.getElementById("leagueFilter").value;
+        const targetOdd = safeNum(document.getElementById("targetOdd")?.value, 1.90);
+        let minOdd = safeNum(document.getElementById("minOdd")?.value, 1.70);
+        let maxOdd = safeNum(document.getElementById("maxOdd")?.value, 2.20);
+
+        if (minOdd > maxOdd) {
+          const tmp = minOdd;
+          minOdd = maxOdd;
+          maxOdd = tmp;
+          document.getElementById("minOdd").value = minOdd.toFixed(2);
+          document.getElementById("maxOdd").value = maxOdd.toFixed(2);
+        }
 
         const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
         let matches = (fixturesResp.response || []).filter(m => {
@@ -1865,22 +2207,27 @@
 
         let htmlBuffer = "";
         const scoredMatches = [];
+        const valuePicks = [];
 
         for (let i = 0; i < matches.length; i++) {
           const m = matches[i];
           setProgress(Math.round(((i + 1) / matches.length) * 100), `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
 
-          const [intelHome, intelAway, standings, h2hFixtures] = await Promise.all([
+          const [intelHome, intelAway, standings, h2hFixtures, oddsResp] = await Promise.all([
             getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
             getTeamData(m.teams.away.id, m.league.id, m.league.season, "away"),
             getLeagueStandings(m.league.id, m.league.season),
-            getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)
+            getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season),
+            getFixtureOdds(m.fixture.id)
           ]);
 
           const scores = computeMarketScores(intelHome, intelAway, m.league.id);
           const h2hSummary = summarizeH2H(h2hFixtures, m.teams.home.id, m.teams.away.id);
+          const modelMarkets = getBestModelMarkets(scores, intelHome, intelAway);
+          const oddsMarkets = extractInterestingOdds(oddsResp);
+          const valuePick = pickClosestValueOption(modelMarkets, oddsMarkets, targetOdd, minOdd, maxOdd);
 
-          scoredMatches.push({
+          const baseItem = {
             fixtureId: m.fixture.id,
             homeTeam: m.teams.home.name,
             awayTeam: m.teams.away.name,
@@ -1892,15 +2239,31 @@
             over35Score: scores.over35Score,
             bttsScore: scores.bttsScore,
             cards4Score: scores.cards4Score
-          });
+          };
 
-          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores, standings, h2hSummary);
+          scoredMatches.push(baseItem);
+
+          if (valuePick) {
+            valuePicks.push({
+              ...baseItem,
+              market: valuePick.market,
+              odd: valuePick.odd,
+              bookmaker: valuePick.bookmaker,
+              modelScore: valuePick.modelScore,
+              finalScore: valuePick.finalScore,
+              oddDistance: valuePick.oddDistance,
+              edge: valuePick.edge
+            });
+          }
+
+          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores, standings, h2hSummary, valuePick);
         }
 
         latestTopLists.over25 = [...scoredMatches].sort((a, b) => b.over25Score - a.over25Score).slice(0, 5);
         latestTopLists.over35 = [...scoredMatches].sort((a, b) => b.over35Score - a.over35Score).slice(0, 5);
         latestTopLists.btts = [...scoredMatches].sort((a, b) => b.bttsScore - a.bttsScore).slice(0, 5);
         latestTopLists.cards4 = [...scoredMatches].sort((a, b) => b.cards4Score - a.cards4Score).slice(0, 5);
+        latestTopLists.valuePicks = [...valuePicks].sort((a, b) => b.finalScore - a.finalScore).slice(0, 10);
 
         renderTopSections();
         renderWallBet();
