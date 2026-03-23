@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4706.30 - Audit 30D + Over 3.5</title>
+  <title>Predictor Pro v4706.31 - Recalibrated Audit Engine</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -29,7 +29,6 @@
     }
 
     * { box-sizing: border-box; }
-
     body {
       font-family: 'Manrope', sans-serif;
       background: var(--bg);
@@ -38,14 +37,8 @@
       padding: 0;
       letter-spacing: 0.1px;
     }
-
     .orbitron { font-family: 'Orbitron', sans-serif; }
-
-    .container {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 16px;
-    }
+    .container { max-width: 1260px; margin: 0 auto; padding: 16px; }
 
     .cyber-card {
       background: var(--card);
@@ -56,12 +49,10 @@
       border-left: 5px solid var(--p);
       box-shadow: 0 10px 30px rgba(0,0,0,.18);
     }
-
     .live-card {
       border-left-color: var(--neon-live);
       box-shadow: 0 0 18px rgba(57,255,20,.08), 0 10px 30px rgba(0,0,0,.18);
     }
-
     .section-panel {
       background: #0b1016;
       border: 1px solid #26303b;
@@ -70,7 +61,6 @@
       margin-bottom: 20px;
       box-shadow: 0 10px 24px rgba(0,0,0,.16);
     }
-
     .section-title {
       font-family: 'Orbitron', sans-serif;
       color: var(--gold);
@@ -79,7 +69,6 @@
       margin-bottom: 12px;
       letter-spacing: .6px;
     }
-
     .omega-pick {
       margin-top: 16px;
       padding: 14px;
@@ -88,17 +77,14 @@
       border: 1px dashed var(--pick-border);
       text-align: center;
     }
-
     .omega-pick.no-bet {
       background: rgba(218, 54, 51, 0.10);
       border-color: var(--alert);
     }
-
     .omega-pick.no-bet .pick-value {
       color: #ffb3b3;
       text-shadow: none;
     }
-
     .pick-title {
       font-size: 0.76rem;
       color: var(--neon-live);
@@ -108,9 +94,7 @@
       text-transform: uppercase;
       font-family: 'Orbitron', sans-serif;
     }
-
     .omega-pick.no-bet .pick-title { color: var(--alert); }
-
     .pick-value {
       font-family: 'Orbitron', sans-serif;
       font-size: 1.35rem;
@@ -118,14 +102,12 @@
       font-weight: 900;
       text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
     }
-
     .pick-reason {
       font-size: 0.79rem;
       color: var(--txt-muted);
       margin-top: 5px;
       line-height: 1.45;
     }
-
     .season-xg-red {
       background: var(--alert);
       color: #fff;
@@ -135,21 +117,18 @@
       font-family: 'Orbitron', sans-serif;
       font-size: 0.9rem;
     }
-
     .season-xga-plain {
       color: #8b949e;
       font-weight: 700;
       font-family: 'Orbitron', sans-serif;
       margin-left: 5px;
     }
-
     .val-xg {
       color: var(--p);
       font-weight: 800;
       font-family: 'Orbitron', sans-serif;
       font-size: 1rem;
     }
-
     .val-split {
       color: var(--split-color);
       font-weight: 900;
@@ -159,7 +138,6 @@
       border-radius: 5px;
       background: rgba(251, 191, 36, 0.1);
     }
-
     .dev-badge {
       font-size: 0.72rem;
       font-weight: 900;
@@ -168,19 +146,16 @@
       margin-left: 8px;
       font-family: 'Orbitron', sans-serif;
     }
-
     .dev-pos {
       background: #238636;
       color: #fff;
       border: 1px solid var(--neon-live);
     }
-
     .dev-neg {
       background: #da3633;
       color: #fff;
       border: 1px solid #ff4d4d;
     }
-
     .btn-main {
       padding: 14px 20px;
       background: var(--grad);
@@ -196,16 +171,13 @@
       font-size: 0.82rem;
       box-shadow: 0 8px 20px rgba(0,0,0,.22);
     }
-
     .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
-
     .btn-main:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       transform: none;
       filter: none;
     }
-
     .date-input, .league-select, .stake-input {
       background: #000;
       color: var(--p);
@@ -216,7 +188,6 @@
       font-size: 0.93rem;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
     }
-
     .league-select { min-width: 250px; cursor: pointer; }
     .date-input { min-width: 180px; }
     .stake-input { width: 120px; }
@@ -227,14 +198,12 @@
       gap: 15px;
       margin-top: 15px;
     }
-
     .team-box {
       background: rgba(0, 0, 0, 0.42);
       padding: 15px;
       border-radius: 12px;
       border: 1px solid #222;
     }
-
     .stat-row {
       display: flex;
       justify-content: space-between;
@@ -246,13 +215,11 @@
       align-items: center;
       line-height: 1.4;
     }
-
     .stat-row:last-child {
       border-bottom: none;
       margin-bottom: 0;
       padding-bottom: 0;
     }
-
     .minor-row {
       font-size: 0.77rem;
       color: var(--txt-muted);
@@ -261,7 +228,6 @@
       text-align: right;
       line-height: 1.4;
     }
-
     .form-dot {
       display: inline-block;
       width: 18px;
@@ -275,7 +241,6 @@
       color: #fff;
       font-family: 'Orbitron', sans-serif;
     }
-
     .form-W { background: #238636; }
     .form-D { background: #666; }
     .form-L { background: #da3633; }
@@ -288,14 +253,12 @@
       margin-bottom: 20px;
       align-items: center;
     }
-
     .small-note {
       color: var(--txt-muted);
       font-size: 0.84rem;
       margin-top: 10px;
       line-height: 1.45;
     }
-
     .error-box {
       background: rgba(218, 54, 51, 0.08);
       border: 1px solid rgba(218, 54, 51, 0.5);
@@ -305,7 +268,6 @@
       margin-bottom: 15px;
       font-size: 0.92rem;
     }
-
     .success-box {
       background: rgba(35, 134, 54, 0.08);
       border: 1px solid rgba(35, 134, 54, 0.5);
@@ -321,14 +283,12 @@
       grid-template-columns: 1fr;
       gap: 10px;
     }
-
     .rank-card {
       background: #11161d;
       border: 1px solid #2e3742;
       border-radius: 12px;
       padding: 12px;
     }
-
     .rank-head {
       display: flex;
       justify-content: space-between;
@@ -336,7 +296,6 @@
       gap: 10px;
       margin-bottom: 6px;
     }
-
     .rank-badge {
       display: inline-block;
       padding: 3px 8px;
@@ -348,7 +307,6 @@
       color: var(--gold);
       border: 1px solid rgba(245, 158, 11, 0.35);
     }
-
     .score-chip {
       display: inline-block;
       padding: 4px 8px;
@@ -360,7 +318,6 @@
       color: var(--p);
       border: 1px solid rgba(0, 242, 255, 0.25);
     }
-
     .live-chip {
       display: inline-block;
       padding: 4px 8px;
@@ -372,7 +329,6 @@
       color: var(--neon-live);
       border: 1px solid rgba(57,255,20,.25);
     }
-
     .standing-pill {
       display: inline-block;
       padding: 4px 9px;
@@ -393,7 +349,6 @@
       border-radius: 16px;
       padding: 16px;
     }
-
     .wallbet-title {
       font-family: 'Orbitron', sans-serif;
       font-size: 1rem;
@@ -401,7 +356,6 @@
       font-weight: 900;
       margin-bottom: 12px;
     }
-
     .wallbet-leg {
       background: rgba(0,0,0,0.28);
       border: 1px solid #313a44;
@@ -415,7 +369,6 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
-
     .bank-box {
       background: #11161c;
       border: 1px solid #2e3742;
@@ -423,14 +376,12 @@
       padding: 12px;
       text-align: center;
     }
-
     .bank-label {
       font-size: 0.7rem;
       color: var(--txt-muted);
       text-transform: uppercase;
       letter-spacing: .5px;
     }
-
     .bank-value {
       margin-top: 6px;
       font-family: 'Orbitron', sans-serif;
@@ -454,7 +405,6 @@
       background: rgba(245, 158, 11, 0.08);
       border: 1px solid rgba(245, 158, 11, 0.28);
     }
-
     .h2h-title {
       font-family: 'Orbitron', sans-serif;
       color: var(--gold);
@@ -462,14 +412,12 @@
       font-weight: 900;
       margin-bottom: 8px;
     }
-
     .h2h-line {
       font-size: 0.82rem;
       margin-bottom: 5px;
       color: #f0f6fc;
       line-height: 1.45;
     }
-
     .h2h-line:last-child { margin-bottom: 0; }
 
     .tip-links {
@@ -478,7 +426,6 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-
     .tip-link {
       display: inline-block;
       padding: 7px 10px;
@@ -492,7 +439,6 @@
       font-family: 'Orbitron', sans-serif;
       transition: .18s;
     }
-
     .tip-link:hover {
       filter: brightness(1.15);
       transform: translateY(-1px);
@@ -503,14 +449,12 @@
       border: 1px solid #2b3440;
       border-radius: 12px;
     }
-
     .audit-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1050px;
+      min-width: 1250px;
       font-size: 0.82rem;
     }
-
     .audit-table th,
     .audit-table td {
       border-bottom: 1px solid #1f2630;
@@ -518,7 +462,6 @@
       text-align: left;
       vertical-align: top;
     }
-
     .audit-table th {
       color: var(--gold);
       font-family: 'Orbitron', sans-serif;
@@ -528,12 +471,10 @@
       top: 0;
       z-index: 1;
     }
-
     .audit-hit {
       color: var(--neon-live);
       font-weight: 800;
     }
-
     .audit-miss {
       color: #ff8c8c;
       font-weight: 800;
@@ -547,7 +488,7 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.30</h1>
+    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.31</h1>
     <input
       type="password"
       id="pin"
@@ -555,14 +496,14 @@
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
       style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
     >
-    <div class="small-note">Over 3.5 + Audit 30 ημερών + Exact Score + Corners</div>
+    <div class="small-note">Recalibrated Over 3.5 + BTTS Filter + Conservative Exact Score + Advanced Audit</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:20px 0;">
         <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.30 Over 3.5 + Audit 30D + Exact Score + Corners</div>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.31 Recalibrated Markets + Advanced Audit</div>
       </header>
 
       <div class="toolbar">
@@ -630,9 +571,16 @@
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470630";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470630";
-    const LS_PREDICTIONS = "omega_predictions_v470630";
+
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470631";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470631";
+    const LS_PREDICTIONS = "omega_predictions_v470631";
+
+    const OVER25_SCORE_THRESHOLD = 104;
+    const OVER25_TOTALXG_THRESHOLD = 2.45;
+    const OVER35_SCORE_THRESHOLD = 132;
+    const OVER35_TOTALXG_THRESHOLD = 3.15;
+    const BTTS_SCORE_THRESHOLD = 86;
 
     let statsCache = new Map();
     let teamStatsCache = new Map();
@@ -742,11 +690,8 @@
     function upsertPrediction(record) {
       const store = getPredictionStore();
       const idx = store.findIndex(x => String(x.fixtureId) === String(record.fixtureId));
-      if (idx >= 0) {
-        store[idx] = record;
-      } else {
-        store.push(record);
-      }
+      if (idx >= 0) store[idx] = record;
+      else store.push(record);
       savePredictionStore(store);
     }
 
@@ -1062,9 +1007,36 @@
         totalXG *= 1.05;
       }
 
-      const over25Score = (totalXG * 26) + ((hSplitXG + aSplitXG) * 10) + ((aXGA + hXGA) * 7);
-      const over35Score = (totalXG * 30) + ((hSplitXG + aSplitXG) * 12) + ((aXGA + hXGA) * 9);
-      const bttsScore = (Math.min(hXG, aXG) * 40) + ((hXGA + aXGA) * 12) + (Math.min(hSplitXG, aSplitXG) * 12);
+      const xgGap = Math.abs(hXG - aXG);
+      const weakerSideXG = Math.min(hXG, aXG);
+      const weakerSideSplitXG = Math.min(hSplitXG, aSplitXG);
+
+      let over25Score =
+        (totalXG * 24) +
+        ((hSplitXG + aSplitXG) * 9) +
+        ((aXGA + hXGA) * 6);
+
+      if (xgGap > 1.35 && weakerSideXG < 0.85) over25Score -= 14;
+      if (weakerSideSplitXG < 0.70) over25Score -= 8;
+
+      let over35Score =
+        (totalXG * 22) +
+        ((hSplitXG + aSplitXG) * 12) +
+        ((aXGA + hXGA) * 10);
+
+      if (xgGap > 1.25) over35Score -= 18;
+      if (weakerSideXG < 1.00) over35Score -= 16;
+      if (weakerSideSplitXG < 0.85) over35Score -= 10;
+
+      let bttsScore =
+        (Math.min(hXG, aXG) * 40) +
+        ((hXGA + aXGA) * 12) +
+        (Math.min(hSplitXG, aSplitXG) * 12);
+
+      if (xgGap > 1.15) bttsScore -= 14;
+      if (Math.min(hXG, aXG) < 0.75) bttsScore -= 10;
+      if (Math.min(hSplitXG, aSplitXG) < 0.65) bttsScore -= 8;
+
       const cards4Score = ((hCards + aCards) * 18) + ((hSplitCards + aSplitCards) * 14);
 
       return {
@@ -1072,7 +1044,35 @@
         over35Score: Number(over35Score.toFixed(2)),
         bttsScore: Number(bttsScore.toFixed(2)),
         cards4Score: Number(cards4Score.toFixed(2)),
-        adjTotalXG: Number(totalXG.toFixed(2))
+        adjTotalXG: Number(totalXG.toFixed(2)),
+        xgGap: Number(xgGap.toFixed(2)),
+        weakerSideXG: Number(weakerSideXG.toFixed(2))
+      };
+    }
+
+    function getMarketSignals(scores, hStats, aStats) {
+      const hXG = safeNum(hStats.formXG);
+      const aXG = safeNum(aStats.formXG);
+
+      const strongOver25 =
+        scores.over25Score >= OVER25_SCORE_THRESHOLD &&
+        scores.adjTotalXG >= OVER25_TOTALXG_THRESHOLD &&
+        !(Math.abs(hXG - aXG) > 1.35 && Math.min(hXG, aXG) < 0.85);
+
+      const strongOver35 =
+        scores.over35Score >= OVER35_SCORE_THRESHOLD &&
+        scores.adjTotalXG >= OVER35_TOTALXG_THRESHOLD &&
+        hXG >= 1.35 &&
+        aXG >= 1.15;
+
+      const strongBTTS =
+        scores.bttsScore >= BTTS_SCORE_THRESHOLD &&
+        Math.min(hXG, aXG) >= 0.75;
+
+      return {
+        over25: strongOver25,
+        over35: strongOver35,
+        btts: strongBTTS
       };
     }
 
@@ -1080,9 +1080,9 @@
       const scores = computeMarketScores(hStats, aStats, leagueId);
       const hXG = safeNum(hStats.formXG);
       const aXG = safeNum(aStats.formXG);
-      const totalXG = scores.adjTotalXG;
+      const signals = getMarketSignals(scores, hStats, aStats);
 
-      if (!Number.isFinite(totalXG) || totalXG < 0.90) {
+      if (!Number.isFinite(scores.adjTotalXG) || scores.adjTotalXG < 0.90) {
         return {
           pick: "⚠️ NO DATA (ΑΓΝΟΗΣΕ ΤΟ ΜΑΤΣ)",
           reason: "Το σύστημα της API δεν έχει προσκομίσει επαρκή στατιστικά xG για αυτές τις ομάδες.",
@@ -1092,15 +1092,15 @@
 
       let pick = "", reason = "", noBet = false;
 
-      if (scores.over35Score >= 118) {
+      if (signals.over35) {
         pick = "🚀 OVER 3.5 GOALS";
-        reason = `Επιθετικό προφίλ πολύ υψηλής έντασης. Adjusted xG: ${totalXG.toFixed(2)} | Score: ${scores.over35Score}`;
-      } else if (scores.over25Score >= 100) {
+        reason = `Recalibrated high-scoring signal. Adjusted xG: ${scores.adjTotalXG.toFixed(2)} | Score: ${scores.over35Score}`;
+      } else if (signals.over25) {
         pick = "🔥 OVER 2.5 GOALS";
-        reason = `Ισχυρό προφίλ παραγωγικότητας. Adjusted xG: ${totalXG.toFixed(2)} | Score: ${scores.over25Score}`;
-      } else if (scores.bttsScore >= 88) {
+        reason = `Strong goal profile after imbalance filtering. Adjusted xG: ${scores.adjTotalXG.toFixed(2)} | Score: ${scores.over25Score}`;
+      } else if (signals.btts) {
         pick = "🎯 GOAL/GOAL (BTTS)";
-        reason = `Και οι δύο ομάδες έχουν αρκετή επιθετική βάση και δίνουν φάσεις. Score: ${scores.bttsScore}`;
+        reason = `Balanced attacking profile with acceptable weaker-side xG. Score: ${scores.bttsScore}`;
       } else if (hXG > (aXG + 1.20) && safeNum(hStats.splitXG) > 1.80) {
         pick = "🏠 ΑΣΟΣ (1)";
         reason = `Ξεκάθαρη εντός έδρας υπεροχή (Split xG Εντός: ${hStats.splitXG}).`;
@@ -1110,16 +1110,23 @@
       } else if (scores.cards4Score >= 95) {
         pick = "🟨 OVER 4 ΚΑΡΤΕΣ";
         reason = `Υψηλή ένταση και πειθαρχικό ρίσκο. Cards Score: ${scores.cards4Score}`;
-      } else if (totalXG < 2.15) {
+      } else if (scores.adjTotalXG < 2.10) {
         pick = "🛡️ UNDER 2.5 GOALS";
-        reason = `Πολύ κλειστό ματς, τακτική προσέγγιση (Adjusted xG: ${totalXG.toFixed(2)}).`;
+        reason = `Συντηρητικό προφίλ με χαμηλό adjusted xG (${scores.adjTotalXG.toFixed(2)}).`;
       } else {
         pick = "⚖️ NO BET (ΑΠΟΧΗ)";
-        reason = `Ισορροπημένα στατιστικά. Καμία μαθηματική αξία για στοιχηματισμό.`;
+        reason = `Δεν υπάρχει καθαρό μαθηματικό edge μετά το recalibration.`;
         noBet = true;
       }
 
       return { pick, reason, noBet };
+    }
+
+    function bucketGoals(exp) {
+      if (exp >= 3.15) return 3;
+      if (exp >= 2.05) return 2;
+      if (exp >= 0.95) return 1;
+      return 0;
     }
 
     function predictExactScoreAndCorners(hStats, aStats) {
@@ -1132,24 +1139,30 @@
       const hCorners = safeNum(hStats.corners);
       const aCorners = safeNum(aStats.corners);
 
-      const homeGoalExp = clamp((hFormXG * 0.42) + (hSplitXG * 0.38) + (aFormXGA * 0.20), 0.2, 4.2);
-      const awayGoalExp = clamp((aFormXG * 0.42) + (aSplitXG * 0.38) + (hFormXGA * 0.20), 0.2, 4.2);
+      const homeGoalExp = clamp((hFormXG * 0.44) + (hSplitXG * 0.34) + (aFormXGA * 0.22), 0.2, 4.0);
+      const awayGoalExp = clamp((aFormXG * 0.44) + (aSplitXG * 0.34) + (hFormXGA * 0.22), 0.2, 4.0);
 
-      let homeGoals = Math.round(homeGoalExp);
-      let awayGoals = Math.round(awayGoalExp);
+      let homeGoals = bucketGoals(homeGoalExp);
+      let awayGoals = bucketGoals(awayGoalExp);
 
-      if (Math.abs(homeGoalExp - awayGoalExp) < 0.18) {
-        homeGoals = Math.round(homeGoalExp);
-        awayGoals = Math.round(awayGoalExp);
+      if (Math.abs(homeGoalExp - awayGoalExp) < 0.22) {
+        if (homeGoals > awayGoals) awayGoals = homeGoals;
+        else if (awayGoals > homeGoals) homeGoals = awayGoals - 1 >= 0 ? homeGoals : awayGoals;
       }
 
-      homeGoals = clamp(homeGoals, 0, 5);
-      awayGoals = clamp(awayGoals, 0, 5);
+      homeGoals = clamp(homeGoals, 0, 4);
+      awayGoals = clamp(awayGoals, 0, 4);
 
-      const totalCornersExp = clamp(((hCorners + aCorners) * 0.72) + ((hSplitXG + aSplitXG) * 0.95), 5, 16);
+      const totalCornersExp = clamp(
+        ((hCorners + aCorners) * 0.76) +
+        ((hSplitXG + aSplitXG) * 0.75),
+        5,
+        15
+      );
+
       const homeCornerShareBase = clamp(
-        (homeGoalExp + hSplitXG + 0.35) / Math.max(homeGoalExp + awayGoalExp + hSplitXG + aSplitXG + 0.7, 0.1),
-        0.35, 0.65
+        (homeGoalExp + hSplitXG + 0.25) / Math.max(homeGoalExp + awayGoalExp + hSplitXG + aSplitXG + 0.5, 0.1),
+        0.38, 0.62
       );
 
       let homeCornersPred = Math.round(totalCornersExp * homeCornerShareBase);
@@ -1179,7 +1192,9 @@
       };
     }
 
-    function savePredictionSnapshot(m, scores, pred, standings) {
+    function savePredictionSnapshot(m, scores, pred, standings, hStats, aStats) {
+      const signals = getMarketSignals(scores, hStats, aStats);
+
       const record = {
         fixtureId: m.fixture.id,
         date: m.fixture.date,
@@ -1195,10 +1210,15 @@
         over35Score: scores.over35Score,
         bttsScore: scores.bttsScore,
         cards4Score: scores.cards4Score,
+        adjTotalXG: scores.adjTotalXG,
+        xgGap: scores.xgGap,
         exactScorePred: pred.exactScore,
         cornersPred: pred.totalCorners,
         homeGoalExp: pred.homeGoalExp,
         awayGoalExp: pred.awayGoalExp,
+        predOver25: signals.over25,
+        predOver35: signals.over35,
+        predBTTS: signals.btts,
         savedAt: new Date().toISOString()
       };
       upsertPrediction(record);
@@ -1211,7 +1231,7 @@
       const tipLinks = buildTipLinks(m.teams.home.name, m.teams.away.name);
       const pred = predictExactScoreAndCorners(s.h, s.a);
 
-      savePredictionSnapshot(m, scores, pred, standings);
+      savePredictionSnapshot(m, scores, pred, standings, s.h, s.a);
 
       return `
         <div class="cyber-card">
@@ -1370,7 +1390,7 @@
 
       const livePredHome = clamp(Math.round(Math.max((m.goals.home ?? 0), liveHomeExp)), 0, 6);
       const livePredAway = clamp(Math.round(Math.max((m.goals.away ?? 0), liveAwayExp)), 0, 6);
-      const liveCornersPred = Math.max(homeCorners + awayCorners, Math.round((homeCorners + awayCorners) * 1.25));
+      const liveCornersPred = Math.max(homeCorners + awayCorners, Math.round((homeCorners + awayCorners) * 1.22));
 
       return `
         <div class="cyber-card live-card">
@@ -1585,6 +1605,31 @@
       showSuccess("Το WallBet αποθηκεύτηκε.");
     }
 
+    function computeClassificationMetrics(rows, predKey, actualKey) {
+      let tp = 0, tn = 0, fp = 0, fn = 0;
+
+      for (const r of rows) {
+        const p = !!r[predKey];
+        const a = !!r[actualKey];
+        if (p && a) tp++;
+        else if (!p && !a) tn++;
+        else if (p && !a) fp++;
+        else fn++;
+      }
+
+      const total = tp + tn + fp + fn;
+      const accuracy = total > 0 ? ((tp + tn) / total) * 100 : 0;
+      const precision = (tp + fp) > 0 ? (tp / (tp + fp)) * 100 : 0;
+      const recall = (tp + fn) > 0 ? (tp / (tp + fn)) * 100 : 0;
+
+      return {
+        tp, tn, fp, fn,
+        accuracy: accuracy.toFixed(1),
+        precision: precision.toFixed(1),
+        recall: recall.toFixed(1)
+      };
+    }
+
     async function run30DayAudit() {
       if (isRunning) return;
 
@@ -1604,6 +1649,7 @@
         cutoff.setDate(cutoff.getDate() - 30);
 
         const candidates = store.filter(x => new Date(x.date) >= cutoff);
+
         if (!candidates.length) {
           document.getElementById("auditSection").innerHTML = `
             <div class="section-panel">
@@ -1617,9 +1663,6 @@
         let rows = [];
         let totals = {
           games: 0,
-          over25Hits: 0,
-          over35Hits: 0,
-          bttsHits: 0,
           exactHits: 0,
           cornersAbsErrorSum: 0,
           cornersCount: 0
@@ -1631,8 +1674,7 @@
 
           const fixtureResp = await apiReq(`fixtures?id=${p.fixtureId}`);
           const fixture = fixtureResp?.response?.[0];
-          if (!fixture) continue;
-          if (!isFinishedStatus(fixture?.fixture?.status?.short)) continue;
+          if (!fixture || !isFinishedStatus(fixture?.fixture?.status?.short)) continue;
 
           const actualHome = safeNum(fixture?.goals?.home);
           const actualAway = safeNum(fixture?.goals?.away);
@@ -1650,15 +1692,7 @@
             actualCorners = statVal(h, "Corner Kicks") + statVal(a, "Corner Kicks");
           }
 
-          const predOver25 = safeNum(p.over25Score) >= 100;
-          const predOver35 = safeNum(p.over35Score) >= 118;
-          const predBTTS = safeNum(p.bttsScore) >= 88;
-
-          const hitOver25 = predOver25 === (actualTotal > 2.5);
-          const hitOver35 = predOver35 === (actualTotal > 3.5);
-          const hitBTTS = predBTTS === actualBTTS;
           const hitExact = String(p.exactScorePred) === actualExact;
-
           let cornersError = null;
           if (actualCorners != null && Number.isFinite(actualCorners)) {
             cornersError = Math.abs(safeNum(p.cornersPred) - actualCorners);
@@ -1667,24 +1701,18 @@
           }
 
           totals.games += 1;
-          if (hitOver25) totals.over25Hits += 1;
-          if (hitOver35) totals.over35Hits += 1;
-          if (hitBTTS) totals.bttsHits += 1;
           if (hitExact) totals.exactHits += 1;
 
           rows.push({
             date: p.date?.slice(0, 10) || "",
             league: p.league,
             match: `${p.homeTeam} vs ${p.awayTeam}`,
-            predOver25: predOver25 ? "YES" : "NO",
-            actualOver25: actualTotal > 2.5 ? "YES" : "NO",
-            hitOver25,
-            predOver35: predOver35 ? "YES" : "NO",
-            actualOver35: actualTotal > 3.5 ? "YES" : "NO",
-            hitOver35,
-            predBTTS: predBTTS ? "YES" : "NO",
-            actualBTTS: actualBTTS ? "YES" : "NO",
-            hitBTTS,
+            predOver25: !!p.predOver25,
+            actualOver25: actualTotal > 2.5,
+            predOver35: !!p.predOver35,
+            actualOver35: actualTotal > 3.5,
+            predBTTS: !!p.predBTTS,
+            actualBTTS: actualBTTS,
             predExact: p.exactScorePred,
             actualExact,
             hitExact,
@@ -1704,36 +1732,21 @@
           return;
         }
 
-        const over25Acc = ((totals.over25Hits / totals.games) * 100).toFixed(1);
-        const over35Acc = ((totals.over35Hits / totals.games) * 100).toFixed(1);
-        const bttsAcc = ((totals.bttsHits / totals.games) * 100).toFixed(1);
+        const over25Metrics = computeClassificationMetrics(rows, "predOver25", "actualOver25");
+        const over35Metrics = computeClassificationMetrics(rows, "predOver35", "actualOver35");
+        const bttsMetrics = computeClassificationMetrics(rows, "predBTTS", "actualBTTS");
         const exactAcc = ((totals.exactHits / totals.games) * 100).toFixed(1);
         const cornersMae = totals.cornersCount > 0 ? (totals.cornersAbsErrorSum / totals.cornersCount).toFixed(2) : "-";
 
         document.getElementById("auditSection").innerHTML = `
           <div class="section-panel">
-            <div class="section-title">📊 AUDIT 30 ΗΜΕΡΩΝ</div>
+            <div class="section-title">📊 ADVANCED AUDIT 30 ΗΜΕΡΩΝ</div>
 
             <div class="bank-grid" style="margin-bottom:16px;">
               <div class="bank-box">
                 <div class="bank-label">Αγώνες</div>
                 <div class="bank-value">${totals.games}</div>
               </div>
-              <div class="bank-box">
-                <div class="bank-label">Accuracy Over 2.5</div>
-                <div class="bank-value">${over25Acc}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">Accuracy Over 3.5</div>
-                <div class="bank-value">${over35Acc}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">Accuracy BTTS</div>
-                <div class="bank-value">${bttsAcc}%</div>
-              </div>
-            </div>
-
-            <div class="bank-grid" style="margin-bottom:16px;">
               <div class="bank-box">
                 <div class="bank-label">Exact Score Hit Rate</div>
                 <div class="bank-value">${exactAcc}%</div>
@@ -1743,12 +1756,65 @@
                 <div class="bank-value">${cornersMae}</div>
               </div>
               <div class="bank-box">
-                <div class="bank-label">Hits Over 2.5</div>
-                <div class="bank-value">${totals.over25Hits}/${totals.games}</div>
+                <div class="bank-label">Stored Predictions</div>
+                <div class="bank-value">${getPredictionStore().length}</div>
+              </div>
+            </div>
+
+            <div class="bank-grid" style="margin-bottom:16px;">
+              <div class="bank-box">
+                <div class="bank-label">O2.5 Accuracy</div>
+                <div class="bank-value">${over25Metrics.accuracy}%</div>
               </div>
               <div class="bank-box">
-                <div class="bank-label">Hits Over 3.5</div>
-                <div class="bank-value">${totals.over35Hits}/${totals.games}</div>
+                <div class="bank-label">O2.5 Precision</div>
+                <div class="bank-value">${over25Metrics.precision}%</div>
+              </div>
+              <div class="bank-box">
+                <div class="bank-label">O2.5 Recall</div>
+                <div class="bank-value">${over25Metrics.recall}%</div>
+              </div>
+              <div class="bank-box">
+                <div class="bank-label">O2.5 FP / FN</div>
+                <div class="bank-value">${over25Metrics.fp}/${over25Metrics.fn}</div>
+              </div>
+            </div>
+
+            <div class="bank-grid" style="margin-bottom:16px;">
+              <div class="bank-box">
+                <div class="bank-label">O3.5 Accuracy</div>
+                <div class="bank-value">${over35Metrics.accuracy}%</div>
+              </div>
+              <div class="bank-box">
+                <div class="bank-label">O3.5 Precision</div>
+                <div class="bank-value">${over35Metrics.precision}%</div>
+              </div>
+              <div class="bank-box">
+                <div class="bank-label">O3.5 Recall</div>
+                <div class="bank-value">${over35Metrics.recall}%</div>
+              </div>
+              <div class="bank-box">
+                <div class="bank-label">O3.5 FP / FN</div>
+                <div class="bank-value">${over35Metrics.fp}/${over35Metrics.fn}</div>
+              </div>
+            </div>
+
+            <div class="bank-grid" style="margin-bottom:16px;">
+              <div class="bank-box">
+                <div class="bank-label">BTTS Accuracy</div>
+                <div class="bank-value">${bttsMetrics.accuracy}%</div>
+              </div>
+              <div class="bank-box">
+                <div class="bank-label">BTTS Precision</div>
+                <div class="bank-value">${bttsMetrics.precision}%</div>
+              </div>
+              <div class="bank-box">
+                <div class="bank-label">BTTS Recall</div>
+                <div class="bank-value">${bttsMetrics.recall}%</div>
+              </div>
+              <div class="bank-box">
+                <div class="bank-label">BTTS FP / FN</div>
+                <div class="bank-value">${bttsMetrics.fp}/${bttsMetrics.fn}</div>
               </div>
             </div>
 
@@ -1782,15 +1848,15 @@
                       <td>${escapeHtml(r.date)}</td>
                       <td>${escapeHtml(r.league)}</td>
                       <td>${escapeHtml(r.match)}</td>
-                      <td>${escapeHtml(r.predOver25)}</td>
-                      <td>${escapeHtml(r.actualOver25)}</td>
-                      <td class="${r.hitOver25 ? 'audit-hit' : 'audit-miss'}">${r.hitOver25 ? 'YES' : 'NO'}</td>
-                      <td>${escapeHtml(r.predOver35)}</td>
-                      <td>${escapeHtml(r.actualOver35)}</td>
-                      <td class="${r.hitOver35 ? 'audit-hit' : 'audit-miss'}">${r.hitOver35 ? 'YES' : 'NO'}</td>
-                      <td>${escapeHtml(r.predBTTS)}</td>
-                      <td>${escapeHtml(r.actualBTTS)}</td>
-                      <td class="${r.hitBTTS ? 'audit-hit' : 'audit-miss'}">${r.hitBTTS ? 'YES' : 'NO'}</td>
+                      <td>${r.predOver25 ? "YES" : "NO"}</td>
+                      <td>${r.actualOver25 ? "YES" : "NO"}</td>
+                      <td class="${r.predOver25 === r.actualOver25 ? 'audit-hit' : 'audit-miss'}">${r.predOver25 === r.actualOver25 ? 'YES' : 'NO'}</td>
+                      <td>${r.predOver35 ? "YES" : "NO"}</td>
+                      <td>${r.actualOver35 ? "YES" : "NO"}</td>
+                      <td class="${r.predOver35 === r.actualOver35 ? 'audit-hit' : 'audit-miss'}">${r.predOver35 === r.actualOver35 ? 'YES' : 'NO'}</td>
+                      <td>${r.predBTTS ? "YES" : "NO"}</td>
+                      <td>${r.actualBTTS ? "YES" : "NO"}</td>
+                      <td class="${r.predBTTS === r.actualBTTS ? 'audit-hit' : 'audit-miss'}">${r.predBTTS === r.actualBTTS ? 'YES' : 'NO'}</td>
                       <td>${escapeHtml(r.predExact)}</td>
                       <td>${escapeHtml(r.actualExact)}</td>
                       <td class="${r.hitExact ? 'audit-hit' : 'audit-miss'}">${r.hitExact ? 'YES' : 'NO'}</td>
@@ -1805,7 +1871,7 @@
           </div>
         `;
 
-        showSuccess("Ο έλεγχος 30 ημερών ολοκληρώθηκε.");
+        showSuccess("Ο advanced έλεγχος 30 ημερών ολοκληρώθηκε.");
       } catch (err) {
         showError(`Σφάλμα audit: ${err?.message || "Άγνωστο σφάλμα"}`);
       } finally {
@@ -1900,7 +1966,7 @@
         renderTopSections();
         renderWallBet();
         display.innerHTML = htmlBuffer;
-        showSuccess("Το scan ολοκληρώθηκε και οι προβλέψεις αποθηκεύτηκαν για audit.");
+        showSuccess("Το recalibrated scan ολοκληρώθηκε και οι προβλέψεις αποθηκεύτηκαν για audit.");
       } catch (err) {
         showError(`Σφάλμα: ${err?.message || "Άγνωστο σφάλμα"}`);
       } finally {
