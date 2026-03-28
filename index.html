@@ -166,8 +166,9 @@
       font-family: 'Orbitron', sans-serif;
       cursor: pointer;
       text-transform: uppercase;
+      margin: 5px;
       transition: 0.25s;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       box-shadow: 0 8px 20px rgba(0,0,0,.22);
     }
     .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
@@ -177,7 +178,7 @@
       background: #000;
       color: var(--p);
       border: 1px solid var(--p);
-      padding: 14px;
+      padding: 13px 14px;
       border-radius: 10px;
       font-family: 'Orbitron', sans-serif;
       font-size: 0.93rem;
@@ -230,7 +231,7 @@
     .tip-link { display: inline-block; padding: 7px 10px; border-radius: 999px; background: rgba(0,242,255,.08); border: 1px solid rgba(0,242,255,.22); color: var(--p); text-decoration: none; font-size: 0.73rem; font-weight: 900; font-family: 'Orbitron', sans-serif; transition: .18s; }
     .tip-link:hover { filter: brightness(1.15); transform: translateY(-1px); }
 
-    .audit-table-wrap { overflow-x: auto; border: 1px solid #2b3440; border-radius: 12px; }
+    .audit-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #2b3440; border-radius: 12px; }
     .audit-table { width: 100%; border-collapse: collapse; min-width: 1250px; font-size: 0.82rem; }
     .audit-table th, .audit-table td { border-bottom: 1px solid #1f2630; padding: 10px 8px; text-align: left; vertical-align: top; }
     .audit-table th { color: var(--gold); font-family: 'Orbitron', sans-serif; font-size: 0.72rem; background: #0f141b; position: sticky; top: 0; z-index: 1; }
@@ -242,26 +243,27 @@
     .match-teams { flex: 1; }
     .match-scores-badges { text-align: right; }
 
-    /* MOBILE OPTIMIZATIONS */
+    /* --- MOBILE OPTIMIZATIONS --- */
     @media (max-width: 900px) {
       .bank-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
-      .cyber-card { padding: 15px; }
+      .cyber-card { padding: 16px; }
       .stats-grid { grid-template-columns: 1fr; }
-      .toolbar { flex-direction: column; align-items: stretch; }
-      .btn-main, .date-input, .league-select, .stake-input { width: 100%; margin: 5px 0; }
+      .toolbar { flex-direction: column; align-items: stretch; gap: 8px; }
+      .btn-main, .date-input, .league-select, .stake-input { width: 100%; margin: 0; }
       
       .match-header { flex-direction: column; align-items: stretch; gap: 10px; }
-      .match-scores-badges { text-align: left; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 5px; }
+      .match-scores-badges { text-align: left; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
       .match-scores-badges .score-chip { margin-top: 0 !important; }
-      .live-score-big { font-size: 1.8rem; width: 100%; text-align: left; margin-bottom: 5px; }
+      .live-score-big { font-size: 2rem; width: 100%; text-align: left; margin-bottom: 5px; }
       
-      .omega-pick { padding: 10px; }
-      .pick-value { font-size: 1.1rem; }
-      #auth input { font-size: 1.5rem !important; }
+      .omega-pick { padding: 12px; }
+      .pick-value { font-size: 1.15rem; }
+      #auth input { font-size: 1.5rem !important; max-width: 100%; }
+      .h2h-line { font-size: 0.8rem; }
     }
-    @media (max-width: 400px) {
+    @media (max-width: 480px) {
       .bank-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -269,15 +271,15 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh; padding: 0 15px;">
-    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.31</h1>
+    <h1 class="orbitron" style="color:var(--p); font-size:1.8rem;">APEX OMEGA v4706.31</h1>
     <input
       type="password"
       id="pin"
       placeholder="PIN"
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
-      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 300px;"
+      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 320px;"
     >
-    <div class="small-note">Sovereign Mobile Elite Edition + Intl. Friendlies</div>
+    <div class="small-note">Mobile Elite + International Friendlies</div>
   </div>
 
   <div id="app" style="display:none;">
@@ -307,7 +309,7 @@
         <div style="width:100%; background:#222; height:8px; border-radius:4px; overflow:hidden;">
           <div id="bar" style="width:0%; height:100%; background:var(--grad); transition:0.3s;"></div>
         </div>
-        <p id="status" class="orbitron" style="font-size:0.72rem; color:var(--p); margin-top:8px;"></p>
+        <p id="status" class="orbitron" style="font-size:0.75rem; color:var(--p); margin-top:8px;"></p>
       </div>
 
       <div id="topSection"></div>
@@ -322,11 +324,13 @@
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
 
+    // Ενσωμάτωση Διεθνών και Συλλογικών Φιλικών
     const LEAGUES_DATA = [
       {id: 2, name: "🏆 UEFA Champions League"},
       {id: 3, name: "🏆 UEFA Europa League"},
       {id: 848, name: "🏆 UEFA Europa Conference League"},
-      {id: 6, name: "🌍 International Friendlies"}, // ΠΡΟΣΤΕΘΗΚΑΝ ΤΑ ΦΙΛΙΚΑ
+      {id: 6, name: "🌍 International Friendlies"}, // Διεθνή Φιλικά
+      {id: 10, name: "🌍 Club Friendlies"}, // Φιλικά Συλλόγων
       {id: 39, name: "🇬🇧 Premier League"},
       {id: 40, name: "🇬🇧 Championship"},
       {id: 41, name: "🇬🇧 League One"},
@@ -609,8 +613,8 @@
       const hCards = safeNum(hStats.cards); const aCards = safeNum(aStats.cards);
       const hSplitCards = safeNum(hStats.splitCards); const aSplitCards = safeNum(aStats.splitCards);
 
-      // TRAP LEAGUES INCLUDING FRIENDLIES (ID 6)
-      const trapLeagues = [40, 41, 136, 141, 79, 62, 6]; 
+      // ΠΡΟΣΘΗΚΗ ΔΙΕΘΝΩΝ ΚΑΙ ΣΥΛΛΟΓΙΚΩΝ ΦΙΛΙΚΩΝ (ID 6 & 10) ΣΤΑ TRAP LEAGUES (-20% Penalty)
+      const trapLeagues = [40, 41, 136, 141, 79, 62, 6, 10]; 
       const goldLeagues = [78, 262, 88, 253];
       const tightLeagues = [61, 94, 197, 135, 2, 3, 848];
 
@@ -766,7 +770,9 @@
 
           <div class="stats-grid">
             <div class="team-box">
-              <div style="color:var(--p); font-size:0.76rem; font-weight:900; margin-bottom:10px;">🏠 ${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}</div>
+              <div style="color:var(--p); font-size:0.76rem; font-weight:900; margin-bottom:10px;">
+                🏠 ${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
+              </div>
               ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
               <div class="stat-row" style="margin-top:12px;"><span>Μέσος Όρος Σεζόν:</span><div><span class="season-xg-red">${s?.h?.seasonXG}</span><span class="season-xga-plain">/ ${s?.h?.seasonXGA}</span></div></div>
               <div class="stat-row"><span>xG Υπέρ (Φόρμα):</span><div><span class="val-xg">${s?.h?.formXG}</span> ${s?.h?.devXG}</div></div>
@@ -778,7 +784,9 @@
             </div>
 
             <div class="team-box">
-              <div style="color:var(--magenta); font-size:0.76rem; font-weight:900; margin-bottom:10px;">✈️ ${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}</div>
+              <div style="color:var(--magenta); font-size:0.76rem; font-weight:900; margin-bottom:10px;">
+                ✈️ ${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
+              </div>
               ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
               <div class="stat-row" style="margin-top:12px;"><span>Μέσος Όρος Σεζόν:</span><div><span class="season-xg-red">${s?.a?.seasonXG}</span><span class="season-xga-plain">/ ${s?.a?.seasonXGA}</span></div></div>
               <div class="stat-row"><span>xG Υπέρ (Φόρμα):</span><div><span class="val-xg">${s?.a?.formXG}</span> ${s?.a?.devXG}</div></div>
@@ -789,11 +797,14 @@
               <div class="minor-row">ΜΟ κάρτες μόνο εκτός: ${s?.a?.splitCards}</div>
             </div>
           </div>
-        </div>`;
+        </div>
+      `;
     }
 
     function buildLiveCard(m, s, standings, h2hSummary) {
-      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id); const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
+      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
+      const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
+
       const homeShots = safeNum(s?.h?.shots); const awayShots = safeNum(s?.a?.shots);
       const homeDanger = safeNum(s?.h?.danger); const awayDanger = safeNum(s?.a?.danger);
       const homeCorners = safeNum(s?.h?.corners); const awayCorners = safeNum(s?.a?.corners);
@@ -854,7 +865,8 @@
               <div class="stat-row"><span>Κάρτες</span><span>🟨 ${s?.a?.yellow ?? 0} | 🟥 ${s?.a?.red ?? 0}</span></div>
             </div>
           </div>
-        </div>`;
+        </div>
+      `;
     }
 
     function rankItemHTML(item, idx, label, scoreKey) {
