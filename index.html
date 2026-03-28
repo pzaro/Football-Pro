@@ -2,8 +2,8 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predictor Pro v4706.31 - Recalibrated Audit Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Predictor Pro v4706.31 - Sovereign Mobile Elite</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -28,7 +28,7 @@
       --soft-cyan: rgba(0, 242, 255, 0.08);
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Manrope', sans-serif;
       background: var(--bg);
@@ -166,23 +166,18 @@
       font-family: 'Orbitron', sans-serif;
       cursor: pointer;
       text-transform: uppercase;
-      margin: 5px;
       transition: 0.25s;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       box-shadow: 0 8px 20px rgba(0,0,0,.22);
     }
     .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
-    .btn-main:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      filter: none;
-    }
+    .btn-main:disabled { opacity: 0.5; cursor: not-allowed; transform: none; filter: none; }
+    
     .date-input, .league-select, .stake-input {
       background: #000;
       color: var(--p);
       border: 1px solid var(--p);
-      padding: 13px 14px;
+      padding: 14px;
       border-radius: 10px;
       font-family: 'Orbitron', sans-serif;
       font-size: 0.93rem;
@@ -192,318 +187,104 @@
     .date-input { min-width: 180px; }
     .stake-input { width: 120px; }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-top: 15px;
-    }
-    .team-box {
-      background: rgba(0, 0, 0, 0.42);
-      padding: 15px;
-      border-radius: 12px;
-      border: 1px solid #222;
-    }
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 8px;
-      font-size: 0.86rem;
-      border-bottom: 1px solid #1a1d23;
-      padding-bottom: 6px;
-      align-items: center;
-      line-height: 1.4;
-    }
-    .stat-row:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-    .minor-row {
-      font-size: 0.77rem;
-      color: var(--txt-muted);
-      margin-top: -2px;
-      margin-bottom: 8px;
-      text-align: right;
-      line-height: 1.4;
-    }
-    .form-dot {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 18px;
-      font-size: 0.6rem;
-      font-weight: 900;
-      margin-right: 3px;
-      color: #fff;
-      font-family: 'Orbitron', sans-serif;
-    }
-    .form-W { background: #238636; }
-    .form-D { background: #666; }
-    .form-L { background: #da3633; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    .team-box { background: rgba(0, 0, 0, 0.42); padding: 15px; border-radius: 12px; border: 1px solid #222; }
+    .stat-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: 0.86rem; border-bottom: 1px solid #1a1d23; padding-bottom: 6px; align-items: center; line-height: 1.4; }
+    .stat-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .minor-row { font-size: 0.77rem; color: var(--txt-muted); margin-top: -2px; margin-bottom: 8px; text-align: right; line-height: 1.4; }
+    
+    .form-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; margin-right: 3px; color: #fff; font-family: 'Orbitron', sans-serif; }
+    .form-W { background: #238636; } .form-D { background: #666; } .form-L { background: #da3633; }
 
-    .toolbar {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-      align-items: center;
-    }
-    .small-note {
-      color: var(--txt-muted);
-      font-size: 0.84rem;
-      margin-top: 10px;
-      line-height: 1.45;
-    }
-    .error-box {
-      background: rgba(218, 54, 51, 0.08);
-      border: 1px solid rgba(218, 54, 51, 0.5);
-      color: #ffb3b3;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      font-size: 0.92rem;
-    }
-    .success-box {
-      background: rgba(35, 134, 54, 0.08);
-      border: 1px solid rgba(35, 134, 54, 0.5);
-      color: #b7f7c4;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      font-size: 0.92rem;
-    }
+    .toolbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; }
+    .small-note { color: var(--txt-muted); font-size: 0.84rem; margin-top: 10px; line-height: 1.45; }
+    
+    .error-box { background: rgba(218, 54, 51, 0.08); border: 1px solid rgba(218, 54, 51, 0.5); color: #ffb3b3; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 0.92rem; }
+    .success-box { background: rgba(35, 134, 54, 0.08); border: 1px solid rgba(35, 134, 54, 0.5); color: #b7f7c4; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 0.92rem; }
 
-    .top-list {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .rank-card {
-      background: #11161d;
-      border: 1px solid #2e3742;
-      border-radius: 12px;
-      padding: 12px;
-    }
-    .rank-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 6px;
-    }
-    .rank-badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 0.71rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      background: var(--soft-gold);
-      color: var(--gold);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-    }
-    .score-chip {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 0.74rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      background: var(--soft-cyan);
-      color: var(--p);
-      border: 1px solid rgba(0, 242, 255, 0.25);
-    }
-    .live-chip {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 0.74rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      background: rgba(57,255,20,.12);
-      color: var(--neon-live);
-      border: 1px solid rgba(57,255,20,.25);
-    }
-    .standing-pill {
-      display: inline-block;
-      padding: 4px 9px;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      background: rgba(245,158,11,.18);
-      color: #ffd27a;
-      border: 1px solid rgba(245,158,11,.45);
-      margin-left: 8px;
-      box-shadow: 0 0 10px rgba(245,158,11,.12);
-    }
+    .top-list { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .rank-card { background: #11161d; border: 1px solid #2e3742; border-radius: 12px; padding: 12px; }
+    .rank-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .rank-badge { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 0.71rem; font-weight: 900; font-family: 'Orbitron', sans-serif; background: var(--soft-gold); color: var(--gold); border: 1px solid rgba(245, 158, 11, 0.35); }
+    .score-chip { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 900; font-family: 'Orbitron', sans-serif; background: var(--soft-cyan); color: var(--p); border: 1px solid rgba(0, 242, 255, 0.25); }
+    .live-chip { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 900; font-family: 'Orbitron', sans-serif; background: rgba(57,255,20,.12); color: var(--neon-live); border: 1px solid rgba(57,255,20,.25); }
+    .standing-pill { display: inline-block; padding: 4px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 900; font-family: 'Orbitron', sans-serif; background: rgba(245,158,11,.18); color: #ffd27a; border: 1px solid rgba(245,158,11,.45); margin-left: 8px; box-shadow: 0 0 10px rgba(245,158,11,.12); }
 
-    .wallbet-box {
-      background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(0,242,255,0.08));
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      border-radius: 16px;
-      padding: 16px;
-    }
-    .wallbet-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1rem;
-      color: var(--gold);
-      font-weight: 900;
-      margin-bottom: 12px;
-    }
-    .wallbet-leg {
-      background: rgba(0,0,0,0.28);
-      border: 1px solid #313a44;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
-    }
+    .wallbet-box { background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(0,242,255,0.08)); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 16px; padding: 16px; }
+    .wallbet-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--gold); font-weight: 900; margin-bottom: 12px; }
+    .wallbet-leg { background: rgba(0,0,0,0.28); border: 1px solid #313a44; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
 
-    .bank-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-    .bank-box {
-      background: #11161c;
-      border: 1px solid #2e3742;
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-    }
-    .bank-label {
-      font-size: 0.7rem;
-      color: var(--txt-muted);
-      text-transform: uppercase;
-      letter-spacing: .5px;
-    }
-    .bank-value {
-      margin-top: 6px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.2rem;
-      color: var(--gold);
-      font-weight: 900;
-    }
+    .bank-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .bank-box { background: #11161c; border: 1px solid #2e3742; border-radius: 12px; padding: 12px; text-align: center; }
+    .bank-label { font-size: 0.7rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .5px; }
+    .bank-value { margin-top: 6px; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--gold); font-weight: 900; }
 
-    .live-score-big {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.15rem;
-      font-weight: 900;
-      color: var(--neon-live);
-      text-shadow: 0 0 12px rgba(57,255,20,.18);
-    }
+    .live-score-big { font-family: 'Orbitron', sans-serif; font-size: 2.15rem; font-weight: 900; color: var(--neon-live); text-shadow: 0 0 12px rgba(57,255,20,.18); }
 
-    .h2h-box {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 12px;
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px solid rgba(245, 158, 11, 0.28);
-    }
-    .h2h-title {
-      font-family: 'Orbitron', sans-serif;
-      color: var(--gold);
-      font-size: 0.78rem;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-    .h2h-line {
-      font-size: 0.82rem;
-      margin-bottom: 5px;
-      color: #f0f6fc;
-      line-height: 1.45;
-    }
+    .h2h-box { margin-top: 14px; padding: 12px; border-radius: 12px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.28); }
+    .h2h-title { font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 0.78rem; font-weight: 900; margin-bottom: 8px; }
+    .h2h-line { font-size: 0.82rem; margin-bottom: 5px; color: #f0f6fc; line-height: 1.45; }
     .h2h-line:last-child { margin-bottom: 0; }
 
-    .tip-links {
-      margin-top: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .tip-link {
-      display: inline-block;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(0,242,255,.08);
-      border: 1px solid rgba(0,242,255,.22);
-      color: var(--p);
-      text-decoration: none;
-      font-size: 0.73rem;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      transition: .18s;
-    }
-    .tip-link:hover {
-      filter: brightness(1.15);
-      transform: translateY(-1px);
-    }
+    .tip-links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .tip-link { display: inline-block; padding: 7px 10px; border-radius: 999px; background: rgba(0,242,255,.08); border: 1px solid rgba(0,242,255,.22); color: var(--p); text-decoration: none; font-size: 0.73rem; font-weight: 900; font-family: 'Orbitron', sans-serif; transition: .18s; }
+    .tip-link:hover { filter: brightness(1.15); transform: translateY(-1px); }
 
-    .audit-table-wrap {
-      overflow-x: auto;
-      border: 1px solid #2b3440;
-      border-radius: 12px;
-    }
-    .audit-table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 1250px;
-      font-size: 0.82rem;
-    }
-    .audit-table th,
-    .audit-table td {
-      border-bottom: 1px solid #1f2630;
-      padding: 10px 8px;
-      text-align: left;
-      vertical-align: top;
-    }
-    .audit-table th {
-      color: var(--gold);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.72rem;
-      background: #0f141b;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    .audit-hit {
-      color: var(--neon-live);
-      font-weight: 800;
-    }
-    .audit-miss {
-      color: #ff8c8c;
-      font-weight: 800;
-    }
+    .audit-table-wrap { overflow-x: auto; border: 1px solid #2b3440; border-radius: 12px; }
+    .audit-table { width: 100%; border-collapse: collapse; min-width: 1250px; font-size: 0.82rem; }
+    .audit-table th, .audit-table td { border-bottom: 1px solid #1f2630; padding: 10px 8px; text-align: left; vertical-align: top; }
+    .audit-table th { color: var(--gold); font-family: 'Orbitron', sans-serif; font-size: 0.72rem; background: #0f141b; position: sticky; top: 0; z-index: 1; }
+    .audit-hit { color: var(--neon-live); font-weight: 800; }
+    .audit-miss { color: #ff8c8c; font-weight: 800; }
 
+    /* Match Layout Classes */
+    .match-header { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+    .match-teams { flex: 1; }
+    .match-scores-badges { text-align: right; }
+
+    /* MOBILE OPTIMIZATIONS */
     @media (max-width: 900px) {
-      .stats-grid, .bank-grid { grid-template-columns: 1fr; }
+      .bank-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .cyber-card { padding: 15px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .btn-main, .date-input, .league-select, .stake-input { width: 100%; margin: 5px 0; }
+      
+      .match-header { flex-direction: column; align-items: stretch; gap: 10px; }
+      .match-scores-badges { text-align: left; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 5px; }
+      .match-scores-badges .score-chip { margin-top: 0 !important; }
+      .live-score-big { font-size: 1.8rem; width: 100%; text-align: left; margin-bottom: 5px; }
+      
+      .omega-pick { padding: 10px; }
+      .pick-value { font-size: 1.1rem; }
+      #auth input { font-size: 1.5rem !important; }
+    }
+    @media (max-width: 400px) {
+      .bank-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
-  <div id="auth" style="text-align:center; margin-top:20vh;">
-    <h1 class="orbitron" style="color:var(--p);">APEX OMEGA v4706.31</h1>
+  <div id="auth" style="text-align:center; margin-top:20vh; padding: 0 15px;">
+    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.31</h1>
     <input
       type="password"
       id="pin"
       placeholder="PIN"
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
-      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none;"
+      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 300px;"
     >
-    <div class="small-note">Recalibrated Over 3.5 + BTTS Filter + Conservative Exact Score + Advanced Audit</div>
+    <div class="small-note">Sovereign Mobile Elite Edition + Intl. Friendlies</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
-      <header style="text-align:center; padding:20px 0;">
-        <h1 class="orbitron" style="color:var(--p); margin:0;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">v4706.31 Recalibrated Markets + Advanced Audit</div>
+      <header style="text-align:center; padding:15px 0 25px;">
+        <h1 class="orbitron" style="color:var(--p); margin:0; font-size: 1.6rem;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">Mobile Elite | Market Recalibration & Audit</div>
       </header>
 
       <div class="toolbar">
@@ -545,6 +326,7 @@
       {id: 2, name: "🏆 UEFA Champions League"},
       {id: 3, name: "🏆 UEFA Europa League"},
       {id: 848, name: "🏆 UEFA Europa Conference League"},
+      {id: 6, name: "🌍 International Friendlies"}, // ΠΡΟΣΤΕΘΗΚΑΝ ΤΑ ΦΙΛΙΚΑ
       {id: 39, name: "🇬🇧 Premier League"},
       {id: 40, name: "🇬🇧 Championship"},
       {id: 41, name: "🇬🇧 League One"},
@@ -591,25 +373,12 @@
     let latestTopLists = { over25: [], over35: [], btts: [], cards4: [] };
     let latestWallBet = null;
 
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
+    function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-    function showError(msg) {
-      document.getElementById("errorBox").innerHTML = `<div class="error-box">${escapeHtml(msg)}</div>`;
-    }
-
-    function clearError() {
-      document.getElementById("errorBox").innerHTML = "";
-    }
-
-    function showSuccess(msg) {
-      document.getElementById("successBox").innerHTML = `<div class="success-box">${escapeHtml(msg)}</div>`;
-    }
-
-    function clearSuccess() {
-      document.getElementById("successBox").innerHTML = "";
-    }
+    function showError(msg) { document.getElementById("errorBox").innerHTML = `<div class="error-box">${escapeHtml(msg)}</div>`; }
+    function clearError() { document.getElementById("errorBox").innerHTML = ""; }
+    function showSuccess(msg) { document.getElementById("successBox").innerHTML = `<div class="success-box">${escapeHtml(msg)}</div>`; }
+    function clearSuccess() { document.getElementById("successBox").innerHTML = ""; }
 
     function setLoader(show, text = "") {
       document.getElementById("loader").style.display = show ? "block" : "none";
@@ -630,12 +399,7 @@
     }
 
     function escapeHtml(str) {
-      return String(str ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+      return String(str ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
     }
 
     function getTodayISO() {
@@ -646,108 +410,56 @@
       return `${y}-${m}-${day}`;
     }
 
-    function safeNum(x, d = 0) {
-      const n = Number(x);
-      return Number.isFinite(n) ? n : d;
-    }
+    function safeNum(x, d = 0) { const n = Number(x); return Number.isFinite(n) ? n : d; }
+    function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
-    function clamp(n, min, max) {
-      return Math.max(min, Math.min(max, n));
-    }
-
-    function isLiveStatus(short) {
-      return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short);
-    }
-
-    function isFinishedStatus(short) {
-      return ["FT", "AET", "PEN"].includes(short);
-    }
+    function isLiveStatus(short) { return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short); }
+    function isFinishedStatus(short) { return ["FT", "AET", "PEN"].includes(short); }
 
     function buildFixtureScoreHTML(m) {
       const hg = m?.goals?.home;
       const ag = m?.goals?.away;
       const short = m?.fixture?.status?.short || "";
-
       if (hg == null || ag == null) return "";
-
       if (isLiveStatus(short)) return `<div class="live-score-big">${hg} - ${ag}</div>`;
       if (isFinishedStatus(short)) return `<div class="live-score-big" style="color:var(--gold); text-shadow:none;">${hg} - ${ag}</div>`;
       return `<div class="live-score-big" style="color:#c9d1d9; text-shadow:none;">${hg} - ${ag}</div>`;
     }
 
-    function getPredictionStore() {
-      try {
-        return JSON.parse(localStorage.getItem(LS_PREDICTIONS) || "[]");
-      } catch {
-        return [];
-      }
-    }
-
-    function savePredictionStore(data) {
-      localStorage.setItem(LS_PREDICTIONS, JSON.stringify(data));
-    }
-
+    function getPredictionStore() { try { return JSON.parse(localStorage.getItem(LS_PREDICTIONS) || "[]"); } catch { return []; } }
+    function savePredictionStore(data) { localStorage.setItem(LS_PREDICTIONS, JSON.stringify(data)); }
     function upsertPrediction(record) {
       const store = getPredictionStore();
       const idx = store.findIndex(x => String(x.fixtureId) === String(record.fixtureId));
-      if (idx >= 0) store[idx] = record;
-      else store.push(record);
+      if (idx >= 0) store[idx] = record; else store.push(record);
       savePredictionStore(store);
     }
 
     function getWallBetBank() {
-      try {
-        return JSON.parse(localStorage.getItem(LS_WALLBET_BANK) || '{"totalBets":0,"stakeSum":0,"profit":0,"wins":0,"losses":0}');
-      } catch {
-        return { totalBets: 0, stakeSum: 0, profit: 0, wins: 0, losses: 0 };
-      }
+      try { return JSON.parse(localStorage.getItem(LS_WALLBET_BANK) || '{"totalBets":0,"stakeSum":0,"profit":0,"wins":0,"losses":0}'); } catch { return { totalBets: 0, stakeSum: 0, profit: 0, wins: 0, losses: 0 }; }
     }
-
-    function saveWallBetBank(v) {
-      localStorage.setItem(LS_WALLBET_BANK, JSON.stringify(v));
-    }
+    function saveWallBetBank(v) { localStorage.setItem(LS_WALLBET_BANK, JSON.stringify(v)); }
 
     function renderBankSection() {
       const bank = getWallBetBank();
       const roi = bank.stakeSum > 0 ? ((bank.profit / bank.stakeSum) * 100).toFixed(1) : "0.0";
-
       document.getElementById("bankSection").innerHTML = `
         <div class="section-panel">
           <div class="section-title">🏦 WALLBET ΤΑΜΕΙΟ</div>
           <div class="bank-grid">
-            <div class="bank-box">
-              <div class="bank-label">Σύνολο Δελτίων</div>
-              <div class="bank-value">${bank.totalBets}</div>
-            </div>
-            <div class="bank-box">
-              <div class="bank-label">Συνολικό Ποντάρισμα</div>
-              <div class="bank-value">${bank.stakeSum.toFixed(2)}</div>
-            </div>
-            <div class="bank-box">
-              <div class="bank-label">Καθαρό Κέρδος</div>
-              <div class="bank-value">${bank.profit.toFixed(2)}</div>
-            </div>
-            <div class="bank-box">
-              <div class="bank-label">ROI %</div>
-              <div class="bank-value">${roi}%</div>
-            </div>
+            <div class="bank-box"><div class="bank-label">Σύνολο Δελτίων</div><div class="bank-value">${bank.totalBets}</div></div>
+            <div class="bank-box"><div class="bank-label">Συνολικό Ποντάρισμα</div><div class="bank-value">${bank.stakeSum.toFixed(2)}</div></div>
+            <div class="bank-box"><div class="bank-label">Καθαρό Κέρδος</div><div class="bank-value">${bank.profit.toFixed(2)}</div></div>
+            <div class="bank-box"><div class="bank-label">ROI %</div><div class="bank-value">${roi}%</div></div>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     async function throttledFetch(url, timeout = REQUEST_TIMEOUT_MS) {
       await sleep(REQUEST_DELAY_MS);
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeout);
-      try {
-        return await fetch(url, {
-          headers: { "x-apisports-key": KEY },
-          signal: controller.signal
-        });
-      } finally {
-        clearTimeout(timer);
-      }
+      try { return await fetch(url, { headers: { "x-apisports-key": KEY }, signal: controller.signal }); } finally { clearTimeout(timer); }
     }
 
     async function apiReq(path) {
@@ -763,53 +475,42 @@
     async function getTeamSeasonStats(teamId, leagueId, season) {
       const key = `${teamId}_${leagueId}_${season}`;
       if (teamStatsCache.has(key)) return teamStatsCache.get(key);
-
       const data = await apiReq(`teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`);
       const response = data?.response || {};
-      teamStatsCache.set(key, response);
-      return response;
+      teamStatsCache.set(key, response); return response;
     }
 
     async function getLastFixtures(teamId, leagueId, season) {
       const key = `team_last_${teamId}_${leagueId}_${season}`;
       if (lastFixturesCache.has(key)) return lastFixturesCache.get(key);
-
       const data = await apiReq(`fixtures?team=${teamId}&league=${leagueId}&season=${season}&last=20&status=FT`);
       const response = data?.response || [];
-      lastFixturesCache.set(key, response);
-      return response;
+      lastFixturesCache.set(key, response); return response;
     }
 
     async function getFixtureStats(fixtureId) {
       if (statsCache.has(fixtureId)) return statsCache.get(fixtureId);
       const data = await apiReq(`fixtures/statistics?fixture=${fixtureId}`);
-      statsCache.set(fixtureId, data);
-      return data;
+      statsCache.set(fixtureId, data); return data;
     }
 
     async function getLeagueStandings(leagueId, season) {
       const key = `${leagueId}_${season}`;
       if (standingsCache.has(key)) return standingsCache.get(key);
-
       const data = await apiReq(`standings?league=${leagueId}&season=${season}`);
       const rawStandings = data?.response?.[0]?.league?.standings || [];
       const flattened = Array.isArray(rawStandings) ? rawStandings.flat().filter(Boolean) : [];
-
-      standingsCache.set(key, flattened);
-      return flattened;
+      standingsCache.set(key, flattened); return flattened;
     }
 
     async function getHeadToHead(team1Id, team2Id, leagueId = null, season = null) {
       const key = `${team1Id}_${team2Id}_${leagueId || "all"}_${season || "all"}`;
       if (h2hCache.has(key)) return h2hCache.get(key);
-
       let path = `fixtures/headtohead?h2h=${team1Id}-${team2Id}`;
       if (leagueId && season) path += `&league=${leagueId}&season=${season}`;
-
       const data = await apiReq(path);
       const response = data?.response || [];
-      h2hCache.set(key, response);
-      return response;
+      h2hCache.set(key, response); return response;
     }
 
     function getTeamRankFromStandings(standings, teamId) {
@@ -825,13 +526,8 @@
       return parseFloat(String(item.value).replace("%", "").trim()) || 0;
     }
 
-    function getTeamGoals(fixture, teamId) {
-      return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.home ?? 0) : (fixture?.goals?.away ?? 0);
-    }
-
-    function getOpponentGoals(fixture, teamId) {
-      return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.away ?? 0) : (fixture?.goals?.home ?? 0);
-    }
+    function getTeamGoals(fixture, teamId) { return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.home ?? 0) : (fixture?.goals?.away ?? 0); }
+    function getOpponentGoals(fixture, teamId) { return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.away ?? 0) : (fixture?.goals?.home ?? 0); }
 
     function estimateXG(statsArr, goals = 0) {
       const shotsOnGoal = statVal(statsArr, "Shots on Goal");
@@ -839,68 +535,36 @@
       const totalShots = statVal(statsArr, "Total Shots");
       const dangerous = statVal(statsArr, "Dangerous Attacks");
       const corners = statVal(statsArr, "Corner Kicks");
-
-      let xg =
-        (shotsOnGoal * 0.18) +
-        (shotsOffGoal * 0.07) +
-        (Math.max(totalShots - shotsOnGoal - shotsOffGoal, 0) * 0.03) +
-        (dangerous * 0.008) +
-        (corners * 0.025) +
-        (goals * 0.35);
-
+      let xg = (shotsOnGoal * 0.18) + (shotsOffGoal * 0.07) + (Math.max(totalShots - shotsOnGoal - shotsOffGoal, 0) * 0.03) + (dangerous * 0.008) + (corners * 0.025) + (goals * 0.35);
       if (!Number.isFinite(xg) || xg <= 0) xg = goals > 0 ? (0.70 + goals * 0.30) : 0.70;
       return xg;
     }
 
     function getWinnerTeamIdFromFixture(f) {
-      const hg = f?.goals?.home ?? 0;
-      const ag = f?.goals?.away ?? 0;
+      const hg = f?.goals?.home ?? 0; const ag = f?.goals?.away ?? 0;
       if (hg > ag) return f?.teams?.home?.id;
       if (ag > hg) return f?.teams?.away?.id;
       return null;
     }
 
     function summarizeH2H(h2hFixtures, homeTeamId, awayTeamId) {
-      if (!Array.isArray(h2hFixtures) || !h2hFixtures.length) {
-        return { matches: 0, homeWins: 0, awayWins: 0, draws: 0, goalsHome: 0, goalsAway: 0, lastResults: [] };
-      }
-
-      let homeWins = 0, awayWins = 0, draws = 0, goalsHome = 0, goalsAway = 0;
-      const lastResults = [];
-
+      if (!Array.isArray(h2hFixtures) || !h2hFixtures.length) return { matches: 0, homeWins: 0, awayWins: 0, draws: 0, goalsHome: 0, goalsAway: 0, lastResults: [] };
+      let homeWins = 0, awayWins = 0, draws = 0, goalsHome = 0, goalsAway = 0; const lastResults = [];
       for (const f of h2hFixtures.slice(0, 8)) {
         const winnerId = getWinnerTeamIdFromFixture(f);
-        const hg = f?.goals?.home ?? 0;
-        const ag = f?.goals?.away ?? 0;
-
+        const hg = f?.goals?.home ?? 0; const ag = f?.goals?.away ?? 0;
         const homeGoalsThisH2H = f?.teams?.home?.id === homeTeamId ? hg : ag;
         const awayGoalsThisH2H = f?.teams?.home?.id === awayTeamId ? hg : ag;
-
-        goalsHome += homeGoalsThisH2H;
-        goalsAway += awayGoalsThisH2H;
-
-        if (winnerId === homeTeamId) homeWins++;
-        else if (winnerId === awayTeamId) awayWins++;
-        else draws++;
-
+        goalsHome += homeGoalsThisH2H; goalsAway += awayGoalsThisH2H;
+        if (winnerId === homeTeamId) homeWins++; else if (winnerId === awayTeamId) awayWins++; else draws++;
         lastResults.push(`${homeGoalsThisH2H}-${awayGoalsThisH2H}`);
       }
-
-      return {
-        matches: h2hFixtures.slice(0, 8).length,
-        homeWins,
-        awayWins,
-        draws,
-        goalsHome,
-        goalsAway,
-        lastResults
-      };
+      return { matches: h2hFixtures.slice(0, 8).length, homeWins, awayWins, draws, goalsHome, goalsAway, lastResults };
     }
 
     function getFormHistory(fixtures, teamId) {
       return fixtures.map(f => {
-        const myG = getTeamGoals(f, teamId);
-        const opG = getOpponentGoals(f, teamId);
+        const myG = getTeamGoals(f, teamId); const opG = getOpponentGoals(f, teamId);
         return myG > opG ? { res: "Ν", cls: "W" } : (myG < opG ? { res: "Η", cls: "L" } : { res: "Ι", cls: "D" });
       }).reverse();
     }
@@ -913,342 +577,149 @@
 
     async function batchCalculate(list, teamId) {
       if (!list.length) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
-
       let xgSum = 0, xgaSum = 0, corSum = 0, crdSum = 0, count = 0;
-
       for (const f of list) {
         const st = await getFixtureStats(f.fixture.id);
         if (!st?.response || st.response.length < 2) continue;
-
         const myObj = st.response.find(x => x.team.id === teamId);
         const opObj = st.response.find(x => x.team.id !== teamId);
         if (!myObj || !opObj) continue;
-
-        const my = myObj.statistics || [];
-        const op = opObj.statistics || [];
-
-        let myXG = statVal(my, "Expected Goals");
-        if (myXG <= 0) myXG = estimateXG(my, getTeamGoals(f, teamId));
-
-        let oppXG = statVal(op, "Expected Goals");
-        if (oppXG <= 0) oppXG = estimateXG(op, getOpponentGoals(f, teamId));
-
-        xgSum += myXG;
-        xgaSum += oppXG;
-        corSum += statVal(my, "Corner Kicks");
-        crdSum += statVal(my, "Yellow Cards") + statVal(my, "Red Cards");
-        count++;
+        const my = myObj.statistics || []; const op = opObj.statistics || [];
+        let myXG = statVal(my, "Expected Goals"); if (myXG <= 0) myXG = estimateXG(my, getTeamGoals(f, teamId));
+        let oppXG = statVal(op, "Expected Goals"); if (oppXG <= 0) oppXG = estimateXG(op, getOpponentGoals(f, teamId));
+        xgSum += myXG; xgaSum += oppXG; corSum += statVal(my, "Corner Kicks"); crdSum += statVal(my, "Yellow Cards") + statVal(my, "Red Cards"); count++;
       }
-
-      return {
-        xg: count > 0 ? (xgSum / count).toFixed(2) : "0.00",
-        xga: count > 0 ? (xgaSum / count).toFixed(2) : "0.00",
-        cor: count > 0 ? (corSum / count).toFixed(1) : "0.0",
-        crd: count > 0 ? (crdSum / count).toFixed(1) : "0.0"
-      };
+      return { xg: count > 0 ? (xgSum / count).toFixed(2) : "0.00", xga: count > 0 ? (xgaSum / count).toFixed(2) : "0.00", cor: count > 0 ? (corSum / count).toFixed(1) : "0.0", crd: count > 0 ? (crdSum / count).toFixed(1) : "0.0" };
     }
 
     async function getTeamData(teamId, leagueId, season, venueType) {
-      const [seasonStats, allFixs] = await Promise.all([
-        getTeamSeasonStats(teamId, leagueId, season),
-        getLastFixtures(teamId, leagueId, season)
-      ]);
-
+      const [seasonStats, allFixs] = await Promise.all([getTeamSeasonStats(teamId, leagueId, season), getLastFixtures(teamId, leagueId, season)]);
       const genLast = allFixs.slice(0, LAST_GENERAL);
       const splitLast = allFixs.filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId).slice(0, LAST_SPLIT);
-
-      const [form, split] = await Promise.all([
-        batchCalculate(genLast, teamId),
-        batchCalculate(splitLast, teamId)
-      ]);
-
+      const [form, split] = await Promise.all([batchCalculate(genLast, teamId), batchCalculate(splitLast, teamId)]);
       const baseXG = parseFloat(seasonStats?.goals?.for?.average?.total) || 1.10;
       const baseXGA = parseFloat(seasonStats?.goals?.against?.average?.total) || 1.10;
-
-      return {
-        seasonXG: baseXG.toFixed(2),
-        seasonXGA: baseXGA.toFixed(2),
-        formXG: form.xg,
-        formXGA: form.xga,
-        devXG: getDev(form.xg, baseXG),
-        devXGA: getDev(form.xga, baseXGA),
-        splitXG: split.xg,
-        splitXGA: split.xga,
-        corners: form.cor,
-        cards: form.crd,
-        splitCards: split.crd,
-        history: getFormHistory(genLast, teamId)
-      };
+      return { seasonXG: baseXG.toFixed(2), seasonXGA: baseXGA.toFixed(2), formXG: form.xg, formXGA: form.xga, devXG: getDev(form.xg, baseXG), devXGA: getDev(form.xga, baseXGA), splitXG: split.xg, splitXGA: split.xga, corners: form.cor, cards: form.crd, splitCards: split.crd, history: getFormHistory(genLast, teamId) };
     }
 
     function computeMarketScores(hStats, aStats, leagueId) {
-      let hXG = safeNum(hStats.formXG);
-      let aXG = safeNum(aStats.formXG);
-      let totalXG = hXG + aXG;
+      let hXG = safeNum(hStats.formXG); let aXG = safeNum(aStats.formXG); let totalXG = hXG + aXG;
+      const hSplitXG = safeNum(hStats.splitXG); const aSplitXG = safeNum(aStats.splitXG);
+      const hXGA = safeNum(hStats.formXGA); const aXGA = safeNum(aStats.formXGA);
+      const hCards = safeNum(hStats.cards); const aCards = safeNum(aStats.cards);
+      const hSplitCards = safeNum(hStats.splitCards); const aSplitCards = safeNum(aStats.splitCards);
 
-      const hSplitXG = safeNum(hStats.splitXG);
-      const aSplitXG = safeNum(aStats.splitXG);
-      const hXGA = safeNum(hStats.formXGA);
-      const aXGA = safeNum(aStats.formXGA);
-      const hCards = safeNum(hStats.cards);
-      const aCards = safeNum(aStats.cards);
-      const hSplitCards = safeNum(hStats.splitCards);
-      const aSplitCards = safeNum(aStats.splitCards);
-
-      const trapLeagues = [40, 41, 136, 141, 79, 62];
+      // TRAP LEAGUES INCLUDING FRIENDLIES (ID 6)
+      const trapLeagues = [40, 41, 136, 141, 79, 62, 6]; 
       const goldLeagues = [78, 262, 88, 253];
       const tightLeagues = [61, 94, 197, 135, 2, 3, 848];
 
-      if (trapLeagues.includes(leagueId)) {
-        totalXG *= 0.80; hXG *= 0.80; aXG *= 0.80;
-      } else if (tightLeagues.includes(leagueId)) {
-        totalXG *= 0.85; hXG *= 0.85; aXG *= 0.85;
-      } else if (goldLeagues.includes(leagueId)) {
-        totalXG *= 1.05;
-      }
+      if (trapLeagues.includes(leagueId)) { totalXG *= 0.80; hXG *= 0.80; aXG *= 0.80; } 
+      else if (tightLeagues.includes(leagueId)) { totalXG *= 0.85; hXG *= 0.85; aXG *= 0.85; } 
+      else if (goldLeagues.includes(leagueId)) { totalXG *= 1.05; }
 
-      const xgGap = Math.abs(hXG - aXG);
-      const weakerSideXG = Math.min(hXG, aXG);
-      const weakerSideSplitXG = Math.min(hSplitXG, aSplitXG);
+      const xgGap = Math.abs(hXG - aXG); const weakerSideXG = Math.min(hXG, aXG); const weakerSideSplitXG = Math.min(hSplitXG, aSplitXG);
 
-      let over25Score =
-        (totalXG * 24) +
-        ((hSplitXG + aSplitXG) * 9) +
-        ((aXGA + hXGA) * 6);
-
+      let over25Score = (totalXG * 24) + ((hSplitXG + aSplitXG) * 9) + ((aXGA + hXGA) * 6);
       if (xgGap > 1.35 && weakerSideXG < 0.85) over25Score -= 14;
       if (weakerSideSplitXG < 0.70) over25Score -= 8;
 
-      let over35Score =
-        (totalXG * 22) +
-        ((hSplitXG + aSplitXG) * 12) +
-        ((aXGA + hXGA) * 10);
-
+      let over35Score = (totalXG * 22) + ((hSplitXG + aSplitXG) * 12) + ((aXGA + hXGA) * 10);
       if (xgGap > 1.25) over35Score -= 18;
       if (weakerSideXG < 1.00) over35Score -= 16;
       if (weakerSideSplitXG < 0.85) over35Score -= 10;
 
-      let bttsScore =
-        (Math.min(hXG, aXG) * 40) +
-        ((hXGA + aXGA) * 12) +
-        (Math.min(hSplitXG, aSplitXG) * 12);
-
+      let bttsScore = (Math.min(hXG, aXG) * 40) + ((hXGA + aXGA) * 12) + (Math.min(hSplitXG, aSplitXG) * 12);
       if (xgGap > 1.15) bttsScore -= 14;
       if (Math.min(hXG, aXG) < 0.75) bttsScore -= 10;
       if (Math.min(hSplitXG, aSplitXG) < 0.65) bttsScore -= 8;
 
       const cards4Score = ((hCards + aCards) * 18) + ((hSplitCards + aSplitCards) * 14);
 
-      return {
-        over25Score: Number(over25Score.toFixed(2)),
-        over35Score: Number(over35Score.toFixed(2)),
-        bttsScore: Number(bttsScore.toFixed(2)),
-        cards4Score: Number(cards4Score.toFixed(2)),
-        adjTotalXG: Number(totalXG.toFixed(2)),
-        xgGap: Number(xgGap.toFixed(2)),
-        weakerSideXG: Number(weakerSideXG.toFixed(2))
-      };
+      return { over25Score: Number(over25Score.toFixed(2)), over35Score: Number(over35Score.toFixed(2)), bttsScore: Number(bttsScore.toFixed(2)), cards4Score: Number(cards4Score.toFixed(2)), adjTotalXG: Number(totalXG.toFixed(2)), xgGap: Number(xgGap.toFixed(2)), weakerSideXG: Number(weakerSideXG.toFixed(2)) };
     }
 
     function getMarketSignals(scores, hStats, aStats) {
-      const hXG = safeNum(hStats.formXG);
-      const aXG = safeNum(aStats.formXG);
-
-      const strongOver25 =
-        scores.over25Score >= OVER25_SCORE_THRESHOLD &&
-        scores.adjTotalXG >= OVER25_TOTALXG_THRESHOLD &&
-        !(Math.abs(hXG - aXG) > 1.35 && Math.min(hXG, aXG) < 0.85);
-
-      const strongOver35 =
-        scores.over35Score >= OVER35_SCORE_THRESHOLD &&
-        scores.adjTotalXG >= OVER35_TOTALXG_THRESHOLD &&
-        hXG >= 1.35 &&
-        aXG >= 1.15;
-
-      const strongBTTS =
-        scores.bttsScore >= BTTS_SCORE_THRESHOLD &&
-        Math.min(hXG, aXG) >= 0.75;
-
-      return {
-        over25: strongOver25,
-        over35: strongOver35,
-        btts: strongBTTS
-      };
+      const hXG = safeNum(hStats.formXG); const aXG = safeNum(aStats.formXG);
+      const strongOver25 = scores.over25Score >= OVER25_SCORE_THRESHOLD && scores.adjTotalXG >= OVER25_TOTALXG_THRESHOLD && !(Math.abs(hXG - aXG) > 1.35 && Math.min(hXG, aXG) < 0.85);
+      const strongOver35 = scores.over35Score >= OVER35_SCORE_THRESHOLD && scores.adjTotalXG >= OVER35_TOTALXG_THRESHOLD && hXG >= 1.35 && aXG >= 1.15;
+      const strongBTTS = scores.bttsScore >= BTTS_SCORE_THRESHOLD && Math.min(hXG, aXG) >= 0.75;
+      return { over25: strongOver25, over35: strongOver35, btts: strongBTTS };
     }
 
     function generateOmegaPick(hStats, aStats, leagueId) {
       const scores = computeMarketScores(hStats, aStats, leagueId);
-      const hXG = safeNum(hStats.formXG);
-      const aXG = safeNum(aStats.formXG);
+      const hXG = safeNum(hStats.formXG); const aXG = safeNum(aStats.formXG);
       const signals = getMarketSignals(scores, hStats, aStats);
 
-      if (!Number.isFinite(scores.adjTotalXG) || scores.adjTotalXG < 0.90) {
-        return {
-          pick: "⚠️ NO DATA (ΑΓΝΟΗΣΕ ΤΟ ΜΑΤΣ)",
-          reason: "Το σύστημα της API δεν έχει προσκομίσει επαρκή στατιστικά xG για αυτές τις ομάδες.",
-          noBet: true
-        };
-      }
-
+      if (!Number.isFinite(scores.adjTotalXG) || scores.adjTotalXG < 0.90) return { pick: "⚠️ NO DATA (ΑΓΝΟΗΣΕ ΤΟ ΜΑΤΣ)", reason: "Το σύστημα της API δεν έχει προσκομίσει επαρκή στατιστικά xG για αυτές τις ομάδες.", noBet: true };
+      
       let pick = "", reason = "", noBet = false;
-
-      if (signals.over35) {
-        pick = "🚀 OVER 3.5 GOALS";
-        reason = `Recalibrated high-scoring signal. Adjusted xG: ${scores.adjTotalXG.toFixed(2)} | Score: ${scores.over35Score}`;
-      } else if (signals.over25) {
-        pick = "🔥 OVER 2.5 GOALS";
-        reason = `Strong goal profile after imbalance filtering. Adjusted xG: ${scores.adjTotalXG.toFixed(2)} | Score: ${scores.over25Score}`;
-      } else if (signals.btts) {
-        pick = "🎯 GOAL/GOAL (BTTS)";
-        reason = `Balanced attacking profile with acceptable weaker-side xG. Score: ${scores.bttsScore}`;
-      } else if (hXG > (aXG + 1.20) && safeNum(hStats.splitXG) > 1.80) {
-        pick = "🏠 ΑΣΟΣ (1)";
-        reason = `Ξεκάθαρη εντός έδρας υπεροχή (Split xG Εντός: ${hStats.splitXG}).`;
-      } else if (aXG > (hXG + 1.10) && safeNum(aStats.splitXG) > 1.65) {
-        pick = "✈️ ΔΙΠΛΟ (2)";
-        reason = `Η φιλοξενούμενη εμφανίζει καθαρή επιθετική υπεροχή και σταθερό εκτός έδρας split.`;
-      } else if (scores.cards4Score >= 95) {
-        pick = "🟨 OVER 4 ΚΑΡΤΕΣ";
-        reason = `Υψηλή ένταση και πειθαρχικό ρίσκο. Cards Score: ${scores.cards4Score}`;
-      } else if (scores.adjTotalXG < 2.10) {
-        pick = "🛡️ UNDER 2.5 GOALS";
-        reason = `Συντηρητικό προφίλ με χαμηλό adjusted xG (${scores.adjTotalXG.toFixed(2)}).`;
-      } else {
-        pick = "⚖️ NO BET (ΑΠΟΧΗ)";
-        reason = `Δεν υπάρχει καθαρό μαθηματικό edge μετά το recalibration.`;
-        noBet = true;
-      }
-
+      if (signals.over35) { pick = "🚀 OVER 3.5 GOALS"; reason = `Recalibrated high-scoring signal. Adjusted xG: ${scores.adjTotalXG.toFixed(2)} | Score: ${scores.over35Score}`; } 
+      else if (signals.over25) { pick = "🔥 OVER 2.5 GOALS"; reason = `Strong goal profile after imbalance filtering. Adjusted xG: ${scores.adjTotalXG.toFixed(2)} | Score: ${scores.over25Score}`; } 
+      else if (signals.btts) { pick = "🎯 GOAL/GOAL (BTTS)"; reason = `Balanced attacking profile with acceptable weaker-side xG. Score: ${scores.bttsScore}`; } 
+      else if (hXG > (aXG + 1.20) && safeNum(hStats.splitXG) > 1.80) { pick = "🏠 ΑΣΟΣ (1)"; reason = `Ξεκάθαρη εντός έδρας υπεροχή (Split xG Εντός: ${hStats.splitXG}).`; } 
+      else if (aXG > (hXG + 1.10) && safeNum(aStats.splitXG) > 1.65) { pick = "✈️ ΔΙΠΛΟ (2)"; reason = `Η φιλοξενούμενη εμφανίζει καθαρή επιθετική υπεροχή και σταθερό εκτός έδρας split.`; } 
+      else if (scores.cards4Score >= 95) { pick = "🟨 OVER 4 ΚΑΡΤΕΣ"; reason = `Υψηλή ένταση και πειθαρχικό ρίσκο. Cards Score: ${scores.cards4Score}`; } 
+      else if (scores.adjTotalXG < 2.10) { pick = "🛡️ UNDER 2.5 GOALS"; reason = `Συντηρητικό προφίλ με χαμηλό adjusted xG (${scores.adjTotalXG.toFixed(2)}).`; } 
+      else { pick = "⚖️ NO BET (ΑΠΟΧΗ)"; reason = `Δεν υπάρχει καθαρό μαθηματικό edge μετά το recalibration.`; noBet = true; }
       return { pick, reason, noBet };
     }
 
-    function bucketGoals(exp) {
-      if (exp >= 3.15) return 3;
-      if (exp >= 2.05) return 2;
-      if (exp >= 0.95) return 1;
-      return 0;
-    }
+    function bucketGoals(exp) { if (exp >= 3.15) return 3; if (exp >= 2.05) return 2; if (exp >= 0.95) return 1; return 0; }
 
     function predictExactScoreAndCorners(hStats, aStats) {
-      const hFormXG = safeNum(hStats.formXG);
-      const aFormXG = safeNum(aStats.formXG);
-      const hSplitXG = safeNum(hStats.splitXG);
-      const aSplitXG = safeNum(aStats.splitXG);
-      const hFormXGA = safeNum(hStats.formXGA);
-      const aFormXGA = safeNum(aStats.formXGA);
-      const hCorners = safeNum(hStats.corners);
-      const aCorners = safeNum(aStats.corners);
+      const hFormXG = safeNum(hStats.formXG); const aFormXG = safeNum(aStats.formXG);
+      const hSplitXG = safeNum(hStats.splitXG); const aSplitXG = safeNum(aStats.splitXG);
+      const hFormXGA = safeNum(hStats.formXGA); const aFormXGA = safeNum(aStats.formXGA);
+      const hCorners = safeNum(hStats.corners); const aCorners = safeNum(aStats.corners);
 
       const homeGoalExp = clamp((hFormXG * 0.44) + (hSplitXG * 0.34) + (aFormXGA * 0.22), 0.2, 4.0);
       const awayGoalExp = clamp((aFormXG * 0.44) + (aSplitXG * 0.34) + (hFormXGA * 0.22), 0.2, 4.0);
 
-      let homeGoals = bucketGoals(homeGoalExp);
-      let awayGoals = bucketGoals(awayGoalExp);
-
+      let homeGoals = bucketGoals(homeGoalExp); let awayGoals = bucketGoals(awayGoalExp);
       if (Math.abs(homeGoalExp - awayGoalExp) < 0.22) {
         if (homeGoals > awayGoals) awayGoals = homeGoals;
         else if (awayGoals > homeGoals) homeGoals = awayGoals - 1 >= 0 ? homeGoals : awayGoals;
       }
+      homeGoals = clamp(homeGoals, 0, 4); awayGoals = clamp(awayGoals, 0, 4);
 
-      homeGoals = clamp(homeGoals, 0, 4);
-      awayGoals = clamp(awayGoals, 0, 4);
-
-      const totalCornersExp = clamp(
-        ((hCorners + aCorners) * 0.76) +
-        ((hSplitXG + aSplitXG) * 0.75),
-        5,
-        15
-      );
-
-      const homeCornerShareBase = clamp(
-        (homeGoalExp + hSplitXG + 0.25) / Math.max(homeGoalExp + awayGoalExp + hSplitXG + aSplitXG + 0.5, 0.1),
-        0.38, 0.62
-      );
-
+      const totalCornersExp = clamp(((hCorners + aCorners) * 0.76) + ((hSplitXG + aSplitXG) * 0.75), 5, 15);
+      const homeCornerShareBase = clamp((homeGoalExp + hSplitXG + 0.25) / Math.max(homeGoalExp + awayGoalExp + hSplitXG + aSplitXG + 0.5, 0.1), 0.38, 0.62);
       let homeCornersPred = Math.round(totalCornersExp * homeCornerShareBase);
       let awayCornersPred = Math.round(totalCornersExp - homeCornersPred);
+      if (homeCornersPred < 2) homeCornersPred = 2; if (awayCornersPred < 2) awayCornersPred = 2;
 
-      if (homeCornersPred < 2) homeCornersPred = 2;
-      if (awayCornersPred < 2) awayCornersPred = 2;
-
-      const totalCornersPred = homeCornersPred + awayCornersPred;
-
-      return {
-        homeGoalExp: homeGoalExp.toFixed(2),
-        awayGoalExp: awayGoalExp.toFixed(2),
-        exactScore: `${homeGoals}-${awayGoals}`,
-        totalCorners: totalCornersPred,
-        homeCorners: homeCornersPred,
-        awayCorners: awayCornersPred
-      };
+      return { homeGoalExp: homeGoalExp.toFixed(2), awayGoalExp: awayGoalExp.toFixed(2), exactScore: `${homeGoals}-${awayGoals}`, totalCorners: homeCornersPred + awayCornersPred, homeCorners: homeCornersPred, awayCorners: awayCornersPred };
     }
 
     function buildTipLinks(homeName, awayName) {
       const query = encodeURIComponent(`${homeName} vs ${awayName}`);
-      return {
-        forebet: `https://www.google.com/search?q=site%3Aforebet.com+${query}`,
-        windrawwin: `https://www.google.com/search?q=site%3Awindrawwin.com+${query}`,
-        predictz: `https://www.google.com/search?q=site%3Apredictz.com+${query}`
-      };
+      return { forebet: `https://www.google.com/search?q=site%3Aforebet.com+${query}`, windrawwin: `https://www.google.com/search?q=site%3Awindrawwin.com+${query}`, predictz: `https://www.google.com/search?q=site%3Apredictz.com+${query}` };
     }
 
     function savePredictionSnapshot(m, scores, pred, standings, hStats, aStats) {
       const signals = getMarketSignals(scores, hStats, aStats);
-
-      const record = {
-        fixtureId: m.fixture.id,
-        date: m.fixture.date,
-        scanDate: getTodayISO(),
-        league: m.league.name,
-        leagueId: m.league.id,
-        season: m.league.season,
-        homeTeam: m.teams.home.name,
-        awayTeam: m.teams.away.name,
-        homeRank: getTeamRankFromStandings(standings, m.teams.home.id),
-        awayRank: getTeamRankFromStandings(standings, m.teams.away.id),
-        over25Score: scores.over25Score,
-        over35Score: scores.over35Score,
-        bttsScore: scores.bttsScore,
-        cards4Score: scores.cards4Score,
-        adjTotalXG: scores.adjTotalXG,
-        xgGap: scores.xgGap,
-        exactScorePred: pred.exactScore,
-        cornersPred: pred.totalCorners,
-        homeGoalExp: pred.homeGoalExp,
-        awayGoalExp: pred.awayGoalExp,
-        predOver25: signals.over25,
-        predOver35: signals.over35,
-        predBTTS: signals.btts,
-        savedAt: new Date().toISOString()
-      };
-      upsertPrediction(record);
+      upsertPrediction({ fixtureId: m.fixture.id, date: m.fixture.date, scanDate: getTodayISO(), league: m.league.name, leagueId: m.league.id, season: m.league.season, homeTeam: m.teams.home.name, awayTeam: m.teams.away.name, homeRank: getTeamRankFromStandings(standings, m.teams.home.id), awayRank: getTeamRankFromStandings(standings, m.teams.away.id), over25Score: scores.over25Score, over35Score: scores.over35Score, bttsScore: scores.bttsScore, cards4Score: scores.cards4Score, adjTotalXG: scores.adjTotalXG, xgGap: scores.xgGap, exactScorePred: pred.exactScore, cornersPred: pred.totalCorners, homeGoalExp: pred.homeGoalExp, awayGoalExp: pred.awayGoalExp, predOver25: signals.over25, predOver35: signals.over35, predBTTS: signals.btts, savedAt: new Date().toISOString() });
     }
 
     function buildMatchCard(m, s, scores, standings, h2hSummary) {
       const omega = generateOmegaPick(s.h, s.a, m.league.id);
-      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
-      const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
+      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id); const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
       const tipLinks = buildTipLinks(m.teams.home.name, m.teams.away.name);
       const pred = predictExactScoreAndCorners(s.h, s.a);
-
       savePredictionSnapshot(m, scores, pred, standings, s.h, s.a);
 
       return `
         <div class="cyber-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
-            <div>
-              <span style="background:#222; padding:4px 8px; border-radius:4px;">${escapeHtml(m.fixture.status.short)}</span>
+          <div class="match-header">
+            <div class="match-teams">
+              <span style="background:#222; padding:4px 8px; border-radius:4px; font-size:0.8rem;">${escapeHtml(m.fixture.status.short)}</span>
               <div style="color:var(--gold); font-size:0.72rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
-              <h2 class="orbitron" style="margin:5px 0;">
-                ${escapeHtml(m.teams.home.name)}
-                ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
-              </h2>
-              <h2 class="orbitron" style="margin:2px 0;">
-                ${escapeHtml(m.teams.away.name)}
-                ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
-              </h2>
+              <h2 class="orbitron" style="margin:5px 0;">${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}</h2>
+              <h2 class="orbitron" style="margin:2px 0;">${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}</h2>
             </div>
-            <div style="text-align:right;">
+            <div class="match-scores-badges">
               ${buildFixtureScoreHTML(m)}
               <div class="score-chip" style="margin-top:8px;">O2.5 ${scores.over25Score}</div>
               <div class="score-chip" style="margin-top:6px;">O3.5 ${scores.over35Score}</div>
@@ -1267,24 +738,12 @@
             <div class="section-title" style="font-size:0.86rem; margin-bottom:10px;">🔮 ΠΡΟΒΛΕΨΗ ΑΚΡΙΒΟΥΣ ΣΚΟΡ & ΚΟΡΝΕΡ</div>
             <div class="stats-grid" style="margin-top:0;">
               <div class="team-box">
-                <div class="stat-row">
-                  <span>Πιθανό ακριβές σκορ</span>
-                  <span class="val-split">${pred.exactScore}</span>
-                </div>
-                <div class="stat-row">
-                  <span>Expected Goals</span>
-                  <span class="val-xg">${pred.homeGoalExp} - ${pred.awayGoalExp}</span>
-                </div>
+                <div class="stat-row"><span>Πιθανό ακριβές σκορ</span><span class="val-split">${pred.exactScore}</span></div>
+                <div class="stat-row"><span>Expected Goals</span><span class="val-xg">${pred.homeGoalExp} - ${pred.awayGoalExp}</span></div>
               </div>
               <div class="team-box">
-                <div class="stat-row">
-                  <span>Πρόβλεψη συνολικών κόρνερ</span>
-                  <span class="val-split">${pred.totalCorners}</span>
-                </div>
-                <div class="stat-row">
-                  <span>Κατανομή κόρνερ</span>
-                  <span class="val-xg">${pred.homeCorners} - ${pred.awayCorners}</span>
-                </div>
+                <div class="stat-row"><span>Πρόβλεψη συνολικών κόρνερ</span><span class="val-split">${pred.totalCorners}</span></div>
+                <div class="stat-row"><span>Κατανομή κόρνερ</span><span class="val-xg">${pred.homeCorners} - ${pred.awayCorners}</span></div>
               </div>
             </div>
           </div>
@@ -1307,107 +766,54 @@
 
           <div class="stats-grid">
             <div class="team-box">
-              <div style="color:var(--p); font-size:0.76rem; font-weight:900; margin-bottom:10px;">
-                🏠 ${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
-              </div>
+              <div style="color:var(--p); font-size:0.76rem; font-weight:900; margin-bottom:10px;">🏠 ${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}</div>
               ${(s?.h?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
-              <div class="stat-row" style="margin-top:12px;">
-                <span>Μέσος Όρος Σεζόν:</span>
-                <div><span class="season-xg-red">${s?.h?.seasonXG}</span><span class="season-xga-plain">/ ${s?.h?.seasonXGA}</span></div>
-              </div>
-              <div class="stat-row">
-                <span>xG Υπέρ (Φόρμα):</span>
-                <div><span class="val-xg">${s?.h?.formXG}</span> ${s?.h?.devXG}</div>
-              </div>
-              <div class="stat-row">
-                <span>xGA Κατά:</span>
-                <div><span class="val-xg">${s?.h?.formXGA}</span> ${s?.h?.devXGA}</div>
-              </div>
-              <div class="stat-row">
-                <span>ΜΟΝΟ ΕΝΤΟΣ:</span>
-                <span class="val-split">${s?.h?.splitXG} / ${s?.h?.splitXGA}</span>
-              </div>
-              <div class="stat-row">
-                <span>Κόρνερ:</span>
-                <span style="font-weight:800;">🚩 ${s?.h?.corners}</span>
-              </div>
-              <div class="stat-row">
-                <span>Κάρτες:</span>
-                <span style="font-weight:800;">🟨 ${s?.h?.cards}</span>
-              </div>
+              <div class="stat-row" style="margin-top:12px;"><span>Μέσος Όρος Σεζόν:</span><div><span class="season-xg-red">${s?.h?.seasonXG}</span><span class="season-xga-plain">/ ${s?.h?.seasonXGA}</span></div></div>
+              <div class="stat-row"><span>xG Υπέρ (Φόρμα):</span><div><span class="val-xg">${s?.h?.formXG}</span> ${s?.h?.devXG}</div></div>
+              <div class="stat-row"><span>xGA Κατά:</span><div><span class="val-xg">${s?.h?.formXGA}</span> ${s?.h?.devXGA}</div></div>
+              <div class="stat-row"><span>ΜΟΝΟ ΕΝΤΟΣ:</span><span class="val-split">${s?.h?.splitXG} / ${s?.h?.splitXGA}</span></div>
+              <div class="stat-row"><span>Κόρνερ:</span><span style="font-weight:800;">🚩 ${s?.h?.corners}</span></div>
+              <div class="stat-row"><span>Κάρτες:</span><span style="font-weight:800;">🟨 ${s?.h?.cards}</span></div>
               <div class="minor-row">ΜΟ κάρτες μόνο εντός: ${s?.h?.splitCards}</div>
             </div>
 
             <div class="team-box">
-              <div style="color:var(--magenta); font-size:0.76rem; font-weight:900; margin-bottom:10px;">
-                ✈️ ${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
-              </div>
+              <div style="color:var(--magenta); font-size:0.76rem; font-weight:900; margin-bottom:10px;">✈️ ${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}</div>
               ${(s?.a?.history || []).map(f => `<span class="form-dot form-${f.cls}">${f.res}</span>`).join("")}
-              <div class="stat-row" style="margin-top:12px;">
-                <span>Μέσος Όρος Σεζόν:</span>
-                <div><span class="season-xg-red">${s?.a?.seasonXG}</span><span class="season-xga-plain">/ ${s?.a?.seasonXGA}</span></div>
-              </div>
-              <div class="stat-row">
-                <span>xG Υπέρ (Φόρμα):</span>
-                <div><span class="val-xg">${s?.a?.formXG}</span> ${s?.a?.devXG}</div>
-              </div>
-              <div class="stat-row">
-                <span>xGA Κατά:</span>
-                <div><span class="val-xg">${s?.a?.formXGA}</span> ${s?.a?.devXGA}</div>
-              </div>
-              <div class="stat-row">
-                <span>ΜΟΝΟ ΕΚΤΟΣ:</span>
-                <span class="val-split">${s?.a?.splitXG} / ${s?.a?.splitXGA}</span>
-              </div>
-              <div class="stat-row">
-                <span>Κόρνερ:</span>
-                <span style="font-weight:800;">🚩 ${s?.a?.corners}</span>
-              </div>
-              <div class="stat-row">
-                <span>Κάρτες:</span>
-                <span style="font-weight:800;">🟨 ${s?.a?.cards}</span>
-              </div>
+              <div class="stat-row" style="margin-top:12px;"><span>Μέσος Όρος Σεζόν:</span><div><span class="season-xg-red">${s?.a?.seasonXG}</span><span class="season-xga-plain">/ ${s?.a?.seasonXGA}</span></div></div>
+              <div class="stat-row"><span>xG Υπέρ (Φόρμα):</span><div><span class="val-xg">${s?.a?.formXG}</span> ${s?.a?.devXG}</div></div>
+              <div class="stat-row"><span>xGA Κατά:</span><div><span class="val-xg">${s?.a?.formXGA}</span> ${s?.a?.devXGA}</div></div>
+              <div class="stat-row"><span>ΜΟΝΟ ΕΚΤΟΣ:</span><span class="val-split">${s?.a?.splitXG} / ${s?.a?.splitXGA}</span></div>
+              <div class="stat-row"><span>Κόρνερ:</span><span style="font-weight:800;">🚩 ${s?.a?.corners}</span></div>
+              <div class="stat-row"><span>Κάρτες:</span><span style="font-weight:800;">🟨 ${s?.a?.cards}</span></div>
               <div class="minor-row">ΜΟ κάρτες μόνο εκτός: ${s?.a?.splitCards}</div>
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     function buildLiveCard(m, s, standings, h2hSummary) {
-      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
-      const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
-
-      const homeShots = safeNum(s?.h?.shots);
-      const awayShots = safeNum(s?.a?.shots);
-      const homeDanger = safeNum(s?.h?.danger);
-      const awayDanger = safeNum(s?.a?.danger);
-      const homeCorners = safeNum(s?.h?.corners);
-      const awayCorners = safeNum(s?.a?.corners);
+      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id); const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
+      const homeShots = safeNum(s?.h?.shots); const awayShots = safeNum(s?.a?.shots);
+      const homeDanger = safeNum(s?.h?.danger); const awayDanger = safeNum(s?.a?.danger);
+      const homeCorners = safeNum(s?.h?.corners); const awayCorners = safeNum(s?.a?.corners);
 
       const liveHomeExp = clamp((homeShots * 0.22) + (homeDanger * 0.012), 0, 4.5);
       const liveAwayExp = clamp((awayShots * 0.22) + (awayDanger * 0.012), 0, 4.5);
-
       const livePredHome = clamp(Math.round(Math.max((m.goals.home ?? 0), liveHomeExp)), 0, 6);
       const livePredAway = clamp(Math.round(Math.max((m.goals.away ?? 0), liveAwayExp)), 0, 6);
       const liveCornersPred = Math.max(homeCorners + awayCorners, Math.round((homeCorners + awayCorners) * 1.22));
 
       return `
         <div class="cyber-card live-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
-            <div>
+          <div class="match-header">
+            <div class="match-teams">
               <span class="live-chip">${escapeHtml(m.fixture.status.short)} ${m.fixture.status.elapsed || 0}'</span>
               <div style="color:var(--gold); font-size:0.72rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
-              <h2 class="orbitron" style="margin:5px 0;">
-                ${escapeHtml(m.teams.home.name)}
-                ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
-              </h2>
-              <h2 class="orbitron" style="margin:2px 0;">
-                ${escapeHtml(m.teams.away.name)}
-                ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
-              </h2>
+              <h2 class="orbitron" style="margin:5px 0;">${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}</h2>
+              <h2 class="orbitron" style="margin:2px 0;">${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}</h2>
             </div>
-            <div style="text-align:right;">
+            <div class="match-scores-badges">
               ${buildFixtureScoreHTML(m)}
             </div>
           </div>
@@ -1416,48 +822,31 @@
             <div class="section-title" style="font-size:0.86rem; margin-bottom:10px;">🔴 LIVE ΠΡΟΒΛΕΨΗ ΤΕΛΙΚΟΥ ΣΚΟΡ & ΚΟΡΝΕΡ</div>
             <div class="stats-grid" style="margin-top:0;">
               <div class="team-box">
-                <div class="stat-row">
-                  <span>Live πρόβλεψη τελικού σκορ</span>
-                  <span class="val-split">${livePredHome}-${livePredAway}</span>
-                </div>
+                <div class="stat-row"><span>Live πρόβλεψη τελικού σκορ</span><span class="val-split">${livePredHome}-${livePredAway}</span></div>
               </div>
               <div class="team-box">
-                <div class="stat-row">
-                  <span>Live πρόβλεψη τελικών κόρνερ</span>
-                  <span class="val-split">${liveCornersPred}</span>
-                </div>
+                <div class="stat-row"><span>Live πρόβλεψη τελικών κόρνερ</span><span class="val-split">${liveCornersPred}</span></div>
               </div>
             </div>
           </div>
 
           <div class="h2h-box" style="margin-top:14px;">
             <div class="h2h-title">📚 ΠΡΟΪΣΤΟΡΙΑ (H2H)</div>
-            <div class="h2h-line">
-              ${escapeHtml(m.teams.home.name)} νίκες: <strong>${h2hSummary?.homeWins ?? 0}</strong>
-              &nbsp; | &nbsp;
-              Ισοπαλίες: <strong>${h2hSummary?.draws ?? 0}</strong>
-              &nbsp; | &nbsp;
-              ${escapeHtml(m.teams.away.name)} νίκες: <strong>${h2hSummary?.awayWins ?? 0}</strong>
-            </div>
+            <div class="h2h-line">${escapeHtml(m.teams.home.name)} νίκες: <strong>${h2hSummary?.homeWins ?? 0}</strong> &nbsp; | &nbsp; Ισοπαλίες: <strong>${h2hSummary?.draws ?? 0}</strong> &nbsp; | &nbsp; ${escapeHtml(m.teams.away.name)} νίκες: <strong>${h2hSummary?.awayWins ?? 0}</strong></div>
             <div class="h2h-line">Τελευταία σκορ: <strong>${(h2hSummary?.lastResults || []).join(", ") || "-"}</strong></div>
           </div>
 
           <div class="stats-grid">
             <div class="team-box">
-              <div style="color:var(--p); font-weight:900; margin-bottom:10px;">
-                🏠 LIVE HOME ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}
-              </div>
+              <div style="color:var(--p); font-weight:900; margin-bottom:10px;">🏠 LIVE HOME ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}</div>
               <div class="stat-row"><span>Κατοχή</span><span class="val-xg">${s?.h?.poss ?? 0}%</span></div>
               <div class="stat-row"><span>Σουτ στην εστία</span><span class="val-xg">${s?.h?.shots ?? 0}</span></div>
               <div class="stat-row"><span>Επικίνδυνες επιθέσεις</span><span class="val-xg">${s?.h?.danger ?? 0}</span></div>
               <div class="stat-row"><span>Κόρνερ</span><span>🚩 ${s?.h?.corners ?? 0}</span></div>
               <div class="stat-row"><span>Κάρτες</span><span>🟨 ${s?.h?.yellow ?? 0} | 🟥 ${s?.h?.red ?? 0}</span></div>
             </div>
-
             <div class="team-box">
-              <div style="color:var(--magenta); font-weight:900; margin-bottom:10px;">
-                ✈️ LIVE AWAY ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}
-              </div>
+              <div style="color:var(--magenta); font-weight:900; margin-bottom:10px;">✈️ LIVE AWAY ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}</div>
               <div class="stat-row"><span>Κατοχή</span><span class="val-xg">${s?.a?.poss ?? 0}%</span></div>
               <div class="stat-row"><span>Σουτ στην εστία</span><span class="val-xg">${s?.a?.shots ?? 0}</span></div>
               <div class="stat-row"><span>Επικίνδυνες επιθέσεις</span><span class="val-xg">${s?.a?.danger ?? 0}</span></div>
@@ -1465,273 +854,77 @@
               <div class="stat-row"><span>Κάρτες</span><span>🟨 ${s?.a?.yellow ?? 0} | 🟥 ${s?.a?.red ?? 0}</span></div>
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     function rankItemHTML(item, idx, label, scoreKey) {
-      return `
-        <div class="rank-card">
-          <div class="rank-head">
-            <div><span class="rank-badge">#${idx + 1} ${label}</span></div>
-            <div class="score-chip">${item[scoreKey]}</div>
-          </div>
-          <div style="font-weight:800;">
-            ${escapeHtml(item.homeTeam)} ${item.homeRank ? `<span class="standing-pill">#${item.homeRank}</span>` : ""}
-            vs
-            ${escapeHtml(item.awayTeam)} ${item.awayRank ? `<span class="standing-pill">#${item.awayRank}</span>` : ""}
-          </div>
-          <div style="color:var(--txt-muted); font-size:0.8rem; margin-top:4px;">${escapeHtml(item.league)}</div>
-        </div>
-      `;
+      return `<div class="rank-card"><div class="rank-head"><div><span class="rank-badge">#${idx + 1} ${label}</span></div><div class="score-chip">${item[scoreKey]}</div></div><div style="font-weight:800;">${escapeHtml(item.homeTeam)} ${item.homeRank ? `<span class="standing-pill">#${item.homeRank}</span>` : ""} vs ${escapeHtml(item.awayTeam)} ${item.awayRank ? `<span class="standing-pill">#${item.awayRank}</span>` : ""}</div><div style="color:var(--txt-muted); font-size:0.8rem; margin-top:4px;">${escapeHtml(item.league)}</div></div>`;
     }
 
     function renderTopSections() {
       document.getElementById("topSection").innerHTML = `
-        <div class="section-panel">
-          <div class="section-title">🏆 TOP 5 OVER 2.5</div>
-          <div class="top-list">
-            ${latestTopLists.over25.map((x, i) => rankItemHTML(x, i, "OVER 2.5", "over25Score")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}
-          </div>
-        </div>
-
-        <div class="section-panel">
-          <div class="section-title">🚀 TOP 5 OVER 3.5</div>
-          <div class="top-list">
-            ${latestTopLists.over35.map((x, i) => rankItemHTML(x, i, "OVER 3.5", "over35Score")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}
-          </div>
-        </div>
-
-        <div class="section-panel">
-          <div class="section-title">🎯 TOP 5 BTTS</div>
-          <div class="top-list">
-            ${latestTopLists.btts.map((x, i) => rankItemHTML(x, i, "BTTS", "bttsScore")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}
-          </div>
-        </div>
-
-        <div class="section-panel">
-          <div class="section-title">🟨 TOP 5 OVER 4 ΚΑΡΤΕΣ</div>
-          <div class="top-list">
-            ${latestTopLists.cards4.map((x, i) => rankItemHTML(x, i, "OVER 4 ΚΑΡΤΕΣ", "cards4Score")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}
-          </div>
-        </div>
-      `;
+        <div class="section-panel"><div class="section-title">🏆 TOP 5 OVER 2.5</div><div class="top-list">${latestTopLists.over25.map((x, i) => rankItemHTML(x, i, "OVER 2.5", "over25Score")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}</div></div>
+        <div class="section-panel"><div class="section-title">🚀 TOP 5 OVER 3.5</div><div class="top-list">${latestTopLists.over35.map((x, i) => rankItemHTML(x, i, "OVER 3.5", "over35Score")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}</div></div>
+        <div class="section-panel"><div class="section-title">🎯 TOP 5 BTTS</div><div class="top-list">${latestTopLists.btts.map((x, i) => rankItemHTML(x, i, "BTTS", "bttsScore")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}</div></div>
+        <div class="section-panel"><div class="section-title">🟨 TOP 5 OVER 4 ΚΑΡΤΕΣ</div><div class="top-list">${latestTopLists.cards4.map((x, i) => rankItemHTML(x, i, "OVER 4 ΚΑΡΤΕΣ", "cards4Score")).join("") || '<div style="color:var(--txt-muted);">Δεν υπάρχουν δεδομένα.</div>'}</div></div>`;
     }
 
     function buildWallBet() {
-      const candidates = [
-        ...latestTopLists.over25.map(x => ({ ...x, market: "OVER 2.5", mainScore: x.over25Score })),
-        ...latestTopLists.over35.map(x => ({ ...x, market: "OVER 3.5", mainScore: x.over35Score })),
-        ...latestTopLists.btts.map(x => ({ ...x, market: "BTTS", mainScore: x.bttsScore })),
-        ...latestTopLists.cards4.map(x => ({ ...x, market: "OVER 4 ΚΑΡΤΕΣ", mainScore: x.cards4Score }))
-      ];
-
-      const unique = [];
-      const used = new Set();
-
-      for (const c of candidates.sort((a, b) => b.mainScore - a.mainScore)) {
-        const key = `${c.fixtureId}_${c.market}`;
-        if (used.has(key)) continue;
-        used.add(key);
-        unique.push(c);
-      }
-
+      const candidates = [...latestTopLists.over25.map(x => ({ ...x, market: "OVER 2.5", mainScore: x.over25Score })), ...latestTopLists.over35.map(x => ({ ...x, market: "OVER 3.5", mainScore: x.over35Score })), ...latestTopLists.btts.map(x => ({ ...x, market: "BTTS", mainScore: x.bttsScore })), ...latestTopLists.cards4.map(x => ({ ...x, market: "OVER 4 ΚΑΡΤΕΣ", mainScore: x.cards4Score }))];
+      const unique = []; const used = new Set();
+      for (const c of candidates.sort((a, b) => b.mainScore - a.mainScore)) { const key = `${c.fixtureId}_${c.market}`; if (used.has(key)) continue; used.add(key); unique.push(c); }
       if (unique.length < 2) return null;
-
-      const leg1 = unique[0];
-      const leg2 = unique.find(x => x.fixtureId !== leg1.fixtureId) || unique[1];
+      const leg1 = unique[0]; const leg2 = unique.find(x => x.fixtureId !== leg1.fixtureId) || unique[1];
       if (!leg2) return null;
-
-      const estimatedScore = Number((leg1.mainScore + leg2.mainScore).toFixed(2));
-      return {
-        date: getTodayISO(),
-        stake: safeNum(document.getElementById("wallbetStake")?.value, 10),
-        legs: [leg1, leg2],
-        estimatedScore
-      };
+      return { date: getTodayISO(), stake: safeNum(document.getElementById("wallbetStake")?.value, 10), legs: [leg1, leg2], estimatedScore: Number((leg1.mainScore + leg2.mainScore).toFixed(2)) };
     }
 
     function renderWallBet() {
       latestWallBet = buildWallBet();
-
-      if (!latestWallBet) {
-        document.getElementById("wallbetSection").innerHTML = `
-          <div class="section-panel">
-            <div class="wallbet-title">🧱 WALLBET ΤΗΣ ΗΜΕΡΑΣ</div>
-            <div style="color:var(--txt-muted);">Δεν βρέθηκαν αρκετά ισχυρές επιλογές.</div>
-          </div>
-        `;
-        return;
-      }
-
-      document.getElementById("wallbetSection").innerHTML = `
-        <div class="section-panel wallbet-box">
-          <div class="wallbet-title">🧱 WALLBET ΤΗΣ ΗΜΕΡΑΣ</div>
-          ${latestWallBet.legs.map((leg, i) => `
-            <div class="wallbet-leg">
-              <div style="font-weight:900; color:var(--gold); margin-bottom:6px;">Leg ${i + 1}: ${escapeHtml(leg.market)}</div>
-              <div style="font-weight:800;">
-                ${escapeHtml(leg.homeTeam)} ${leg.homeRank ? `<span class="standing-pill">#${leg.homeRank}</span>` : ""}
-                vs
-                ${escapeHtml(leg.awayTeam)} ${leg.awayRank ? `<span class="standing-pill">#${leg.awayRank}</span>` : ""}
-              </div>
-              <div style="color:var(--txt-muted); font-size:0.82rem; margin-top:4px;">${escapeHtml(leg.league)}</div>
-              <div style="margin-top:6px;" class="score-chip">Score ${leg.mainScore}</div>
-            </div>
-          `).join("")}
-          <div style="margin-top:10px; font-weight:800;">
-            Stake: <span style="color:var(--p);">${latestWallBet.stake.toFixed(2)}</span>
-            &nbsp; | &nbsp;
-            Combined Strength: <span style="color:var(--gold);">${latestWallBet.estimatedScore}</span>
-          </div>
-        </div>
-      `;
+      if (!latestWallBet) { document.getElementById("wallbetSection").innerHTML = `<div class="section-panel"><div class="wallbet-title">🧱 WALLBET ΤΗΣ ΗΜΕΡΑΣ</div><div style="color:var(--txt-muted);">Δεν βρέθηκαν αρκετά ισχυρές επιλογές.</div></div>`; return; }
+      document.getElementById("wallbetSection").innerHTML = `<div class="section-panel wallbet-box"><div class="wallbet-title">🧱 WALLBET ΤΗΣ ΗΜΕΡΑΣ</div>${latestWallBet.legs.map((leg, i) => `<div class="wallbet-leg"><div style="font-weight:900; color:var(--gold); margin-bottom:6px;">Leg ${i + 1}: ${escapeHtml(leg.market)}</div><div style="font-weight:800;">${escapeHtml(leg.homeTeam)} ${leg.homeRank ? `<span class="standing-pill">#${leg.homeRank}</span>` : ""} vs ${escapeHtml(leg.awayTeam)} ${leg.awayRank ? `<span class="standing-pill">#${leg.awayRank}</span>` : ""}</div><div style="color:var(--txt-muted); font-size:0.82rem; margin-top:4px;">${escapeHtml(leg.league)}</div><div style="margin-top:6px;" class="score-chip">Score ${leg.mainScore}</div></div>`).join("")}<div style="margin-top:10px; font-weight:800;">Stake: <span style="color:var(--p);">${latestWallBet.stake.toFixed(2)}</span> &nbsp; | &nbsp; Combined Strength: <span style="color:var(--gold);">${latestWallBet.estimatedScore}</span></div></div>`;
     }
 
     function saveWallBet() {
-      if (!latestWallBet) {
-        showError("Δεν υπάρχει διαθέσιμο WallBet για αποθήκευση.");
-        return;
-      }
-
+      if (!latestWallBet) { showError("Δεν υπάρχει διαθέσιμο WallBet για αποθήκευση."); return; }
       localStorage.setItem(LS_WALLBET_LAST, JSON.stringify(latestWallBet));
-
-      const bank = getWallBetBank();
-      bank.totalBets += 1;
-      bank.stakeSum += safeNum(latestWallBet.stake, 10);
-      saveWallBetBank(bank);
-      renderBankSection();
-      clearError();
-      showSuccess("Το WallBet αποθηκεύτηκε.");
+      const bank = getWallBetBank(); bank.totalBets += 1; bank.stakeSum += safeNum(latestWallBet.stake, 10);
+      saveWallBetBank(bank); renderBankSection(); clearError(); showSuccess("Το WallBet αποθηκεύτηκε.");
     }
 
     function computeClassificationMetrics(rows, predKey, actualKey) {
       let tp = 0, tn = 0, fp = 0, fn = 0;
-
-      for (const r of rows) {
-        const p = !!r[predKey];
-        const a = !!r[actualKey];
-        if (p && a) tp++;
-        else if (!p && !a) tn++;
-        else if (p && !a) fp++;
-        else fn++;
-      }
-
+      for (const r of rows) { const p = !!r[predKey]; const a = !!r[actualKey]; if (p && a) tp++; else if (!p && !a) tn++; else if (p && !a) fp++; else fn++; }
       const total = tp + tn + fp + fn;
-      const accuracy = total > 0 ? ((tp + tn) / total) * 100 : 0;
-      const precision = (tp + fp) > 0 ? (tp / (tp + fp)) * 100 : 0;
-      const recall = (tp + fn) > 0 ? (tp / (tp + fn)) * 100 : 0;
-
-      return {
-        tp, tn, fp, fn,
-        accuracy: accuracy.toFixed(1),
-        precision: precision.toFixed(1),
-        recall: recall.toFixed(1)
-      };
+      return { tp, tn, fp, fn, accuracy: (total > 0 ? ((tp + tn) / total) * 100 : 0).toFixed(1), precision: ((tp + fp) > 0 ? (tp / (tp + fp)) * 100 : 0).toFixed(1), recall: ((tp + fn) > 0 ? (tp / (tp + fn)) * 100 : 0).toFixed(1) };
     }
 
     async function run30DayAudit() {
       if (isRunning) return;
-
-      isRunning = true;
-      clearError();
-      clearSuccess();
-      setButtonsDisabled(true);
-      setLoader(true, "AUDIT 30 ΗΜΕΡΩΝ...");
-
-      document.getElementById("display").innerHTML = "";
-      document.getElementById("topSection").innerHTML = "";
-      document.getElementById("wallbetSection").innerHTML = "";
-
+      isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true); setLoader(true, "AUDIT 30 ΗΜΕΡΩΝ...");
+      document.getElementById("display").innerHTML = ""; document.getElementById("topSection").innerHTML = ""; document.getElementById("wallbetSection").innerHTML = "";
       try {
-        const store = getPredictionStore();
-        const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - 30);
-
+        const store = getPredictionStore(); const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
         const candidates = store.filter(x => new Date(x.date) >= cutoff);
-
-        if (!candidates.length) {
-          document.getElementById("auditSection").innerHTML = `
-            <div class="section-panel">
-              <div class="section-title">📊 AUDIT 30 ΗΜΕΡΩΝ</div>
-              <div style="color:var(--txt-muted);">Δεν υπάρχουν αποθηκευμένες προβλέψεις στο τελευταίο 30ήμερο.</div>
-            </div>
-          `;
-          return;
-        }
-
-        let rows = [];
-        let totals = {
-          games: 0,
-          exactHits: 0,
-          cornersAbsErrorSum: 0,
-          cornersCount: 0
-        };
-
+        if (!candidates.length) { document.getElementById("auditSection").innerHTML = `<div class="section-panel"><div class="section-title">📊 AUDIT 30 ΗΜΕΡΩΝ</div><div style="color:var(--txt-muted);">Δεν υπάρχουν αποθηκευμένες προβλέψεις στο τελευταίο 30ήμερο.</div></div>`; return; }
+        let rows = []; let totals = { games: 0, exactHits: 0, cornersAbsErrorSum: 0, cornersCount: 0 };
         for (let i = 0; i < candidates.length; i++) {
-          const p = candidates[i];
-          setProgress(Math.round(((i + 1) / candidates.length) * 100), `AUDIT: ${p.homeTeam} vs ${p.awayTeam}`);
-
-          const fixtureResp = await apiReq(`fixtures?id=${p.fixtureId}`);
-          const fixture = fixtureResp?.response?.[0];
+          const p = candidates[i]; setProgress(Math.round(((i + 1) / candidates.length) * 100), `AUDIT: ${p.homeTeam} vs ${p.awayTeam}`);
+          const fixtureResp = await apiReq(`fixtures?id=${p.fixtureId}`); const fixture = fixtureResp?.response?.[0];
           if (!fixture || !isFinishedStatus(fixture?.fixture?.status?.short)) continue;
-
-          const actualHome = safeNum(fixture?.goals?.home);
-          const actualAway = safeNum(fixture?.goals?.away);
-          const actualTotal = actualHome + actualAway;
-          const actualBTTS = actualHome > 0 && actualAway > 0;
-          const actualExact = `${actualHome}-${actualAway}`;
-
-          const statsResp = await getFixtureStats(p.fixtureId);
-          let actualCorners = null;
+          const actualHome = safeNum(fixture?.goals?.home); const actualAway = safeNum(fixture?.goals?.away);
+          const actualTotal = actualHome + actualAway; const actualBTTS = actualHome > 0 && actualAway > 0; const actualExact = `${actualHome}-${actualAway}`;
+          const statsResp = await getFixtureStats(p.fixtureId); let actualCorners = null;
           if (statsResp?.response && statsResp.response.length >= 2) {
-            const hObj = statsResp.response.find(x => x.team?.id === fixture?.teams?.home?.id);
-            const aObj = statsResp.response.find(x => x.team?.id === fixture?.teams?.away?.id);
-            const h = hObj?.statistics || [];
-            const a = aObj?.statistics || [];
-            actualCorners = statVal(h, "Corner Kicks") + statVal(a, "Corner Kicks");
+            const hObj = statsResp.response.find(x => x.team?.id === fixture?.teams?.home?.id); const aObj = statsResp.response.find(x => x.team?.id === fixture?.teams?.away?.id);
+            actualCorners = statVal(hObj?.statistics || [], "Corner Kicks") + statVal(aObj?.statistics || [], "Corner Kicks");
           }
-
-          const hitExact = String(p.exactScorePred) === actualExact;
-          let cornersError = null;
-          if (actualCorners != null && Number.isFinite(actualCorners)) {
-            cornersError = Math.abs(safeNum(p.cornersPred) - actualCorners);
-            totals.cornersAbsErrorSum += cornersError;
-            totals.cornersCount += 1;
-          }
-
-          totals.games += 1;
-          if (hitExact) totals.exactHits += 1;
-
-          rows.push({
-            date: p.date?.slice(0, 10) || "",
-            league: p.league,
-            match: `${p.homeTeam} vs ${p.awayTeam}`,
-            predOver25: !!p.predOver25,
-            actualOver25: actualTotal > 2.5,
-            predOver35: !!p.predOver35,
-            actualOver35: actualTotal > 3.5,
-            predBTTS: !!p.predBTTS,
-            actualBTTS: actualBTTS,
-            predExact: p.exactScorePred,
-            actualExact,
-            hitExact,
-            predCorners: p.cornersPred,
-            actualCorners: actualCorners == null ? "-" : actualCorners,
-            cornersError: cornersError == null ? "-" : cornersError.toFixed(1)
-          });
+          const hitExact = String(p.exactScorePred) === actualExact; let cornersError = null;
+          if (actualCorners != null && Number.isFinite(actualCorners)) { cornersError = Math.abs(safeNum(p.cornersPred) - actualCorners); totals.cornersAbsErrorSum += cornersError; totals.cornersCount += 1; }
+          totals.games += 1; if (hitExact) totals.exactHits += 1;
+          rows.push({ date: p.date?.slice(0, 10) || "", league: p.league, match: `${p.homeTeam} vs ${p.awayTeam}`, predOver25: !!p.predOver25, actualOver25: actualTotal > 2.5, predOver35: !!p.predOver35, actualOver35: actualTotal > 3.5, predBTTS: !!p.predBTTS, actualBTTS: actualBTTS, predExact: p.exactScorePred, actualExact, hitExact, predCorners: p.cornersPred, actualCorners: actualCorners == null ? "-" : actualCorners, cornersError: cornersError == null ? "-" : cornersError.toFixed(1) });
         }
-
-        if (!totals.games) {
-          document.getElementById("auditSection").innerHTML = `
-            <div class="section-panel">
-              <div class="section-title">📊 AUDIT 30 ΗΜΕΡΩΝ</div>
-              <div style="color:var(--txt-muted);">Δεν βρέθηκαν ολοκληρωμένοι αγώνες για αξιολόγηση.</div>
-            </div>
-          `;
-          return;
-        }
-
+        if (!totals.games) { document.getElementById("auditSection").innerHTML = `<div class="section-panel"><div class="section-title">📊 AUDIT 30 ΗΜΕΡΩΝ</div><div style="color:var(--txt-muted);">Δεν βρέθηκαν ολοκληρωμένοι αγώνες για αξιολόγηση.</div></div>`; return; }
         const over25Metrics = computeClassificationMetrics(rows, "predOver25", "actualOver25");
         const over35Metrics = computeClassificationMetrics(rows, "predOver35", "actualOver35");
         const bttsMetrics = computeClassificationMetrics(rows, "predBTTS", "actualBTTS");
@@ -1741,346 +934,91 @@
         document.getElementById("auditSection").innerHTML = `
           <div class="section-panel">
             <div class="section-title">📊 ADVANCED AUDIT 30 ΗΜΕΡΩΝ</div>
-
             <div class="bank-grid" style="margin-bottom:16px;">
-              <div class="bank-box">
-                <div class="bank-label">Αγώνες</div>
-                <div class="bank-value">${totals.games}</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">Exact Score Hit Rate</div>
-                <div class="bank-value">${exactAcc}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">Corners MAE</div>
-                <div class="bank-value">${cornersMae}</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">Stored Predictions</div>
-                <div class="bank-value">${getPredictionStore().length}</div>
-              </div>
+              <div class="bank-box"><div class="bank-label">Αγώνες</div><div class="bank-value">${totals.games}</div></div>
+              <div class="bank-box"><div class="bank-label">Exact Score Hit Rate</div><div class="bank-value">${exactAcc}%</div></div>
+              <div class="bank-box"><div class="bank-label">Corners MAE</div><div class="bank-value">${cornersMae}</div></div>
+              <div class="bank-box"><div class="bank-label">Stored Predictions</div><div class="bank-value">${getPredictionStore().length}</div></div>
             </div>
-
             <div class="bank-grid" style="margin-bottom:16px;">
-              <div class="bank-box">
-                <div class="bank-label">O2.5 Accuracy</div>
-                <div class="bank-value">${over25Metrics.accuracy}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">O2.5 Precision</div>
-                <div class="bank-value">${over25Metrics.precision}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">O2.5 Recall</div>
-                <div class="bank-value">${over25Metrics.recall}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">O2.5 FP / FN</div>
-                <div class="bank-value">${over25Metrics.fp}/${over25Metrics.fn}</div>
-              </div>
+              <div class="bank-box"><div class="bank-label">O2.5 Accuracy</div><div class="bank-value">${over25Metrics.accuracy}%</div></div>
+              <div class="bank-box"><div class="bank-label">O2.5 Precision</div><div class="bank-value">${over25Metrics.precision}%</div></div>
+              <div class="bank-box"><div class="bank-label">O2.5 Recall</div><div class="bank-value">${over25Metrics.recall}%</div></div>
+              <div class="bank-box"><div class="bank-label">O2.5 FP / FN</div><div class="bank-value">${over25Metrics.fp}/${over25Metrics.fn}</div></div>
             </div>
-
-            <div class="bank-grid" style="margin-bottom:16px;">
-              <div class="bank-box">
-                <div class="bank-label">O3.5 Accuracy</div>
-                <div class="bank-value">${over35Metrics.accuracy}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">O3.5 Precision</div>
-                <div class="bank-value">${over35Metrics.precision}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">O3.5 Recall</div>
-                <div class="bank-value">${over35Metrics.recall}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">O3.5 FP / FN</div>
-                <div class="bank-value">${over35Metrics.fp}/${over35Metrics.fn}</div>
-              </div>
-            </div>
-
-            <div class="bank-grid" style="margin-bottom:16px;">
-              <div class="bank-box">
-                <div class="bank-label">BTTS Accuracy</div>
-                <div class="bank-value">${bttsMetrics.accuracy}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">BTTS Precision</div>
-                <div class="bank-value">${bttsMetrics.precision}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">BTTS Recall</div>
-                <div class="bank-value">${bttsMetrics.recall}%</div>
-              </div>
-              <div class="bank-box">
-                <div class="bank-label">BTTS FP / FN</div>
-                <div class="bank-value">${bttsMetrics.fp}/${bttsMetrics.fn}</div>
-              </div>
-            </div>
-
             <div class="audit-table-wrap">
               <table class="audit-table">
-                <thead>
-                  <tr>
-                    <th>Ημ/νία</th>
-                    <th>Λίγκα</th>
-                    <th>Ματς</th>
-                    <th>O2.5 Pred</th>
-                    <th>O2.5 Act</th>
-                    <th>Hit</th>
-                    <th>O3.5 Pred</th>
-                    <th>O3.5 Act</th>
-                    <th>Hit</th>
-                    <th>BTTS Pred</th>
-                    <th>BTTS Act</th>
-                    <th>Hit</th>
-                    <th>Exact Pred</th>
-                    <th>Exact Act</th>
-                    <th>Hit</th>
-                    <th>Corners Pred</th>
-                    <th>Corners Act</th>
-                    <th>Error</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${rows.map(r => `
-                    <tr>
-                      <td>${escapeHtml(r.date)}</td>
-                      <td>${escapeHtml(r.league)}</td>
-                      <td>${escapeHtml(r.match)}</td>
-                      <td>${r.predOver25 ? "YES" : "NO"}</td>
-                      <td>${r.actualOver25 ? "YES" : "NO"}</td>
-                      <td class="${r.predOver25 === r.actualOver25 ? 'audit-hit' : 'audit-miss'}">${r.predOver25 === r.actualOver25 ? 'YES' : 'NO'}</td>
-                      <td>${r.predOver35 ? "YES" : "NO"}</td>
-                      <td>${r.actualOver35 ? "YES" : "NO"}</td>
-                      <td class="${r.predOver35 === r.actualOver35 ? 'audit-hit' : 'audit-miss'}">${r.predOver35 === r.actualOver35 ? 'YES' : 'NO'}</td>
-                      <td>${r.predBTTS ? "YES" : "NO"}</td>
-                      <td>${r.actualBTTS ? "YES" : "NO"}</td>
-                      <td class="${r.predBTTS === r.actualBTTS ? 'audit-hit' : 'audit-miss'}">${r.predBTTS === r.actualBTTS ? 'YES' : 'NO'}</td>
-                      <td>${escapeHtml(r.predExact)}</td>
-                      <td>${escapeHtml(r.actualExact)}</td>
-                      <td class="${r.hitExact ? 'audit-hit' : 'audit-miss'}">${r.hitExact ? 'YES' : 'NO'}</td>
-                      <td>${escapeHtml(String(r.predCorners))}</td>
-                      <td>${escapeHtml(String(r.actualCorners))}</td>
-                      <td>${escapeHtml(String(r.cornersError))}</td>
-                    </tr>
-                  `).join("")}
-                </tbody>
+                <thead><tr><th>Ημ/νία</th><th>Λίγκα</th><th>Ματς</th><th>O2.5 Pred</th><th>O2.5 Act</th><th>Hit</th><th>O3.5 Pred</th><th>O3.5 Act</th><th>Hit</th><th>BTTS Pred</th><th>BTTS Act</th><th>Hit</th><th>Exact Pred</th><th>Exact Act</th><th>Hit</th><th>Corners Pred</th><th>Corners Act</th><th>Error</th></tr></thead>
+                <tbody>${rows.map(r => `<tr><td>${escapeHtml(r.date)}</td><td>${escapeHtml(r.league)}</td><td>${escapeHtml(r.match)}</td><td>${r.predOver25 ? "YES" : "NO"}</td><td>${r.actualOver25 ? "YES" : "NO"}</td><td class="${r.predOver25 === r.actualOver25 ? 'audit-hit' : 'audit-miss'}">${r.predOver25 === r.actualOver25 ? 'YES' : 'NO'}</td><td>${r.predOver35 ? "YES" : "NO"}</td><td>${r.actualOver35 ? "YES" : "NO"}</td><td class="${r.predOver35 === r.actualOver35 ? 'audit-hit' : 'audit-miss'}">${r.predOver35 === r.actualOver35 ? 'YES' : 'NO'}</td><td>${r.predBTTS ? "YES" : "NO"}</td><td>${r.actualBTTS ? "YES" : "NO"}</td><td class="${r.predBTTS === r.actualBTTS ? 'audit-hit' : 'audit-miss'}">${r.predBTTS === r.actualBTTS ? 'YES' : 'NO'}</td><td>${escapeHtml(r.predExact)}</td><td>${escapeHtml(r.actualExact)}</td><td class="${r.hitExact ? 'audit-hit' : 'audit-miss'}">${r.hitExact ? 'YES' : 'NO'}</td><td>${escapeHtml(String(r.predCorners))}</td><td>${escapeHtml(String(r.actualCorners))}</td><td>${escapeHtml(String(r.cornersError))}</td></tr>`).join("")}</tbody>
               </table>
             </div>
-          </div>
-        `;
-
+          </div>`;
         showSuccess("Ο advanced έλεγχος 30 ημερών ολοκληρώθηκε.");
-      } catch (err) {
-        showError(`Σφάλμα audit: ${err?.message || "Άγνωστο σφάλμα"}`);
-      } finally {
-        setLoader(false);
-        setButtonsDisabled(false);
-        isRunning = false;
-      }
+      } catch (err) { showError(`Σφάλμα audit: ${err?.message || "Άγνωστο σφάλμα"}`); } finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
     }
 
     async function runScan() {
       if (isRunning) return;
-
-      isRunning = true;
-      clearError();
-      clearSuccess();
-      setButtonsDisabled(true);
-      setLoader(true, "ΑΝΑΖΗΤΗΣΗ ΣΗΜΕΙΩΝ ΜΕ ΑΞΙΑ...");
-
-      const display = document.getElementById("display");
-      display.innerHTML = "";
-      document.getElementById("topSection").innerHTML = "";
-      document.getElementById("wallbetSection").innerHTML = "";
-      document.getElementById("auditSection").innerHTML = "";
-
+      isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true); setLoader(true, "ΑΝΑΖΗΤΗΣΗ ΣΗΜΕΙΩΝ ΜΕ ΑΞΙΑ...");
+      const display = document.getElementById("display"); display.innerHTML = ""; document.getElementById("topSection").innerHTML = ""; document.getElementById("wallbetSection").innerHTML = ""; document.getElementById("auditSection").innerHTML = "";
       try {
         const selectedDate = document.getElementById("scanDate").value || getTodayISO();
         const selectedLeague = document.getElementById("leagueFilter").value;
-
         const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
-        let matches = (fixturesResp.response || []).filter(m => {
-          if (selectedLeague === "ALL") return LEAGUES.includes(m.league.id);
-          return m.league.id === parseInt(selectedLeague, 10);
-        });
-
-        matches.sort((a, b) => {
-          const aLive = isLiveStatus(a.fixture.status.short) ? 1 : 0;
-          const bLive = isLiveStatus(b.fixture.status.short) ? 1 : 0;
-          const aFinished = isFinishedStatus(a.fixture.status.short) ? 1 : 0;
-          const bFinished = isFinishedStatus(b.fixture.status.short) ? 1 : 0;
-
-          if (aLive !== bLive) return bLive - aLive;
-          if (aFinished !== bFinished) return bFinished - aFinished;
-          return (a.fixture.timestamp || 0) - (b.fixture.timestamp || 0);
-        });
-
+        let matches = (fixturesResp.response || []).filter(m => selectedLeague === "ALL" ? LEAGUES.includes(m.league.id) : m.league.id === parseInt(selectedLeague, 10));
+        matches.sort((a, b) => { const aLive = isLiveStatus(a.fixture.status.short) ? 1 : 0; const bLive = isLiveStatus(b.fixture.status.short) ? 1 : 0; const aFinished = isFinishedStatus(a.fixture.status.short) ? 1 : 0; const bFinished = isFinishedStatus(b.fixture.status.short) ? 1 : 0; if (aLive !== bLive) return bLive - aLive; if (aFinished !== bFinished) return bFinished - aFinished; return (a.fixture.timestamp || 0) - (b.fixture.timestamp || 0); });
         matches = matches.slice(0, MAX_MATCHES);
-
-        if (!matches.length) {
-          display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν αγώνες.</h3></div>`;
-          return;
-        }
-
-        let htmlBuffer = "";
-        const scoredMatches = [];
-
+        if (!matches.length) { display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν αγώνες.</h3></div>`; return; }
+        let htmlBuffer = ""; const scoredMatches = [];
         for (let i = 0; i < matches.length; i++) {
-          const m = matches[i];
-          setProgress(Math.round(((i + 1) / matches.length) * 100), `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
-
-          const [intelHome, intelAway, standings, h2hFixtures] = await Promise.all([
-            getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"),
-            getTeamData(m.teams.away.id, m.league.id, m.league.season, "away"),
-            getLeagueStandings(m.league.id, m.league.season),
-            getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)
-          ]);
-
+          const m = matches[i]; setProgress(Math.round(((i + 1) / matches.length) * 100), `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
+          const [intelHome, intelAway, standings, h2hFixtures] = await Promise.all([getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"), getTeamData(m.teams.away.id, m.league.id, m.league.season, "away"), getLeagueStandings(m.league.id, m.league.season), getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)]);
           const scores = computeMarketScores(intelHome, intelAway, m.league.id);
           const h2hSummary = summarizeH2H(h2hFixtures, m.teams.home.id, m.teams.away.id);
-
-          scoredMatches.push({
-            fixtureId: m.fixture.id,
-            homeTeam: m.teams.home.name,
-            awayTeam: m.teams.away.name,
-            league: m.league.name,
-            leagueId: m.league.id,
-            homeRank: getTeamRankFromStandings(standings, m.teams.home.id),
-            awayRank: getTeamRankFromStandings(standings, m.teams.away.id),
-            over25Score: scores.over25Score,
-            over35Score: scores.over35Score,
-            bttsScore: scores.bttsScore,
-            cards4Score: scores.cards4Score
-          });
-
+          scoredMatches.push({ fixtureId: m.fixture.id, homeTeam: m.teams.home.name, awayTeam: m.teams.away.name, league: m.league.name, leagueId: m.league.id, homeRank: getTeamRankFromStandings(standings, m.teams.home.id), awayRank: getTeamRankFromStandings(standings, m.teams.away.id), over25Score: scores.over25Score, over35Score: scores.over35Score, bttsScore: scores.bttsScore, cards4Score: scores.cards4Score });
           htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores, standings, h2hSummary);
         }
-
         latestTopLists.over25 = [...scoredMatches].sort((a, b) => b.over25Score - a.over25Score).slice(0, 5);
         latestTopLists.over35 = [...scoredMatches].sort((a, b) => b.over35Score - a.over35Score).slice(0, 5);
         latestTopLists.btts = [...scoredMatches].sort((a, b) => b.bttsScore - a.bttsScore).slice(0, 5);
         latestTopLists.cards4 = [...scoredMatches].sort((a, b) => b.cards4Score - a.cards4Score).slice(0, 5);
-
-        renderTopSections();
-        renderWallBet();
-        display.innerHTML = htmlBuffer;
-        showSuccess("Το recalibrated scan ολοκληρώθηκε και οι προβλέψεις αποθηκεύτηκαν για audit.");
-      } catch (err) {
-        showError(`Σφάλμα: ${err?.message || "Άγνωστο σφάλμα"}`);
-      } finally {
-        setLoader(false);
-        setButtonsDisabled(false);
-        isRunning = false;
-      }
+        renderTopSections(); renderWallBet(); display.innerHTML = htmlBuffer; showSuccess("Το recalibrated scan ολοκληρώθηκε και οι προβλέψεις αποθηκεύτηκαν για audit.");
+      } catch (err) { showError(`Σφάλμα: ${err?.message || "Άγνωστο σφάλμα"}`); } finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
     }
 
     async function runLiveScan() {
       if (isRunning) return;
-
-      isRunning = true;
-      clearError();
-      clearSuccess();
-      setButtonsDisabled(true);
-      setLoader(true, "ΑΝΑΖΗΤΗΣΗ LIVE ΑΓΩΝΩΝ...");
-
-      const display = document.getElementById("display");
-      display.innerHTML = "";
-      document.getElementById("topSection").innerHTML = "";
-      document.getElementById("wallbetSection").innerHTML = "";
-      document.getElementById("auditSection").innerHTML = "";
-
+      isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true); setLoader(true, "ΑΝΑΖΗΤΗΣΗ LIVE ΑΓΩΝΩΝ...");
+      const display = document.getElementById("display"); display.innerHTML = ""; document.getElementById("topSection").innerHTML = ""; document.getElementById("wallbetSection").innerHTML = ""; document.getElementById("auditSection").innerHTML = "";
       try {
         const selectedDate = document.getElementById("scanDate").value || getTodayISO();
         const selectedLeague = document.getElementById("leagueFilter").value;
-
         const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
-        let matches = (fixturesResp.response || []).filter(m => {
-          const leagueOk = selectedLeague === "ALL"
-            ? LEAGUES.includes(m.league.id)
-            : m.league.id === parseInt(selectedLeague, 10);
-          return leagueOk && isLiveStatus(m.fixture.status.short);
-        });
-
-        if (!matches.length) {
-          display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν υπάρχουν live αγώνες.</h3></div>`;
-          return;
-        }
-
+        let matches = (fixturesResp.response || []).filter(m => { const leagueOk = selectedLeague === "ALL" ? LEAGUES.includes(m.league.id) : m.league.id === parseInt(selectedLeague, 10); return leagueOk && isLiveStatus(m.fixture.status.short); });
+        if (!matches.length) { display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν υπάρχουν live αγώνες.</h3></div>`; return; }
         let htmlBuffer = "";
-
         for (let i = 0; i < matches.length; i++) {
-          const m = matches[i];
-          setProgress(Math.round(((i + 1) / matches.length) * 100), `LIVE: ${m.teams.home.name} vs ${m.teams.away.name}`);
-
-          const [statResp, standings, h2hFixtures] = await Promise.all([
-            getFixtureStats(m.fixture.id),
-            getLeagueStandings(m.league.id, m.league.season),
-            getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)
-          ]);
-
+          const m = matches[i]; setProgress(Math.round(((i + 1) / matches.length) * 100), `LIVE: ${m.teams.home.name} vs ${m.teams.away.name}`);
+          const [statResp, standings, h2hFixtures] = await Promise.all([getFixtureStats(m.fixture.id), getLeagueStandings(m.league.id, m.league.season), getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)]);
           let liveStats = null;
           if (statResp?.response && statResp.response.length >= 2) {
-            const homeObj = statResp.response.find(x => x.team?.id === m.teams.home.id);
-            const awayObj = statResp.response.find(x => x.team?.id === m.teams.away.id);
-
-            const homeStats = homeObj?.statistics || [];
-            const awayStats = awayObj?.statistics || [];
-
-            liveStats = {
-              h: {
-                corners: statVal(homeStats, "Corner Kicks"),
-                yellow: statVal(homeStats, "Yellow Cards"),
-                red: statVal(homeStats, "Red Cards"),
-                shots: statVal(homeStats, "Shots on Goal"),
-                danger: statVal(homeStats, "Dangerous Attacks"),
-                poss: statVal(homeStats, "Ball Possession")
-              },
-              a: {
-                corners: statVal(awayStats, "Corner Kicks"),
-                yellow: statVal(awayStats, "Yellow Cards"),
-                red: statVal(awayStats, "Red Cards"),
-                shots: statVal(awayStats, "Shots on Goal"),
-                danger: statVal(awayStats, "Dangerous Attacks"),
-                poss: statVal(awayStats, "Ball Possession")
-              }
-            };
+            const homeObj = statResp.response.find(x => x.team?.id === m.teams.home.id); const awayObj = statResp.response.find(x => x.team?.id === m.teams.away.id);
+            const homeStats = homeObj?.statistics || []; const awayStats = awayObj?.statistics || [];
+            liveStats = { h: { corners: statVal(homeStats, "Corner Kicks"), yellow: statVal(homeStats, "Yellow Cards"), red: statVal(homeStats, "Red Cards"), shots: statVal(homeStats, "Shots on Goal"), danger: statVal(homeStats, "Dangerous Attacks"), poss: statVal(homeStats, "Ball Possession") }, a: { corners: statVal(awayStats, "Corner Kicks"), yellow: statVal(awayStats, "Yellow Cards"), red: statVal(awayStats, "Red Cards"), shots: statVal(awayStats, "Shots on Goal"), danger: statVal(awayStats, "Dangerous Attacks"), poss: statVal(awayStats, "Ball Possession") } };
           }
-
           const h2hSummary = summarizeH2H(h2hFixtures, m.teams.home.id, m.teams.away.id);
           htmlBuffer += buildLiveCard(m, liveStats, standings, h2hSummary);
         }
-
         display.innerHTML = htmlBuffer;
-      } catch (err) {
-        showError(`Σφάλμα live: ${err?.message || "Άγνωστο σφάλμα"}`);
-      } finally {
-        setLoader(false);
-        setButtonsDisabled(false);
-        isRunning = false;
-      }
+      } catch (err) { showError(`Σφάλμα live: ${err?.message || "Άγνωστο σφάλμα"}`); } finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
     }
 
-    function exportPDF() {
-      html2pdf().set({
-        margin: 8,
-        filename: `Omega_${getTodayISO()}.pdf`,
-        image: { type: "jpeg", quality: 0.96 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-      }).from(document.getElementById("app")).save();
-    }
+    function exportPDF() { html2pdf().set({ margin: 8, filename: `Omega_${getTodayISO()}.pdf`, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(document.getElementById("app")).save(); }
 
     window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("scanDate").value = getTodayISO();
       const select = document.getElementById("leagueFilter");
-      LEAGUES_DATA.forEach(l => {
-        const opt = document.createElement("option");
-        opt.value = l.id;
-        opt.textContent = l.name;
-        select.appendChild(opt);
-      });
+      LEAGUES_DATA.forEach(l => { const opt = document.createElement("option"); opt.value = l.id; opt.textContent = l.name; select.appendChild(opt); });
       renderBankSection();
     });
   </script>
