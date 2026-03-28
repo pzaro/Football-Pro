@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Predictor Pro v4706.31 - Sovereign Mobile Elite</title>
+  <title>Predictor Pro v4706.32 - Sovereign Mobile Elite</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -166,9 +166,8 @@
       font-family: 'Orbitron', sans-serif;
       cursor: pointer;
       text-transform: uppercase;
-      margin: 5px;
       transition: 0.25s;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       box-shadow: 0 8px 20px rgba(0,0,0,.22);
     }
     .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
@@ -178,7 +177,7 @@
       background: #000;
       color: var(--p);
       border: 1px solid var(--p);
-      padding: 13px 14px;
+      padding: 14px;
       border-radius: 10px;
       font-family: 'Orbitron', sans-serif;
       font-size: 0.93rem;
@@ -271,15 +270,15 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh; padding: 0 15px;">
-    <h1 class="orbitron" style="color:var(--p); font-size:1.8rem;">APEX OMEGA v4706.31</h1>
+    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.32</h1>
     <input
       type="password"
       id="pin"
       placeholder="PIN"
       oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
-      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 320px;"
+      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 300px;"
     >
-    <div class="small-note">Mobile Elite + International Friendlies</div>
+    <div class="small-note">Sovereign Mobile Elite Edition + ALL Friendlies</div>
   </div>
 
   <div id="app" style="display:none;">
@@ -309,7 +308,7 @@
         <div style="width:100%; background:#222; height:8px; border-radius:4px; overflow:hidden;">
           <div id="bar" style="width:0%; height:100%; background:var(--grad); transition:0.3s;"></div>
         </div>
-        <p id="status" class="orbitron" style="font-size:0.75rem; color:var(--p); margin-top:8px;"></p>
+        <p id="status" class="orbitron" style="font-size:0.72rem; color:var(--p); margin-top:8px;"></p>
       </div>
 
       <div id="topSection"></div>
@@ -324,13 +323,15 @@
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
 
-    // Ενσωμάτωση Διεθνών και Συλλογικών Φιλικών
+    // ✅ ΟΛΑ ΤΑ ΠΙΘΑΝΑ IDS ΓΙΑ ΦΙΛΙΚΑ ΠΡΟΣΤΕΘΗΚΑΝ ΕΔΩ
     const LEAGUES_DATA = [
       {id: 2, name: "🏆 UEFA Champions League"},
       {id: 3, name: "🏆 UEFA Europa League"},
       {id: 848, name: "🏆 UEFA Europa Conference League"},
-      {id: 6, name: "🌍 International Friendlies"}, // Διεθνή Φιλικά
-      {id: 10, name: "🌍 Club Friendlies"}, // Φιλικά Συλλόγων
+      {id: 5, name: "🌍 UEFA Nations League"}, // Μερικά φιλικά ευρωπαϊκών
+      {id: 6, name: "🌍 International Friendlies"}, // Εθνικές ομάδες
+      {id: 10, name: "🌍 Club Friendlies"}, // Σύλλογοι (Μέρος 1)
+      {id: 66, name: "🌍 Friendlies"}, // Σύλλογοι (Μέρος 2 / Γενικά)
       {id: 39, name: "🇬🇧 Premier League"},
       {id: 40, name: "🇬🇧 Championship"},
       {id: 41, name: "🇬🇧 League One"},
@@ -358,9 +359,9 @@
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
 
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470631";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470631";
-    const LS_PREDICTIONS = "omega_predictions_v470631";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470632";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470632";
+    const LS_PREDICTIONS = "omega_predictions_v470632";
 
     const OVER25_SCORE_THRESHOLD = 104;
     const OVER25_TOTALXG_THRESHOLD = 2.45;
@@ -613,8 +614,8 @@
       const hCards = safeNum(hStats.cards); const aCards = safeNum(aStats.cards);
       const hSplitCards = safeNum(hStats.splitCards); const aSplitCards = safeNum(aStats.splitCards);
 
-      // ΠΡΟΣΘΗΚΗ ΔΙΕΘΝΩΝ ΚΑΙ ΣΥΛΛΟΓΙΚΩΝ ΦΙΛΙΚΩΝ (ID 6 & 10) ΣΤΑ TRAP LEAGUES (-20% Penalty)
-      const trapLeagues = [40, 41, 136, 141, 79, 62, 6, 10]; 
+      // ✅ ΠΡΟΣΘΗΚΗ ΟΛΩΝ ΤΩΝ ΦΙΛΙΚΩΝ ΣΤΑ TRAP LEAGUES (-20% Penalty)
+      const trapLeagues = [40, 41, 136, 141, 79, 62, 5, 6, 10, 66]; 
       const goldLeagues = [78, 262, 88, 253];
       const tightLeagues = [61, 94, 197, 135, 2, 3, 848];
 
