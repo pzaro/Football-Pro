@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Predictor Pro v4706.36 - Sovereign Ultimate</title>
+  <title>Predictor Pro v4706.37 - Sovereign Ultimate</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -55,7 +55,7 @@
     .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
     .btn-main:disabled { opacity: 0.5; cursor: not-allowed; transform: none; filter: none; }
     
-    .date-input, .league-select, .stake-input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 14px; border-radius: 10px; font-family: 'Orbitron', sans-serif; font-size: 0.93rem; }
+    .date-input, .league-select, .stake-input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 14px; border-radius: 10px; font-family: 'Orbitron', sans-serif; font-size: 0.93rem; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03); }
     .league-select { min-width: 250px; cursor: pointer; }
     .date-input { min-width: 140px; }
     .stake-input { width: 120px; }
@@ -148,7 +148,7 @@
   </div>
 
   <div id="auth" style="text-align:center; margin-top:15vh; padding: 0 15px;">
-    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.36</h1>
+    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.37</h1>
     <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 300px;">
     <div class="small-note">Sovereign Ultimate Edition | The Final Masterpiece</div>
   </div>
@@ -201,6 +201,7 @@
             ⬆️ ΑΝΕΒΑΣΜΑ ΑΡΧΕΙΟΥ
             <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
         </label>
+        <button class="btn-main" style="background:#da3633; margin:5px;" onclick="clearVault()">🗑️ ΚΑΘΑΡΙΣΜΟΣ ΜΝΗΜΗΣ</button>
         <div style="width:100%; display:flex; gap:10px; margin-top:5px;">
             <input type="number" id="wallbetStake" class="stake-input" value="10" min="1" step="1" placeholder="Stake" style="flex:1;">
             <button class="btn-main" id="btnSaveWallbet" style="background:#b45309; flex:2;" onclick="saveWallBet()">💾 SAVE WALLBET</button>
@@ -242,13 +243,13 @@
 
     const REQUEST_DELAY_MS = 260; const REQUEST_TIMEOUT_MS = 12000; const LAST_GENERAL = 6; const LAST_SPLIT = 6;
 
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470636";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470636";
-    const LS_PREDICTIONS = "omega_predictions_v470636";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470637";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470637";
+    const LS_PREDICTIONS = "omega_predictions_v470637";
 
     const OVER25_SCORE_THRESHOLD = 104; const OVER25_TOTALXG_THRESHOLD = 2.45;
     const OVER35_SCORE_THRESHOLD = 132; const OVER35_TOTALXG_THRESHOLD = 3.15;
-    const BTTS_SCORE_THRESHOLD = 92; // 🔒 Αυξήθηκε λόγω Αγγλίας/Ιταλίας
+    const BTTS_SCORE_THRESHOLD = 92; // 🔒 Αυστηρό όριο λόγω Ιταλίας
 
     let statsCache = new Map(); let teamStatsCache = new Map(); let lastFixturesCache = new Map(); let standingsCache = new Map(); let h2hCache = new Map();
     let isRunning = false; let latestTopLists = { over25: [], over35: [], btts: [], cards4: [] }; let latestWallBet = null;
@@ -265,7 +266,7 @@
       if (!show) document.getElementById("bar").style.width = "0%";
     }
     function setProgress(percent, text = "") { document.getElementById("bar").style.width = `${percent}%`; document.getElementById("status").innerText = text; }
-    function setButtonsDisabled(disabled) { ["btnPre", "btnLive", "btnAudit", "btnPdf", "btnSaveWallbet", "leagueFilter"].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = disabled; }); }
+    function setButtonsDisabled(disabled) { ["btnPre", "btnLive", "btnAudit", "btnSaveWallbet", "leagueFilter"].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = disabled; }); }
     function escapeHtml(str) { return String(str ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;"); }
     
     function getTodayISO() { const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, "0"); const day = String(d.getDate()).padStart(2, "0"); return `${y}-${m}-${day}`; }
@@ -319,6 +320,13 @@
             } catch(err) { showError("Λάθος μορφή αρχείου."); }
         };
         reader.readAsText(file);
+    }
+    
+    function clearVault() {
+        if(confirm("ΠΡΟΣΟΧΗ: Είσαι σίγουρος ότι θέλεις να διαγράψεις ΟΛΑ τα δεδομένα από τη μνήμη του Data Vault;")) {
+            localStorage.removeItem(LS_PREDICTIONS);
+            showSuccess("Η μνήμη καθάρισε! Το Vault είναι πλέον άδειο και έτοιμο για νέο Scan.");
+        }
     }
 
     // --- WALLBET BANK ---
@@ -418,9 +426,9 @@
       const hCards = safeNum(hStats.cards); const aCards = safeNum(aStats.cards);
       const hSplitCards = safeNum(hStats.splitCards); const aSplitCards = safeNum(aStats.splitCards);
 
-      // 🔒 ΤΕΛΕΙΟΠΟΙΗΜΕΝΑ ΦΙΛΤΡΑ ΑΝΑΛΟΓΑ ΜΕ ΤΟ AUDIT ΣΟΥ
-      const trapLeagues = [40, 41, 136, 141, 79, 62, 5, 6, 10, 66]; // -20% (Όλα τα φιλικά & Β' Εθνικές)
-      const tightLeagues = [61, 94, 197, 135, 140, 39, 2, 3, 848]; // -15% (Προστέθηκε Αγγλία 39 & Ισπανία 140)
+      // 🔒 ΤΕΛΕΙΟΠΟΙΗΜΕΝΑ ΦΙΛΤΡΑ ΑΝΑΛΟΓΑ ΜΕ ΤΟ AUDIT
+      const trapLeagues = [40, 41, 136, 141, 79, 62, 5, 6, 10, 66]; // -20%
+      const tightLeagues = [61, 94, 197, 135, 140, 39, 2, 3, 848]; // -15% (Μπήκε Αγγλία και Ισπανία)
       const goldLeagues = [78, 262, 88, 253]; // +5%
 
       if (trapLeagues.includes(leagueId)) { totalXG *= 0.80; hXG *= 0.80; aXG *= 0.80; } 
@@ -634,16 +642,16 @@
               <div class="stat-row"><span>Κατοχή</span><span class="val-xg">${s?.h?.poss ?? 0}%</span></div>
               <div class="stat-row"><span>Σουτ στην εστία</span><span class="val-xg">${s?.h?.shots ?? 0}</span></div>
               <div class="stat-row"><span>Επικίνδυνες επιθέσεις</span><span class="val-xg">${s?.h?.danger ?? 0}</span></div>
-              <div class="stat-row"><span>Κόρνερ</span><span>🚩 ${s?.h?.corners ?? 0}</span></div>
-              <div class="stat-row"><span>Κάρτες</span><span>🟨 ${s?.h?.yellow ?? 0} | 🟥 ${s?.h?.red ?? 0}</span></div>
+              <div class="stat-row"><span>Κόρνερ</span><span>🚩 <span style="color:var(--alert);font-weight:bold;">(Live)</span> ${s?.h?.corners ?? 0}</span></div>
+              <div class="stat-row"><span>Κάρτες</span><span>🟨 <span style="color:var(--alert);font-weight:bold;">(Live)</span> ${s?.h?.yellow ?? 0} | 🟥 ${s?.h?.red ?? 0}</span></div>
             </div>
             <div class="team-box">
               <div style="color:var(--magenta); font-weight:900; margin-bottom:10px;">✈️ LIVE AWAY ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}</div>
               <div class="stat-row"><span>Κατοχή</span><span class="val-xg">${s?.a?.poss ?? 0}%</span></div>
               <div class="stat-row"><span>Σουτ στην εστία</span><span class="val-xg">${s?.a?.shots ?? 0}</span></div>
               <div class="stat-row"><span>Επικίνδυνες επιθέσεις</span><span class="val-xg">${s?.a?.danger ?? 0}</span></div>
-              <div class="stat-row"><span>Κόρνερ</span><span>🚩 ${s?.a?.corners ?? 0}</span></div>
-              <div class="stat-row"><span>Κάρτες</span><span>🟨 ${s?.a?.yellow ?? 0} | 🟥 ${s?.a?.red ?? 0}</span></div>
+              <div class="stat-row"><span>Κόρνερ</span><span>🚩 <span style="color:var(--alert);font-weight:bold;">(Live)</span> ${s?.a?.corners ?? 0}</span></div>
+              <div class="stat-row"><span>Κάρτες</span><span>🟨 <span style="color:var(--alert);font-weight:bold;">(Live)</span> ${s?.a?.yellow ?? 0} | 🟥 ${s?.a?.red ?? 0}</span></div>
             </div>
           </div>
         </div>`;
