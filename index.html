@@ -3,188 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Predictor Pro v4706.32 - Sovereign Mobile Elite</title>
+  <title>Predictor Pro v4706.33 - Sovereign Data Vault</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root {
-      --bg: #010409;
-      --card: #0d1117;
-      --border: #30363d;
-      --p: #00f2ff;
-      --split-color: #fbbf24;
-      --gold: #f59e0b;
-      --neon-live: #39ff14;
-      --alert: #da3633;
-      --txt-muted: #9aa4b2;
+      --bg: #010409; --card: #0d1117; --border: #30363d;
+      --p: #00f2ff; --split-color: #fbbf24; --gold: #f59e0b;
+      --neon-live: #39ff14; --alert: #da3633; --txt-muted: #9aa4b2;
       --grad: linear-gradient(135deg, #00f2ff, #8b5cf6);
-      --pick-bg: rgba(57, 255, 20, 0.10);
-      --pick-border: #39ff14;
-      --magenta: #ff00ff;
-      --soft-red: rgba(218, 54, 51, 0.08);
-      --soft-gold: rgba(245, 158, 11, 0.08);
-      --soft-cyan: rgba(0, 242, 255, 0.08);
+      --pick-bg: rgba(57, 255, 20, 0.10); --pick-border: #39ff14;
+      --magenta: #ff00ff; --soft-red: rgba(218, 54, 51, 0.08);
+      --soft-gold: rgba(245, 158, 11, 0.08); --soft-cyan: rgba(0, 242, 255, 0.08);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body {
-      font-family: 'Manrope', sans-serif;
-      background: var(--bg);
-      color: #f0f6fc;
-      margin: 0;
-      padding: 0;
-      letter-spacing: 0.1px;
-    }
+    body { font-family: 'Manrope', sans-serif; background: var(--bg); color: #f0f6fc; margin: 0; padding: 0; letter-spacing: 0.1px; }
     .orbitron { font-family: 'Orbitron', sans-serif; }
     .container { max-width: 1260px; margin: 0 auto; padding: 16px; }
 
-    .cyber-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px;
-      margin-bottom: 20px;
-      border-left: 5px solid var(--p);
-      box-shadow: 0 10px 30px rgba(0,0,0,.18);
-    }
-    .live-card {
-      border-left-color: var(--neon-live);
-      box-shadow: 0 0 18px rgba(57,255,20,.08), 0 10px 30px rgba(0,0,0,.18);
-    }
-    .section-panel {
-      background: #0b1016;
-      border: 1px solid #26303b;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 24px rgba(0,0,0,.16);
-    }
-    .section-title {
-      font-family: 'Orbitron', sans-serif;
-      color: var(--gold);
-      font-size: 1rem;
-      font-weight: 900;
-      margin-bottom: 12px;
-      letter-spacing: .6px;
-    }
-    .omega-pick {
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 10px;
-      background: var(--pick-bg);
-      border: 1px dashed var(--pick-border);
-      text-align: center;
-    }
-    .omega-pick.no-bet {
-      background: rgba(218, 54, 51, 0.10);
-      border-color: var(--alert);
-    }
-    .omega-pick.no-bet .pick-value {
-      color: #ffb3b3;
-      text-shadow: none;
-    }
-    .pick-title {
-      font-size: 0.76rem;
-      color: var(--neon-live);
-      font-weight: 900;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      font-family: 'Orbitron', sans-serif;
-    }
+    .cyber-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 20px; border-left: 5px solid var(--p); box-shadow: 0 10px 30px rgba(0,0,0,.18); }
+    .live-card { border-left-color: var(--neon-live); box-shadow: 0 0 18px rgba(57,255,20,.08), 0 10px 30px rgba(0,0,0,.18); }
+    .section-panel { background: #0b1016; border: 1px solid #26303b; border-radius: 16px; padding: 18px; margin-bottom: 20px; box-shadow: 0 10px 24px rgba(0,0,0,.16); }
+    .section-title { font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 1rem; font-weight: 900; margin-bottom: 12px; letter-spacing: .6px; }
+    
+    .omega-pick { margin-top: 16px; padding: 14px; border-radius: 10px; background: var(--pick-bg); border: 1px dashed var(--pick-border); text-align: center; }
+    .omega-pick.no-bet { background: rgba(218, 54, 51, 0.10); border-color: var(--alert); }
+    .omega-pick.no-bet .pick-value { color: #ffb3b3; text-shadow: none; }
+    .pick-title { font-size: 0.76rem; color: var(--neon-live); font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; font-family: 'Orbitron', sans-serif; }
     .omega-pick.no-bet .pick-title { color: var(--alert); }
-    .pick-value {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.35rem;
-      color: #fff;
-      font-weight: 900;
-      text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
-    }
-    .pick-reason {
-      font-size: 0.79rem;
-      color: var(--txt-muted);
-      margin-top: 5px;
-      line-height: 1.45;
-    }
-    .season-xg-red {
-      background: var(--alert);
-      color: #fff;
-      padding: 3px 8px;
-      border-radius: 5px;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.9rem;
-    }
-    .season-xga-plain {
-      color: #8b949e;
-      font-weight: 700;
-      font-family: 'Orbitron', sans-serif;
-      margin-left: 5px;
-    }
-    .val-xg {
-      color: var(--p);
-      font-weight: 800;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1rem;
-    }
-    .val-split {
-      color: var(--split-color);
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      border: 1px solid var(--split-color);
-      padding: 2px 7px;
-      border-radius: 5px;
-      background: rgba(251, 191, 36, 0.1);
-    }
-    .dev-badge {
-      font-size: 0.72rem;
-      font-weight: 900;
-      padding: 3px 6px;
-      border-radius: 5px;
-      margin-left: 8px;
-      font-family: 'Orbitron', sans-serif;
-    }
-    .dev-pos {
-      background: #238636;
-      color: #fff;
-      border: 1px solid var(--neon-live);
-    }
-    .dev-neg {
-      background: #da3633;
-      color: #fff;
-      border: 1px solid #ff4d4d;
-    }
-    .btn-main {
-      padding: 14px 20px;
-      background: var(--grad);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: 0.25s;
-      font-size: 0.85rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,.22);
-    }
+    .pick-value { font-family: 'Orbitron', sans-serif; font-size: 1.35rem; color: #fff; font-weight: 900; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
+    .pick-reason { font-size: 0.79rem; color: var(--txt-muted); margin-top: 5px; line-height: 1.45; }
+    
+    .season-xg-red { background: var(--alert); color: #fff; padding: 3px 8px; border-radius: 5px; font-weight: 900; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; }
+    .season-xga-plain { color: #8b949e; font-weight: 700; font-family: 'Orbitron', sans-serif; margin-left: 5px; }
+    .val-xg { color: var(--p); font-weight: 800; font-family: 'Orbitron', sans-serif; font-size: 1rem; }
+    .val-split { color: var(--split-color); font-weight: 900; font-family: 'Orbitron', sans-serif; border: 1px solid var(--split-color); padding: 2px 7px; border-radius: 5px; background: rgba(251, 191, 36, 0.1); }
+    .dev-badge { font-size: 0.72rem; font-weight: 900; padding: 3px 6px; border-radius: 5px; margin-left: 8px; font-family: 'Orbitron', sans-serif; }
+    .dev-pos { background: #238636; color: #fff; border: 1px solid var(--neon-live); }
+    .dev-neg { background: #da3633; color: #fff; border: 1px solid #ff4d4d; }
+    
+    .btn-main { display: inline-block; padding: 14px 20px; background: var(--grad); color: #fff; border: none; border-radius: 10px; font-weight: 900; font-family: 'Orbitron', sans-serif; cursor: pointer; text-transform: uppercase; transition: 0.25s; font-size: 0.85rem; box-shadow: 0 8px 20px rgba(0,0,0,.22); text-align: center; }
     .btn-main:hover { filter: brightness(1.15); transform: translateY(-2px); }
     .btn-main:disabled { opacity: 0.5; cursor: not-allowed; transform: none; filter: none; }
     
-    .date-input, .league-select, .stake-input {
-      background: #000;
-      color: var(--p);
-      border: 1px solid var(--p);
-      padding: 14px;
-      border-radius: 10px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.93rem;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
-    }
+    .date-input, .league-select, .stake-input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 14px; border-radius: 10px; font-family: 'Orbitron', sans-serif; font-size: 0.93rem; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03); }
     .league-select { min-width: 250px; cursor: pointer; }
-    .date-input { min-width: 180px; }
+    .date-input { min-width: 150px; }
     .stake-input { width: 120px; }
 
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
@@ -196,9 +63,10 @@
     .form-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 0.6rem; font-weight: 900; margin-right: 3px; color: #fff; font-family: 'Orbitron', sans-serif; }
     .form-W { background: #238636; } .form-D { background: #666; } .form-L { background: #da3633; }
 
-    .toolbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; }
+    .toolbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; align-items: center; }
+    .toolbar-secondary { background: rgba(0,242,255,0.05); border: 1px dashed var(--p); border-radius: 12px; padding: 15px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; align-items: center; }
+
     .small-note { color: var(--txt-muted); font-size: 0.84rem; margin-top: 10px; line-height: 1.45; }
-    
     .error-box { background: rgba(218, 54, 51, 0.08); border: 1px solid rgba(218, 54, 51, 0.5); color: #ffb3b3; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 0.92rem; }
     .success-box { background: rgba(35, 134, 54, 0.08); border: 1px solid rgba(35, 134, 54, 0.5); color: #b7f7c4; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 0.92rem; }
 
@@ -237,19 +105,16 @@
     .audit-hit { color: var(--neon-live); font-weight: 800; }
     .audit-miss { color: #ff8c8c; font-weight: 800; }
 
-    /* Match Layout Classes */
     .match-header { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
     .match-teams { flex: 1; }
     .match-scores-badges { text-align: right; }
 
     /* --- MOBILE OPTIMIZATIONS --- */
-    @media (max-width: 900px) {
-      .bank-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 900px) { .bank-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) {
       .cyber-card { padding: 16px; }
       .stats-grid { grid-template-columns: 1fr; }
-      .toolbar { flex-direction: column; align-items: stretch; gap: 8px; }
+      .toolbar, .toolbar-secondary { flex-direction: column; align-items: stretch; gap: 8px; }
       .btn-main, .date-input, .league-select, .stake-input { width: 100%; margin: 0; }
       
       .match-header { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -260,32 +125,22 @@
       .omega-pick { padding: 12px; }
       .pick-value { font-size: 1.15rem; }
       #auth input { font-size: 1.5rem !important; max-width: 100%; }
-      .h2h-line { font-size: 0.8rem; }
-    }
-    @media (max-width: 480px) {
-      .bank-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh; padding: 0 15px;">
-    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.32</h1>
-    <input
-      type="password"
-      id="pin"
-      placeholder="PIN"
-      oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}"
-      style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 300px;"
-    >
-    <div class="small-note">Sovereign Mobile Elite Edition + ALL Friendlies</div>
+    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.33</h1>
+    <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 300px;">
+    <div class="small-note">Data Vault Edition | Mobile Optimized</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
-      <header style="text-align:center; padding:15px 0 25px;">
+      <header style="text-align:center; padding:15px 0 20px;">
         <h1 class="orbitron" style="color:var(--p); margin:0; font-size: 1.6rem;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">Mobile Elite | Market Recalibration & Audit</div>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">Mobile Elite | Data Vault & Advanced Audit</div>
       </header>
 
       <div class="toolbar">
@@ -296,9 +151,22 @@
         <input type="number" id="wallbetStake" class="stake-input" value="10" min="1" step="1" placeholder="Stake">
         <button class="btn-main" id="btnPre" onclick="runScan()">🚀 SCAN</button>
         <button class="btn-main" id="btnLive" style="background:#da3633;" onclick="runLiveScan()">🔴 LIVE SCORE</button>
-        <button class="btn-main" id="btnAudit" style="background:#7c3aed;" onclick="run30DayAudit()">📊 AUDIT 30D</button>
         <button class="btn-main" id="btnSaveWallbet" style="background:#b45309;" onclick="saveWallBet()">💾 SAVE WALLBET</button>
-        <button class="btn-main" id="btnPdf" style="background:#222;" onclick="exportPDF()">📄 SAVE PDF</button>
+      </div>
+
+      <div class="toolbar-secondary">
+        <div style="width:100%; text-align:center; font-family:'Orbitron'; color:var(--p); font-weight:900; font-size:0.8rem; margin-bottom:5px;">🗄️ OMEGA DATA VAULT (ΑΝΑΛΥΣΗ ΙΣΤΟΡΙΚΟΥ)</div>
+        <div style="display:flex; gap:10px; width:100%;">
+            <input type="date" id="auditStart" class="date-input" style="flex:1;" title="Από">
+            <input type="date" id="auditEnd" class="date-input" style="flex:1;" title="Έως">
+        </div>
+        <button class="btn-main" id="btnAudit" style="background:#7c3aed;" onclick="runCustomAudit()">📊 ΕΛΕΓΧΟΣ ΑΠΟΔΟΣΗΣ</button>
+        <button class="btn-main" style="background:#10b981;" onclick="exportData()">⬇️ ΚΑΤΕΒΑΣΜΑ ΑΡΧΕΙΟΥ (JSON)</button>
+        <label class="btn-main" style="background:#3b82f6; cursor:pointer; margin:5px;">
+            ⬆️ ΑΝΕΒΑΣΜΑ ΑΡΧΕΙΟΥ
+            <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+        </label>
+        <button class="btn-main" id="btnPdf" style="background:#222;" onclick="exportPDF()">📄 EXPORT PDF</button>
       </div>
 
       <div id="errorBox"></div>
@@ -323,15 +191,14 @@
     const KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
     const API = "https://v3.football.api-sports.io";
 
-    // ✅ ΟΛΑ ΤΑ ΠΙΘΑΝΑ IDS ΓΙΑ ΦΙΛΙΚΑ ΠΡΟΣΤΕΘΗΚΑΝ ΕΔΩ
     const LEAGUES_DATA = [
       {id: 2, name: "🏆 UEFA Champions League"},
       {id: 3, name: "🏆 UEFA Europa League"},
       {id: 848, name: "🏆 UEFA Europa Conference League"},
-      {id: 5, name: "🌍 UEFA Nations League"}, // Μερικά φιλικά ευρωπαϊκών
-      {id: 6, name: "🌍 International Friendlies"}, // Εθνικές ομάδες
-      {id: 10, name: "🌍 Club Friendlies"}, // Σύλλογοι (Μέρος 1)
-      {id: 66, name: "🌍 Friendlies"}, // Σύλλογοι (Μέρος 2 / Γενικά)
+      {id: 5, name: "🌍 UEFA Nations League"},
+      {id: 6, name: "🌍 International Friendlies"},
+      {id: 10, name: "🌍 Club Friendlies"},
+      {id: 66, name: "🌍 Friendlies"},
       {id: 39, name: "🇬🇧 Premier League"},
       {id: 40, name: "🇬🇧 Championship"},
       {id: 41, name: "🇬🇧 League One"},
@@ -350,7 +217,6 @@
       {id: 262, name: "🇲🇽 Liga MX"},
       {id: 197, name: "🇬🇷 Greece Super League"}
     ];
-
     const LEAGUES = LEAGUES_DATA.map(l => l.id);
 
     const REQUEST_DELAY_MS = 260;
@@ -359,9 +225,9 @@
     const LAST_SPLIT = 6;
     const MAX_MATCHES = 100;
 
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470632";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470632";
-    const LS_PREDICTIONS = "omega_predictions_v470632";
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470633";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470633";
+    const LS_PREDICTIONS = "omega_predictions_v470633"; // Data Vault Storage
 
     const OVER25_SCORE_THRESHOLD = 104;
     const OVER25_TOTALXG_THRESHOLD = 2.45;
@@ -369,17 +235,10 @@
     const OVER35_TOTALXG_THRESHOLD = 3.15;
     const BTTS_SCORE_THRESHOLD = 86;
 
-    let statsCache = new Map();
-    let teamStatsCache = new Map();
-    let lastFixturesCache = new Map();
-    let standingsCache = new Map();
-    let h2hCache = new Map();
-    let isRunning = false;
-    let latestTopLists = { over25: [], over35: [], btts: [], cards4: [] };
-    let latestWallBet = null;
+    let statsCache = new Map(); let teamStatsCache = new Map(); let lastFixturesCache = new Map(); let standingsCache = new Map(); let h2hCache = new Map();
+    let isRunning = false; let latestTopLists = { over25: [], over35: [], btts: [], cards4: [] }; let latestWallBet = null;
 
     function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-
     function showError(msg) { document.getElementById("errorBox").innerHTML = `<div class="error-box">${escapeHtml(msg)}</div>`; }
     function clearError() { document.getElementById("errorBox").innerHTML = ""; }
     function showSuccess(msg) { document.getElementById("successBox").innerHTML = `<div class="success-box">${escapeHtml(msg)}</div>`; }
@@ -390,47 +249,28 @@
       document.getElementById("status").innerText = text;
       if (!show) document.getElementById("bar").style.width = "0%";
     }
-
-    function setProgress(percent, text = "") {
-      document.getElementById("bar").style.width = `${percent}%`;
-      document.getElementById("status").innerText = text;
-    }
-
-    function setButtonsDisabled(disabled) {
-      ["btnPre", "btnLive", "btnAudit", "btnPdf", "btnSaveWallbet", "leagueFilter"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.disabled = disabled;
-      });
-    }
-
-    function escapeHtml(str) {
-      return String(str ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
-    }
-
+    function setProgress(percent, text = "") { document.getElementById("bar").style.width = `${percent}%`; document.getElementById("status").innerText = text; }
+    function setButtonsDisabled(disabled) { ["btnPre", "btnLive", "btnAudit", "btnPdf", "btnSaveWallbet", "leagueFilter"].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = disabled; }); }
+    function escapeHtml(str) { return String(str ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;"); }
+    
     function getTodayISO() {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
+      const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, "0"); const day = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${day}`;
     }
-
     function safeNum(x, d = 0) { const n = Number(x); return Number.isFinite(n) ? n : d; }
     function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
-
     function isLiveStatus(short) { return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short); }
     function isFinishedStatus(short) { return ["FT", "AET", "PEN"].includes(short); }
 
     function buildFixtureScoreHTML(m) {
-      const hg = m?.goals?.home;
-      const ag = m?.goals?.away;
-      const short = m?.fixture?.status?.short || "";
+      const hg = m?.goals?.home; const ag = m?.goals?.away; const short = m?.fixture?.status?.short || "";
       if (hg == null || ag == null) return "";
       if (isLiveStatus(short)) return `<div class="live-score-big">${hg} - ${ag}</div>`;
       if (isFinishedStatus(short)) return `<div class="live-score-big" style="color:var(--gold); text-shadow:none;">${hg} - ${ag}</div>`;
       return `<div class="live-score-big" style="color:#c9d1d9; text-shadow:none;">${hg} - ${ag}</div>`;
     }
 
+    // --- DATA VAULT (IMPORT/EXPORT/STORAGE) ---
     function getPredictionStore() { try { return JSON.parse(localStorage.getItem(LS_PREDICTIONS) || "[]"); } catch { return []; } }
     function savePredictionStore(data) { localStorage.setItem(LS_PREDICTIONS, JSON.stringify(data)); }
     function upsertPrediction(record) {
@@ -440,14 +280,43 @@
       savePredictionStore(store);
     }
 
-    function getWallBetBank() {
-      try { return JSON.parse(localStorage.getItem(LS_WALLBET_BANK) || '{"totalBets":0,"stakeSum":0,"profit":0,"wins":0,"losses":0}'); } catch { return { totalBets: 0, stakeSum: 0, profit: 0, wins: 0, losses: 0 }; }
+    function exportData() {
+        const data = getPredictionStore();
+        if(data.length === 0) { showError("Δεν υπάρχουν δεδομένα για εξαγωγή."); return; }
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `omega_vault_${getTodayISO()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showSuccess("Τα δεδομένα εξήχθησαν επιτυχώς!");
     }
-    function saveWallBetBank(v) { localStorage.setItem(LS_WALLBET_BANK, JSON.stringify(v)); }
 
+    function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (Array.isArray(imported)) {
+                    const store = getPredictionStore();
+                    const storeMap = new Map(store.map(x => [String(x.fixtureId), x]));
+                    imported.forEach(item => { if (item.fixtureId) storeMap.set(String(item.fixtureId), item); });
+                    savePredictionStore(Array.from(storeMap.values()));
+                    showSuccess(`Εισήχθησαν ${imported.length} προβλέψεις. Σύνολο στη βάση: ${storeMap.size}`);
+                }
+            } catch(err) { showError("Λάθος μορφή αρχείου."); }
+        };
+        reader.readAsText(file);
+    }
+
+    // --- WALLBET BANK ---
+    function getWallBetBank() { try { return JSON.parse(localStorage.getItem(LS_WALLBET_BANK) || '{"totalBets":0,"stakeSum":0,"profit":0,"wins":0,"losses":0}'); } catch { return { totalBets: 0, stakeSum: 0, profit: 0, wins: 0, losses: 0 }; } }
+    function saveWallBetBank(v) { localStorage.setItem(LS_WALLBET_BANK, JSON.stringify(v)); }
     function renderBankSection() {
-      const bank = getWallBetBank();
-      const roi = bank.stakeSum > 0 ? ((bank.profit / bank.stakeSum) * 100).toFixed(1) : "0.0";
+      const bank = getWallBetBank(); const roi = bank.stakeSum > 0 ? ((bank.profit / bank.stakeSum) * 100).toFixed(1) : "0.0";
       document.getElementById("bankSection").innerHTML = `
         <div class="section-panel">
           <div class="section-title">🏦 WALLBET ΤΑΜΕΙΟ</div>
@@ -472,138 +341,43 @@
         const response = await throttledFetch(`${API}/${path}`);
         if (!response.ok) return { response: [], errors: { status: response.status } };
         return await response.json() || { response: [] };
-      } catch (err) {
-        return { response: [], errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown") } };
-      }
+      } catch (err) { return { response: [], errors: { message: err?.name === "AbortError" ? "timeout" : (err?.message || "unknown") } }; }
     }
 
-    async function getTeamSeasonStats(teamId, leagueId, season) {
-      const key = `${teamId}_${leagueId}_${season}`;
-      if (teamStatsCache.has(key)) return teamStatsCache.get(key);
-      const data = await apiReq(`teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`);
-      const response = data?.response || {};
-      teamStatsCache.set(key, response); return response;
-    }
+    async function getTeamSeasonStats(teamId, leagueId, season) { const key = `${teamId}_${leagueId}_${season}`; if (teamStatsCache.has(key)) return teamStatsCache.get(key); const data = await apiReq(`teams/statistics?team=${teamId}&league=${leagueId}&season=${season}`); const response = data?.response || {}; teamStatsCache.set(key, response); return response; }
+    async function getLastFixtures(teamId, leagueId, season) { const key = `team_last_${teamId}_${leagueId}_${season}`; if (lastFixturesCache.has(key)) return lastFixturesCache.get(key); const data = await apiReq(`fixtures?team=${teamId}&league=${leagueId}&season=${season}&last=20&status=FT`); const response = data?.response || []; lastFixturesCache.set(key, response); return response; }
+    async function getFixtureStats(fixtureId) { if (statsCache.has(fixtureId)) return statsCache.get(fixtureId); const data = await apiReq(`fixtures/statistics?fixture=${fixtureId}`); statsCache.set(fixtureId, data); return data; }
+    async function getLeagueStandings(leagueId, season) { const key = `${leagueId}_${season}`; if (standingsCache.has(key)) return standingsCache.get(key); const data = await apiReq(`standings?league=${leagueId}&season=${season}`); const rawStandings = data?.response?.[0]?.league?.standings || []; const flattened = Array.isArray(rawStandings) ? rawStandings.flat().filter(Boolean) : []; standingsCache.set(key, flattened); return flattened; }
+    async function getHeadToHead(team1Id, team2Id, leagueId = null, season = null) { const key = `${team1Id}_${team2Id}_${leagueId || "all"}_${season || "all"}`; if (h2hCache.has(key)) return h2hCache.get(key); let path = `fixtures/headtohead?h2h=${team1Id}-${team2Id}`; if (leagueId && season) path += `&league=${leagueId}&season=${season}`; const data = await apiReq(path); const response = data?.response || []; h2hCache.set(key, response); return response; }
 
-    async function getLastFixtures(teamId, leagueId, season) {
-      const key = `team_last_${teamId}_${leagueId}_${season}`;
-      if (lastFixturesCache.has(key)) return lastFixturesCache.get(key);
-      const data = await apiReq(`fixtures?team=${teamId}&league=${leagueId}&season=${season}&last=20&status=FT`);
-      const response = data?.response || [];
-      lastFixturesCache.set(key, response); return response;
-    }
-
-    async function getFixtureStats(fixtureId) {
-      if (statsCache.has(fixtureId)) return statsCache.get(fixtureId);
-      const data = await apiReq(`fixtures/statistics?fixture=${fixtureId}`);
-      statsCache.set(fixtureId, data); return data;
-    }
-
-    async function getLeagueStandings(leagueId, season) {
-      const key = `${leagueId}_${season}`;
-      if (standingsCache.has(key)) return standingsCache.get(key);
-      const data = await apiReq(`standings?league=${leagueId}&season=${season}`);
-      const rawStandings = data?.response?.[0]?.league?.standings || [];
-      const flattened = Array.isArray(rawStandings) ? rawStandings.flat().filter(Boolean) : [];
-      standingsCache.set(key, flattened); return flattened;
-    }
-
-    async function getHeadToHead(team1Id, team2Id, leagueId = null, season = null) {
-      const key = `${team1Id}_${team2Id}_${leagueId || "all"}_${season || "all"}`;
-      if (h2hCache.has(key)) return h2hCache.get(key);
-      let path = `fixtures/headtohead?h2h=${team1Id}-${team2Id}`;
-      if (leagueId && season) path += `&league=${leagueId}&season=${season}`;
-      const data = await apiReq(path);
-      const response = data?.response || [];
-      h2hCache.set(key, response); return response;
-    }
-
-    function getTeamRankFromStandings(standings, teamId) {
-      if (!Array.isArray(standings) || !standings.length) return null;
-      const row = standings.find(x => String(x?.team?.id) === String(teamId));
-      return row?.rank ?? null;
-    }
-
-    function statVal(statsArr, type) {
-      if (!Array.isArray(statsArr)) return 0;
-      const item = statsArr.find(x => x.type === type);
-      if (!item || item.value == null) return 0;
-      return parseFloat(String(item.value).replace("%", "").trim()) || 0;
-    }
-
+    function getTeamRankFromStandings(standings, teamId) { if (!Array.isArray(standings) || !standings.length) return null; const row = standings.find(x => String(x?.team?.id) === String(teamId)); return row?.rank ?? null; }
+    function statVal(statsArr, type) { if (!Array.isArray(statsArr)) return 0; const item = statsArr.find(x => x.type === type); if (!item || item.value == null) return 0; return parseFloat(String(item.value).replace("%", "").trim()) || 0; }
     function getTeamGoals(fixture, teamId) { return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.home ?? 0) : (fixture?.goals?.away ?? 0); }
     function getOpponentGoals(fixture, teamId) { return fixture?.teams?.home?.id === teamId ? (fixture?.goals?.away ?? 0) : (fixture?.goals?.home ?? 0); }
 
     function estimateXG(statsArr, goals = 0) {
-      const shotsOnGoal = statVal(statsArr, "Shots on Goal");
-      const shotsOffGoal = statVal(statsArr, "Shots off Goal");
-      const totalShots = statVal(statsArr, "Total Shots");
-      const dangerous = statVal(statsArr, "Dangerous Attacks");
-      const corners = statVal(statsArr, "Corner Kicks");
+      const shotsOnGoal = statVal(statsArr, "Shots on Goal"); const shotsOffGoal = statVal(statsArr, "Shots off Goal"); const totalShots = statVal(statsArr, "Total Shots"); const dangerous = statVal(statsArr, "Dangerous Attacks"); const corners = statVal(statsArr, "Corner Kicks");
       let xg = (shotsOnGoal * 0.18) + (shotsOffGoal * 0.07) + (Math.max(totalShots - shotsOnGoal - shotsOffGoal, 0) * 0.03) + (dangerous * 0.008) + (corners * 0.025) + (goals * 0.35);
       if (!Number.isFinite(xg) || xg <= 0) xg = goals > 0 ? (0.70 + goals * 0.30) : 0.70;
       return xg;
     }
 
-    function getWinnerTeamIdFromFixture(f) {
-      const hg = f?.goals?.home ?? 0; const ag = f?.goals?.away ?? 0;
-      if (hg > ag) return f?.teams?.home?.id;
-      if (ag > hg) return f?.teams?.away?.id;
-      return null;
-    }
-
-    function summarizeH2H(h2hFixtures, homeTeamId, awayTeamId) {
-      if (!Array.isArray(h2hFixtures) || !h2hFixtures.length) return { matches: 0, homeWins: 0, awayWins: 0, draws: 0, goalsHome: 0, goalsAway: 0, lastResults: [] };
-      let homeWins = 0, awayWins = 0, draws = 0, goalsHome = 0, goalsAway = 0; const lastResults = [];
-      for (const f of h2hFixtures.slice(0, 8)) {
-        const winnerId = getWinnerTeamIdFromFixture(f);
-        const hg = f?.goals?.home ?? 0; const ag = f?.goals?.away ?? 0;
-        const homeGoalsThisH2H = f?.teams?.home?.id === homeTeamId ? hg : ag;
-        const awayGoalsThisH2H = f?.teams?.home?.id === awayTeamId ? hg : ag;
-        goalsHome += homeGoalsThisH2H; goalsAway += awayGoalsThisH2H;
-        if (winnerId === homeTeamId) homeWins++; else if (winnerId === awayTeamId) awayWins++; else draws++;
-        lastResults.push(`${homeGoalsThisH2H}-${awayGoalsThisH2H}`);
-      }
-      return { matches: h2hFixtures.slice(0, 8).length, homeWins, awayWins, draws, goalsHome, goalsAway, lastResults };
-    }
-
-    function getFormHistory(fixtures, teamId) {
-      return fixtures.map(f => {
-        const myG = getTeamGoals(f, teamId); const opG = getOpponentGoals(f, teamId);
-        return myG > opG ? { res: "Ν", cls: "W" } : (myG < opG ? { res: "Η", cls: "L" } : { res: "Ι", cls: "D" });
-      }).reverse();
-    }
-
-    function getDev(curr, base) {
-      if (!base || base <= 0) return `<span class="dev-badge dev-pos">N/A</span>`;
-      const d = (((parseFloat(curr) - base) / base) * 100).toFixed(1);
-      return `<span class="dev-badge ${d >= 0 ? "dev-pos" : "dev-neg"}">${d > 0 ? "+" : ""}${d}%</span>`;
-    }
+    function getWinnerTeamIdFromFixture(f) { const hg = f?.goals?.home ?? 0; const ag = f?.goals?.away ?? 0; if (hg > ag) return f?.teams?.home?.id; if (ag > hg) return f?.teams?.away?.id; return null; }
+    function summarizeH2H(h2hFixtures, homeTeamId, awayTeamId) { if (!Array.isArray(h2hFixtures) || !h2hFixtures.length) return { matches: 0, homeWins: 0, awayWins: 0, draws: 0, goalsHome: 0, goalsAway: 0, lastResults: [] }; let homeWins = 0, awayWins = 0, draws = 0, goalsHome = 0, goalsAway = 0; const lastResults = []; for (const f of h2hFixtures.slice(0, 8)) { const winnerId = getWinnerTeamIdFromFixture(f); const hg = f?.goals?.home ?? 0; const ag = f?.goals?.away ?? 0; const homeGoalsThisH2H = f?.teams?.home?.id === homeTeamId ? hg : ag; const awayGoalsThisH2H = f?.teams?.home?.id === awayTeamId ? hg : ag; goalsHome += homeGoalsThisH2H; goalsAway += awayGoalsThisH2H; if (winnerId === homeTeamId) homeWins++; else if (winnerId === awayTeamId) awayWins++; else draws++; lastResults.push(`${homeGoalsThisH2H}-${awayGoalsThisH2H}`); } return { matches: h2hFixtures.slice(0, 8).length, homeWins, awayWins, draws, goalsHome, goalsAway, lastResults }; }
+    function getFormHistory(fixtures, teamId) { return fixtures.map(f => { const myG = getTeamGoals(f, teamId); const opG = getOpponentGoals(f, teamId); return myG > opG ? { res: "Ν", cls: "W" } : (myG < opG ? { res: "Η", cls: "L" } : { res: "Ι", cls: "D" }); }).reverse(); }
+    function getDev(curr, base) { if (!base || base <= 0) return `<span class="dev-badge dev-pos">N/A</span>`; const d = (((parseFloat(curr) - base) / base) * 100).toFixed(1); return `<span class="dev-badge ${d >= 0 ? "dev-pos" : "dev-neg"}">${d > 0 ? "+" : ""}${d}%</span>`; }
 
     async function batchCalculate(list, teamId) {
-      if (!list.length) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
-      let xgSum = 0, xgaSum = 0, corSum = 0, crdSum = 0, count = 0;
-      for (const f of list) {
-        const st = await getFixtureStats(f.fixture.id);
-        if (!st?.response || st.response.length < 2) continue;
-        const myObj = st.response.find(x => x.team.id === teamId);
-        const opObj = st.response.find(x => x.team.id !== teamId);
-        if (!myObj || !opObj) continue;
-        const my = myObj.statistics || []; const op = opObj.statistics || [];
-        let myXG = statVal(my, "Expected Goals"); if (myXG <= 0) myXG = estimateXG(my, getTeamGoals(f, teamId));
-        let oppXG = statVal(op, "Expected Goals"); if (oppXG <= 0) oppXG = estimateXG(op, getOpponentGoals(f, teamId));
-        xgSum += myXG; xgaSum += oppXG; corSum += statVal(my, "Corner Kicks"); crdSum += statVal(my, "Yellow Cards") + statVal(my, "Red Cards"); count++;
-      }
+      if (!list.length) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" }; let xgSum = 0, xgaSum = 0, corSum = 0, crdSum = 0, count = 0;
+      for (const f of list) { const st = await getFixtureStats(f.fixture.id); if (!st?.response || st.response.length < 2) continue; const myObj = st.response.find(x => x.team.id === teamId); const opObj = st.response.find(x => x.team.id !== teamId); if (!myObj || !opObj) continue; const my = myObj.statistics || []; const op = opObj.statistics || []; let myXG = statVal(my, "Expected Goals"); if (myXG <= 0) myXG = estimateXG(my, getTeamGoals(f, teamId)); let oppXG = statVal(op, "Expected Goals"); if (oppXG <= 0) oppXG = estimateXG(op, getOpponentGoals(f, teamId)); xgSum += myXG; xgaSum += oppXG; corSum += statVal(my, "Corner Kicks"); crdSum += statVal(my, "Yellow Cards") + statVal(my, "Red Cards"); count++; }
       return { xg: count > 0 ? (xgSum / count).toFixed(2) : "0.00", xga: count > 0 ? (xgaSum / count).toFixed(2) : "0.00", cor: count > 0 ? (corSum / count).toFixed(1) : "0.0", crd: count > 0 ? (crdSum / count).toFixed(1) : "0.0" };
     }
 
     async function getTeamData(teamId, leagueId, season, venueType) {
       const [seasonStats, allFixs] = await Promise.all([getTeamSeasonStats(teamId, leagueId, season), getLastFixtures(teamId, leagueId, season)]);
-      const genLast = allFixs.slice(0, LAST_GENERAL);
-      const splitLast = allFixs.filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId).slice(0, LAST_SPLIT);
+      const genLast = allFixs.slice(0, LAST_GENERAL); const splitLast = allFixs.filter(f => venueType === "home" ? f.teams.home.id === teamId : f.teams.away.id === teamId).slice(0, LAST_SPLIT);
       const [form, split] = await Promise.all([batchCalculate(genLast, teamId), batchCalculate(splitLast, teamId)]);
-      const baseXG = parseFloat(seasonStats?.goals?.for?.average?.total) || 1.10;
-      const baseXGA = parseFloat(seasonStats?.goals?.against?.average?.total) || 1.10;
+      const baseXG = parseFloat(seasonStats?.goals?.for?.average?.total) || 1.10; const baseXGA = parseFloat(seasonStats?.goals?.against?.average?.total) || 1.10;
       return { seasonXG: baseXG.toFixed(2), seasonXGA: baseXGA.toFixed(2), formXG: form.xg, formXGA: form.xga, devXG: getDev(form.xg, baseXG), devXGA: getDev(form.xga, baseXGA), splitXG: split.xg, splitXGA: split.xga, corners: form.cor, cards: form.crd, splitCards: split.crd, history: getFormHistory(genLast, teamId) };
     }
 
@@ -614,10 +388,8 @@
       const hCards = safeNum(hStats.cards); const aCards = safeNum(aStats.cards);
       const hSplitCards = safeNum(hStats.splitCards); const aSplitCards = safeNum(aStats.splitCards);
 
-      // ✅ ΠΡΟΣΘΗΚΗ ΟΛΩΝ ΤΩΝ ΦΙΛΙΚΩΝ ΣΤΑ TRAP LEAGUES (-20% Penalty)
       const trapLeagues = [40, 41, 136, 141, 79, 62, 5, 6, 10, 66]; 
-      const goldLeagues = [78, 262, 88, 253];
-      const tightLeagues = [61, 94, 197, 135, 2, 3, 848];
+      const goldLeagues = [78, 262, 88, 253]; const tightLeagues = [61, 94, 197, 135, 2, 3, 848];
 
       if (trapLeagues.includes(leagueId)) { totalXG *= 0.80; hXG *= 0.80; aXG *= 0.80; } 
       else if (tightLeagues.includes(leagueId)) { totalXG *= 0.85; hXG *= 0.85; aXG *= 0.85; } 
@@ -626,18 +398,11 @@
       const xgGap = Math.abs(hXG - aXG); const weakerSideXG = Math.min(hXG, aXG); const weakerSideSplitXG = Math.min(hSplitXG, aSplitXG);
 
       let over25Score = (totalXG * 24) + ((hSplitXG + aSplitXG) * 9) + ((aXGA + hXGA) * 6);
-      if (xgGap > 1.35 && weakerSideXG < 0.85) over25Score -= 14;
-      if (weakerSideSplitXG < 0.70) over25Score -= 8;
-
+      if (xgGap > 1.35 && weakerSideXG < 0.85) over25Score -= 14; if (weakerSideSplitXG < 0.70) over25Score -= 8;
       let over35Score = (totalXG * 22) + ((hSplitXG + aSplitXG) * 12) + ((aXGA + hXGA) * 10);
-      if (xgGap > 1.25) over35Score -= 18;
-      if (weakerSideXG < 1.00) over35Score -= 16;
-      if (weakerSideSplitXG < 0.85) over35Score -= 10;
-
+      if (xgGap > 1.25) over35Score -= 18; if (weakerSideXG < 1.00) over35Score -= 16; if (weakerSideSplitXG < 0.85) over35Score -= 10;
       let bttsScore = (Math.min(hXG, aXG) * 40) + ((hXGA + aXGA) * 12) + (Math.min(hSplitXG, aSplitXG) * 12);
-      if (xgGap > 1.15) bttsScore -= 14;
-      if (Math.min(hXG, aXG) < 0.75) bttsScore -= 10;
-      if (Math.min(hSplitXG, aSplitXG) < 0.65) bttsScore -= 8;
+      if (xgGap > 1.15) bttsScore -= 14; if (Math.min(hXG, aXG) < 0.75) bttsScore -= 10; if (Math.min(hSplitXG, aSplitXG) < 0.65) bttsScore -= 8;
 
       const cards4Score = ((hCards + aCards) * 18) + ((hSplitCards + aSplitCards) * 14);
 
@@ -672,7 +437,6 @@
     }
 
     function bucketGoals(exp) { if (exp >= 3.15) return 3; if (exp >= 2.05) return 2; if (exp >= 0.95) return 1; return 0; }
-
     function predictExactScoreAndCorners(hStats, aStats) {
       const hFormXG = safeNum(hStats.formXG); const aFormXG = safeNum(aStats.formXG);
       const hSplitXG = safeNum(hStats.splitXG); const aSplitXG = safeNum(aStats.splitXG);
@@ -683,25 +447,17 @@
       const awayGoalExp = clamp((aFormXG * 0.44) + (aSplitXG * 0.34) + (hFormXGA * 0.22), 0.2, 4.0);
 
       let homeGoals = bucketGoals(homeGoalExp); let awayGoals = bucketGoals(awayGoalExp);
-      if (Math.abs(homeGoalExp - awayGoalExp) < 0.22) {
-        if (homeGoals > awayGoals) awayGoals = homeGoals;
-        else if (awayGoals > homeGoals) homeGoals = awayGoals - 1 >= 0 ? homeGoals : awayGoals;
-      }
+      if (Math.abs(homeGoalExp - awayGoalExp) < 0.22) { if (homeGoals > awayGoals) awayGoals = homeGoals; else if (awayGoals > homeGoals) homeGoals = awayGoals - 1 >= 0 ? homeGoals : awayGoals; }
       homeGoals = clamp(homeGoals, 0, 4); awayGoals = clamp(awayGoals, 0, 4);
 
       const totalCornersExp = clamp(((hCorners + aCorners) * 0.76) + ((hSplitXG + aSplitXG) * 0.75), 5, 15);
       const homeCornerShareBase = clamp((homeGoalExp + hSplitXG + 0.25) / Math.max(homeGoalExp + awayGoalExp + hSplitXG + aSplitXG + 0.5, 0.1), 0.38, 0.62);
-      let homeCornersPred = Math.round(totalCornersExp * homeCornerShareBase);
-      let awayCornersPred = Math.round(totalCornersExp - homeCornersPred);
+      let homeCornersPred = Math.round(totalCornersExp * homeCornerShareBase); let awayCornersPred = Math.round(totalCornersExp - homeCornersPred);
       if (homeCornersPred < 2) homeCornersPred = 2; if (awayCornersPred < 2) awayCornersPred = 2;
-
       return { homeGoalExp: homeGoalExp.toFixed(2), awayGoalExp: awayGoalExp.toFixed(2), exactScore: `${homeGoals}-${awayGoals}`, totalCorners: homeCornersPred + awayCornersPred, homeCorners: homeCornersPred, awayCorners: awayCornersPred };
     }
 
-    function buildTipLinks(homeName, awayName) {
-      const query = encodeURIComponent(`${homeName} vs ${awayName}`);
-      return { forebet: `https://www.google.com/search?q=site%3Aforebet.com+${query}`, windrawwin: `https://www.google.com/search?q=site%3Awindrawwin.com+${query}`, predictz: `https://www.google.com/search?q=site%3Apredictz.com+${query}` };
-    }
+    function buildTipLinks(homeName, awayName) { const query = encodeURIComponent(`${homeName} vs ${awayName}`); return { forebet: `https://www.google.com/search?q=site%3Aforebet.com+${query}`, windrawwin: `https://www.google.com/search?q=site%3Awindrawwin.com+${query}`, predictz: `https://www.google.com/search?q=site%3Apredictz.com+${query}` }; }
 
     function savePredictionSnapshot(m, scores, pred, standings, hStats, aStats) {
       const signals = getMarketSignals(scores, hStats, aStats);
@@ -803,9 +559,7 @@
     }
 
     function buildLiveCard(m, s, standings, h2hSummary) {
-      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id);
-      const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
-
+      const homeRank = getTeamRankFromStandings(standings, m.teams.home.id); const awayRank = getTeamRankFromStandings(standings, m.teams.away.id);
       const homeShots = safeNum(s?.h?.shots); const awayShots = safeNum(s?.a?.shots);
       const homeDanger = safeNum(s?.h?.danger); const awayDanger = safeNum(s?.a?.danger);
       const homeCorners = safeNum(s?.h?.corners); const awayCorners = safeNum(s?.a?.corners);
@@ -833,12 +587,8 @@
           <div class="section-panel" style="margin-top:14px; padding:14px;">
             <div class="section-title" style="font-size:0.86rem; margin-bottom:10px;">🔴 LIVE ΠΡΟΒΛΕΨΗ ΤΕΛΙΚΟΥ ΣΚΟΡ & ΚΟΡΝΕΡ</div>
             <div class="stats-grid" style="margin-top:0;">
-              <div class="team-box">
-                <div class="stat-row"><span>Live πρόβλεψη τελικού σκορ</span><span class="val-split">${livePredHome}-${livePredAway}</span></div>
-              </div>
-              <div class="team-box">
-                <div class="stat-row"><span>Live πρόβλεψη τελικών κόρνερ</span><span class="val-split">${liveCornersPred}</span></div>
-              </div>
+              <div class="team-box"><div class="stat-row"><span>Live πρόβλεψη τελικού σκορ</span><span class="val-split">${livePredHome}-${livePredAway}</span></div></div>
+              <div class="team-box"><div class="stat-row"><span>Live πρόβλεψη τελικών κόρνερ</span><span class="val-split">${liveCornersPred}</span></div></div>
             </div>
           </div>
 
@@ -912,14 +662,42 @@
       return { tp, tn, fp, fn, accuracy: (total > 0 ? ((tp + tn) / total) * 100 : 0).toFixed(1), precision: ((tp + fp) > 0 ? (tp / (tp + fp)) * 100 : 0).toFixed(1), recall: ((tp + fn) > 0 ? (tp / (tp + fn)) * 100 : 0).toFixed(1) };
     }
 
-    async function run30DayAudit() {
+    // --- DATA VAULT: CUSTOM DATE AUDIT ---
+    async function runCustomAudit() {
       if (isRunning) return;
-      isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true); setLoader(true, "AUDIT 30 ΗΜΕΡΩΝ...");
+      
+      const startDateStr = document.getElementById("auditStart").value;
+      const endDateStr = document.getElementById("auditEnd").value;
+      
+      if (!startDateStr || !endDateStr) {
+          showError("Παρακαλώ επέλεξε και τις δύο ημερομηνίες (Από / Έως).");
+          return;
+      }
+      
+      const startDate = new Date(startDateStr);
+      const endDate = new Date(endDateStr);
+      // Αντιστροφή αν βάλει λάθος ημερομηνίες
+      if (startDate > endDate) {
+          showError("Η ημερομηνία 'Από' πρέπει να είναι πριν από την ημερομηνία 'Έως'.");
+          return;
+      }
+      
+      // Προσθήκη μιας ημέρας στο End Date για να συμπεριλάβει τα ματς της τελευταίας μέρας μέχρι τις 23:59
+      const endBoundary = new Date(endDate);
+      endBoundary.setDate(endBoundary.getDate() + 1);
+
+      isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true); setLoader(true, "CUSTOM DATE AUDIT...");
       document.getElementById("display").innerHTML = ""; document.getElementById("topSection").innerHTML = ""; document.getElementById("wallbetSection").innerHTML = "";
+      
       try {
-        const store = getPredictionStore(); const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
-        const candidates = store.filter(x => new Date(x.date) >= cutoff);
-        if (!candidates.length) { document.getElementById("auditSection").innerHTML = `<div class="section-panel"><div class="section-title">📊 AUDIT 30 ΗΜΕΡΩΝ</div><div style="color:var(--txt-muted);">Δεν υπάρχουν αποθηκευμένες προβλέψεις στο τελευταίο 30ήμερο.</div></div>`; return; }
+        const store = getPredictionStore();
+        // Φιλτράρισμα βάσει της επιλεγμένης ημερομηνίας
+        const candidates = store.filter(x => {
+            const matchDate = new Date(x.date);
+            return matchDate >= startDate && matchDate < endBoundary;
+        });
+
+        if (!candidates.length) { document.getElementById("auditSection").innerHTML = `<div class="section-panel"><div class="section-title">📊 CUSTOM DATE AUDIT</div><div style="color:var(--txt-muted);">Δεν υπάρχουν αποθηκευμένες προβλέψεις σε αυτό το χρονικό διάστημα.</div></div>`; return; }
         let rows = []; let totals = { games: 0, exactHits: 0, cornersAbsErrorSum: 0, cornersCount: 0 };
         for (let i = 0; i < candidates.length; i++) {
           const p = candidates[i]; setProgress(Math.round(((i + 1) / candidates.length) * 100), `AUDIT: ${p.homeTeam} vs ${p.awayTeam}`);
@@ -937,7 +715,7 @@
           totals.games += 1; if (hitExact) totals.exactHits += 1;
           rows.push({ date: p.date?.slice(0, 10) || "", league: p.league, match: `${p.homeTeam} vs ${p.awayTeam}`, predOver25: !!p.predOver25, actualOver25: actualTotal > 2.5, predOver35: !!p.predOver35, actualOver35: actualTotal > 3.5, predBTTS: !!p.predBTTS, actualBTTS: actualBTTS, predExact: p.exactScorePred, actualExact, hitExact, predCorners: p.cornersPred, actualCorners: actualCorners == null ? "-" : actualCorners, cornersError: cornersError == null ? "-" : cornersError.toFixed(1) });
         }
-        if (!totals.games) { document.getElementById("auditSection").innerHTML = `<div class="section-panel"><div class="section-title">📊 AUDIT 30 ΗΜΕΡΩΝ</div><div style="color:var(--txt-muted);">Δεν βρέθηκαν ολοκληρωμένοι αγώνες για αξιολόγηση.</div></div>`; return; }
+        if (!totals.games) { document.getElementById("auditSection").innerHTML = `<div class="section-panel"><div class="section-title">📊 CUSTOM DATE AUDIT</div><div style="color:var(--txt-muted);">Δεν βρέθηκαν ολοκληρωμένοι αγώνες για αξιολόγηση στο επιλεγμένο διάστημα.</div></div>`; return; }
         const over25Metrics = computeClassificationMetrics(rows, "predOver25", "actualOver25");
         const over35Metrics = computeClassificationMetrics(rows, "predOver35", "actualOver35");
         const bttsMetrics = computeClassificationMetrics(rows, "predBTTS", "actualBTTS");
@@ -946,12 +724,12 @@
 
         document.getElementById("auditSection").innerHTML = `
           <div class="section-panel">
-            <div class="section-title">📊 ADVANCED AUDIT 30 ΗΜΕΡΩΝ</div>
+            <div class="section-title">📊 OMEGA CUSTOM AUDIT (${startDateStr} έως ${endDateStr})</div>
             <div class="bank-grid" style="margin-bottom:16px;">
-              <div class="bank-box"><div class="bank-label">Αγώνες</div><div class="bank-value">${totals.games}</div></div>
+              <div class="bank-box"><div class="bank-label">Αγώνες Ελέγχου</div><div class="bank-value">${totals.games}</div></div>
               <div class="bank-box"><div class="bank-label">Exact Score Hit Rate</div><div class="bank-value">${exactAcc}%</div></div>
               <div class="bank-box"><div class="bank-label">Corners MAE</div><div class="bank-value">${cornersMae}</div></div>
-              <div class="bank-box"><div class="bank-label">Stored Predictions</div><div class="bank-value">${getPredictionStore().length}</div></div>
+              <div class="bank-box"><div class="bank-label">Total DB Records</div><div class="bank-value">${getPredictionStore().length}</div></div>
             </div>
             <div class="bank-grid" style="margin-bottom:16px;">
               <div class="bank-box"><div class="bank-label">O2.5 Accuracy</div><div class="bank-value">${over25Metrics.accuracy}%</div></div>
@@ -966,7 +744,7 @@
               </table>
             </div>
           </div>`;
-        showSuccess("Ο advanced έλεγχος 30 ημερών ολοκληρώθηκε.");
+        showSuccess(`Ο έλεγχος για το διάστημα ${startDateStr} - ${endDateStr} ολοκληρώθηκε.`);
       } catch (err) { showError(`Σφάλμα audit: ${err?.message || "Άγνωστο σφάλμα"}`); } finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
     }
 
@@ -1030,6 +808,12 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("scanDate").value = getTodayISO();
+      
+      // Βάλε 1 μήνα πίσω στο auditStart και το σημερινό στο auditEnd
+      const dStart = new Date(); dStart.setDate(dStart.getDate() - 30);
+      document.getElementById("auditStart").value = dStart.toISOString().split('T')[0];
+      document.getElementById("auditEnd").value = getTodayISO();
+
       const select = document.getElementById("leagueFilter");
       LEAGUES_DATA.forEach(l => { const opt = document.createElement("option"); opt.value = l.id; opt.textContent = l.name; select.appendChild(opt); });
       renderBankSection();
