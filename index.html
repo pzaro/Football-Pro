@@ -427,7 +427,7 @@
       let over35Score = (totalXG * 22) + ((hSplitXG + aSplitXG) * 12) + ((aXGA + hXGA) * 10);
       if (xgGap > 1.25) over35Score -= 18; if (weakerSideXG < 1.00) over35Score -= 16; if (weakerSideSplitXG < 0.85) over35Score -= 10;
       let bttsScore = (Math.min(hXG, aXG) * 40) + ((hXGA + aXGA) * 12) + (Math.min(hSplitXG, aSplitXG) * 12);
-      if (xgGap > 1.15) bttsScore -= 14; if (Math.min(hXG, aXG) < 0.75) bttsScore -= 10; if (Math.min(hSplitXG, aSplitXG) < 0.65) bttsScore -= 8;
+      if (xgGap > 1.15) bttsScore -= 14; if (Math.min(hXG, aXG) < 0.85) bttsScore -= 15; if (Math.min(hSplitXG, aSplitXG) < 0.65) bttsScore -= 8;
 
       const cards4Score = ((hCards + aCards) * 18) + ((hSplitCards + aSplitCards) * 14);
 
