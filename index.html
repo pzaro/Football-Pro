@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Predictor Pro v4706.33 - Sovereign Data Vault</title>
+  <title>Predictor Pro v4706.34 - Sovereign Data Miner</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -51,7 +51,7 @@
     
     .date-input, .league-select, .stake-input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 14px; border-radius: 10px; font-family: 'Orbitron', sans-serif; font-size: 0.93rem; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03); }
     .league-select { min-width: 250px; cursor: pointer; }
-    .date-input { min-width: 150px; }
+    .date-input { min-width: 140px; }
     .stake-input { width: 120px; }
 
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
@@ -131,31 +131,32 @@
 
 <body>
   <div id="auth" style="text-align:center; margin-top:20vh; padding: 0 15px;">
-    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.33</h1>
+    <h1 class="orbitron" style="color:var(--p); font-size: 1.8rem;">APEX OMEGA v4706.34</h1>
     <input type="password" id="pin" placeholder="PIN" oninput="if(this.value==='106014'){this.parentElement.style.display='none';document.getElementById('app').style.display='block';}" style="background:#000; color:var(--p); border:1px solid var(--p); padding:15px; font-size:2rem; text-align:center; border-radius:12px; font-family:'Orbitron'; outline:none; width: 100%; max-width: 300px;">
-    <div class="small-note">Data Vault Edition | Mobile Optimized</div>
+    <div class="small-note">Data Miner Edition | Batch Range Scanning</div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="container">
       <header style="text-align:center; padding:15px 0 20px;">
         <h1 class="orbitron" style="color:var(--p); margin:0; font-size: 1.6rem;">OMEGA TERMINAL <span style="color:#fff">PROFIT</span></h1>
-        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">Mobile Elite | Data Vault & Advanced Audit</div>
+        <div style="margin-top:6px; color:var(--txt-muted); font-size:0.85rem;">Mobile Elite | Data Miner & Batch Audit</div>
       </header>
 
       <div class="toolbar">
-        <input type="date" id="scanDate" class="date-input">
+        <div style="display:flex; gap:10px; width:100%; max-width:500px;">
+            <input type="date" id="scanStart" class="date-input" style="flex:1;" title="Έναρξη Σάρωσης">
+            <input type="date" id="scanEnd" class="date-input" style="flex:1;" title="Λήξη Σάρωσης">
+        </div>
         <select id="leagueFilter" class="league-select">
           <option value="ALL">🌐 Όλες οι Διοργανώσεις</option>
         </select>
-        <input type="number" id="wallbetStake" class="stake-input" value="10" min="1" step="1" placeholder="Stake">
-        <button class="btn-main" id="btnPre" onclick="runScan()">🚀 SCAN</button>
+        <button class="btn-main" id="btnPre" onclick="runScan()">🚀 BATCH SCAN</button>
         <button class="btn-main" id="btnLive" style="background:#da3633;" onclick="runLiveScan()">🔴 LIVE SCORE</button>
-        <button class="btn-main" id="btnSaveWallbet" style="background:#b45309;" onclick="saveWallBet()">💾 SAVE WALLBET</button>
       </div>
 
       <div class="toolbar-secondary">
-        <div style="width:100%; text-align:center; font-family:'Orbitron'; color:var(--p); font-weight:900; font-size:0.8rem; margin-bottom:5px;">🗄️ OMEGA DATA VAULT (ΑΝΑΛΥΣΗ ΙΣΤΟΡΙΚΟΥ)</div>
+        <div style="width:100%; text-align:center; font-family:'Orbitron'; color:var(--p); font-weight:900; font-size:0.8rem; margin-bottom:5px;">🗄️ OMEGA DATA VAULT (ΔΙΑΧΕΙΡΙΣΗ ΒΑΣΗΣ & ΕΛΕΓΧΟΣ)</div>
         <div style="display:flex; gap:10px; width:100%;">
             <input type="date" id="auditStart" class="date-input" style="flex:1;" title="Από">
             <input type="date" id="auditEnd" class="date-input" style="flex:1;" title="Έως">
@@ -166,7 +167,10 @@
             ⬆️ ΑΝΕΒΑΣΜΑ ΑΡΧΕΙΟΥ
             <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
         </label>
-        <button class="btn-main" id="btnPdf" style="background:#222;" onclick="exportPDF()">📄 EXPORT PDF</button>
+        <div style="width:100%; display:flex; gap:10px; margin-top:5px;">
+            <input type="number" id="wallbetStake" class="stake-input" value="10" min="1" step="1" placeholder="Stake" style="flex:1;">
+            <button class="btn-main" id="btnSaveWallbet" style="background:#b45309; flex:2;" onclick="saveWallBet()">💾 SAVE WALLBET</button>
+        </div>
       </div>
 
       <div id="errorBox"></div>
@@ -223,11 +227,10 @@
     const REQUEST_TIMEOUT_MS = 12000;
     const LAST_GENERAL = 6;
     const LAST_SPLIT = 6;
-    const MAX_MATCHES = 100;
 
-    const LS_WALLBET_BANK = "omega_wallbet_bank_v470633";
-    const LS_WALLBET_LAST = "omega_wallbet_last_v470633";
-    const LS_PREDICTIONS = "omega_predictions_v470633"; // Data Vault Storage
+    const LS_WALLBET_BANK = "omega_wallbet_bank_v470634";
+    const LS_WALLBET_LAST = "omega_wallbet_last_v470634";
+    const LS_PREDICTIONS = "omega_predictions_v470634"; // Data Vault Storage
 
     const OVER25_SCORE_THRESHOLD = 104;
     const OVER25_TOTALXG_THRESHOLD = 2.45;
@@ -257,6 +260,18 @@
       const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, "0"); const day = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${day}`;
     }
+    // Helper to get array of dates between two dates
+    function getDatesInRange(startDateStr, endDateStr) {
+      const dates = [];
+      let currentDate = new Date(startDateStr);
+      const endDate = new Date(endDateStr);
+      while (currentDate <= endDate) {
+        dates.push(currentDate.toISOString().split('T')[0]);
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      return dates;
+    }
+
     function safeNum(x, d = 0) { const n = Number(x); return Number.isFinite(n) ? n : d; }
     function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
     function isLiveStatus(short) { return ["1H", "2H", "HT", "LIVE", "ET", "BT", "P"].includes(short); }
@@ -368,8 +383,18 @@
     function getDev(curr, base) { if (!base || base <= 0) return `<span class="dev-badge dev-pos">N/A</span>`; const d = (((parseFloat(curr) - base) / base) * 100).toFixed(1); return `<span class="dev-badge ${d >= 0 ? "dev-pos" : "dev-neg"}">${d > 0 ? "+" : ""}${d}%</span>`; }
 
     async function batchCalculate(list, teamId) {
-      if (!list.length) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" }; let xgSum = 0, xgaSum = 0, corSum = 0, crdSum = 0, count = 0;
-      for (const f of list) { const st = await getFixtureStats(f.fixture.id); if (!st?.response || st.response.length < 2) continue; const myObj = st.response.find(x => x.team.id === teamId); const opObj = st.response.find(x => x.team.id !== teamId); if (!myObj || !opObj) continue; const my = myObj.statistics || []; const op = opObj.statistics || []; let myXG = statVal(my, "Expected Goals"); if (myXG <= 0) myXG = estimateXG(my, getTeamGoals(f, teamId)); let oppXG = statVal(op, "Expected Goals"); if (oppXG <= 0) oppXG = estimateXG(op, getOpponentGoals(f, teamId)); xgSum += myXG; xgaSum += oppXG; corSum += statVal(my, "Corner Kicks"); crdSum += statVal(my, "Yellow Cards") + statVal(my, "Red Cards"); count++; }
+      if (!list.length) return { xg: "0.00", xga: "0.00", cor: "0.0", crd: "0.0" };
+      let xgSum = 0, xgaSum = 0, corSum = 0, crdSum = 0, count = 0;
+      for (const f of list) {
+        const st = await getFixtureStats(f.fixture.id);
+        if (!st?.response || st.response.length < 2) continue;
+        const myObj = st.response.find(x => x.team.id === teamId); const opObj = st.response.find(x => x.team.id !== teamId);
+        if (!myObj || !opObj) continue;
+        const my = myObj.statistics || []; const op = opObj.statistics || [];
+        let myXG = statVal(my, "Expected Goals"); if (myXG <= 0) myXG = estimateXG(my, getTeamGoals(f, teamId));
+        let oppXG = statVal(op, "Expected Goals"); if (oppXG <= 0) oppXG = estimateXG(op, getOpponentGoals(f, teamId));
+        xgSum += myXG; xgaSum += oppXG; corSum += statVal(my, "Corner Kicks"); crdSum += statVal(my, "Yellow Cards") + statVal(my, "Red Cards"); count++;
+      }
       return { xg: count > 0 ? (xgSum / count).toFixed(2) : "0.00", xga: count > 0 ? (xgaSum / count).toFixed(2) : "0.00", cor: count > 0 ? (corSum / count).toFixed(1) : "0.0", crd: count > 0 ? (crdSum / count).toFixed(1) : "0.0" };
     }
 
@@ -476,7 +501,7 @@
           <div class="match-header">
             <div class="match-teams">
               <span style="background:#222; padding:4px 8px; border-radius:4px; font-size:0.8rem;">${escapeHtml(m.fixture.status.short)}</span>
-              <div style="color:var(--gold); font-size:0.72rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)}</div>
+              <div style="color:var(--gold); font-size:0.72rem; font-weight:800; margin-top:5px;">${escapeHtml(m.league.name)} - ${m.fixture.date.substring(0,10)}</div>
               <h2 class="orbitron" style="margin:5px 0;">${escapeHtml(m.teams.home.name)} ${homeRank ? `<span class="standing-pill">#${homeRank}</span>` : ""}</h2>
               <h2 class="orbitron" style="margin:2px 0;">${escapeHtml(m.teams.away.name)} ${awayRank ? `<span class="standing-pill">#${awayRank}</span>` : ""}</h2>
             </div>
@@ -665,56 +690,43 @@
     // --- DATA VAULT: CUSTOM DATE AUDIT ---
     async function runCustomAudit() {
       if (isRunning) return;
+      const startDateStr = document.getElementById("auditStart").value; const endDateStr = document.getElementById("auditEnd").value;
+      if (!startDateStr || !endDateStr) { showError("Παρακαλώ επέλεξε και τις δύο ημερομηνίες (Από / Έως)."); return; }
+      const startDate = new Date(startDateStr); const endDate = new Date(endDateStr);
+      if (startDate > endDate) { showError("Η ημερομηνία 'Από' πρέπει να είναι πριν από την ημερομηνία 'Έως'."); return; }
       
-      const startDateStr = document.getElementById("auditStart").value;
-      const endDateStr = document.getElementById("auditEnd").value;
-      
-      if (!startDateStr || !endDateStr) {
-          showError("Παρακαλώ επέλεξε και τις δύο ημερομηνίες (Από / Έως).");
-          return;
-      }
-      
-      const startDate = new Date(startDateStr);
-      const endDate = new Date(endDateStr);
-      // Αντιστροφή αν βάλει λάθος ημερομηνίες
-      if (startDate > endDate) {
-          showError("Η ημερομηνία 'Από' πρέπει να είναι πριν από την ημερομηνία 'Έως'.");
-          return;
-      }
-      
-      // Προσθήκη μιας ημέρας στο End Date για να συμπεριλάβει τα ματς της τελευταίας μέρας μέχρι τις 23:59
-      const endBoundary = new Date(endDate);
-      endBoundary.setDate(endBoundary.getDate() + 1);
+      const endBoundary = new Date(endDate); endBoundary.setDate(endBoundary.getDate() + 1);
 
       isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true); setLoader(true, "CUSTOM DATE AUDIT...");
       document.getElementById("display").innerHTML = ""; document.getElementById("topSection").innerHTML = ""; document.getElementById("wallbetSection").innerHTML = "";
       
       try {
         const store = getPredictionStore();
-        // Φιλτράρισμα βάσει της επιλεγμένης ημερομηνίας
-        const candidates = store.filter(x => {
-            const matchDate = new Date(x.date);
-            return matchDate >= startDate && matchDate < endBoundary;
-        });
-
+        const candidates = store.filter(x => { const matchDate = new Date(x.date); return matchDate >= startDate && matchDate < endBoundary; });
         if (!candidates.length) { document.getElementById("auditSection").innerHTML = `<div class="section-panel"><div class="section-title">📊 CUSTOM DATE AUDIT</div><div style="color:var(--txt-muted);">Δεν υπάρχουν αποθηκευμένες προβλέψεις σε αυτό το χρονικό διάστημα.</div></div>`; return; }
+        
         let rows = []; let totals = { games: 0, exactHits: 0, cornersAbsErrorSum: 0, cornersCount: 0 };
         for (let i = 0; i < candidates.length; i++) {
           const p = candidates[i]; setProgress(Math.round(((i + 1) / candidates.length) * 100), `AUDIT: ${p.homeTeam} vs ${p.awayTeam}`);
           const fixtureResp = await apiReq(`fixtures?id=${p.fixtureId}`); const fixture = fixtureResp?.response?.[0];
           if (!fixture || !isFinishedStatus(fixture?.fixture?.status?.short)) continue;
+          
           const actualHome = safeNum(fixture?.goals?.home); const actualAway = safeNum(fixture?.goals?.away);
           const actualTotal = actualHome + actualAway; const actualBTTS = actualHome > 0 && actualAway > 0; const actualExact = `${actualHome}-${actualAway}`;
+          
           const statsResp = await getFixtureStats(p.fixtureId); let actualCorners = null;
           if (statsResp?.response && statsResp.response.length >= 2) {
             const hObj = statsResp.response.find(x => x.team?.id === fixture?.teams?.home?.id); const aObj = statsResp.response.find(x => x.team?.id === fixture?.teams?.away?.id);
             actualCorners = statVal(hObj?.statistics || [], "Corner Kicks") + statVal(aObj?.statistics || [], "Corner Kicks");
           }
+          
           const hitExact = String(p.exactScorePred) === actualExact; let cornersError = null;
           if (actualCorners != null && Number.isFinite(actualCorners)) { cornersError = Math.abs(safeNum(p.cornersPred) - actualCorners); totals.cornersAbsErrorSum += cornersError; totals.cornersCount += 1; }
           totals.games += 1; if (hitExact) totals.exactHits += 1;
+          
           rows.push({ date: p.date?.slice(0, 10) || "", league: p.league, match: `${p.homeTeam} vs ${p.awayTeam}`, predOver25: !!p.predOver25, actualOver25: actualTotal > 2.5, predOver35: !!p.predOver35, actualOver35: actualTotal > 3.5, predBTTS: !!p.predBTTS, actualBTTS: actualBTTS, predExact: p.exactScorePred, actualExact, hitExact, predCorners: p.cornersPred, actualCorners: actualCorners == null ? "-" : actualCorners, cornersError: cornersError == null ? "-" : cornersError.toFixed(1) });
         }
+        
         if (!totals.games) { document.getElementById("auditSection").innerHTML = `<div class="section-panel"><div class="section-title">📊 CUSTOM DATE AUDIT</div><div style="color:var(--txt-muted);">Δεν βρέθηκαν ολοκληρωμένοι αγώνες για αξιολόγηση στο επιλεγμένο διάστημα.</div></div>`; return; }
         const over25Metrics = computeClassificationMetrics(rows, "predOver25", "actualOver25");
         const over35Metrics = computeClassificationMetrics(rows, "predOver35", "actualOver35");
@@ -748,32 +760,73 @@
       } catch (err) { showError(`Σφάλμα audit: ${err?.message || "Άγνωστο σφάλμα"}`); } finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
     }
 
+    // --- BATCH SCANNING (RANGE) ---
     async function runScan() {
       if (isRunning) return;
       isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true); setLoader(true, "ΑΝΑΖΗΤΗΣΗ ΣΗΜΕΙΩΝ ΜΕ ΑΞΙΑ...");
       const display = document.getElementById("display"); display.innerHTML = ""; document.getElementById("topSection").innerHTML = ""; document.getElementById("wallbetSection").innerHTML = ""; document.getElementById("auditSection").innerHTML = "";
+      
       try {
-        const selectedDate = document.getElementById("scanDate").value || getTodayISO();
+        const startDateStr = document.getElementById("scanStart").value || getTodayISO();
+        const endDateStr = document.getElementById("scanEnd").value || startDateStr;
         const selectedLeague = document.getElementById("leagueFilter").value;
-        const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
-        let matches = (fixturesResp.response || []).filter(m => selectedLeague === "ALL" ? LEAGUES.includes(m.league.id) : m.league.id === parseInt(selectedLeague, 10));
-        matches.sort((a, b) => { const aLive = isLiveStatus(a.fixture.status.short) ? 1 : 0; const bLive = isLiveStatus(b.fixture.status.short) ? 1 : 0; const aFinished = isFinishedStatus(a.fixture.status.short) ? 1 : 0; const bFinished = isFinishedStatus(b.fixture.status.short) ? 1 : 0; if (aLive !== bLive) return bLive - aLive; if (aFinished !== bFinished) return bFinished - aFinished; return (a.fixture.timestamp || 0) - (b.fixture.timestamp || 0); });
-        matches = matches.slice(0, MAX_MATCHES);
-        if (!matches.length) { display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν αγώνες.</h3></div>`; return; }
+        
+        if (new Date(startDateStr) > new Date(endDateStr)) {
+          showError("Λάθος Ημερομηνίες: Η Έναρξη πρέπει να είναι πριν από τη Λήξη.");
+          isRunning = false; setButtonsDisabled(false); setLoader(false); return;
+        }
+
+        const datesToScan = getDatesInRange(startDateStr, endDateStr);
+        let allMatches = [];
+
+        // Fetch fixtures for all dates in range
+        for (let i = 0; i < datesToScan.length; i++) {
+           setProgress(Math.round(((i) / datesToScan.length) * 10), `Λήψη δεδομένων για ${datesToScan[i]}...`);
+           const fixturesResp = await apiReq(`fixtures?date=${datesToScan[i]}`);
+           let dayMatches = (fixturesResp.response || []).filter(m => selectedLeague === "ALL" ? LEAGUES.includes(m.league.id) : m.league.id === parseInt(selectedLeague, 10));
+           allMatches.push(...dayMatches);
+        }
+
+        allMatches.sort((a, b) => { const aLive = isLiveStatus(a.fixture.status.short) ? 1 : 0; const bLive = isLiveStatus(b.fixture.status.short) ? 1 : 0; const aFinished = isFinishedStatus(a.fixture.status.short) ? 1 : 0; const bFinished = isFinishedStatus(b.fixture.status.short) ? 1 : 0; if (aLive !== bLive) return bLive - aLive; if (aFinished !== bFinished) return bFinished - aFinished; return (a.fixture.timestamp || 0) - (b.fixture.timestamp || 0); });
+        
+        // Safety limit to avoid breaking the browser or eating the entire API quota instantly
+        if(allMatches.length > 500) { allMatches = allMatches.slice(0, 500); }
+
+        if (!allMatches.length) { display.innerHTML = `<div class="cyber-card"><h3 class="orbitron" style="text-align:center; color:var(--gold); margin:0;">Δεν βρέθηκαν αγώνες στο επιλεγμένο διάστημα.</h3></div>`; isRunning=false; setButtonsDisabled(false); setLoader(false); return; }
+        
         let htmlBuffer = ""; const scoredMatches = [];
-        for (let i = 0; i < matches.length; i++) {
-          const m = matches[i]; setProgress(Math.round(((i + 1) / matches.length) * 100), `ΑΝΑΛΥΣΗ: ${m.teams.home.name} vs ${m.teams.away.name}`);
+        const MAX_RENDER = 30; // Οπτική προστασία του DOM (εμφανίζει μόνο τα τελευταία 30, αλλά τα σώζει ΟΛΑ)
+
+        for (let i = 0; i < allMatches.length; i++) {
+          const m = allMatches[i]; 
+          // Το progress bar πάει από 10% έως 100%
+          setProgress(10 + Math.round(((i + 1) / allMatches.length) * 90), `ΑΝΑΛΥΣΗ (${i+1}/${allMatches.length}): ${m.teams.home.name} vs ${m.teams.away.name}`);
+          
           const [intelHome, intelAway, standings, h2hFixtures] = await Promise.all([getTeamData(m.teams.home.id, m.league.id, m.league.season, "home"), getTeamData(m.teams.away.id, m.league.id, m.league.season, "away"), getLeagueStandings(m.league.id, m.league.season), getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)]);
           const scores = computeMarketScores(intelHome, intelAway, m.league.id);
           const h2hSummary = summarizeH2H(h2hFixtures, m.teams.home.id, m.teams.away.id);
+          
           scoredMatches.push({ fixtureId: m.fixture.id, homeTeam: m.teams.home.name, awayTeam: m.teams.away.name, league: m.league.name, leagueId: m.league.id, homeRank: getTeamRankFromStandings(standings, m.teams.home.id), awayRank: getTeamRankFromStandings(standings, m.teams.away.id), over25Score: scores.over25Score, over35Score: scores.over35Score, bttsScore: scores.bttsScore, cards4Score: scores.cards4Score });
-          htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores, standings, h2hSummary);
+          
+          // Μόνο τα πρώτα 30 (συνήθως τα πιο πρόσφατα) μπαίνουν στο HTML για να μην κρασάρει το κινητό
+          if (i < MAX_RENDER) {
+              htmlBuffer += buildMatchCard(m, { h: intelHome, a: intelAway }, scores, standings, h2hSummary);
+          }
         }
+        
         latestTopLists.over25 = [...scoredMatches].sort((a, b) => b.over25Score - a.over25Score).slice(0, 5);
         latestTopLists.over35 = [...scoredMatches].sort((a, b) => b.over35Score - a.over35Score).slice(0, 5);
         latestTopLists.btts = [...scoredMatches].sort((a, b) => b.bttsScore - a.bttsScore).slice(0, 5);
         latestTopLists.cards4 = [...scoredMatches].sort((a, b) => b.cards4Score - a.cards4Score).slice(0, 5);
-        renderTopSections(); renderWallBet(); display.innerHTML = htmlBuffer; showSuccess("Το recalibrated scan ολοκληρώθηκε και οι προβλέψεις αποθηκεύτηκαν για audit.");
+        
+        renderTopSections(); renderWallBet(); 
+        
+        if (allMatches.length > MAX_RENDER) {
+            htmlBuffer += `<div class="cyber-card" style="text-align:center; color:var(--p);"><h3 class="orbitron">+${allMatches.length - MAX_RENDER} αγώνες αναλύθηκαν και αποθηκεύτηκαν κρυφά στο Data Vault.</h3><p style="font-size:0.8rem; color:var(--txt-muted);">Μπορείς να τους δεις στο "Ελεγχος Απόδοσης" (Audit) ή να κατεβάσεις το αρχείο JSON.</p></div>`;
+        }
+        
+        display.innerHTML = htmlBuffer; 
+        showSuccess(`Το Batch Scan ολοκληρώθηκε. Αναλύθηκαν και αποθηκεύτηκαν ${allMatches.length} αγώνες στο Data Vault.`);
       } catch (err) { showError(`Σφάλμα: ${err?.message || "Άγνωστο σφάλμα"}`); } finally { setLoader(false); setButtonsDisabled(false); isRunning = false; }
     }
 
@@ -782,7 +835,7 @@
       isRunning = true; clearError(); clearSuccess(); setButtonsDisabled(true); setLoader(true, "ΑΝΑΖΗΤΗΣΗ LIVE ΑΓΩΝΩΝ...");
       const display = document.getElementById("display"); display.innerHTML = ""; document.getElementById("topSection").innerHTML = ""; document.getElementById("wallbetSection").innerHTML = ""; document.getElementById("auditSection").innerHTML = "";
       try {
-        const selectedDate = document.getElementById("scanDate").value || getTodayISO();
+        const selectedDate = document.getElementById("scanStart").value || getTodayISO(); // Χρησιμοποιεί μόνο την ημερομηνία έναρξης για το Live
         const selectedLeague = document.getElementById("leagueFilter").value;
         const fixturesResp = await apiReq(`fixtures?date=${selectedDate}`);
         let matches = (fixturesResp.response || []).filter(m => { const leagueOk = selectedLeague === "ALL" ? LEAGUES.includes(m.league.id) : m.league.id === parseInt(selectedLeague, 10); return leagueOk && isLiveStatus(m.fixture.status.short); });
@@ -807,9 +860,9 @@
     function exportPDF() { html2pdf().set({ margin: 8, filename: `Omega_${getTodayISO()}.pdf`, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(document.getElementById("app")).save(); }
 
     window.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("scanDate").value = getTodayISO();
+      document.getElementById("scanStart").value = getTodayISO();
+      document.getElementById("scanEnd").value = getTodayISO();
       
-      // Βάλε 1 μήνα πίσω στο auditStart και το σημερινό στο auditEnd
       const dStart = new Date(); dStart.setDate(dStart.getDate() - 30);
       document.getElementById("auditStart").value = dStart.toISOString().split('T')[0];
       document.getElementById("auditEnd").value = getTodayISO();
