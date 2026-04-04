@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4720 - The Championship Balance</title>
+  <title>APEX OMEGA v4721 - Dynamic Engine</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
@@ -52,7 +52,7 @@
     .cyber-card { background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius); padding: 22px; margin-bottom: 18px; border-left: 4px solid var(--p); box-shadow: var(--shadow); animation: fadeUp 0.35s ease-out both; }
     .feed-match-card { transition: box-shadow 0.3s; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    .section-panel { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 18px; box-shadow: var(--shadow); }
+    .section-panel { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 18px; box-shadow: var(--shadow); transition: height 0.3s ease; }
     .section-title { font-family: 'Orbitron', monospace; color: var(--gold); font-size: 0.78rem; font-weight: 900; margin-bottom: 14px; letter-spacing: 1.5px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 
     /* TOOLBARS & INPUTS */
@@ -67,6 +67,12 @@
     .btn:hover:not(:disabled) { filter: brightness(1.15); }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .btn-danger { background: linear-gradient(135deg, #da3633, #b91c1c); }
+
+    /* CALIBRATION GRID */
+    .calib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+    .calib-item { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; border: 1px solid var(--border); }
+    .calib-lbl { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--magenta); margin-bottom: 5px; display: block; }
+    .calib-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--p); color: #fff; font-family: 'Orbitron', monospace; font-size: 1rem; padding: 4px; outline: none; text-align: center; }
 
     /* PREDICTION TABS */
     .pred-tabs { display: flex; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.25); }
@@ -120,27 +126,15 @@
   <div class="credit-bar" role="banner">
     <div class="credit-bar-left">
       <div class="credit-logo">APEX OMEGA</div>
-      <div>
-        <div class="credit-label">API CREDITS</div>
-        <div id="creditDisplay" class="credit-value mono" aria-live="polite">— SYNC —</div>
-      </div>
+      <div><div class="credit-label">API CREDITS</div><div id="creditDisplay" class="credit-value mono" aria-live="polite">— SYNC —</div></div>
     </div>
   </div>
 
   <div id="auth" role="main">
     <div class="auth-card">
       <div class="auth-title">APEX OMEGA</div>
-      <div class="auth-sub">v4720 · The Championship Balance</div>
-      <label for="pin" style="position:absolute; width:1px; height:1px; overflow:hidden;">PIN Εισόδου</label>
-      <input
-        type="password"
-        id="pin"
-        class="auth-input"
-        placeholder="• • • •"
-        maxlength="8"
-        autocomplete="off"
-        inputmode="numeric"
-      >
+      <div class="auth-sub">v4721 · The Dynamic Engine</div>
+      <input type="password" id="pin" class="auth-input" placeholder="• • • •" maxlength="8" autocomplete="off" inputmode="numeric">
       <div id="authError" role="alert" style="margin-top:12px; font-size:0.75rem; color:var(--alert); min-height:20px;"></div>
     </div>
   </div>
@@ -148,52 +142,97 @@
   <div id="app" style="display:none;" role="main">
     <div class="container">
 
+      <div class="section-panel" style="border-color: var(--magenta);">
+        <div class="section-title" style="color: var(--magenta); cursor:pointer;" onclick="toggleCalibration()">
+          <span>⚙️ ΚΑΝΤΡΑΝ ΚΑΛΙΜΠΡΑΡΙΣΜΑΤΟΣ (DYNAMIC ENGINE)</span>
+          <span id="calibArrow">▼</span>
+        </div>
+        <div id="calibrationPanel" style="display:none; margin-top:15px;">
+          
+          <div style="font-size:0.75rem; color:var(--txt-muted); margin-bottom:15px;">
+            Προσάρμοσε τον αλγόριθμο με βάση τις υποδείξεις του Auto-Calibration Audit. Οι αλλαγές θα εφαρμοστούν στο επόμενο Scan.
+          </div>
+
+          <div style="color:var(--p); font-family:'Orbitron',monospace; font-size:0.8rem; margin-bottom:8px;">1. ΒΑΡΗ ΥΠΟΛΟΓΙΣΜΟΥ (xG WEIGHTS)</div>
+          <div class="calib-grid">
+            <div class="calib-item"><span class="calib-lbl">Σουτ στον Στόχο</span><input type="number" step="0.01" id="cfg_wShotsOn" class="calib-input"></div>
+            <div class="calib-item"><span class="calib-lbl">Σουτ εκτός Στόχου</span><input type="number" step="0.01" id="cfg_wShotsOff" class="calib-input"></div>
+            <div class="calib-item"><span class="calib-lbl">Κόρνερ</span><input type="number" step="0.01" id="cfg_wCorners" class="calib-input"></div>
+            <div class="calib-item"><span class="calib-lbl">Πραγματικά Γκολ</span><input type="number" step="0.01" id="cfg_wGoals" class="calib-input"></div>
+          </div>
+
+          <div style="color:var(--gold); font-family:'Orbitron',monospace; font-size:0.8rem; margin-bottom:8px; margin-top:20px;">2. ΟΡΙΑ ΕΠΙΛΟΓΩΝ (THRESHOLDS)</div>
+          <div class="calib-grid">
+            <div class="calib-item"><span class="calib-lbl">Ελάχιστο Total xG για O2.5</span><input type="number" step="0.05" id="cfg_tXG_O25" class="calib-input"></div>
+            <div class="calib-item"><span class="calib-lbl">Ελάχιστο Total xG για O3.5</span><input type="number" step="0.05" id="cfg_tXG_O35" class="calib-input"></div>
+            <div class="calib-item"><span class="calib-lbl">Διαφορά xG (Diff) για 1X2</span><input type="number" step="0.05" id="cfg_xG_Diff" class="calib-input"></div>
+          </div>
+
+          <div style="color:#ffb3b3; font-family:'Orbitron',monospace; font-size:0.8rem; margin-bottom:8px; margin-top:20px;">3. LEAGUE MODIFIERS (MULTIPLIERS)</div>
+          <div class="calib-grid">
+            <div class="calib-item"><span class="calib-lbl">Trap Leagues (πχ Champ.)</span><input type="number" step="0.01" id="cfg_modTrap" class="calib-input"></div>
+            <div class="calib-item"><span class="calib-lbl">Tight Leagues (πχ Serie A)</span><input type="number" step="0.01" id="cfg_modTight" class="calib-input"></div>
+            <div class="calib-item"><span class="calib-lbl">Gold Leagues (πχ Bundes.)</span><input type="number" step="0.01" id="cfg_modGold" class="calib-input"></div>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:20px;">
+            <button class="btn" style="background:linear-gradient(135deg, #10b981, #059669);" onclick="saveSettings()">💾 ΑΠΟΘΗΚΕΥΣΗ ΡΥΘΜΙΣΕΩΝ</button>
+            <button class="btn btn-danger" onclick="resetSettings()">🔄 ΕΠΑΝΑΦΟΡΑ DEFAULTS</button>
+          </div>
+        </div>
+      </div>
+
       <div class="toolbar">
-        <div class="toolbar-group">
-          <div class="toolbar-label">Ημ/νία Έναρξης</div>
-          <input type="date" id="scanStart" class="field" aria-label="Ημερομηνία έναρξης">
-        </div>
-        <div class="toolbar-group">
-          <div class="toolbar-label">Ημ/νία Λήξης</div>
-          <input type="date" id="scanEnd" class="field" aria-label="Ημερομηνία λήξης">
-        </div>
-        <div class="toolbar-group" style="flex:2;">
-          <div class="toolbar-label">Διοργάνωση</div>
-          <select id="leagueFilter" class="field" aria-label="Επιλογή διοργάνωσης">
+        <div class="toolbar-group"><div class="toolbar-label">Ημ/νία Έναρξης</div><input type="date" id="scanStart" class="field"></div>
+        <div class="toolbar-group"><div class="toolbar-label">Ημ/νία Λήξης</div><input type="date" id="scanEnd" class="field"></div>
+        <div class="toolbar-group" style="flex:2;"><div class="toolbar-label">Διοργάνωση</div>
+          <select id="leagueFilter" class="field">
             <option value="ALL">🌐 Βασικές Διοργανώσεις (Top 24)</option>
             <option value="WORLD">🌍 ΟΛΟ ΤΟ ΚΟΥΠΟΝΙ (Όλος ο Κόσμος)</option>
           </select>
         </div>
-        <div class="toolbar-group" style="flex:0;">
-          <button class="btn" id="btnPre" onclick="runScan()" aria-label="Εκκίνηση Batch Scan">🚀 BATCH SCAN</button>
-        </div>
+        <div class="toolbar-group" style="flex:0;"><button class="btn" id="btnPre" onclick="runScan()">🚀 BATCH SCAN</button></div>
       </div>
 
       <div class="section-panel" style="background: rgba(0,242,255,0.03); border: 1px dashed rgba(0,242,255,0.2);">
         <div class="section-title" style="margin:0; margin-bottom:14px;">🗄️ DATA VAULT & 4-PILLAR AUDIT</div>
         <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-          <input type="date" id="auditStart" class="field" style="flex:1; min-width:120px;" aria-label="Audit ημερομηνία έναρξης">
-          <input type="date" id="auditEnd" class="field" style="flex:1; min-width:120px;" aria-label="Audit ημερομηνία λήξης">
-          <select id="auditLeague" class="field" style="flex:1; min-width:140px;" aria-label="Επιλογή λίγκας για Audit">
-            <option value="ALL">🌐 Όλες οι Λίγκες</option>
-          </select>
+          <input type="date" id="auditStart" class="field" style="flex:1; min-width:120px;">
+          <input type="date" id="auditEnd" class="field" style="flex:1; min-width:120px;">
+          <select id="auditLeague" class="field" style="flex:1; min-width:140px;"><option value="ALL">🌐 Όλες οι Λίγκες</option></select>
           <button class="btn" style="background: linear-gradient(135deg, #7c3aed, #9f67ff);" onclick="runCustomAudit()">📊 RUN AUDIT</button>
           <button class="btn btn-danger" onclick="clearVault()">🗑️ CLEAR</button>
         </div>
       </div>
 
-      <div id="errorBox" role="alert" aria-live="assertive"></div>
-      <div id="successBox" role="status" aria-live="polite"></div>
-      <div id="loader" style="display:none;" class="progress-wrap" aria-live="polite">
-        <div class="progress-bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBarEl">
-          <div id="bar" class="progress-bar" style="width:0%"></div>
-        </div>
+      <div id="errorBox"></div><div id="successBox"></div>
+      <div id="loader" style="display:none;" class="progress-wrap">
+        <div class="progress-bar-bg"><div id="bar" class="progress-bar" style="width:0%"></div></div>
         <div class="progress-status"><span id="status" class="mono"></span></div>
       </div>
 
       <div id="topSection"></div>
       <div id="wallbetSection"></div>
       <div id="summarySection"></div>
+      
+      <div id="feedFilterSection" style="display:none; margin-top:20px;">
+        <div class="section-panel" style="border-color:var(--p); background: rgba(0,242,255,0.03); padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div class="section-title" style="margin:0; color:var(--p);">⚽ FEED ΑΓΩΝΩΝ (<span id="feedCount">0</span>)</div>
+            <select id="marketFilter" class="field" style="max-width:300px; border-color:var(--neon-live);" onchange="filterFeed()">
+              <option value="ALL">🌐 Εμφάνιση Όλων των Αγώνων</option>
+              <option value="COMBO">⚡ Μόνο Συνδυαστικά</option>
+              <option value="1X2">⚖️ Μόνο Σημεία</option>
+              <option value="O25">🔥 Μόνο OVER 2.5</option>
+              <option value="O35">🚀 Μόνο OVER 3.5</option>
+              <option value="BTTS">🎯 Μόνο Goal/Goal</option>
+              <option value="COR">🚩 Μόνο Κόρνερ</option>
+              <option value="BOMB">💣 Μόνο Βόμβες</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div id="selectedMatchContainer" style="display:none; margin-top:20px;"></div>
       <div id="matchesFeed"></div>
       <div id="auditSection" style="margin-top:20px;"></div>
@@ -204,18 +243,10 @@
   <script>
     const API_BASE = "https://v3.football.api-sports.io";
     const API_KEY = "956cbd05f9e9bf934df78d9b72d9a3a0";
-    
-    // NEW DB KEY for balanced stats
-    const LS_PREDICTIONS = "omega_preds_v4720";
+    const LS_PREDICTIONS = "omega_preds_v4721";
+    const LS_SETTINGS = "omega_settings_v4721";
 
-    const TAB_COLORS = {
-      combo2: '#f59e0b',
-      combo1: '#ff00ff',
-      outcomes: '#3b82f6',
-      over25: '#00f2ff',
-      over35: '#a78bfa',
-      exact: '#34d399'
-    };
+    const TAB_COLORS = { combo2:'#f59e0b', combo1:'#ff00ff', outcomes:'#3b82f6', over25:'#00f2ff', over35:'#a78bfa', exact:'#34d399' };
 
     const LEAGUES_DATA = [
       {id:2,name:"🏆 Champions League"},{id:3,name:"🏆 Europa League"},{id:848,name:"🏆 Conference League"},
@@ -235,37 +266,78 @@
     let latestTopLists = { exact:[], combo1:[], combo2:[], outcomes:[], over25:[], over35:[] };
     window.scannedMatchesData = [];
 
-    document.getElementById('pin').addEventListener('input', function () {
+    // --- DYNAMIC SETTINGS LOGIC ---
+    const DEFAULT_SETTINGS = {
+      wShotsOn: 0.14, wShotsOff: 0.04, wCorners: 0.02, wGoals: 0.20,
+      tXG_O25: 2.75, tXG_O35: 3.25, xG_Diff: 0.55,
+      modTrap: 0.90, modTight: 0.95, modGold: 1.15
+    };
+    
+    let engineConfig = { ...DEFAULT_SETTINGS };
+
+    function loadSettings() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(LS_SETTINGS));
+        if(saved) engineConfig = { ...DEFAULT_SETTINGS, ...saved };
+      } catch {}
+      updateUIFromSettings();
+    }
+
+    function updateUIFromSettings() {
+      document.getElementById('cfg_wShotsOn').value = engineConfig.wShotsOn;
+      document.getElementById('cfg_wShotsOff').value = engineConfig.wShotsOff;
+      document.getElementById('cfg_wCorners').value = engineConfig.wCorners;
+      document.getElementById('cfg_wGoals').value = engineConfig.wGoals;
+      document.getElementById('cfg_tXG_O25').value = engineConfig.tXG_O25;
+      document.getElementById('cfg_tXG_O35').value = engineConfig.tXG_O35;
+      document.getElementById('cfg_xG_Diff').value = engineConfig.xG_Diff;
+      document.getElementById('cfg_modTrap').value = engineConfig.modTrap;
+      document.getElementById('cfg_modTight').value = engineConfig.modTight;
+      document.getElementById('cfg_modGold').value = engineConfig.modGold;
+    }
+
+    function saveSettings() {
+      engineConfig.wShotsOn = parseFloat(document.getElementById('cfg_wShotsOn').value) || DEFAULT_SETTINGS.wShotsOn;
+      engineConfig.wShotsOff = parseFloat(document.getElementById('cfg_wShotsOff').value) || DEFAULT_SETTINGS.wShotsOff;
+      engineConfig.wCorners = parseFloat(document.getElementById('cfg_wCorners').value) || DEFAULT_SETTINGS.wCorners;
+      engineConfig.wGoals = parseFloat(document.getElementById('cfg_wGoals').value) || DEFAULT_SETTINGS.wGoals;
+      engineConfig.tXG_O25 = parseFloat(document.getElementById('cfg_tXG_O25').value) || DEFAULT_SETTINGS.tXG_O25;
+      engineConfig.tXG_O35 = parseFloat(document.getElementById('cfg_tXG_O35').value) || DEFAULT_SETTINGS.tXG_O35;
+      engineConfig.xG_Diff = parseFloat(document.getElementById('cfg_xG_Diff').value) || DEFAULT_SETTINGS.xG_Diff;
+      engineConfig.modTrap = parseFloat(document.getElementById('cfg_modTrap').value) || DEFAULT_SETTINGS.modTrap;
+      engineConfig.modTight = parseFloat(document.getElementById('cfg_modTight').value) || DEFAULT_SETTINGS.modTight;
+      engineConfig.modGold = parseFloat(document.getElementById('cfg_modGold').value) || DEFAULT_SETTINGS.modGold;
+      
+      localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig));
+      showOk("Οι ρυθμίσεις του αλγορίθμου αποθηκεύτηκαν! Τρέξε νέο Scan.");
+      toggleCalibration();
+    }
+
+    function resetSettings() {
+      engineConfig = { ...DEFAULT_SETTINGS };
+      updateUIFromSettings();
+      saveSettings();
+    }
+
+    window.toggleCalibration = function() {
+      const p = document.getElementById('calibrationPanel');
+      const a = document.getElementById('calibArrow');
+      if(p.style.display === 'none') { p.style.display = 'block'; a.innerText = '▲'; } 
+      else { p.style.display = 'none'; a.innerText = '▼'; }
+    };
+
+    // --- AUTH & SETUP ---
+    document.getElementById('pin').addEventListener('input', async function () {
       if (this.value === "106014") {
         document.getElementById('auth').style.display = 'none';
         document.getElementById('app').style.display = 'block';
-        initCredits(); updateAuditLeagueFilter();
+        initCredits(); updateAuditLeagueFilter(); loadSettings();
       }
     });
 
-    function updateCredits(v) {
-      const el = document.getElementById('creditDisplay');
-      if (v !== null) { el.textContent = v; el.className = `credit-value mono${v < 50 ? ' low' : ''}`; }
-    }
-
-    async function initCredits() {
-      try {
-        const r = await fetch(`${API_BASE}/status`, { headers: { 'x-apisports-key': API_KEY } });
-        const d = await r.json();
-        currentCredits = (d.response?.requests?.limit_day || 500) - (d.response?.requests?.current || 0);
-        updateCredits(currentCredits);
-      } catch { /* silent */ }
-    }
-
-    async function apiReq(path) {
-      await new Promise(r => setTimeout(r, 280));
-      try {
-        const r = await fetch(`${API_BASE}/${path}`, { headers: { 'x-apisports-key': API_KEY } });
-        if (typeof currentCredits === 'number') { currentCredits--; updateCredits(currentCredits); }
-        if (!r.ok) return { response: [] };
-        return await r.json();
-      } catch { return { response: [] }; }
-    }
+    function updateCredits(v) { const el = document.getElementById('creditDisplay'); if (v !== null) { el.textContent = v; el.className = `credit-value mono${v < 50 ? ' low' : ''}`; } }
+    async function initCredits() { try { const r = await fetch(`${API_BASE}/status`, { headers: { 'x-apisports-key': API_KEY } }); const d = await r.json(); currentCredits = (d.response?.requests?.limit_day || 500) - (d.response?.requests?.current || 0); updateCredits(currentCredits); } catch {} }
+    async function apiReq(path) { await new Promise(r => setTimeout(r, 280)); try { const r = await fetch(`${API_BASE}/${path}`, { headers: { 'x-apisports-key': API_KEY } }); if (typeof currentCredits === 'number') { currentCredits--; updateCredits(currentCredits); } if (!r.ok) return { response: [] }; return await r.json(); } catch { return { response: [] }; } }
 
     const safeNum  = (x, d = 0) => Number.isFinite(Number(x)) ? Number(x) : d;
     const clamp    = (n, mn, mx) => Math.max(mn, Math.min(mx, n));
@@ -273,26 +345,10 @@
     const isFinished = s => ["FT","AET","PEN"].includes(s);
     const esc      = str => String(str ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
     const todayISO = () => new Date().toISOString().split('T')[0];
-
-    function getDatesInRange(s, e) {
-      const dates = []; let c = new Date(s); const end = new Date(e);
-      while (c <= end) { dates.push(c.toISOString().split('T')[0]); c.setDate(c.getDate() + 1); }
-      return dates;
-    }
-
-    function setLoader(show, text = '') {
-      document.getElementById('loader').style.display = show ? 'block' : 'none';
-      document.getElementById('status').textContent = text;
-      if (!show) { document.getElementById('bar').style.width = '0%'; document.getElementById('progressBarEl').setAttribute('aria-valuenow', 0); }
-    }
-
-    function setProgress(pct, text = '') {
-      const p = Math.round(clamp(pct, 0, 100));
-      document.getElementById('bar').style.width = p + '%';
-      document.getElementById('progressBarEl').setAttribute('aria-valuenow', p);
-      document.getElementById('status').textContent = text;
-    }
-
+    function getDatesInRange(s, e) { const dates = []; let c = new Date(s); const end = new Date(e); while (c <= end) { dates.push(c.toISOString().split('T')[0]); c.setDate(c.getDate() + 1); } return dates; }
+    
+    function setLoader(show, text = '') { document.getElementById('loader').style.display = show ? 'block' : 'none'; document.getElementById('status').textContent = text; if (!show) { document.getElementById('bar').style.width = '0%'; } }
+    function setProgress(pct, text = '') { document.getElementById('bar').style.width = Math.round(clamp(pct, 0, 100)) + '%'; document.getElementById('status').textContent = text; }
     function setBtnsDisabled(d) { ["btnPre", "leagueFilter", "auditLeague"].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = d; }); }
     function showErr(msg) { document.getElementById('errorBox').innerHTML = `<div style="background:var(--alert-dim); border:1px solid var(--alert); color:#ffb3b3; padding:12px; border-radius:8px; margin-bottom:15px;">⚠️ ${esc(msg)}</div>`; }
     function showOk(msg) { document.getElementById('successBox').innerHTML = `<div style="background:rgba(35,134,54,0.08); border:1px solid #238636; color:#b7f7c4; padding:12px; border-radius:8px; margin-bottom:15px;">✅ ${esc(msg)}</div>`; setTimeout(() => document.getElementById('successBox').innerHTML = '', 4000); }
@@ -303,19 +359,9 @@
     function savePredStore(data) { try { localStorage.setItem(LS_PREDICTIONS, JSON.stringify(data)); } catch (e) { if (e.name === 'QuotaExceededError') showErr('Η μνήμη είναι γεμάτη. Κάνε Clear.'); } }
     function upsertPrediction(record) { const store = getPredStore(); const idx = store.findIndex(x => String(x.fixtureId) === String(record.fixtureId)); if (idx >= 0) store[idx] = record; else store.push(record); savePredStore(store); updateAuditLeagueFilter(); }
     function clearVault() { if (confirm("Είσαι σίγουρος ότι θέλεις να διαγράψεις ΟΛΑ τα δεδομένα;")) { localStorage.removeItem(LS_PREDICTIONS); showOk("Η μνήμη καθάρισε!"); updateAuditLeagueFilter(); } }
-    function updateAuditLeagueFilter() {
-      const store = getPredStore(); const leagues = new Set(store.map(x => x.leagueId)); const sel = document.getElementById('auditLeague');
-      sel.innerHTML = '<option value="ALL">🌐 Όλες οι Λίγκες</option>';
-      LEAGUES_DATA.forEach(l => { if (leagues.has(l.id)) sel.innerHTML += `<option value="${l.id}">${l.name}</option>`; });
-      const knownIds = new Set(LEAGUE_IDS);
-      store.forEach(x => { if (!knownIds.has(x.leagueId) && x.leagueId) sel.innerHTML += `<option value="${x.leagueId}">${x.league}</option>`; knownIds.add(x.leagueId); });
-    }
+    function updateAuditLeagueFilter() { const store = getPredStore(); const leagues = new Set(store.map(x => x.leagueId)); const sel = document.getElementById('auditLeague'); sel.innerHTML = '<option value="ALL">🌐 Όλες οι Λίγκες</option>'; LEAGUES_DATA.forEach(l => { if (leagues.has(l.id)) sel.innerHTML += `<option value="${l.id}">${l.name}</option>`; }); const knownIds = new Set(LEAGUE_IDS); store.forEach(x => { if (!knownIds.has(x.leagueId) && x.leagueId) sel.innerHTML += `<option value="${x.leagueId}">${x.league}</option>`; knownIds.add(x.leagueId); }); }
 
-    async function getTStats(t, lg, s) { const k = `${t}_${lg}_${s}`; if (teamStatsCache.has(k)) return teamStatsCache.get(k); const d = await apiReq(`teams/statistics?team=${t}&league=${lg}&season=${s}`); teamStatsCache.set(k, d?.response || {}); return d?.response || {}; }
-    async function getLFix(t, lg, s) { const k = `${t}_${lg}_${s}`; if (lastFixCache.has(k)) return lastFixCache.get(k); const d = await apiReq(`fixtures?team=${t}&league=${lg}&season=${s}&last=20&status=FT`); lastFixCache.set(k, d?.response || []); return d?.response || []; }
-    async function getStand(lg, s) { const k = `${lg}_${s}`; if (standCache.has(k)) return standCache.get(k); const d = await apiReq(`standings?league=${lg}&season=${s}`); const f = Array.isArray(d?.response?.[0]?.league?.standings) ? d.response[0].league.standings.flat() : []; standCache.set(k, f); return f; }
-    async function getHeadToHead(t1, t2, lg, s) { const k = `${t1}_${t2}_${lg || 'a'}_${s || 'a'}`; if (h2hCache.has(k)) return h2hCache.get(k); let path = `fixtures/headtohead?h2h=${t1}-${t2}`; if (lg && s) path += `&league=${lg}&season=${s}`; const d = await apiReq(path); h2hCache.set(k, d?.response || []); return d?.response || []; }
-    
+    // --- MATH DYNAMIC FUNCTIONS ---
     const getTeamRank  = (standings, tId) => { const row = (standings || []).find(x => String(x?.team?.id) === String(tId)); return row?.rank ?? null; };
     const getTeamGoals = (f, t) => f?.teams?.home?.id === t ? (f?.goals?.home ?? 0) : (f?.goals?.away ?? 0);
     const getOppGoals  = (f, t) => f?.teams?.home?.id === t ? (f?.goals?.away ?? 0) : (f?.goals?.home ?? 0);
@@ -323,16 +369,22 @@
     function getFormHistory(fixtures, teamId) { return fixtures.map(f => { const my = getTeamGoals(f, teamId), op = getOppGoals(f, teamId); return my > op ? { res: 'Ν', cls: 'W' } : (my < op ? { res: 'Η', cls: 'L' } : { res: 'Ι', cls: 'D' }); }).reverse(); }
     function devBadge(curr, base) { if (!base || base <= 0) return `<span class="dev-badge">N/A</span>`; const d = (((parseFloat(curr) - base) / base) * 100).toFixed(1); return `<span class="dev-badge ${d >= 0 ? 'dev-pos' : 'dev-neg'}">${d > 0 ? '+' : ''}${d}%</span>`; }
 
-    // FIX 1: BOOSTED xG FORMULA (Reduced penalty on actual shots)
+    // DYNAMIC xG
     function estXG(arr, g = 0) {
-      return (statVal(arr, 'Shots on Goal') * 0.14) + (statVal(arr, 'Shots off Goal') * 0.04) + (statVal(arr, 'Corner Kicks') * 0.02) + (g * 0.20) || 0.60 + g * 0.25;
+      return (statVal(arr, 'Shots on Goal') * engineConfig.wShotsOn) + 
+             (statVal(arr, 'Shots off Goal') * engineConfig.wShotsOff) + 
+             (statVal(arr, 'Corner Kicks') * engineConfig.wCorners) + 
+             (g * engineConfig.wGoals) || 0.60 + g * 0.25;
     }
+
+    async function getTStats(t, lg, s) { const k = `${t}_${lg}_${s}`; if (teamStatsCache.has(k)) return teamStatsCache.get(k); const d = await apiReq(`teams/statistics?team=${t}&league=${lg}&season=${s}`); teamStatsCache.set(k, d?.response || {}); return d?.response || {}; }
+    async function getLFix(t, lg, s) { const k = `${t}_${lg}_${s}`; if (lastFixCache.has(k)) return lastFixCache.get(k); const d = await apiReq(`fixtures?team=${t}&league=${lg}&season=${s}&last=20&status=FT`); lastFixCache.set(k, d?.response || []); return d?.response || []; }
+    async function getStand(lg, s) { const k = `${lg}_${s}`; if (standCache.has(k)) return standCache.get(k); const d = await apiReq(`standings?league=${lg}&season=${s}`); const f = Array.isArray(d?.response?.[0]?.league?.standings) ? d.response[0].league.standings.flat() : []; standCache.set(k, f); return f; }
+    async function getHeadToHead(t1, t2, lg, s) { const k = `${t1}_${t2}_${lg || 'a'}_${s || 'a'}`; if (h2hCache.has(k)) return h2hCache.get(k); let path = `fixtures/headtohead?h2h=${t1}-${t2}`; if (lg && s) path += `&league=${lg}&season=${s}`; const d = await apiReq(path); h2hCache.set(k, d?.response || []); return d?.response || []; }
 
     async function batchCalc(list, tId) {
       if (!list.length) return { xg: '0.00', xga: '0.00', cor: '0.0', crd: '0.0' };
-      const results = await Promise.allSettled(
-        list.map(f => apiReq(`fixtures/statistics?fixture=${f.fixture.id}`))
-      );
+      const results = await Promise.allSettled(list.map(f => apiReq(`fixtures/statistics?fixture=${f.fixture.id}`)));
       let x = 0, xa = 0, c = 0, cr = 0, n = 0;
       results.forEach((res, i) => {
         if (res.status !== 'fulfilled') return;
@@ -351,64 +403,40 @@
 
     async function buildIntel(tId, lg, s, isHome) {
       const [ss, allFix] = await Promise.all([getTStats(tId, lg, s), getLFix(tId, lg, s)]);
-      const gen   = allFix.slice(0, 6);
-      const split = allFix.filter(f => (isHome ? f.teams.home.id : f.teams.away.id) === tId).slice(0, 6);
+      const gen   = allFix.slice(0, 6); const split = allFix.filter(f => (isHome ? f.teams.home.id : f.teams.away.id) === tId).slice(0, 6);
       const [fData, sData] = await Promise.all([batchCalc(gen, tId), batchCalc(split, tId)]);
       const baseXG  = parseFloat(ss?.goals?.for?.average?.total) || 1.10;
       const baseXGA = parseFloat(ss?.goals?.against?.average?.total) || 1.10;
-      return {
-        fXG: safeNum(fData.xg), fXGA: safeNum(fData.xga),
-        sXG: safeNum(sData.xg), sXGA: safeNum(sData.xga),
-        cor: safeNum(fData.cor), crd: safeNum(fData.crd), scrd: safeNum(sData.crd),
-        uiXG: fData.xg, uiXGA: fData.xga,
-        uiDevXG: devBadge(fData.xg, baseXG), uiDevXGA: devBadge(fData.xga, baseXGA),
-        uiSXG: sData.xg, uiSXGA: sData.xga,
-        uiSeasXG: baseXG.toFixed(2), uiSeasXGA: baseXGA.toFixed(2),
-        history: getFormHistory(gen, tId)
-      };
+      return { fXG: safeNum(fData.xg), fXGA: safeNum(fData.xga), sXG: safeNum(sData.xg), sXGA: safeNum(sData.xga), cor: safeNum(fData.cor), crd: safeNum(fData.crd), scrd: safeNum(sData.crd), uiXG: fData.xg, uiXGA: fData.xga, uiDevXG: devBadge(fData.xg, baseXG), uiDevXGA: devBadge(fData.xga, baseXGA), uiSXG: sData.xg, uiSXGA: sData.xga, uiSeasXG: baseXG.toFixed(2), uiSeasXGA: baseXGA.toFixed(2), history: getFormHistory(gen, tId) };
     }
-
+    
     function summarizeH2H(fixtures, homeId, awayId) {
       let hw = 0, aw = 0, dr = 0, gh = 0, ga = 0, last = [];
       for (const f of (fixtures || []).slice(0, 8)) {
-        const hg = f?.goals?.home ?? 0, ag = f?.goals?.away ?? 0;
-        const myG = f?.teams?.home?.id === homeId ? hg : ag;
-        const opG = f?.teams?.home?.id === awayId ? hg : ag;
-        gh += myG; ga += opG;
-        if (myG > opG) hw++; else if (opG > myG) aw++; else dr++;
-        last.push(`${myG}-${opG}`);
+        const hg = f?.goals?.home ?? 0, ag = f?.goals?.away ?? 0, myG = f?.teams?.home?.id === homeId ? hg : ag, opG = f?.teams?.home?.id === awayId ? hg : ag;
+        gh += myG; ga += opG; if (myG > opG) hw++; else if (opG > myG) aw++; else dr++; last.push(`${myG}-${opG}`);
       }
       return { homeWins: hw, awayWins: aw, draws: dr, goalsHome: gh, goalsAway: ga, lastResults: last };
     }
 
     function applyLeagueModifiers(hS, aS, leagueId) {
       let tXG = hS.fXG + aS.fXG;
-      if (GOLD_LEAGUES.has(leagueId)) {
-        tXG *= 1.05;
-      } else if (TRAP_LEAGUES.has(leagueId)) {
-        // FIX 2: Relaxed Trap League penalty from 20% to 10%
-        tXG *= 0.90; hS.fXG *= 0.90; aS.fXG *= 0.90;
-      } else if (TIGHT_LEAGUES.has(leagueId)) {
-        tXG *= 0.95; hS.fXG *= 0.95; aS.fXG *= 0.95;
-      }
+      if (GOLD_LEAGUES.has(leagueId)) { tXG *= engineConfig.modGold; } 
+      else if (TRAP_LEAGUES.has(leagueId)) { tXG *= engineConfig.modTrap; hS.fXG *= engineConfig.modTrap; aS.fXG *= engineConfig.modTrap; } 
+      else if (TIGHT_LEAGUES.has(leagueId)) { tXG *= engineConfig.modTight; hS.fXG *= engineConfig.modTight; aS.fXG *= engineConfig.modTight; }
       return tXG;
     }
 
     function calcExpectedAndBuckets(hS, aS, leagueId) {
       let hExp = clamp((hS.fXG * 0.45) + (hS.sXG * 0.3) + (aS.fXGA * 0.25), 0.15, 4.0);
       let aExp = clamp((aS.fXG * 0.45) + (aS.sXG * 0.3) + (hS.fXGA * 0.25), 0.15, 4.0);
+      if(TIGHT_LEAGUES.has(leagueId)) { hExp *= engineConfig.modTight; aExp *= engineConfig.modTight; }
+      if(GOLD_LEAGUES.has(leagueId)) { hExp *= engineConfig.modGold; aExp *= engineConfig.modGold; }
 
-      // AI Calibration
-      if(TIGHT_LEAGUES.has(leagueId)) { hExp *= 0.85; aExp *= 0.85; }
-      if(GOLD_LEAGUES.has(leagueId)) { hExp *= 1.15; aExp *= 1.15; }
-
-      // FIX 3: Realistic Rounding instead of brutal forced buckets
       const getBucket = (x) => Math.round(x);
-      
       let hG = getBucket(hExp), aG = getBucket(aExp); 
       if (Math.abs(hExp - aExp) < 0.25 && hG !== aG) { if (hG > aG) aG = hG; else hG = aG; }
       const exactConf = 100 - ((Math.abs(hExp - hG) + Math.abs(aExp - aG)) * 40);
-
       return { hExp, aExp, exact: `${hG}-${aG}`, exactConf, hG, aG };
     }
 
@@ -426,21 +454,19 @@
       const bttsScore = Math.min(hS.fXG, aS.fXG);
       let outPick = "X";
       
-      // FIX 4: Lowered 1X2 threshold to a realistic 0.55
-      if (xgDiff > 0.55) outPick = "1"; else if (xgDiff < -0.55) outPick = "2";
+      // DYNAMIC 1X2 OUTCOME
+      if (xgDiff > engineConfig.xG_Diff) outPick = "1"; else if (xgDiff < -engineConfig.xG_Diff) outPick = "2";
       if (outPick === "1" && hG <= aG) hG = aG + 1;
       if (outPick === "2" && aG <= hG) aG = hG + 1;
 
-      const hr = getTeamRank(stand, m.teams.home.id) || 99;
-      const ar = getTeamRank(stand, m.teams.away.id) || 99;
-      const isHomeBomb = (hr - ar) >= 5 && (hS.fXG - aS.fXG >= 0.25);
-      const isAwayBomb = (ar - hr) >= 5 && (aS.fXG - hS.fXG >= 0.25);
+      const hr = getTeamRank(stand, m.teams.home.id) || 99; const ar = getTeamRank(stand, m.teams.away.id) || 99;
+      const isHomeBomb = (hr - ar) >= 5 && (hS.fXG - aS.fXG >= 0.25); const isAwayBomb = (ar - hr) >= 5 && (aS.fXG - hS.fXG >= 0.25);
 
-      // FIX 5: Lowered O2.5 threshold from 2.90 to 2.75
-      const isLockO25   = tXG >= 2.90 && bttsScore >= 1.00;
+      // DYNAMIC O2.5 / O3.5
+      const isLockO25   = tXG >= (engineConfig.tXG_O25 + 0.15) && bttsScore >= 1.00;
       const isLockBTTS  = bttsScore >= 1.15 && tXG >= 2.50;
-      const isStrictO35 = tXG >= 3.25 && bttsScore >= 1.20;
-      const isStrictO25 = tXG >= 2.75 && bttsScore >= 0.85;
+      const isStrictO35 = tXG >= engineConfig.tXG_O35 && bttsScore >= 1.20;
+      const isStrictO25 = tXG >= engineConfig.tXG_O25 && bttsScore >= 0.85;
       const isStrict1   = outPick === "1" && hS.fXG >= 1.65 && aS.fXG <= 0.90;
       const isStrict2   = outPick === "2" && aS.fXG >= 1.65 && hS.fXG <= 0.90;
       const isCombo1    = (isStrict1 || isStrict2) && tXG >= 2.20;
@@ -455,43 +481,46 @@
       else if (isStrictO35){ omegaPick = "🚀 OVER 3.5 GOALS"; pickScore = tXG * 30; reason = "Ακραίος επιθετικός ρυθμός."; }
       else if (isStrictO25){ omegaPick = "🔥 OVER 2.5 GOALS"; pickScore = tXG * 25; reason = "Ασφαλές Over βάσει παραγωγής xG."; }
       else if (bttsScore >= 1.1){ omegaPick = "🎯 GOAL/GOAL (BTTS)"; pickScore = bttsScore * 80; reason = "Και οι 2 ομάδες σκοράρουν συχνά."; }
-      else if (outPick !== "X" && Math.abs(xgDiff) >= 0.70){ omegaPick = outPick === "1" ? "🏠 ΑΣΟΣ" : "✈️ ΔΙΠΛΟ"; pickScore = Math.abs(xgDiff) * 80; reason = "Καθαρή νίκη βάσει xG."; }
+      else if (outPick !== "X" && Math.abs(xgDiff) >= engineConfig.xG_Diff + 0.15){ omegaPick = outPick === "1" ? "🏠 ΑΣΟΣ" : "✈️ ΔΙΠΛΟ"; pickScore = Math.abs(xgDiff) * 80; reason = "Καθαρή νίκη βάσει xG."; }
       else if (cor >= 10.3){ omegaPick = "🚩 OVER 8.5 ΚΟΡΝΕΡ"; pickScore = cor * 8.5; reason = `Παραγωγή κόρνερ: ${cor.toFixed(1)}`; }
 
       return { omegaPick, reason, pickScore, xgDiff, bttsScore, outPick, exact: `${hG}-${aG}`, exactConf: 100 - ((Math.abs(hExp - hG) + Math.abs(aExp - aG)) * 40), hr, ar, isHomeBomb, isAwayBomb, isLockO25, isLockBTTS };
     }
 
+    // --- HTML RENDERERS ---
     function getMatchCardHTML(d) {
       const pickClass = d.isBomb ? 'bomb' : d.omegaPick.includes('NO BET') ? 'nobet' : 'hit';
       const pickColor = d.isBomb ? 'var(--magenta)' : d.omegaPick.includes('NO BET') ? 'var(--alert)' : 'var(--neon-live)';
       const pickValueColor = d.omegaPick.includes('NO BET') ? '#ffb3b3' : '#fff';
       let lockHtml = '';
-      if (d.isLockO25)  lockHtml += `<div style="display:inline-block; padding:6px 12px; border-radius:6px; font-family:'Orbitron',monospace; font-weight:900; font-size:0.75rem; margin-bottom:8px; background:linear-gradient(135deg,#ff4b2b,#ff416c); color:#fff; border:1px solid #ff416c;">💎 ΚΑΡΑΜΠΙΝΑΤΟ OVER 2.5</div><br>`;
-      if (d.isLockBTTS) lockHtml += `<div style="display:inline-block; padding:6px 12px; border-radius:6px; font-family:'Orbitron',monospace; font-weight:900; font-size:0.75rem; margin-bottom:8px; background:linear-gradient(135deg,#11998e,#38ef7d); color:#fff; border:1px solid #38ef7d;">🎯 ΚΑΡΑΜΠΙΝΑΤΟ BTTS</div>`;
+      if (d.isLockO25)  lockHtml += `<div class="lock-badge lock-o25">💎 ΚΑΡΑΜΠΙΝΑΤΟ OVER 2.5</div><br>`;
+      if (d.isLockBTTS) lockHtml += `<div class="lock-badge lock-btts">🎯 ΚΑΡΑΜΠΙΝΑΤΟ BTTS</div>`;
       let scoreHtml = '';
       if (d.m?.goals?.home != null) {
-        const live = isLive(d.m.fixture.status.short);
-        const col  = live ? 'var(--neon-live)' : 'var(--gold)';
-        const elapsed = live ? ` <span style="font-size:0.8rem;">(${d.m.fixture.status.elapsed}')</span>` : '';
-        scoreHtml = `<div style="font-family:'Orbitron',monospace; font-size:2rem; font-weight:900; color:${col};">${d.m.goals.home} — ${d.m.goals.away}${elapsed}</div>`;
+        const live = isLive(d.m.fixture.status.short); const col = live ? 'var(--neon-live)' : 'var(--gold)'; const elapsed = live ? ` <span style="font-size:0.8rem;">(${d.m.fixture.status.elapsed}')</span>` : '';
+        scoreHtml = `<div class="live-score-big" style="color:${col};">${d.m.goals.home} — ${d.m.goals.away}${elapsed}</div>`;
       }
-      const rankBadge = r => r !== 99 ? `<span style="background:var(--gold-dim);color:#ffd27a;padding:2px 8px;border-radius:99px;font-size:0.65rem;margin-left:6px;">#${r}</span>` : '';
+      const rankBadge = r => r !== 99 ? `<span class="standing-pill">#${r}</span>` : '';
 
       return `
       <div class="cyber-card feed-match-card" id="card-${d.fixId}">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
-          <div><div style="font-size:0.65rem; color:var(--gold); margin-bottom:4px;"><span style="background:var(--border2);padding:2px 8px;border-radius:4px;">${esc(d.m.fixture.status.short)}</span>&nbsp;${esc(d.lg)}</div><div style="font-family:'Orbitron',monospace; font-size:1rem; font-weight:900; margin:3px 0;">${esc(d.ht)}${rankBadge(d.hr)}</div><div style="font-family:'Orbitron',monospace; font-size:1rem; font-weight:900; margin:3px 0; color:var(--txt-muted);">${esc(d.at)}${rankBadge(d.ar)}</div></div>
+        <div class="match-header" style="flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-size:0.65rem; color:var(--gold); margin-bottom:4px;"><span style="background:var(--border2);padding:2px 8px;border-radius:4px;">${esc(d.m.fixture.status.short)}</span>&nbsp;${esc(d.lg)}</div>
+            <div class="match-team-name">${esc(d.ht)}${rankBadge(d.hr)}</div>
+            <div class="match-team-name" style="color:var(--txt-muted);">${esc(d.at)}${rankBadge(d.ar)}</div>
+          </div>
           <div style="text-align:right;">${scoreHtml}<div style="font-family:'Space Mono',monospace; font-size:0.65rem; margin-top:6px;">Total xG: <span style="color:var(--p);font-weight:bold;">${d.tXG.toFixed(2)}</span></div></div>
         </div>
         ${lockHtml ? `<div style="text-align:center; margin-bottom:8px;">${lockHtml}</div>` : ''}
         <div class="omega-pick ${pickClass}"><div class="pick-header" style="color:${pickColor};">💡 STRICT EDGE PICK</div><div class="pick-value" style="color:${pickValueColor};">${esc(d.omegaPick)}</div><div class="pick-reason">${esc(d.reason)}</div></div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
-          <div style="background:rgba(0,0,0,0.35); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.04);"><div class="stat-row"><span style="color:var(--txt-muted);">Ακριβές Σκορ</span><span class="val-split">${esc(d.exact)}</span></div><div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:var(--txt-muted);">Poisson xG</span><span class="val-xg">${d.hExp.toFixed(2)} - ${d.aExp.toFixed(2)}</span></div></div>
-          <div style="background:rgba(0,0,0,0.35); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.04);"><div class="stat-row"><span style="color:var(--txt-muted);">Σύνολο Κόρνερ</span><span class="val-split">${d.totCors.toFixed(1)}</span></div><div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:var(--txt-muted);">Προβλ. Κόρνερ</span><span class="val-xg">${d.hCors} - ${d.aCors}</span></div></div>
+        <div class="stats-grid">
+          <div class="team-box"><div class="stat-row"><span style="color:var(--txt-muted);">Ακριβές Σκορ</span><span class="val-split">${esc(d.exact)}</span></div><div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:var(--txt-muted);">Poisson xG</span><span class="val-xg">${d.hExp.toFixed(2)} - ${d.aExp.toFixed(2)}</span></div></div>
+          <div class="team-box"><div class="stat-row"><span style="color:var(--txt-muted);">Σύνολο Κόρνερ</span><span class="val-split">${d.totCors.toFixed(1)}</span></div><div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:var(--txt-muted);">Προβλ. Κόρνερ</span><span class="val-xg">${d.hCors} - ${d.aCors}</span></div></div>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;">
-          <div style="background:rgba(0,0,0,0.35); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.04);"><div style="font-family:'Space Mono',monospace; font-size:0.72rem; font-weight:700; margin-bottom:12px; color:var(--p);">🏠 ${esc(d.ht)}</div><div class="stat-row"><span style="color:var(--txt-muted);">xG (Φόρμα)</span><div><span class="val-xg">${d.hS.uiXG}</span>${d.hS.uiDevXG}</div></div><div class="stat-row"><span style="color:var(--txt-muted);">xGA Κατά</span><div><span class="val-xg">${d.hS.uiXGA}</span>${d.hS.uiDevXGA}</div></div><div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:var(--txt-muted);">Split Εντός</span><span class="val-split">${d.hS.uiSXG} / ${d.hS.uiSXGA}</span></div></div>
-          <div style="background:rgba(0,0,0,0.35); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.04);"><div style="font-family:'Space Mono',monospace; font-size:0.72rem; font-weight:700; margin-bottom:12px; color:var(--magenta);">✈️ ${esc(d.at)}</div><div class="stat-row"><span style="color:var(--txt-muted);">xG (Φόρμα)</span><div><span class="val-xg">${d.aS.uiXG}</span>${d.aS.uiDevXG}</div></div><div class="stat-row"><span style="color:var(--txt-muted);">xGA Κατά</span><div><span class="val-xg">${d.aS.uiXGA}</span>${d.aS.uiDevXGA}</div></div><div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:var(--txt-muted);">Split Εκτός</span><span class="val-split">${d.aS.uiSXG} / ${d.aS.uiSXGA}</span></div></div>
+        <div class="stats-grid">
+          <div class="team-box"><div style="font-family:'Space Mono',monospace; font-size:0.72rem; font-weight:700; margin-bottom:12px; color:var(--p);">🏠 ${esc(d.ht)}</div><div class="stat-row"><span style="color:var(--txt-muted);">xG (Φόρμα)</span><div><span class="val-xg">${d.hS.uiXG}</span>${d.hS.uiDevXG}</div></div><div class="stat-row"><span style="color:var(--txt-muted);">xGA Κατά</span><div><span class="val-xg">${d.hS.uiXGA}</span>${d.hS.uiDevXGA}</div></div><div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:var(--txt-muted);">Split Εντός</span><span class="val-split">${d.hS.uiSXG} / ${d.hS.uiSXGA}</span></div></div>
+          <div class="team-box"><div style="font-family:'Space Mono',monospace; font-size:0.72rem; font-weight:700; margin-bottom:12px; color:var(--magenta);">✈️ ${esc(d.at)}</div><div class="stat-row"><span style="color:var(--txt-muted);">xG (Φόρμα)</span><div><span class="val-xg">${d.aS.uiXG}</span>${d.aS.uiDevXG}</div></div><div class="stat-row"><span style="color:var(--txt-muted);">xGA Κατά</span><div><span class="val-xg">${d.aS.uiXGA}</span>${d.aS.uiDevXGA}</div></div><div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:var(--txt-muted);">Split Εκτός</span><span class="val-split">${d.aS.uiSXG} / ${d.aS.uiSXGA}</span></div></div>
         </div>
       </div>`;
     }
@@ -501,65 +530,43 @@
       for (let i = 0; i < dates.length; i++) {
         setProgress((i / dates.length) * 10, `Λήψη Κουπονιού ${dates[i]}`);
         const res = await apiReq(`fixtures?date=${dates[i]}`);
-        const dm = (res.response || []).filter(m => {
-          if (selLg === 'WORLD') return true;
-          if (selLg === 'ALL')   return LEAGUE_IDS.includes(m.league.id);
-          return m.league.id === parseInt(selLg);
-        });
-        allMatches.push(...dm);
-        if (allMatches.length > 350) break;
+        const dm = (res.response || []).filter(m => { if (selLg === 'WORLD') return true; if (selLg === 'ALL') return LEAGUE_IDS.includes(m.league.id); return m.league.id === parseInt(selLg); });
+        allMatches.push(...dm); if (allMatches.length > 350) break;
       }
       return allMatches;
     }
 
     async function analyzeMatch(m, index, total) {
       setProgress(10 + ((index + 1) / total) * 90, `(${index + 1}/${total}) ${m.teams.home.name}`);
-      const [hS, aS, stand, h2hFix] = await Promise.all([
-        buildIntel(m.teams.home.id, m.league.id, m.league.season, true), buildIntel(m.teams.away.id, m.league.id, m.league.season, false), getStand(m.league.id, m.league.season), getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)
-      ]);
-
+      const [hS, aS, stand, h2hFix] = await Promise.all([ buildIntel(m.teams.home.id, m.league.id, m.league.season, true), buildIntel(m.teams.away.id, m.league.id, m.league.season, false), getStand(m.league.id, m.league.season), getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season) ]);
       let tXG = applyLeagueModifiers(hS, aS, m.league.id);
       const { hExp, aExp, exact, exactConf, hG, aG } = calcExpectedAndBuckets(hS, aS, m.league.id);
       const { cor, hCors, aCors } = calcCorners(hExp, aExp, hS, aS);
       const pick = decidePick(hS, aS, tXG, hG, aG, hCors, aCors, cor, stand, m);
-
-      return {
-        m, fixId: m.fixture.id, ht: m.teams.home.name, at: m.teams.away.name, lg: m.league.name, leagueId: m.league.id, tXG, btts: pick.bttsScore, cor, outPick: pick.outPick, xgDiff: pick.xgDiff, exact: pick.exact, exactConf: pick.exactConf, omegaPick: pick.omegaPick, strength: pick.pickScore, reason: pick.reason, hExp, aExp, hr: pick.hr, ar: pick.ar, hCors, aCors, totCors: hCors + aCors, hS, aS, h2h: summarizeH2H(h2hFix, m.teams.home.id, m.teams.away.id), isBomb: pick.isHomeBomb || pick.isAwayBomb, isLockO25: pick.isLockO25, isLockBTTS: pick.isLockBTTS
-      };
+      return { m, fixId: m.fixture.id, ht: m.teams.home.name, at: m.teams.away.name, lg: m.league.name, leagueId: m.league.id, tXG, btts: pick.bttsScore, cor, outPick: pick.outPick, xgDiff: pick.xgDiff, exact: pick.exact, exactConf: pick.exactConf, omegaPick: pick.omegaPick, strength: pick.pickScore, reason: pick.reason, hExp, aExp, hr: pick.hr, ar: pick.ar, hCors, aCors, totCors: hCors + aCors, hS, aS, h2h: summarizeH2H(h2hFix, m.teams.home.id, m.teams.away.id), isBomb: pick.isHomeBomb || pick.isAwayBomb, isLockO25: pick.isLockO25, isLockBTTS: pick.isLockBTTS };
     }
 
     async function runScan() {
-      if (isRunning) return;
-      isRunning = true; clearAlerts(); setBtnsDisabled(true); setLoader(true, 'ΑΝΑΖΗΤΗΣΗ ΑΓΩΝΩΝ...');
+      if (isRunning) return; isRunning = true; clearAlerts(); setBtnsDisabled(true); setLoader(true, 'ΑΝΑΖΗΤΗΣΗ ΑΓΩΝΩΝ...');
       document.getElementById('topSection').innerHTML = ''; document.getElementById('summarySection').innerHTML = ''; document.getElementById('selectedMatchContainer').style.display = 'none'; document.getElementById('wallbetSection').innerHTML = ''; document.getElementById('matchesFeed').innerHTML = '';
       window.scannedMatchesData = [];
-
       try {
-        const start  = document.getElementById('scanStart').value  || todayISO(), end = document.getElementById('scanEnd').value || start, selLg = document.getElementById('leagueFilter').value, dates = getDatesInRange(start, end);
+        const start = document.getElementById('scanStart').value || todayISO(), end = document.getElementById('scanEnd').value || start, selLg = document.getElementById('leagueFilter').value, dates = getDatesInRange(start, end);
         let allMatches = await fetchFixturesForDates(dates, selLg);
-
         if (!allMatches.length) return abortScan('Δεν βρέθηκαν αγώνες στο επιλεγμένο διάστημα.');
         if (allMatches.length > 350) { showOk(`Βρέθηκαν πάρα πολλοί αγώνες. Θα αναλυθούν οι πρώτοι 350.`); allMatches = allMatches.slice(0, 350); }
 
         const scored = [];
         for (let i = 0; i < allMatches.length; i++) {
-          const rec = await analyzeMatch(allMatches[i], i, allMatches.length);
-          scored.push(rec); window.scannedMatchesData.push(rec);
+          const rec = await analyzeMatch(allMatches[i], i, allMatches.length); scored.push(rec); window.scannedMatchesData.push(rec);
           upsertPrediction({ fixtureId: rec.m.fixture.id, date: rec.m.fixture.date, scanDate: todayISO(), league: rec.m.league.name, leagueId: rec.m.league.id, homeTeam: rec.ht, awayTeam: rec.at, outPick: rec.outPick, predOver25: rec.omegaPick.includes('OVER 2') || rec.omegaPick.includes('OVER 3'), predOver35: rec.omegaPick.includes('OVER 3'), predBTTS: rec.omegaPick.includes('GOAL'), exactScorePred: rec.exact, omegaPick: rec.omegaPick, savedAt: new Date().toISOString() });
         }
 
-        latestTopLists.combo2   = scored.filter(x => x.omegaPick.includes('👑')).sort((a,b) => b.strength - a.strength).slice(0,5);
-        latestTopLists.combo1   = scored.filter(x => x.omegaPick.includes('⚡')).sort((a,b) => b.strength - a.strength).slice(0,5);
-        latestTopLists.outcomes = scored.filter(x => x.omegaPick.includes('ΑΣΟΣ') || x.omegaPick.includes('ΔΙΠΛΟ')).sort((a,b) => b.strength - a.strength).slice(0,5);
-        latestTopLists.exact    = [...scored].sort((a,b) => b.exactConf - a.exactConf).slice(0,5);
-        latestTopLists.over25   = scored.filter(x => x.omegaPick.includes('OVER 2.5')).sort((a,b) => b.strength - a.strength).slice(0,5);
-        latestTopLists.over35   = scored.filter(x => x.omegaPick.includes('OVER 3.5')).sort((a,b) => b.strength - a.strength).slice(0,5);
+        latestTopLists.combo2 = scored.filter(x => x.omegaPick.includes('👑')).sort((a,b) => b.strength - a.strength).slice(0,5); latestTopLists.combo1 = scored.filter(x => x.omegaPick.includes('⚡')).sort((a,b) => b.strength - a.strength).slice(0,5); latestTopLists.outcomes = scored.filter(x => x.omegaPick.includes('ΑΣΟΣ') || x.omegaPick.includes('ΔΙΠΛΟ')).sort((a,b) => b.strength - a.strength).slice(0,5); latestTopLists.exact = [...scored].sort((a,b) => b.exactConf - a.exactConf).slice(0,5); latestTopLists.over25 = scored.filter(x => x.omegaPick.includes('OVER 2.5')).sort((a,b) => b.strength - a.strength).slice(0,5); latestTopLists.over35 = scored.filter(x => x.omegaPick.includes('OVER 3.5')).sort((a,b) => b.strength - a.strength).slice(0,5);
 
         renderTopSections(); renderWallBets(); renderSummaryTable();
-
-        let feedHtml = `<div style="color:var(--p); margin-top:20px; border-bottom:1px solid var(--border); padding-bottom:10px; font-weight:bold; font-family:'Orbitron',monospace;">⚽ ΑΝΑΛΥΤΙΚΕΣ ΕΚΤΙΜΗΣΕΙΣ ΑΓΩΝΩΝ (${scored.length})</div>`;
-        scored.forEach(d => { feedHtml += getMatchCardHTML(d); });
-        document.getElementById('matchesFeed').innerHTML = feedHtml; showOk(`Ολοκληρώθηκε! Αναλύθηκαν ${allMatches.length} αγώνες.`);
+        document.getElementById('feedFilterSection').style.display = 'block'; window.filterFeed();
+        showOk(`Ολοκληρώθηκε! Αναλύθηκαν ${allMatches.length} αγώνες.`);
       } catch (e) { showErr(e.message); } finally { isRunning = false; setLoader(false); setBtnsDisabled(false); }
     }
 
@@ -568,9 +575,7 @@
       try {
         const res = await apiReq('fixtures?live=all'); const liveMap = new Map((res.response || []).map(f => [f.fixture.id, f])); let updated = 0;
         window.scannedMatchesData.forEach(d => { if (liveMap.has(d.fixId)) { const ld = liveMap.get(d.fixId); d.m.goals = ld.goals; d.m.fixture.status = ld.fixture.status; updated++; } });
-        if (updated > 0) {
-          renderSummaryTable(); let feedHtml = `<div style="color:var(--p); margin-top:20px; border-bottom:1px solid var(--border); padding-bottom:10px; font-weight:bold; font-family:'Orbitron',monospace;">⚽ ΑΝΑΛΥΤΙΚΕΣ ΕΚΤΙΜΗΣΕΙΣ ΑΓΩΝΩΝ (${window.scannedMatchesData.length})</div>`; window.scannedMatchesData.forEach(d => { feedHtml += getMatchCardHTML(d); }); document.getElementById('matchesFeed').innerHTML = feedHtml; showOk(`Ανανεώθηκαν τα σκορ σε ${updated} ζωντανά ματς!`);
-        } else { showOk('Δεν βρέθηκαν ζωντανά ματς από αυτά που έχετε σκανάρει.'); }
+        if (updated > 0) { renderSummaryTable(); window.filterFeed(); showOk(`Ανανεώθηκαν τα σκορ σε ${updated} ζωντανά ματς!`); } else { showOk('Δεν βρέθηκαν ζωντανά ματς από αυτά που έχετε σκανάρει.'); }
       } catch (e) { showErr("Σφάλμα ανανέωσης live: " + e.message); } finally { if (btn) { btn.innerText = '🔄 SYNC LIVE (1 Credit)'; btn.disabled = false; } }
     };
 
@@ -581,22 +586,14 @@
         html += `<div style="background:linear-gradient(90deg,var(--gold-dim),transparent); border-left:4px solid var(--gold); padding:10px 15px; font-family:'Orbitron',monospace; font-weight:900; font-size:0.85rem; color:var(--gold); margin-top:10px; margin-bottom:5px;">${esc(lg)}</div><div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; font-size:0.75rem; text-align:center;"><thead><tr><th style="padding:8px; border-bottom:1px solid var(--border); color:var(--txt-muted);">Ημ/νία</th><th style="text-align:left; padding:8px; border-bottom:1px solid var(--border); color:var(--txt-muted);">Αγώνας</th><th style="padding:8px; border-bottom:1px solid var(--border); color:var(--txt-muted);">Σκορ</th><th style="padding:8px; border-bottom:1px solid var(--border); color:var(--txt-muted);">1X2</th><th style="padding:8px; border-bottom:1px solid var(--border); color:var(--txt-muted);">O2.5</th><th style="padding:8px; border-bottom:1px solid var(--border); color:var(--txt-muted);">BTTS</th><th style="padding:8px; border-bottom:1px solid var(--border); color:var(--txt-muted);">Exact</th><th style="padding:8px; border-bottom:1px solid var(--border); color:var(--txt-muted);">Omega Pick</th></tr></thead><tbody>`;
         matches.forEach(x => {
           const isFin = isFinished(x.m.fixture.status.short), isLiveNow = isLive(x.m.fixture.status.short);
-          const ah = x.m.goals?.home ?? 0, aa = x.m.goals?.away ?? 0;
-          const aTot = ah + aa, aBtts = ah > 0 && aa > 0, aOut = ah > aa ? '1' : (ah < aa ? '2' : 'X');
-          let scoreStr = '-', scoreCol = '#666';
-          if (isFin) { scoreStr = `${ah}-${aa}`; scoreCol = 'var(--gold)'; } else if (isLiveNow) { scoreStr = `${ah}-${aa} <span style="font-size:0.6rem;">(${x.m.fixture.status.elapsed}')</span>`; scoreCol = 'var(--neon-live)'; }
-          const isO25flag = x.omegaPick.includes('OVER 2') || x.omegaPick.includes('OVER 3') ? '🔥' : (x.tXG >= 2.5 ? 'Y' : '-');
-          let colO25 = isO25flag === '🔥' ? 'var(--p)' : '#666'; if ((isFin || isLiveNow) && isO25flag !== '-') colO25 = aTot >= 3 ? 'var(--neon-live)' : (isFin ? 'var(--alert)' : colO25);
-          const isBttsFlag = x.omegaPick.includes('GOAL') ? '🎯' : (x.btts >= 0.85 ? 'Y' : '-');
-          let colBtts = isBttsFlag === '🎯' ? 'var(--magenta)' : '#666'; if ((isFin || isLiveNow) && isBttsFlag !== '-') colBtts = aBtts ? 'var(--neon-live)' : (isFin ? 'var(--alert)' : colBtts);
+          const ah = x.m.goals?.home ?? 0, aa = x.m.goals?.away ?? 0; const aTot = ah + aa, aBtts = ah > 0 && aa > 0, aOut = ah > aa ? '1' : (ah < aa ? '2' : 'X');
+          let scoreStr = '-', scoreCol = '#666'; if (isFin) { scoreStr = `${ah}-${aa}`; scoreCol = 'var(--gold)'; } else if (isLiveNow) { scoreStr = `${ah}-${aa} <span style="font-size:0.6rem;">(${x.m.fixture.status.elapsed}')</span>`; scoreCol = 'var(--neon-live)'; }
+          const isO25flag = x.omegaPick.includes('OVER 2') || x.omegaPick.includes('OVER 3') ? '🔥' : (x.tXG >= 2.5 ? 'Y' : '-'); let colO25 = isO25flag === '🔥' ? 'var(--p)' : '#666'; if ((isFin || isLiveNow) && isO25flag !== '-') colO25 = aTot >= 3 ? 'var(--neon-live)' : (isFin ? 'var(--alert)' : colO25);
+          const isBttsFlag = x.omegaPick.includes('GOAL') ? '🎯' : (x.btts >= 0.85 ? 'Y' : '-'); let colBtts = isBttsFlag === '🎯' ? 'var(--magenta)' : '#666'; if ((isFin || isLiveNow) && isBttsFlag !== '-') colBtts = aBtts ? 'var(--neon-live)' : (isFin ? 'var(--alert)' : colBtts);
           let colOut = x.outPick === 'X' ? '#888' : '#fff'; if (isFin && x.outPick !== 'X') colOut = x.outPick === aOut ? 'var(--neon-live)' : 'var(--alert)';
           let colExact = 'var(--gold)'; if (isFin) colExact = x.exact === `${ah}-${aa}` ? 'var(--neon-live)' : 'var(--alert)';
           const lockIcon = x.isLockO25 ? '💎 ' : (x.isLockBTTS ? '🎯 ' : ''); let colOmega = x.omegaPick.includes('NO BET') ? '#ffb3b3' : '#fff';
-          if ((isFin || isLiveNow) && !x.omegaPick.includes('NO BET')) {
-            let hit = null;
-            if (x.omegaPick.includes('OVER 2.5')) hit = aTot >= 3; else if (x.omegaPick.includes('OVER 3.5')) hit = aTot >= 4; else if (x.omegaPick.includes('GOAL/GOAL')) hit = aBtts; else if (x.omegaPick.includes('ΑΣΟΣ') && isFin) hit = aOut === '1'; else if (x.omegaPick.includes('ΔΙΠΛΟ') && isFin) hit = aOut === '2'; else if (x.omegaPick.includes('1 & OVER 1.5') && isFin) hit = aOut === '1' && aTot >= 2; else if (x.omegaPick.includes('2 & OVER 1.5') && isFin) hit = aOut === '2' && aTot >= 2; else if (x.omegaPick.includes('ΒΟΜΒΑ (1X)') && isFin) hit = aOut === '1' || aOut === 'X'; else if (x.omegaPick.includes('ΒΟΜΒΑ (X2)') && isFin) hit = aOut === '2' || aOut === 'X';
-            if (hit !== null) colOmega = hit ? 'var(--neon-live)' : (isFin ? 'var(--alert)' : colOmega);
-          }
+          if ((isFin || isLiveNow) && !x.omegaPick.includes('NO BET')) { let hit = null; if (x.omegaPick.includes('OVER 2.5')) hit = aTot >= 3; else if (x.omegaPick.includes('OVER 3.5')) hit = aTot >= 4; else if (x.omegaPick.includes('GOAL/GOAL')) hit = aBtts; else if (x.omegaPick.includes('ΑΣΟΣ') && isFin) hit = aOut === '1'; else if (x.omegaPick.includes('ΔΙΠΛΟ') && isFin) hit = aOut === '2'; else if (x.omegaPick.includes('1 & OVER 1.5') && isFin) hit = aOut === '1' && aTot >= 2; else if (x.omegaPick.includes('2 & OVER 1.5') && isFin) hit = aOut === '2' && aTot >= 2; else if (x.omegaPick.includes('ΒΟΜΒΑ (1X)') && isFin) hit = aOut === '1' || aOut === 'X'; else if (x.omegaPick.includes('ΒΟΜΒΑ (X2)') && isFin) hit = aOut === '2' || aOut === 'X'; if (hit !== null) colOmega = hit ? 'var(--neon-live)' : (isFin ? 'var(--alert)' : colOmega); }
           html += `<tr class="summary-row" onclick="scrollToMatch('card-${x.fixId}')" ${isLiveNow ? 'style="background:rgba(57,255,20,0.05);"' : ''}><td style="color:var(--txt-muted); padding:10px 8px;">${x.m.fixture.date.substring(5,10)}</td><td style="text-align:left; font-weight:bold; padding:10px 8px;">${esc(x.ht)} <span style="color:#666">-</span> ${esc(x.at)}</td><td style="color:${scoreCol}; font-weight:bold; padding:10px 8px;">${scoreStr}</td><td style="color:${colOut}; font-weight:bold; padding:10px 8px;">${x.outPick}</td><td style="color:${colO25}; font-weight:bold; font-size:1.1rem; padding:10px 8px;">${isO25flag}</td><td style="color:${colBtts}; font-weight:bold; font-size:1.1rem; padding:10px 8px;">${isBttsFlag}</td><td style="color:${colExact}; font-weight:bold; padding:10px 8px;">${x.exact}</td><td style="font-size:0.7rem; color:${colOmega}; font-weight:bold; padding:10px 8px;">${lockIcon}${x.omegaPick.split(' ').slice(0,2).join(' ')}</td></tr>`;
         });
         html += `</tbody></table></div>`;
@@ -605,7 +602,14 @@
     }
 
     function renderTopSections() {
-      const tabs = [{ id:'combo2', lbl:'1X2 & O1.5 & COR', e:'👑', d:latestTopLists.combo2, sk:'strength', sl:'VAL', c:TAB_COLORS.combo2 },{ id:'combo1', lbl:'1X2 & O1.5', e:'⚡', d:latestTopLists.combo1, sk:'strength', sl:'VAL', c:TAB_COLORS.combo1 },{ id:'outcomes', lbl:'ΣΗΜΕΙΑ', e:'⚖️', d:latestTopLists.outcomes, sk:'strength', sl:'VAL', c:TAB_COLORS.outcomes },{ id:'over25', lbl:'OVER 2.5', e:'🔥', d:latestTopLists.over25, sk:'tXG', sl:'xG', c:TAB_COLORS.over25 },{ id:'over35', lbl:'OVER 3.5', e:'🚀', d:latestTopLists.over35, sk:'tXG', sl:'xG', c:TAB_COLORS.over35 },{ id:'exact', lbl:'ΑΚΡΙΒΕΣ', e:'🎯', d:latestTopLists.exact, sk:'exactConf', sl:'CONF', c:TAB_COLORS.exact }];
+      const tabs = [
+        { id:'combo2', lbl:'1X2 & O1.5 & COR', e:'👑', d:latestTopLists.combo2, sk:'strength', sl:'VAL', c:TAB_COLORS.combo2 },
+        { id:'combo1', lbl:'1X2 & O1.5', e:'⚡', d:latestTopLists.combo1, sk:'strength', sl:'VAL', c:TAB_COLORS.combo1 },
+        { id:'outcomes', lbl:'ΣΗΜΕΙΑ', e:'⚖️', d:latestTopLists.outcomes, sk:'strength', sl:'VAL', c:TAB_COLORS.outcomes },
+        { id:'over25', lbl:'OVER 2.5', e:'🔥', d:latestTopLists.over25, sk:'tXG', sl:'xG', c:TAB_COLORS.over25 },
+        { id:'over35', lbl:'OVER 3.5', e:'🚀', d:latestTopLists.over35, sk:'tXG', sl:'xG', c:TAB_COLORS.over35 },
+        { id:'exact', lbl:'ΑΚΡΙΒΕΣ', e:'🎯', d:latestTopLists.exact, sk:'exactConf', sl:'CONF', c:TAB_COLORS.exact }
+      ];
       let html = `<div class="section-panel" style="padding:0;"><div class="pred-tabs">`;
       tabs.forEach((t, i) => { html += `<button class="pred-tab${i === 0 ? ' active' : ''}" onclick="switchTab('${t.id}')" id="tab-btn-${t.id}" style="${i === 0 ? `color:${t.c}; border-bottom-color:${t.c};` : ''}" data-color="${t.c}">${t.e} ${t.lbl} <span style="background:${t.d.length ? t.c : '#444'}; color:#000; padding:0 6px; border-radius:10px; font-size:0.65rem; margin-left:6px;">${t.d.length}</span></button>`; });
       html += `</div>`;
@@ -622,7 +626,25 @@
     }
 
     window.switchTab = function (id) { document.querySelectorAll('.pred-tab').forEach(b => { b.classList.remove('active'); b.style.color = 'var(--txt-muted)'; b.style.borderBottomColor = 'transparent'; }); document.querySelectorAll('.pred-tab-panel').forEach(p => p.style.display = 'none'); const btn = document.getElementById('tab-btn-' + id); const color = btn.dataset.color || TAB_COLORS[id] || 'var(--p)'; btn.classList.add('active'); btn.style.color = color; btn.style.borderBottomColor = color; document.getElementById('tabpanel-' + id).style.display = 'block'; };
-    window.scrollToMatch = function (id) { const card = document.getElementById(id); if (card) { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); card.style.boxShadow = '0 0 30px var(--p)'; setTimeout(() => card.style.boxShadow = 'var(--shadow)', 1500); } };
+    window.scrollToMatch = function (id) { const card = document.getElementById(id); if (card) { document.getElementById('marketFilter').value = 'ALL'; window.filterFeed(); setTimeout(() => { const c = document.getElementById(id); if (c) { c.scrollIntoView({ behavior: 'smooth', block: 'center' }); c.style.transition = 'box-shadow 0.3s'; c.style.boxShadow = '0 0 30px var(--p)'; setTimeout(() => c.style.boxShadow = 'var(--shadow)', 1500); } }, 100); } };
+
+    window.filterFeed = function() {
+        const filter = document.getElementById('marketFilter').value; let feedHtml = ''; let visibleCount = 0;
+        window.scannedMatchesData.forEach(d => {
+            let show = false; const pick = d.omegaPick;
+            if(filter === 'ALL') show = true;
+            else if(filter === 'COMBO' && (pick.includes('👑') || pick.includes('⚡'))) show = true;
+            else if(filter === '1X2' && (pick.includes('ΑΣΟΣ') || pick.includes('ΔΙΠΛΟ'))) show = true;
+            else if(filter === 'O25' && pick.includes('OVER 2.5')) show = true;
+            else if(filter === 'O35' && pick.includes('OVER 3.5')) show = true;
+            else if(filter === 'BTTS' && pick.includes('GOAL/GOAL')) show = true;
+            else if(filter === 'COR' && pick.includes('ΚΟΡΝΕΡ')) show = true;
+            else if(filter === 'BOMB' && pick.includes('ΒΟΜΒΑ')) show = true;
+            else if(filter === 'UNDER' && pick.includes('UNDER')) show = true;
+            if(show) { feedHtml += getMatchCardHTML(d); visibleCount++; }
+        });
+        document.getElementById('matchesFeed').innerHTML = feedHtml; document.getElementById('feedCount').innerText = visibleCount;
+    };
 
     function renderWallBets() {
       const wallDiv = document.getElementById('wallbetSection'); if (!window.scannedMatchesData.length) { wallDiv.innerHTML = ''; return; }
@@ -652,7 +674,6 @@
         if (!cands.length) { document.getElementById('auditSection').innerHTML = `<div class="section-panel">Δεν υπάρχουν αποθηκευμένες προβλέψεις για αυτό το διάστημα.</div>`; return; }
 
         let rows = [], stats = { games: 0, outHit: 0, o25Tot: 0, o25Hit: 0, o35Tot: 0, o35Hit: 0, exHit: 0 };
-
         for (let i = 0; i < cands.length; i++) {
           const p = cands[i]; setProgress(Math.round(((i + 1) / cands.length) * 100), `AUDIT: ${p.homeTeam}`);
           const fr  = await apiReq(`fixtures?id=${p.fixtureId}`); const fix = fr?.response?.[0];
@@ -681,12 +702,14 @@
         const exRate  = ((stats.exHit / stats.games) * 100).toFixed(1);
 
         const suggestions = [];
-        if (parseFloat(outRate) < 80 && validOutGames > 0) suggestions.push(`📉 <b>ΣΗΜΕΙΑ (1X2):</b> Win Rate ${outRate}%. Αύξηση xG Diff σε > 0.85.`);
-        if (parseFloat(o25Rate) < 80 && stats.o25Tot > 0)  suggestions.push(`📉 <b>OVER 2.5:</b> Ποσοστό ${o25Rate}%. Αύξηση ελάχιστου Total xG στο 2.95.`);
+        if (parseFloat(outRate) < 80 && validOutGames > 0) suggestions.push(`📉 <b>ΣΗΜΕΙΑ (1X2):</b> Win Rate ${outRate}%. Αύξηση xG Diff.`);
+        if (parseFloat(o25Rate) < 80 && stats.o25Tot > 0)  suggestions.push(`📉 <b>OVER 2.5:</b> Ποσοστό ${o25Rate}%. Αύξηση ελάχιστου Total xG.`);
         if (parseFloat(o35Rate) < 70 && stats.o35Tot > 0)  suggestions.push(`📉 <b>OVER 3.5:</b> Ποσοστό ${o35Rate}%. Αυστηρότερο φίλτρο απαιτείται.`);
-        if (parseFloat(exRate)  < 15) suggestions.push(`📉 <b>ΑΚΡΙΒΕΣ ΣΚΟΡ:</b> Ποσοστό ${exRate}%. Η κατανομή Poisson ρυθμίστηκε στη Χρυσή Τομή.`);
+        if (parseFloat(exRate)  < 15) suggestions.push(`📉 <b>ΑΚΡΙΒΕΣ ΣΚΟΡ:</b> Ποσοστό ${exRate}%. Ρύθμισε τα βάρη (Weights) στο Καντράν.`);
 
-        const sugHtml = suggestions.length ? `<div style="background:var(--alert-dim); border:1px solid var(--alert); padding:15px; border-radius:8px; margin-bottom:15px;"><div style="color:var(--gold); font-weight:bold; margin-bottom:8px;">🤖 AUTO-CALIBRATION: ΠΡΟΤΑΣΕΙΣ ΓΙΑ ${lgFilter === 'ALL' ? 'ΟΛΕΣ ΤΙΣ ΛΙΓΚΕΣ' : esc(rows[0]?.lg || '')}</div><ul style="font-size:0.8rem; margin-left:15px; color:#ddd;">${suggestions.map(s => `<li style="margin-bottom:5px;">${s}</li>`).join('')}</ul></div>` : `<div style="background:rgba(35,134,54,0.1); border:1px solid #238636; padding:15px; border-radius:8px; margin-bottom:15px; color:#b7f7c4; font-weight:bold;">🤖 AUTO-CALIBRATION: Ο αλγόριθμος λειτουργεί τέλεια στα επιθυμητά όρια!</div>`;
+        const sugHtml = suggestions.length
+          ? `<div style="background:var(--alert-dim); border:1px solid var(--alert); padding:15px; border-radius:8px; margin-bottom:15px;"><div style="color:var(--gold); font-weight:bold; margin-bottom:8px;">🤖 AUTO-CALIBRATION: ΠΡΟΤΑΣΕΙΣ ΓΙΑ ${lgFilter === 'ALL' ? 'ΟΛΕΣ ΤΙΣ ΛΙΓΚΕΣ' : esc(rows[0]?.lg || '')}</div><ul style="font-size:0.8rem; margin-left:15px; color:#ddd;">${suggestions.map(s => `<li style="margin-bottom:5px;">${s}</li>`).join('')}</ul></div>`
+          : `<div style="background:rgba(35,134,54,0.1); border:1px solid #238636; padding:15px; border-radius:8px; margin-bottom:15px; color:#b7f7c4; font-weight:bold;">🤖 AUTO-CALIBRATION: Ο αλγόριθμος λειτουργεί τέλεια στα επιθυμητά όρια!</div>`;
 
         document.getElementById('auditSection').innerHTML = `
           <div class="section-panel">
@@ -701,8 +724,26 @@
             ${sugHtml}
             <div style="overflow-x:auto; border-radius:8px; border:1px solid var(--border);">
               <table style="width:100%; border-collapse:collapse; font-size:0.78rem; text-align:center; min-width:900px;">
-                <thead><tr style="background:rgba(0,0,0,0.4);"><th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Ημ/νία</th><th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Ματς</th><th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Σημείο (P→A)</th><th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">O2.5 (P→A)</th><th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">O3.5 (P→A)</th><th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Exact (P→A)</th><th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Τελική Πρόταση (Omega)</th></tr></thead>
-                <tbody>${rows.map(r => `<tr><td style="padding:9px; border-bottom:1px solid var(--border);">${r.date}</td><td style="padding:9px; border-bottom:1px solid var(--border);">${esc(r.match)}</td><td style="padding:9px; border-bottom:1px solid var(--border);" class="${r.pOut === '-' ? '' : r.pOut === 'X' ? '' : r.hitOut ? 'audit-hit' : 'audit-miss'}">${r.pOut} | ${r.aOut}</td><td style="padding:9px; border-bottom:1px solid var(--border); color:${r.pO25 === r.aO25 && r.pO25 ? 'var(--neon-live)' : r.pO25 ? 'var(--alert)' : '#666'}">${r.pO25 ? 'Y' : 'N'} | ${r.aO25 ? 'Y' : 'N'}</td><td style="padding:9px; border-bottom:1px solid var(--border); color:${r.pO35 === r.aO35 && r.pO35 ? 'var(--neon-live)' : r.pO35 ? 'var(--alert)' : '#666'}">${r.pO35 ? 'Y' : 'N'} | ${r.aO35 ? 'Y' : 'N'}</td><td style="padding:9px; border-bottom:1px solid var(--border);" class="${r.pEx === '-' ? '' : r.hitEx ? 'audit-hit' : 'audit-miss'}">${r.pEx} | ${r.aEx}</td><td style="padding:9px; border-bottom:1px solid var(--border); font-size:0.7rem;">${esc(r.omega)}</td></tr>`).join('')}</tbody>
+                <thead><tr style="background:rgba(0,0,0,0.4);">
+                  <th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Ημ/νία</th>
+                  <th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Ματς</th>
+                  <th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Σημείο (P→A)</th>
+                  <th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">O2.5 (P→A)</th>
+                  <th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">O3.5 (P→A)</th>
+                  <th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Exact (P→A)</th>
+                  <th style="padding:9px; border-bottom:1px solid var(--border); color:var(--gold);">Τελική Πρόταση (Omega)</th>
+                </tr></thead>
+                <tbody>
+                  ${rows.map(r => `<tr>
+                    <td style="padding:9px; border-bottom:1px solid var(--border);">${r.date}</td>
+                    <td style="padding:9px; border-bottom:1px solid var(--border);">${esc(r.match)}</td>
+                    <td style="padding:9px; border-bottom:1px solid var(--border);" class="${r.pOut === '-' ? '' : r.pOut === 'X' ? '' : r.hitOut ? 'audit-hit' : 'audit-miss'}">${r.pOut} | ${r.aOut}</td>
+                    <td style="padding:9px; border-bottom:1px solid var(--border); color:${r.pO25 === r.aO25 && r.pO25 ? 'var(--neon-live)' : r.pO25 ? 'var(--alert)' : '#666'}">${r.pO25 ? 'Y' : 'N'} | ${r.aO25 ? 'Y' : 'N'}</td>
+                    <td style="padding:9px; border-bottom:1px solid var(--border); color:${r.pO35 === r.aO35 && r.pO35 ? 'var(--neon-live)' : r.pO35 ? 'var(--alert)' : '#666'}">${r.pO35 ? 'Y' : 'N'} | ${r.aO35 ? 'Y' : 'N'}</td>
+                    <td style="padding:9px; border-bottom:1px solid var(--border);" class="${r.pEx === '-' ? '' : r.hitEx ? 'audit-hit' : 'audit-miss'}">${r.pEx} | ${r.aEx}</td>
+                    <td style="padding:9px; border-bottom:1px solid var(--border); font-size:0.7rem;">${esc(r.omega)}</td>
+                  </tr>`).join('')}
+                </tbody>
               </table>
             </div>
           </div>`;
@@ -711,10 +752,14 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('scanStart').value = todayISO(); document.getElementById('scanEnd').value = todayISO();
-      const d30 = new Date(); d30.setDate(d30.getDate() - 15); document.getElementById('auditStart').value = d30.toISOString().split('T')[0]; document.getElementById('auditEnd').value = todayISO();
+      document.getElementById('scanStart').value = todayISO();
+      document.getElementById('scanEnd').value   = todayISO();
+      const d30 = new Date(); d30.setDate(d30.getDate() - 15);
+      document.getElementById('auditStart').value = d30.toISOString().split('T')[0];
+      document.getElementById('auditEnd').value   = todayISO();
       updateAuditLeagueFilter();
-      const sel = document.getElementById('leagueFilter'); LEAGUES_DATA.forEach(l => sel.innerHTML += `<option value="${l.id}">${l.name}</option>`);
+      const sel = document.getElementById('leagueFilter');
+      LEAGUES_DATA.forEach(l => sel.innerHTML += `<option value="${l.id}">${l.name}</option>`);
     });
   </script>
 </body>
