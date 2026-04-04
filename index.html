@@ -587,6 +587,132 @@
     ::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
     ::-webkit-scrollbar-thumb { background: rgba(0,242,255,0.25); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(0,242,255,0.45); }
+
+    /* ── PREDICTION TABS ── */
+    .pred-tabs {
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.25);
+    }
+    .pred-tabs::-webkit-scrollbar { display: none; }
+
+    .pred-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--txt-muted);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .pred-tab:hover { color: var(--txt); background: rgba(255,255,255,0.03); }
+    .pred-tab.active {
+      color: var(--tab-color, var(--p));
+      border-bottom-color: var(--tab-color, var(--p));
+      background: rgba(255,255,255,0.02);
+    }
+    .pred-tab-emoji { font-size: 1rem; }
+    .pred-tab-label { letter-spacing: 0.5px; }
+    .pred-tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: var(--radius-pill);
+      font-size: 0.65rem;
+      font-weight: 900;
+      font-family: 'Space Mono', monospace;
+      color: #000;
+      transition: background 0.2s;
+    }
+
+    .pred-tab-panel { display: none; }
+    .pred-tab-panel.active { display: block; }
+
+    /* ── PREDICTION LIST ROWS ── */
+    .pred-list { padding: 8px; display: flex; flex-direction: column; gap: 4px; max-height: 520px; overflow-y: auto; }
+
+    .pred-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .pred-row:hover { background: rgba(255,255,255,0.04); border-color: var(--border2); }
+    .pred-row:nth-child(odd) { background: rgba(0,0,0,0.15); }
+    .pred-row:nth-child(odd):hover { background: rgba(255,255,255,0.04); }
+
+    .pred-row-rank {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      font-weight: 900;
+      min-width: 26px;
+      text-align: center;
+    }
+    .pred-row-info { flex: 1; min-width: 0; }
+    .pred-row-match {
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .pred-row-home { color: var(--p); }
+    .pred-row-away { color: #c9d1d9; }
+    .pred-row-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; flex-wrap: wrap; }
+    .pred-row-league { font-size: 0.68rem; color: var(--txt-muted); font-family: 'Space Mono', monospace; }
+    .pred-row-tag {
+      font-size: 0.62rem;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      padding: 1px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid;
+    }
+    .pred-row-score {
+      text-align: center;
+      border: 1px solid;
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      min-width: 56px;
+      flex-shrink: 0;
+    }
+    .pred-row-score-val {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.9rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .pred-row-score-lbl {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      margin-top: 3px;
+      opacity: 0.7;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 480px) {
+      .pred-tab { padding: 10px 12px; font-size: 0.72rem; }
+      .pred-tab-label { display: none; }
+      .pred-row-match { font-size: 0.78rem; }
+    }
   </style>
 </head>
 
@@ -1534,43 +1660,97 @@
     }
 
     function renderTopSections() {
-      let html='';
-
-      if(latestTopLists.bombs.length>0) {
-        html+=`
-        <div class="section-panel" style="border:1px solid rgba(255,0,255,0.25); box-shadow:0 0 20px var(--magenta-dim)">
-          <div class="section-title" style="color:var(--magenta)">💣 TOP ΒΟΜΒΕΣ (UPSETS) <span class="count-badge">${latestTopLists.bombs.length}</span></div>
-          <div class="top-list">${latestTopLists.bombs.map((x,i)=>rankCardHTML(x,i,'BOMB',x.bombScore>=0?'bombScore':'over25Score',true)).join('')}</div>
-        </div>`;
-      }
-
-      const lists=[
-        {title:'🔥 TOP 5 OVER 2.5',data:latestTopLists.over25,label:'O2.5',key:'over25Score'},
-        {title:'🚀 TOP 5 OVER 3.5',data:latestTopLists.over35,label:'O3.5',key:'over35Score'},
-        {title:'🎯 TOP 5 BTTS',data:latestTopLists.btts,label:'BTTS',key:'bttsScore'},
-        {title:'🚩 TOP 5 ΚΟΡΝΕΡ',data:latestTopLists.corners,label:'COR',key:'expectedCorners'},
+      const tabs=[
+        {id:'bombs',  emoji:'💣', label:'ΒΟΜΒΕΣ',   data:latestTopLists.bombs,   scoreKey:'bombScore',       scoreLabel:'BOMB', color:'var(--magenta)', borderColor:'rgba(255,0,255,0.3)', glowColor:'var(--magenta-dim)', isBomb:true},
+        {id:'over25', emoji:'🔥', label:'OVER 2.5',  data:latestTopLists.over25,  scoreKey:'over25Score',     scoreLabel:'O2.5', color:'var(--p)',       borderColor:'rgba(0,242,255,0.2)', glowColor:'none',              isBomb:false},
+        {id:'over35', emoji:'🚀', label:'OVER 3.5',  data:latestTopLists.over35,  scoreKey:'over35Score',     scoreLabel:'O3.5', color:'#a78bfa',       borderColor:'rgba(167,139,250,0.2)', glowColor:'none',            isBomb:false},
+        {id:'btts',   emoji:'🎯', label:'BTTS',      data:latestTopLists.btts,    scoreKey:'bttsScore',       scoreLabel:'BTTS', color:'#34d399',       borderColor:'rgba(52,211,153,0.2)', glowColor:'none',             isBomb:false},
+        {id:'corners',emoji:'🚩', label:'ΚΟΡΝΕΡ',    data:latestTopLists.corners, scoreKey:'expectedCorners', scoreLabel:'COR',  color:'var(--gold)',    borderColor:'rgba(245,158,11,0.2)', glowColor:'none',             isBomb:false},
+        {id:'cards4', emoji:'🟨', label:'ΚΑΡΤΕΣ 4+', data:latestTopLists.cards4,  scoreKey:'cards4Score',     scoreLabel:'C4+',  color:'#f87171',       borderColor:'rgba(248,113,113,0.2)','glowColor':'none',           isBomb:false},
       ];
 
-      html+=`<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">`;
-      for(const l of lists) {
-        html+=`
-        <div class="section-panel" style="margin-bottom:0">
-          <div class="section-title">${l.title}</div>
-          <div class="top-list">${l.data.length?l.data.map((x,i)=>rankCardHTML(x,i,l.label,l.key)).join(''):`<div style="color:var(--txt-muted);font-size:0.8rem;">Δεν υπάρχουν δεδομένα.</div>`}</div>
-        </div>`;
-      }
-      html+=`</div>`;
+      // Tab bar
+      let html=`<div class="section-panel" style="padding:0; overflow:hidden;">`;
+
+      // Tab buttons row
+      html+=`<div class="pred-tabs" id="predTabBar">`;
+      tabs.forEach((t,i)=>{
+        const cnt=t.data.length;
+        html+=`<button class="pred-tab ${i===0?'active':''}" onclick="switchPredTab('${t.id}')" id="tab-btn-${t.id}" style="--tab-color:${t.color}">
+          <span class="pred-tab-emoji">${t.emoji}</span>
+          <span class="pred-tab-label">${t.label}</span>
+          <span class="pred-tab-count" style="background:${cnt>0?t.color:'var(--txt-muted)'}">${cnt}</span>
+        </button>`;
+      });
+      html+=`</div>`; // end tab bar
+
+      // Tab panels
+      tabs.forEach((t,i)=>{
+        html+=`<div class="pred-tab-panel ${i===0?'active':''}" id="tabpanel-${t.id}">`;
+        if(!t.data.length){
+          html+=`<div style="padding:24px; text-align:center; color:var(--txt-muted); font-size:0.82rem; font-family:'Space Mono',monospace;">
+            Δεν υπάρχουν αγώνες που πληρούν το threshold για <strong style="color:${t.color}">${t.label}</strong>.
+          </div>`;
+        } else {
+          html+=`<div class="pred-list">`;
+          t.data.forEach((x,i)=>{
+            const score=t.scoreKey==='expectedCorners'?x[t.scoreKey]?.toFixed(1):x[t.scoreKey];
+            const isBomb=t.isBomb;
+            html+=`
+            <div class="pred-row" onclick="jumpToMatch(${window.scannedMatchesData.findIndex(d=>d.m.fixture.id===x.fixtureId)})">
+              <div class="pred-row-rank" style="color:${i<3?t.color:'var(--txt-muted)'}">${i+1}</div>
+              <div class="pred-row-info">
+                <div class="pred-row-match">
+                  <span class="pred-row-home">${esc(x.homeTeam)}</span>
+                  ${x.homeRank?`<span class="standing-pill">#${x.homeRank}</span>`:''}
+                  <span style="color:var(--txt-muted); margin:0 5px;">vs</span>
+                  <span class="pred-row-away">${esc(x.awayTeam)}</span>
+                  ${x.awayRank?`<span class="standing-pill">#${x.awayRank}</span>`:''}
+                </div>
+                <div class="pred-row-meta">
+                  <span class="pred-row-league">${esc(x.league)}</span>
+                  ${isBomb?`<span class="pred-row-tag" style="color:var(--magenta);border-color:rgba(255,0,255,0.3)">💣 UPSET</span>`:''}
+                </div>
+              </div>
+              <div class="pred-row-score" style="color:${t.color};border-color:${t.borderColor}">
+                <div class="pred-row-score-val">${score}</div>
+                <div class="pred-row-score-lbl">${t.scoreLabel}</div>
+              </div>
+            </div>`;
+          });
+          html+=`</div>`; // end pred-list
+        }
+        html+=`</div>`; // end tab panel
+      });
+
+      html+=`</div>`; // end section-panel
       document.getElementById('topSection').innerHTML=html;
     }
 
+    window.switchPredTab = function(id) {
+      document.querySelectorAll('.pred-tab').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.pred-tab-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('tab-btn-'+id)?.classList.add('active');
+      document.getElementById('tabpanel-'+id)?.classList.add('active');
+    };
+
+    window.jumpToMatch = function(idx) {
+      if(idx<0) return;
+      const sel=document.querySelector('.match-select-field');
+      if(sel){ sel.value=idx; window.renderSpecificMatch(idx); }
+      const card=document.getElementById('selectedMatchCard');
+      if(card) card.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+
     // ── WALLBET ──
     function buildWallBet() {
+      // Pull best candidate from each category (already sorted desc)
       const cands=[
-        ...latestTopLists.bombs.map(x=>({...x,market:x.pickTitle||'ΒΟΜΒΑ',mainScore:x.bombScore||x.over25Score})),
-        ...latestTopLists.over35.map(x=>({...x,market:'OVER 3.5',mainScore:x.over35Score})),
-        ...latestTopLists.over25.map(x=>({...x,market:'OVER 2.5',mainScore:x.over25Score})),
-        ...latestTopLists.btts.map(x=>({...x,market:'BTTS',mainScore:x.bttsScore})),
-        ...latestTopLists.corners.map(x=>({...x,market:x.expectedCorners>=11.5?'OVER 9.5 ΚΟΡΝΕΡ':'OVER 8.5 ΚΟΡΝΕΡ',mainScore:Math.round(x.expectedCorners*8)}))
+        ...latestTopLists.bombs.slice(0,3).map(x=>({...x,market:x.pickTitle||'ΒΟΜΒΑ',mainScore:x.bombScore||x.over25Score})),
+        ...latestTopLists.over35.slice(0,3).map(x=>({...x,market:'OVER 3.5',mainScore:x.over35Score})),
+        ...latestTopLists.over25.slice(0,4).map(x=>({...x,market:'OVER 2.5',mainScore:x.over25Score})),
+        ...latestTopLists.btts.slice(0,3).map(x=>({...x,market:'BTTS',mainScore:x.bttsScore})),
+        ...latestTopLists.corners.slice(0,3).map(x=>({...x,market:x.expectedCorners>=11.5?'OVER 9.5 ΚΟΡΝΕΡ':'OVER 8.5 ΚΟΡΝΕΡ',mainScore:Math.round(x.expectedCorners*8)}))
       ];
       const unique=[], used=new Set();
       for(const c of cands.sort((a,b)=>b.mainScore-a.mainScore)) {
@@ -1803,13 +1983,13 @@
           window.scannedMatchesData.push({m,s:{h:hS,a:aS},scores,standings,h2hSummary,omega,pred});
         }
 
-        // Build top lists
-        latestTopLists.bombs=[...scored].filter(x=>x.isBomb).sort((a,b)=>b.bombScore-a.bombScore).slice(0,5);
-        latestTopLists.over25=[...scored].sort((a,b)=>b.over25Score-a.over25Score).slice(0,5);
-        latestTopLists.over35=[...scored].sort((a,b)=>b.over35Score-a.over35Score).slice(0,5);
-        latestTopLists.btts=[...scored].sort((a,b)=>b.bttsScore-a.bttsScore).slice(0,5);
-        latestTopLists.corners=[...scored].sort((a,b)=>b.expectedCorners-a.expectedCorners).slice(0,5);
-        latestTopLists.cards4=[...scored].sort((a,b)=>b.cards4Score-a.cards4Score).slice(0,5);
+        // Build top lists — NO slice, show ALL qualified matches per category
+        latestTopLists.bombs   = [...scored].filter(x=>x.isBomb).sort((a,b)=>b.bombScore-a.bombScore);
+        latestTopLists.over25  = [...scored].filter(x=>x.over25Score>=OVER25_SCORE_THRESH).sort((a,b)=>b.over25Score-a.over25Score);
+        latestTopLists.over35  = [...scored].filter(x=>x.over35Score>=OVER35_SCORE_THRESH).sort((a,b)=>b.over35Score-a.over35Score);
+        latestTopLists.btts    = [...scored].filter(x=>x.bttsScore>=BTTS_SCORE_THRESH).sort((a,b)=>b.bttsScore-a.bttsScore);
+        latestTopLists.corners = [...scored].filter(x=>x.expectedCorners>=10.3).sort((a,b)=>b.expectedCorners-a.expectedCorners);
+        latestTopLists.cards4  = [...scored].filter(x=>x.cards4Score>=95).sort((a,b)=>b.cards4Score-a.cards4Score);
 
         renderTopSections();
         renderWallBet();
