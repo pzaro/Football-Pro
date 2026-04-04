@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4706.60 - Omniscience</title>
+  <title>APEX OMEGA v4706.70 - Logical Sync</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -189,7 +189,7 @@
   <div id="auth">
     <div class="auth-card">
       <div class="auth-title">APEX OMEGA</div>
-      <div class="auth-sub">v4706.60 · Omniscience UI</div>
+      <div class="auth-sub">v4706.70 · Logical Sync</div>
       <input type="password" id="pin" class="auth-input" placeholder="• • • •" maxlength="8">
       <div id="authError" style="margin-top:12px; font-size:0.75rem; color:var(--alert); min-height:18px;"></div>
     </div>
@@ -406,34 +406,48 @@
           else if(TIGHT_LEAGUES.has(m.league.id)) { tXG*=0.85; hS.fXG*=0.85; aS.fXG*=0.85; }
           else if(GOLD_LEAGUES.has(m.league.id)) tXG*=1.05;
 
-          // Markets
           let o25 = (tXG*24)+((hS.sXG+aS.sXG)*9)+((aS.fXGA+hS.fXGA)*6);
           let o35 = (tXG*22)+((hS.sXG+aS.sXG)*12)+((aS.fXGA+hS.fXGA)*10);
           let btts = (Math.min(hS.fXG,aS.fXG)*40)+((hS.fXGA+aS.fXGA)*12)+(Math.min(hS.sXG,aS.sXG)*12);
           const cor = hS.cor + aS.cor;
 
-          // Exact Score (Simplified Math)
+          // Exact Score (Refined Math to allow 3+ goals)
           const hExp = clamp((hS.fXG*0.42)+(hS.sXG*0.35)+(aS.fXGA*0.23), 0.15, 4.0);
           const aExp = clamp((aS.fXG*0.42)+(aS.sXG*0.35)+(hS.fXGA*0.23), 0.15, 4.0);
-          let hG = hExp>=2.05?2: hExp>=0.90?1:0;
-          let aG = aExp>=2.05?2: aExp>=0.90?1:0;
-          if(Math.abs(hExp-aExp)<0.20) { if(hG>aG) aG=hG; else if(aG>hG) hG=Math.max(0,aG-1); }
           
-          let exactConf = 100 - ((Math.abs(hExp - Math.round(hExp)) + Math.abs(aExp - Math.round(aExp))) * 50);
+          const getBucket = (x) => x>=3.15 ? 4 : x>=2.15 ? 3 : x>=1.15 ? 2 : x>=0.65 ? 1 : 0;
+          let hG = getBucket(hExp);
+          let aG = getBucket(aExp);
+          
+          if(Math.abs(hExp-aExp)<0.25 && hG !== aG) { 
+              if(hG>aG) aG=hG; 
+              else if(aG>hG) hG=aG; 
+          }
+          
+          let exactConf = 100 - ((Math.abs(hExp - hG) + Math.abs(aExp - aG)) * 40);
           if(TIGHT_LEAGUES.has(m.league.id) && hG===1 && aG===1) exactConf += 15;
 
           // Outcomes 1X2
           let outPick = "X", outScore = 80 - (Math.abs(hS.fXG - aS.fXG) * 100);
-          if (hS.fXG > aS.fXG + 0.4 && hS.sXG > aS.sXG) { outPick = "1"; outScore = ((hS.fXG - aS.fXG)*35) + (hS.sXG*15); }
-          else if (aS.fXG > hS.fXG + 0.4 && aS.sXG > hS.sXG) { outPick = "2"; outScore = ((aS.fXG - hS.fXG)*35) + (aS.sXG*15); }
+          if (hS.fXG > aS.fXG + 0.35 && hS.sXG > aS.sXG) { outPick = "1"; outScore = ((hS.fXG - aS.fXG)*40) + (hS.sXG*15); }
+          else if (aS.fXG > hS.fXG + 0.35 && aS.sXG > hS.sXG) { outPick = "2"; outScore = ((aS.fXG - hS.fXG)*40) + (aS.sXG*15); }
 
-          // Mixed Absolute Strength
+          // Mixed Absolute Strength (Strict Logical Alignment)
           let omegaPick = "NO BET", strength = 0;
-          if (o35 >= 132 && tXG >= 3.1) { omegaPick = "OVER 3.5"; strength = o35; }
-          else if (o25 >= 104 && tXG >= 2.45) { omegaPick = "OVER 2.5"; strength = o25; }
-          else if (btts >= 92 && Math.min(hS.fXG, aS.fXG) >= 0.85) { omegaPick = "GOAL/GOAL"; strength = btts; }
+          
+          // Align outcomes to exact score to prevent 1-1 exact score but "1" Pick
+          if (outPick === "1" && hG <= aG) hG = aG + 1;
+          if (outPick === "2" && aG <= hG) aG = hG + 1;
+          
+          let totG = hG + aG; // Recalculate after alignment
+
+          if (o35 >= 130 && tXG >= 3.1 && totG >= 4) { omegaPick = "OVER 3.5"; strength = o35; }
+          else if (o25 >= 104 && tXG >= 2.45 && totG >= 3) { omegaPick = "OVER 2.5"; strength = o25; }
+          else if (btts >= 92 && Math.min(hS.fXG, aS.fXG) >= 0.85 && hG > 0 && aG > 0) { omegaPick = "GOAL/GOAL"; strength = btts; }
           else if (cor >= 11.5) { omegaPick = "OVER 9.5 ΚΟΡΝΕΡ"; strength = cor * 10; }
           else if (outScore >= 60 && outPick !== "X") { omegaPick = outPick==="1"?"ΑΣΟΣ":"ΔΙΠΛΟ"; strength = outScore; }
+          else if (totG >= 3 && o25 >= 98) { omegaPick = "OVER 2.5"; strength = o25; } // Fallback sync
+          else if (totG < 3 && o25 < 85 && TIGHT_LEAGUES.has(m.league.id)) { omegaPick = "UNDER 2.5"; strength = 100 - o25; }
 
           const rec = {
             m, fixId: m.fixture.id,
