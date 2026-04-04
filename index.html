@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4712 - Bug Fix</title>
+  <title>APEX OMEGA v4713 - Live Summary</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -165,9 +165,9 @@
       .match-header { flex-direction: column; }
       .wallbet-container { flex-direction: column; }
       .scores-row { justify-content: flex-start; }
-      .summary-table th:nth-child(3), .summary-table td:nth-child(3),
-      .summary-table th:nth-child(4), .summary-table td:nth-child(4),
-      .summary-table th:nth-child(5), .summary-table td:nth-child(5) { display: none; }
+      .summary-table th:nth-child(1), .summary-table td:nth-child(1),
+      .summary-table th:nth-child(8), .summary-table td:nth-child(8) { display: none; }
+      .summary-table td { padding: 8px 4px; font-size: 0.7rem; }
     }
   </style>
 </head>
@@ -186,7 +186,7 @@
   <div id="auth">
     <div class="auth-card">
       <div class="auth-title">APEX OMEGA</div>
-      <div class="auth-sub">v4712 · Bug Fix Edition</div>
+      <div class="auth-sub">v4713 · Live Summary</div>
       <input type="password" id="pin" class="auth-input" placeholder="• • • •" maxlength="8">
       <div id="authError" style="margin-top:12px; font-size:0.75rem; color:var(--alert); min-height:18px;"></div>
     </div>
@@ -379,8 +379,6 @@
     
     function summarizeH2H(fixtures, homeId, awayId) { let hw=0,aw=0,dr=0,gh=0,ga=0,last=[]; for(const f of fixtures.slice(0,8)) { const hg=f?.goals?.home??0, ag=f?.goals?.away??0; const myG=f?.teams?.home?.id===homeId?hg:ag; const opG=f?.teams?.home?.id===awayId?hg:ag; gh+=myG; ga+=opG; if(myG>opG) hw++; else if(opG>myG) aw++; else dr++; last.push(`${myG}-${opG}`); } return {homeWins:hw,awayWins:aw,draws:dr,goalsHome:gh,goalsAway:ga,lastResults:last}; }
 
-    function buildTipLinks(h,a) { const q=encodeURIComponent(`${h} vs ${a}`); return { forebet:`https://www.google.com/search?q=site:forebet.com+${q}`, windrawwin:`https://www.google.com/search?q=site:windrawwin.com+${q}` }; }
-
     // --- RENDER DETAILED MATCH CARD ---
     function getMatchCardHTML(d) {
       const pickClass = d.isBomb ? 'bomb' : d.omegaPick.includes('NO BET') ? 'no-bet' : '';
@@ -408,7 +406,7 @@
             ${scoreHtml}
             <div class="scores-row">
               <span class="score-chip">O2.5: ${d.tXG.toFixed(2)} xG</span>
-              <span class="score-chip">BTTS: ${d.btts.toFixed(2)} min xG</span>
+              <span class="score-chip">BTTS: ${Math.min(d.hS.fXG, d.aS.fXG).toFixed(2)} min xG</span>
             </div>
           </div>
         </div>
@@ -445,6 +443,7 @@
           <div class="team-box">
             <div style="font-family:'Space Mono'; font-size:0.72rem; font-weight:700; margin-bottom:12px; color:var(--p);">🏠 ${esc(d.ht)}</div>
             <div style="margin-bottom:10px;">${d.hS.history.map(f=>`<span class="form-dot form-${f.cls}">${f.res}</span>`).join('')}</div>
+            <div class="stat-row"><span class="stat-key">Σεζόν μ.ο.</span><div><span class="season-xg">${d.hS.uiSeasXG}</span> / ${d.hS.uiSeasXGA}</div></div>
             <div class="stat-row"><span class="stat-key">xG (Φόρμα)</span><div><span class="val-xg">${d.hS.uiXG}</span>${d.hS.uiDevXG}</div></div>
             <div class="stat-row"><span class="stat-key">xGA Κατά</span><div><span class="val-xg">${d.hS.uiXGA}</span>${d.hS.uiDevXGA}</div></div>
             <div class="stat-row"><span class="stat-key">Split Εντός</span><span class="val-split">${d.hS.uiSXG} / ${d.hS.uiSXGA}</span></div>
@@ -459,6 +458,8 @@
         </div>
       </div>`;
     }
+
+    function buildTipLinks(h,a) { const q=encodeURIComponent(`${h} vs ${a}`); return { forebet:`https://www.google.com/search?q=site:forebet.com+${q}`, windrawwin:`https://www.google.com/search?q=site:windrawwin.com+${q}` }; }
 
     // --- MAIN BATCH ENGINE ---
     async function runScan() {
@@ -567,24 +568,57 @@
       for (const [lg, matches] of Object.entries(grouped)) {
         summaryHtml += `<div class="league-group-title">${esc(lg)}</div>`;
         summaryHtml += `<div style="overflow-x:auto;"><table class="summary-table">
-          <thead><tr><th>Ημ/νία</th><th style="text-align:left;">Αγώνας</th><th>1X2</th><th>O2.5</th><th>O3.5</th><th>BTTS</th><th>Exact</th><th>Κόρνερ</th><th>Omega Pick</th></tr></thead><tbody>`;
+          <thead><tr><th>Ημ/νία</th><th style="text-align:left;">Αγώνας</th><th>Σκορ</th><th>1X2</th><th>O2.5</th><th>BTTS</th><th>Exact</th><th>Κόρνερ</th><th>Omega Pick</th></tr></thead><tbody>`;
         
         matches.forEach(x => {
-          const isO25 = x.tXG >= 2.5 ? 'Y' : 'N';
-          const isO35 = x.tXG >= 3.4 ? 'Y' : 'N';
-          const isBtts = x.btts >= 0.85 ? 'Y' : 'N';
+          const isFin = isFinished(x.m.fixture.status.short);
+          const ah = x.m.goals?.home ?? 0; const aa = x.m.goals?.away ?? 0;
+          const scoreStr = isFin ? `${ah}-${aa}` : '-';
+          const aTot = ah + aa; const aBtts = ah > 0 && aa > 0; const aOut = ah > aa ? '1' : (ah < aa ? '2' : 'X');
+
+          let isO25 = x.omegaPick.includes('OVER 2') || x.omegaPick.includes('OVER 3') ? '🔥' : (x.tXG >= 2.5 ? 'Y' : '-');
+          let colO25 = isO25 === '🔥' ? 'var(--p)' : '#666';
+          if (isFin && isO25 !== '-') colO25 = aTot >= 3 ? 'var(--neon-live)' : 'var(--alert)';
+
+          let isBtts = x.omegaPick.includes('GOAL') ? '🎯' : (x.btts >= 0.85 ? 'Y' : '-');
+          let colBtts = isBtts === '🎯' ? 'var(--magenta)' : '#666';
+          if (isFin && isBtts !== '-') colBtts = aBtts ? 'var(--neon-live)' : 'var(--alert)';
+
+          let colOut = x.outPick === 'X' ? '#888' : '#fff';
+          if (isFin && x.outPick !== 'X') colOut = x.outPick === aOut ? 'var(--neon-live)' : 'var(--alert)';
+
+          let colExact = 'var(--gold)';
+          if (isFin) colExact = x.exact === scoreStr ? 'var(--neon-live)' : 'var(--alert)';
+
           let lockIcon = x.isLockO25 ? '💎 ' : (x.isLockBTTS ? '🎯 ' : '');
+          let colOmega = x.omegaPick.includes('NO BET') ? '#ffb3b3' : '#fff';
+          
+          if (isFin && !x.omegaPick.includes('NO BET')) {
+              let isOmegaHit = false;
+              if (x.omegaPick.includes('OVER 2.5')) isOmegaHit = aTot >= 3;
+              else if (x.omegaPick.includes('OVER 3.5')) isOmegaHit = aTot >= 4;
+              else if (x.omegaPick.includes('GOAL/GOAL')) isOmegaHit = aBtts;
+              else if (x.omegaPick.includes('ΑΣΟΣ')) isOmegaHit = aOut === '1';
+              else if (x.omegaPick.includes('ΔΙΠΛΟ')) isOmegaHit = aOut === '2';
+              else if (x.omegaPick.includes('1 & OVER 1.5')) isOmegaHit = aOut === '1' && aTot >= 2;
+              else if (x.omegaPick.includes('2 & OVER 1.5')) isOmegaHit = aOut === '2' && aTot >= 2;
+              else if (x.omegaPick.includes('ΒΟΜΒΑ (1X)')) isOmegaHit = aOut === '1' || aOut === 'X';
+              else if (x.omegaPick.includes('ΒΟΜΒΑ (X2)')) isOmegaHit = aOut === '2' || aOut === 'X';
+              else if (x.omegaPick.includes('ΚΟΡΝΕΡ')) isOmegaHit = null; 
+              
+              if (isOmegaHit !== null) colOmega = isOmegaHit ? 'var(--neon-live)' : 'var(--alert)';
+          }
 
           summaryHtml += `<tr onclick="openMatchCard(${x.originalIndex})">
             <td style="color:var(--txt-muted);">${x.m.fixture.date.substring(5,10)}</td>
             <td class="st-match">${esc(x.ht)} <span style="color:#666">-</span> ${esc(x.at)}</td>
-            <td style="color:${x.outPick==='X'?'#888':'#fff'}">${x.outPick}</td>
-            <td style="color:${isO25==='Y'?'var(--p)':'#666'}">${isO25}</td>
-            <td style="color:${isO35==='Y'?'var(--magenta)':'#666'}">${isO35}</td>
-            <td style="color:${isBtts==='Y'?'var(--neon-live)':'#666'}">${isBtts}</td>
-            <td style="color:var(--gold); font-weight:bold;">${x.exact}</td>
+            <td style="color:${isFin?'var(--gold)':'#666'}; font-weight:bold;">${scoreStr}</td>
+            <td style="color:${colOut}; font-weight:bold;">${x.outPick}</td>
+            <td style="color:${colO25}; font-weight:bold; font-size:1.1rem;">${isO25}</td>
+            <td style="color:${colBtts}; font-weight:bold; font-size:1.1rem;">${isBtts}</td>
+            <td style="color:${colExact}; font-weight:bold;">${x.exact}</td>
             <td>${x.cor.toFixed(1)}</td>
-            <td style="font-size:0.7rem; color:${x.omegaPick.includes('NO BET')?'#ffb3b3':'#fff'}">${lockIcon}${x.omegaPick.split(' ')[0]} ${x.omegaPick.split(' ')[1]||''}</td>
+            <td style="font-size:0.7rem; color:${colOmega}; font-weight:bold;">${lockIcon}${x.omegaPick.split(' ')[0]} ${x.omegaPick.split(' ')[1]||''}</td>
           </tr>`;
         });
         summaryHtml += `</tbody></table></div>`;
@@ -660,14 +694,14 @@
           <div class="wallbet-leg" onclick="openMatchCard(${window.scannedMatchesData.indexOf(l4)})"><div class="wallbet-leg-match">${l4.ht} vs ${l4.at}</div><div class="wallbet-leg-pick"><span>🎲 ${l4.omegaPick}</span><span class="wallbet-leg-conf">Strength: ${Math.round(l4.strength)}</span></div></div></div>`;
       }
       if(safePicks.length < 2) {
-          wallHtml += `<div style="text-align:center; padding:20px; width:100%; color:var(--txt-muted);">⚠️ Το σύστημα δεν βρήκε 2 απόλυτα ασφαλή σημεία (O2.5/BTTS) σήμερα. Καλύτερα αποχή.</div>`;
+          wallHtml += `<div style="text-align:center; padding:20px; width:100%; color:var(--txt-muted);">⚠️ Το σύστημα δεν βρήκε 2 απόλυτα ασφαλή σημεία (O2.5/BTTS) σήμερα για δυάδα. Καλύτερα αποχή (No Bet).</div>`;
       }
       
-      wallHtml += `</div><div style="font-size:0.7rem; margin-top:12px; color:#6b7280;">*Επαγγελματική στρατηγική: Παίζουμε μόνο Δυάδες. Ποτέ μεγάλα παρολί.</div></div>`;
+      wallHtml += `</div><div style="font-size:0.7rem; margin-top:12px; color:#6b7280;">*Επαγγελματική στρατηγική: Παίζουμε μόνο Δυάδες. Ποτέ μεγαλύτερα παρολί.</div></div>`;
       wallDiv.innerHTML = wallHtml;
     }
 
-    // --- 4-PILLAR AUDIT ENGINE ---
+    // --- 4-PILLAR AUDIT ENGINE WITH AI SUGGESTIONS ---
     async function runCustomAudit() {
       if(isRunning) return;
       const s = document.getElementById('auditStart').value; const e = document.getElementById('auditEnd').value; const lgFilter = document.getElementById('auditLeague').value;
