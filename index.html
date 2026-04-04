@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4706.80 - The Perfect Engine</title>
+  <title>APEX OMEGA v4706.90 - Global Radar</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -165,7 +165,7 @@
   <div id="auth">
     <div class="auth-card">
       <div class="auth-title">APEX OMEGA</div>
-      <div class="auth-sub">v4706.80 · The Perfect Engine</div>
+      <div class="auth-sub">v4706.90 · Global Radar</div>
       <input type="password" id="pin" class="auth-input" placeholder="• • • •" maxlength="8">
       <div id="authError" style="margin-top:12px; font-size:0.75rem; color:var(--alert); min-height:18px;"></div>
     </div>
@@ -202,13 +202,15 @@
         </div>
         <div class="toolbar-group" style="flex:2;">
           <div class="toolbar-label">Διοργάνωση</div>
-          <select id="leagueFilter" class="field"></select>
+          <select id="leagueFilter" class="field">
+            <option value="ALL">🌐 Βασικές Διοργανώσεις (Top 24)</option>
+            <option value="WORLD">🌍 ΟΛΟ ΤΟ ΚΟΥΠΟΝΙ (Όλος ο Κόσμος)</option>
+            </select>
         </div>
         <div class="toolbar-group" style="flex:0;">
           <div class="toolbar-label">&nbsp;</div>
           <div style="display:flex; gap:8px;">
             <button class="btn" id="btnPre" onclick="runScan()">🚀 BATCH SCAN</button>
-            <button class="btn btn-live" id="btnLive" onclick="runLiveScan()">🔴 LIVE</button>
           </div>
         </div>
       </div>
@@ -281,7 +283,7 @@
 
     function setLoader(show, text='') { document.getElementById('loader').style.display = show ? 'block' : 'none'; document.getElementById('status').textContent = text; if (!show) document.getElementById('bar').style.width = '0%'; }
     function setProgress(pct, text='') { document.getElementById('bar').style.width = Math.round(clamp(pct,0,100)) + '%'; document.getElementById('status').textContent = text; }
-    function setBtnsDisabled(d) { ["btnPre","btnLive","leagueFilter"].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = d; }); }
+    function setBtnsDisabled(d) { ["btnPre","leagueFilter"].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = d; }); }
     function showErr(msg) { document.getElementById('errorBox').innerHTML = `<div style="color:var(--alert);margin-bottom:10px;">⚠️ ${esc(msg)}</div>`; }
     function clearErr() { document.getElementById('errorBox').innerHTML = ''; }
 
@@ -391,12 +393,18 @@
         for(let i=0; i<dates.length; i++) {
           setProgress((i/dates.length)*10, `Λήψη ${dates[i]}`);
           const res = await apiReq(`fixtures?date=${dates[i]}`);
-          const dm = (res.response||[]).filter(m=>selLg==='ALL'?LEAGUE_IDS.includes(m.league.id):m.league.id===parseInt(selLg));
+          const dm = (res.response||[]).filter(m => {
+             if (selLg === 'WORLD') return true; // ΟΛΟ ΤΟ ΚΟΥΠΟΝΙ
+             if (selLg === 'ALL') return LEAGUE_IDS.includes(m.league.id); // ΒΑΣΙΚΕΣ
+             return m.league.id === parseInt(selLg);
+          });
           allMatches.push(...dm);
         }
 
         if(!allMatches.length) { showErr('Δεν βρέθηκαν αγώνες.'); isRunning=false; setBtnsDisabled(false); setLoader(false); return; }
-        if(allMatches.length>200) allMatches=allMatches.slice(0,200);
+        
+        // Προστασία στα credits - Όριο 300 αγώνες (300 * 12 req = 3600 req max)
+        if(allMatches.length > 300) allMatches = allMatches.slice(0, 300);
         
         const scored = [];
 
@@ -628,6 +636,8 @@
       document.getElementById('scanStart').value = todayISO();
       document.getElementById('scanEnd').value = todayISO();
       const sel = document.getElementById('leagueFilter');
+      sel.innerHTML += `<option value="ALL">🌐 Βασικές Διοργανώσεις (Top 24)</option>`;
+      sel.innerHTML += `<option value="WORLD">🌍 ΟΛΟ ΤΟ ΚΟΥΠΟΝΙ (Όλος ο Κόσμος)</option>`;
       LEAGUES_DATA.forEach(l => sel.innerHTML += `<option value="${l.id}">${l.name}</option>`);
     });
   </script>
