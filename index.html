@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4733 - Data Matrix Edition</title>
+  <title>APEX OMEGA v4734 - Data Matrix (Bugfix)</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   
@@ -202,7 +202,7 @@
 <div id="auth">
   <div class="auth-card">
     <div class="brand-logo" style="justify-content: center; font-size: 2rem; margin-bottom: 10px;">APEX<span>OMEGA</span></div>
-    <div class="auth-sub" style="font-weight: 600; color: var(--accent-blue);">v4733 · Data Matrix Edition</div>
+    <div class="auth-sub" style="font-weight: 600; color: var(--accent-blue);">v4734 · Data Matrix (Bugfix)</div>
     <input type="password" id="pin" class="auth-input" placeholder="• • • •" maxlength="8" autocomplete="off" inputmode="numeric">
     <div id="authError" style="margin-top:12px; font-size:0.75rem; color:var(--accent-red); min-height:20px; font-weight:600;"></div>
   </div>
@@ -360,9 +360,9 @@
 // ================================================================
 const API_BASE   = "https://v3.football.api-sports.io";
 const API_KEY    = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LS_PREDS   = "omega_preds_v4733"; 
-const LS_SETTINGS= "omega_settings_v4733";
-const LS_LGMODS  = "omega_lgmods_v4733";
+const LS_PREDS   = "omega_preds_v4734"; 
+const LS_SETTINGS= "omega_settings_v4734";
+const LS_LGMODS  = "omega_lgmods_v4734";
 
 const LEAGUES_DATA = [
   {id:2,name:"Champions League"},{id:3,name:"Europa League"},{id:848,name:"Conference League"},
@@ -524,53 +524,49 @@ window.applyAllAdvisor = function(encoded, leagueId) {
 };
 
 // ================================================================
-//  EXPORT & IMPORT (OFFLINE DATA MANAGEMENT)
+//  EXPORT / IMPORT & LIVE SYNC
 // ================================================================
 window.exportData = function() {
-  if (!window.scannedMatchesData || !window.scannedMatchesData.length) {
-    showErr("No data available to export."); 
-    return;
-  }
+  if (!window.scannedMatchesData || !window.scannedMatchesData.length) { showErr("No data available to export."); return; }
   const dataStr = JSON.stringify(window.scannedMatchesData);
   const blob = new Blob([dataStr], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `apex_omega_export_${todayISO()}.json`;
-  a.click();
+  const a = document.createElement('a'); a.href = url; a.download = `apex_omega_export_${todayISO()}.json`; a.click();
   URL.revokeObjectURL(url);
   showOk("Data exported successfully!");
 };
 
 window.importData = function(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
       const imported = JSON.parse(e.target.result);
       if (!Array.isArray(imported)) throw new Error("Invalid file format");
       window.scannedMatchesData = imported;
-      
       latestTopLists.combo2 = window.scannedMatchesData.filter(x=>x.omegaPick.includes('👑')).sort((a,b)=>b.strength-a.strength).slice(0,5); 
       latestTopLists.combo1 = window.scannedMatchesData.filter(x=>x.omegaPick.includes('⚡')).sort((a,b)=>b.strength-a.strength).slice(0,5); 
       latestTopLists.outcomes = window.scannedMatchesData.filter(x=>x.omegaPick.includes('ΑΣΟΣ')||x.omegaPick.includes('ΔΙΠΛΟ')).sort((a,b)=>b.strength-a.strength).slice(0,5); 
       latestTopLists.exact = [...window.scannedMatchesData].sort((a,b)=>b.exactConf-a.exactConf).slice(0,5); 
       latestTopLists.over25 = window.scannedMatchesData.filter(x=>x.omegaPick.includes('OVER 2.5')).sort((a,b)=>b.strength-a.strength).slice(0,5); 
       latestTopLists.over35 = window.scannedMatchesData.filter(x=>x.omegaPick.includes('OVER 3.5')).sort((a,b)=>b.strength-a.strength).slice(0,5);
-      
-      renderTopSections();
-      renderWallBets();
-      renderSummaryTable();
-      document.getElementById('feedFilterSection').style.display = 'block';
-      filterFeed();
+      renderTopSections(); renderWallBets(); renderSummaryTable();
+      document.getElementById('feedFilterSection').style.display = 'block'; filterFeed();
       showOk(`Successfully imported ${imported.length} matches (Offline Mode).`);
-    } catch (err) {
-      showErr("Error reading file.");
-    }
+    } catch (err) { showErr("Error reading file."); }
     event.target.value = ''; 
   };
   reader.readAsText(file);
+};
+
+window.syncLiveScores = async function() {
+  if(isRunning)return; const btn=document.getElementById('btnSyncLive'); if(btn){btn.innerText='Syncing...';btn.disabled=true;}
+  try {
+    const res=await apiReq('fixtures?live=all'); const map=new Map((res.response||[]).map(f=>[f.fixture.id,f])); let upd=0;
+    window.scannedMatchesData.forEach(d=>{if(map.has(d.fixId)){const ld=map.get(d.fixId);d.m.goals=ld.goals;d.m.fixture.status=ld.fixture.status;upd++;}});
+    if(upd>0){renderSummaryTable();filterFeed();showOk(`Synced ${upd} live matches.`);}
+    else showOk('No live matches found in current set.');
+  } catch(e){showErr("Sync error: "+e.message);} finally{if(btn){btn.innerText='Live Sync';btn.disabled=false;}}
 };
 
 // ================================================================
@@ -970,11 +966,11 @@ window.resimulateMatches = function() {
       if(outPick==="1"&&hG<=aG) hG=aG+1; if(outPick==="2"&&aG<=hG) aG=hG+1;
 
       const bttsScore = Math.min(hXG, aXG);
-      const cor = Number(d.hS.cor||5) + Number(d.aS.cor||5);
+      const cor = Number(d.hS.cor) + Number(d.aS.cor);
       const totCorExp = clamp((cor*0.78)+((Number(d.hS.sXG)+Number(d.aS.sXG))*0.72),5,15);
       const hShare = clamp((hExp+Number(d.hS.sXG)+0.25)/Math.max(hExp+aExp+Number(d.hS.sXG)+Number(d.aS.sXG)+0.5,0.1),0.38,0.62);
       let hCors=Math.max(2,Math.round(totCorExp*hShare)), aCors=Math.max(2,Math.round(totCorExp-hCors));
-      const totCards = Number(d.totCards||0);
+      const totCards = Number(d.totCards);
 
       let omegaPick="NO BET", reason="Insufficient statistical edge.", pickScore=0;
       if(tXG>=lp.minXGO35 && bttsScore>=1.20)              { omegaPick="🚀 OVER 3.5 GOALS"; pickScore=tXG*30; reason="Extreme scoring pace."; }
@@ -1051,6 +1047,22 @@ async function analyzeMatch(m, index, total) {
 
   const rec = { m, fixId:m.fixture.id, ht:m.teams.home.name, at:m.teams.away.name, lg:m.league.name, leagueId:m.league.id, tXG, btts:bttsScore, cor, outPick, xgDiff, exact:`${hG}-${aG}`, exactConf, omegaPick, strength:pickScore, reason, hExp, aExp, hr:getTeamRank(stand,m.teams.home.id)??99, ar:getTeamRank(stand,m.teams.away.id)??99, hCors, aCors, totCors:hCors+aCors, totCards, hS, aS, h2h:summarizeH2H(h2hFix,m.teams.home.id,m.teams.away.id), isBomb:false, isLockO25:tXG>=(lp.minXGO25+0.15)&&bttsScore>=1.00, isLockBTTS:bttsScore>=(lp.minBTTS+0.05)&&tXG>=2.50 };
   window.scannedMatchesData.push(rec);
+}
+
+async function fetchFixturesForDates(dates,selLg) {
+  let all=[];
+  for(let i=0;i<dates.length;i++){
+    setProgress((i/dates.length)*10,`Fetching ${dates[i]}`);
+    const res=await apiReq(`fixtures?date=${dates[i]}`);
+    const dm=(res.response||[]).filter(m=>{
+      if(selLg==='WORLD') return true;
+      if(selLg==='ALL') return LEAGUE_IDS.includes(m.league.id);
+      if(selLg==='MY_LEAGUES') return MY_LEAGUES_IDS.includes(m.league.id);
+      return m.league.id===parseInt(selLg);
+    });
+    all.push(...dm); if(all.length>350) break;
+  }
+  return all;
 }
 
 async function runScan() {
@@ -1196,6 +1208,7 @@ async function runCustomAudit() {
     const bttsRate = stats.bttsTot>0  ? (stats.bttsHit/stats.bttsTot)*100 : 0;
     const exRate   = (stats.exHit/stats.games)*100;
 
+    // TARGETED ADVISOR LOGIC
     const TARGET_1X2 = 80, TARGET_O25 = 80, TARGET_O35 = 70, TARGET_BTTS = 70;
     let suggestions = [];
     const currentO25  = lgFilter!=='ALL' && leagueMods[lgFilter]?.minXGO25 !== undefined ? Number(leagueMods[lgFilter].minXGO25) : Number(engineConfig.tXG_O25);
