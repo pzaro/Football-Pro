@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4727 - The Stable Core</title>
+  <title>APEX OMEGA v4728 - The Elite Focus</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -118,7 +118,7 @@
 <div id="auth">
   <div class="auth-card">
     <div class="auth-title">APEX OMEGA</div>
-    <div class="auth-sub">v4727 · The Stable Core</div>
+    <div class="auth-sub">v4728 · The Elite Focus (My Leagues)</div>
     <input type="password" id="pin" class="auth-input" placeholder="• • • •" maxlength="8" autocomplete="off" inputmode="numeric">
     <div id="authError" style="margin-top:12px;font-size:0.75rem;color:var(--alert);min-height:20px"></div>
   </div>
@@ -198,6 +198,7 @@
       <div class="toolbar-group"><div class="toolbar-label">Ημ/νία Λήξης</div><input type="date" id="scanEnd" class="field"></div>
       <div class="toolbar-group" style="flex:2"><div class="toolbar-label">Διοργάνωση</div>
         <select id="leagueFilter" class="field">
+          <option value="MY_LEAGUES">⭐ MY LEAGUES (Μόνο τα Παραγωγικά)</option>
           <option value="ALL">🌐 Βασικές Διοργανώσεις (Top 24)</option>
           <option value="WORLD">🌍 ΟΛΟ ΤΟ ΚΟΥΠΟΝΙ (Όλος ο Κόσμος)</option>
         </select>
@@ -256,9 +257,9 @@
 // ================================================================
 const API_BASE   = "https://v3.football.api-sports.io";
 const API_KEY    = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LS_PREDS   = "omega_preds_v4727"; // Clean DB for BULK SAVE structure
-const LS_SETTINGS= "omega_settings_v4727";
-const LS_LGMODS  = "omega_lgmods_v4727";
+const LS_PREDS   = "omega_preds_v4728"; // Clean DB for new My Leagues option
+const LS_SETTINGS= "omega_settings_v4728";
+const LS_LGMODS  = "omega_lgmods_v4728";
 
 const TAB_COLORS = { combo2:'#f59e0b', combo1:'#ff00ff', outcomes:'#3b82f6', over25:'#00f2ff', over35:'#a78bfa', exact:'#34d399' };
 
@@ -274,6 +275,8 @@ const LEAGUE_IDS  = LEAGUES_DATA.map(l => l.id);
 const TRAP_LEAGUES  = new Set([40,41,136,141,79,62,6,10,66]);
 const TIGHT_LEAGUES = new Set([61,94,197,135,140,39,2,3,848]);
 const GOLD_LEAGUES  = new Set([78,262,88,253]);
+
+const MY_LEAGUES_IDS = [39, 78, 88, 144, 140, 135, 197, 253]; // The Golden 8
 
 let teamStatsCache = new Map(), lastFixCache = new Map(), standCache = new Map(), h2hCache = new Map();
 let isRunning = false, currentCredits = null;
@@ -434,7 +437,7 @@ function showOk(msg)  { document.getElementById('successBox').innerHTML=`<div st
 function clearAlerts() { document.getElementById('errorBox').innerHTML=''; document.getElementById('successBox').innerHTML=''; }
 function abortScan(msg) { if(msg) showErr(msg); isRunning=false; setBtnsDisabled(false); setLoader(false); }
 
-// BULK SAVE FIX: Avoids Quota and UI freezes by saving array at once
+// BULK SAVE FIX
 function getPredStore() { try{return JSON.parse(localStorage.getItem(LS_PREDS)||"[]");}catch{return [];} }
 function bulkSavePredictions(newRecords) {
   try {
@@ -469,7 +472,6 @@ function getFormHistory(fixtures,teamId){return fixtures.map(f=>{const my=getTea
 
 function estXG(arr,g=0){return(statVal(arr,'Shots on Goal')*engineConfig.wShotsOn)+(statVal(arr,'Shots off Goal')*engineConfig.wShotsOff)+(statVal(arr,'Corner Kicks')*engineConfig.wCorners)+(g*engineConfig.wGoals)||0.60+g*0.25;}
 
-// ANTI-BAN Sequential Execution
 async function batchCalc(list,tId){
   if(!list.length) return{xg:'0.00',xga:'0.00',cor:'0.0',crd:'0.0'};
   let x=0,xa=0,c=0,cr=0,n=0;
@@ -510,13 +512,17 @@ async function fetchFixturesForDates(dates,selLg) {
   for(let i=0;i<dates.length;i++){
     setProgress((i/dates.length)*10,`Λήψη ${dates[i]}`);
     const res=await apiReq(`fixtures?date=${dates[i]}`);
-    const dm=(res.response||[]).filter(m=>{if(selLg==='WORLD')return true;if(selLg==='ALL')return LEAGUE_IDS.includes(m.league.id);return m.league.id===parseInt(selLg);});
+    const dm=(res.response||[]).filter(m=>{
+      if(selLg==='WORLD') return true;
+      if(selLg==='ALL') return LEAGUE_IDS.includes(m.league.id);
+      if(selLg==='MY_LEAGUES') return MY_LEAGUES_IDS.includes(m.league.id);
+      return m.league.id===parseInt(selLg);
+    });
     all.push(...dm); if(all.length>350) break;
   }
   return all;
 }
 
-// SIMULATION ENGINE (0 CREDITS)
 window.resimulateMatches = function() {
   if(!window.scannedMatchesData.length) { showErr("Δεν υπάρχουν σκαναρισμένα ματς. Τρέξε πρώτα ένα Batch Scan."); return; }
   clearAlerts();
@@ -628,10 +634,8 @@ async function runScan() {
     if(!all.length) return abortScan('Δεν βρέθηκαν αγώνες στο επιλεγμένο διάστημα.');
     if(all.length>350){showOk(`Βρέθηκαν >350 αγώνες. Θα αναλυθούν οι πρώτοι 350.`); all=all.slice(0,350);}
     
-    // Analyze all matches
     for(let i=0;i<all.length;i++) await analyzeMatch(all[i],i,all.length);
     
-    // BULK SAVE to prevent crashes at the end
     const toSave = window.scannedMatchesData.map(d => ({ fixtureId:d.fixId, date:d.m.fixture.date, scanDate:todayISO(), league:d.lg, leagueId:d.leagueId, homeTeam:d.ht, awayTeam:d.at, outPick:d.outPick, predOver25:d.omegaPick.includes('OVER 2')||d.omegaPick.includes('OVER 3'), predOver35:d.omegaPick.includes('OVER 3'), predBTTS:d.omegaPick.includes('GOAL'), exactScorePred:d.exact, omegaPick:d.omegaPick, savedAt:new Date().toISOString() }));
     bulkSavePredictions(toSave);
 
@@ -832,6 +836,7 @@ async function runCustomAudit() {
     const exRate   = (stats.exHit/stats.games)*100;
     const bttsRate = stats.bttsTot>0  ? (stats.bttsHit/stats.bttsTot)*100 : 0;
 
+    // ADVISOR LOGIC
     const TARGET = 80;
     let suggestions = [];
     const currentO25 = lgFilter!=='ALL' && leagueMods[lgFilter]?.minXG !== undefined ? Number(leagueMods[lgFilter].minXG) : Number(engineConfig.tXG_O25);
