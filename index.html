@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4724 - Smart Calibration</title>
+  <title>APEX OMEGA v4725 - Targeted Advisor</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -38,69 +38,62 @@
     .auth-card{background:rgba(13,17,23,0.9);border:1px solid rgba(0,242,255,0.2);border-radius:20px;padding:48px 40px;max-width:380px;width:100%;box-shadow:0 0 60px rgba(0,242,255,0.06),var(--shadow);text-align:center}
     .auth-title{font-family:'Orbitron',monospace;color:var(--p);font-size:1.5rem;font-weight:900;letter-spacing:2px;margin-bottom:8px}
     .auth-sub{color:var(--txt-muted);font-size:0.75rem;margin-bottom:28px}
-    .auth-input{width:100%;background:rgba(0,0,0,0.6);color:var(--p);border:1px solid rgba(0,242,255,0.3);padding:18px;font-size:2rem;text-align:center;border-radius:var(--radius);font-family:'Orbitron',monospace;outline:none;letter-spacing:8px}
+    .auth-input{width:100%;background:rgba(0,0,0,0.6);color:var(--p);border:1px solid rgba(0,242,255,0.3);padding:18px;font-size:2rem;text-align:center;border-radius:var(--radius);font-family:'Orbitron',monospace;outline:none;letter-spacing:8px;transition:border-color 0.3s,box-shadow 0.3s}
     .auth-input:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--p-dim)}
 
-    /* PANELS */
+    /* PANELS & CARDS */
     .cyber-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:22px;margin-bottom:18px;border-left:4px solid var(--p);box-shadow:var(--shadow);animation:fadeUp 0.35s ease-out both}
     .feed-match-card{transition:box-shadow 0.3s}
     @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
     .section-panel{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:18px;box-shadow:var(--shadow)}
     .section-title{font-family:'Orbitron',monospace;color:var(--gold);font-size:0.78rem;font-weight:900;margin-bottom:14px;letter-spacing:1.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;gap:8px}
 
-    /* TOOLBAR */
+    /* TOOLBARS & INPUTS */
     .toolbar{background:rgba(13,17,23,0.8);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
     .toolbar-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:130px}
     .toolbar-label{font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--txt-muted);text-transform:uppercase}
     .field{background:rgba(0,0,0,0.5);color:var(--p);border:1px solid rgba(0,242,255,0.25);padding:13px 15px;border-radius:var(--radius-sm);font-family:'Space Mono',monospace;font-size:0.85rem;width:100%;outline:none;transition:border-color 0.2s}
     .field:focus{border-color:var(--p);box-shadow:0 0 0 2px var(--p-dim)}
-    .field:disabled{opacity:0.45;cursor:not-allowed}
     select.field option{background:#0b1016;color:#fff}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;background:var(--grad);color:#fff;border:none;border-radius:var(--radius-sm);font-weight:800;cursor:pointer;text-transform:uppercase;font-size:0.8rem;transition:filter 0.2s,opacity 0.2s;white-space:nowrap;font-family:'Syne',sans-serif}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;background:var(--grad);color:#fff;border:none;border-radius:var(--radius-sm);font-weight:800;cursor:pointer;text-transform:uppercase;font-size:0.8rem;transition:filter 0.2s;font-family:'Syne',sans-serif;white-space:nowrap}
     .btn:hover:not(:disabled){filter:brightness(1.15)}
     .btn:disabled{opacity:0.45;cursor:not-allowed}
     .btn-danger{background:linear-gradient(135deg,#da3633,#b91c1c)}
 
-    /* CALIBRATION */
+    /* CALIBRATION GRID */
     .calib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:12px}
     .calib-item{background:rgba(0,0,0,0.4);padding:12px;border-radius:8px;border:1px solid var(--border)}
     .calib-lbl{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--magenta);margin-bottom:5px;display:block}
-    .calib-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--p);color:#fff;font-family:'Orbitron',monospace;font-size:1rem;padding:4px;outline:none;text-align:center}
+    .calib-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--p);color:#fff;font-family:'Orbitron',monospace;font-size:1rem;padding:4px;outline:none;text-align:center;transition:background 0.3s}
 
     /* ADVISOR CARDS */
-    .advisor-card{border-radius:10px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;transition:background 0.2s}
+    .advisor-card{border-radius:10px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;background:rgba(218,54,51,0.08);border:1px solid rgba(218,54,51,0.3)}
     .advisor-ok{background:rgba(35,134,54,0.1);border:1px solid rgba(35,134,54,0.35)}
-    .advisor-warn{background:rgba(218,54,51,0.08);border:1px solid rgba(218,54,51,0.3)}
     .advisor-arrow{font-size:1.5rem;min-width:30px;text-align:center}
     .advisor-detail{flex:1}
     .advisor-label{font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:900;margin-bottom:4px}
     .advisor-desc{font-size:0.75rem;color:var(--txt-muted)}
-    .advisor-value{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;min-width:80px;text-align:right}
-    .advisor-apply-btn{padding:6px 12px;font-size:0.7rem;border-radius:6px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-weight:800;white-space:nowrap;transition:filter 0.2s}
-    .advisor-apply-btn:hover{filter:brightness(1.2)}
-
+    .advisor-apply-btn{padding:6px 12px;font-size:0.7rem;border-radius:6px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-weight:800;white-space:nowrap}
+    
     /* PER-LEAGUE TABLE */
     .league-mod-table{width:100%;border-collapse:collapse;font-size:0.78rem}
-    .league-mod-table th{padding:8px 10px;background:rgba(0,0,0,0.4);color:var(--gold);font-family:'Space Mono',monospace;font-size:0.65rem;text-align:left;border-bottom:1px solid var(--border)}
+    .league-mod-table th{padding:8px 10px;background:rgba(0,0,0,0.4);color:var(--gold);font-family:'Space Mono',monospace;text-align:left;border-bottom:1px solid var(--border)}
     .league-mod-table td{padding:8px 10px;border-bottom:1px solid var(--border2);vertical-align:middle}
-    .league-mod-input{background:transparent;border:none;border-bottom:1px solid rgba(0,242,255,0.3);color:var(--p);font-family:'Orbitron',monospace;font-size:0.85rem;width:60px;text-align:center;outline:none;padding:2px}
-    .mod-hit-bar{height:5px;border-radius:3px;margin-top:4px;background:var(--border)}
-    .mod-hit-fill{height:5px;border-radius:3px;transition:width 0.5s}
+    .league-mod-input{background:transparent;border:none;border-bottom:1px solid rgba(0,242,255,0.3);color:var(--p);font-family:'Orbitron',monospace;font-size:0.85rem;width:60px;text-align:center;outline:none;transition:background 0.3s}
 
-    /* TABS */
+    /* PREDICTION TABS */
     .pred-tabs{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.25)}
     .pred-tabs::-webkit-scrollbar{display:none}
     .pred-tab{padding:12px 16px;background:transparent;color:var(--txt-muted);font-weight:700;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;border-top:none;border-left:none;border-right:none;font-family:'Syne',sans-serif;font-size:0.8rem;transition:color 0.2s,border-color 0.2s}
-
-    /* STATS */
+    
+    /* STATS & MISC */
     .stat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);padding-bottom:7px}
     .val-xg{color:var(--p);font-weight:800;font-family:'Space Mono',monospace}
     .val-split{color:var(--split-color);font-weight:900;background:rgba(251,191,36,0.08);padding:2px 7px;border-radius:4px}
     .dev-badge{display:inline-block;font-size:0.65rem;padding:1px 5px;border-radius:3px;margin-left:4px;font-family:'Space Mono',monospace}
     .dev-pos{background:rgba(35,134,54,0.2);color:#3fb950}
     .dev-neg{background:rgba(218,54,51,0.2);color:#ff7b72}
-
-    /* OMEGA PICK */
+    
     .omega-pick{margin-top:5px;padding:16px;border-radius:10px;text-align:center}
     .omega-pick.nobet{background:var(--alert-dim);border:1px dashed rgba(218,54,51,0.4)}
     .omega-pick.bomb{background:var(--magenta-dim);border:1px dashed rgba(255,0,255,0.4)}
@@ -110,24 +103,19 @@
     .pick-value{font-family:'Orbitron',monospace;font-size:1.25rem;font-weight:900}
     .pick-reason{font-size:0.77rem;color:var(--txt-muted);margin-top:8px}
 
-    /* PROGRESS */
     .progress-wrap{margin-bottom:18px}
     .progress-bar-bg{background:rgba(255,255,255,0.06);height:6px;border-radius:3px;overflow:hidden}
     .progress-bar{height:100%;background:var(--grad);transition:width 0.3s;border-radius:3px}
     .progress-status{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--p);margin-top:6px}
 
-    /* MISC */
     .wallbet-leg{background:rgba(0,0,0,0.45);border-left:3px solid var(--p);padding:12px;margin-bottom:12px;border-radius:12px;cursor:pointer;transition:background 0.2s}
     .wallbet-leg:hover{background:rgba(0,242,255,0.06)}
     .summary-row{cursor:pointer;border-bottom:1px solid var(--border2);transition:background 0.15s}
     .summary-row:hover{background:rgba(0,242,255,0.05)}
     .audit-hit{color:var(--neon-live);font-weight:700;background:rgba(57,255,20,0.05)}
     .audit-miss{color:#ff8c8c;font-weight:700;background:rgba(255,68,68,0.05)}
-    .rate-badge{display:inline-block;padding:3px 8px;border-radius:5px;font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:900}
-    .rate-ok{background:rgba(35,134,54,0.2);color:#3fb950;border:1px solid rgba(35,134,54,0.4)}
-    .rate-warn{background:rgba(218,54,51,0.15);color:#ff7b72;border:1px solid rgba(218,54,51,0.3)}
-
-    @media(max-width:680px){.calib-grid{grid-template-columns:1fr 1fr}}
+    
+    @media(max-width:680px){.calib-grid{grid-template-columns:1fr 1fr} .wallbet-container{flex-direction:column;}}
   </style>
 </head>
 <body>
@@ -142,7 +130,7 @@
 <div id="auth">
   <div class="auth-card">
     <div class="auth-title">APEX OMEGA</div>
-    <div class="auth-sub">v4724 · Smart Calibration Engine</div>
+    <div class="auth-sub">v4725 · Targeted Advisor Engine</div>
     <input type="password" id="pin" class="auth-input" placeholder="• • • •" maxlength="8" autocomplete="off" inputmode="numeric">
     <div id="authError" style="margin-top:12px;font-size:0.75rem;color:var(--alert);min-height:20px"></div>
   </div>
@@ -151,61 +139,58 @@
 <div id="app" style="display:none">
   <div class="container">
 
-    <!-- ===== GLOBAL CALIBRATION ===== -->
     <div class="section-panel" style="border-color:var(--magenta)">
       <div class="section-title" style="color:var(--magenta);cursor:pointer" onclick="togglePanel('globalCalibPanel','globalArrow')">
         <span>⚙️ GLOBAL CALIBRATION ENGINE</span><span id="globalArrow">▼</span>
       </div>
-      <div id="globalCalibPanel" style="display:none">
-        <div style="font-size:0.75rem;color:var(--txt-muted);margin-bottom:15px">Αυτές οι τιμές ισχύουν για όλες τις λίγκες εκτός αν υπάρχει per-league override παρακάτω.</div>
-        <div style="color:var(--p);font-family:'Orbitron',monospace;font-size:0.78rem;margin-bottom:8px">xG WEIGHTS</div>
+      <div id="globalCalibPanel" style="display:none; margin-top:15px;">
+        <div style="font-size:0.75rem;color:var(--txt-muted);margin-bottom:15px">Αυτές οι ρυθμίσεις ισχύουν για όλα τα πρωταθλήματα που ΔΕΝ έχουν ξεχωριστή ρύθμιση παρακάτω.</div>
+        
+        <div style="color:var(--p);font-family:'Orbitron',monospace;font-size:0.78rem;margin-bottom:8px">xG WEIGHTS (ΒΑΡΗ)</div>
         <div class="calib-grid">
           <div class="calib-item"><span class="calib-lbl">Σουτ στον Στόχο</span><input type="number" step="0.01" id="cfg_wShotsOn" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Σουτ εκτός Στόχου</span><input type="number" step="0.01" id="cfg_wShotsOff" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Κόρνερ</span><input type="number" step="0.01" id="cfg_wCorners" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Πραγματικά Γκολ</span><input type="number" step="0.01" id="cfg_wGoals" class="calib-input"></div>
         </div>
-        <div style="color:var(--gold);font-family:'Orbitron',monospace;font-size:0.78rem;margin-bottom:8px;margin-top:14px">THRESHOLDS</div>
+
+        <div style="color:var(--gold);font-family:'Orbitron',monospace;font-size:0.78rem;margin-bottom:8px;margin-top:14px">THRESHOLDS (ΟΡΙΑ)</div>
         <div class="calib-grid">
           <div class="calib-item"><span class="calib-lbl">Min Total xG (O2.5)</span><input type="number" step="0.05" id="cfg_tXG_O25" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Min Total xG (O3.5)</span><input type="number" step="0.05" id="cfg_tXG_O35" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">xG Diff (1X2)</span><input type="number" step="0.05" id="cfg_xG_Diff" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Min BTTS xG</span><input type="number" step="0.05" id="cfg_tBTTS" class="calib-input"></div>
         </div>
-        <div style="color:#ffb3b3;font-family:'Orbitron',monospace;font-size:0.78rem;margin-bottom:8px;margin-top:14px">DEFAULT LEAGUE TYPE MULTIPLIERS</div>
+
+        <div style="color:#ffb3b3;font-family:'Orbitron',monospace;font-size:0.78rem;margin-bottom:8px;margin-top:14px">LEAGUE MULTIPLIERS (ΠΕΝΑΛΤΙ/ΜΠΟΝΟΥΣ)</div>
         <div class="calib-grid">
           <div class="calib-item"><span class="calib-lbl">Trap Leagues</span><input type="number" step="0.01" id="cfg_modTrap" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Tight Leagues</span><input type="number" step="0.01" id="cfg_modTight" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Gold Leagues</span><input type="number" step="0.01" id="cfg_modGold" class="calib-input"></div>
         </div>
+
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-          <button class="btn" style="background:linear-gradient(135deg,#10b981,#059669)" onclick="saveSettings()">💾 ΑΠΟΘΗΚΕΥΣΗ</button>
-          <button class="btn btn-danger" onclick="resetSettings()">🔄 ΕΠΑΝΑΦΟΡΑ</button>
+          <button class="btn" style="background:linear-gradient(135deg,#10b981,#059669)" onclick="saveSettings()">💾 ΑΠΟΘΗΚΕΥΣΗ GLOBAL</button>
+          <button class="btn btn-danger" onclick="resetSettings()">🔄 ΕΠΑΝΑΦΟΡΑ DEFAULTS</button>
         </div>
       </div>
     </div>
 
-    <!-- ===== PER-LEAGUE MODIFIERS ===== -->
     <div class="section-panel" style="border-color:var(--gold)">
       <div class="section-title" style="color:var(--gold);cursor:pointer" onclick="togglePanel('leagueModPanel','leagueArrow')">
-        <span>🏆 PER-LEAGUE MODIFIERS (INDIVIDUAL TUNING)</span><span id="leagueArrow">▼</span>
+        <span>🏆 PER-LEAGUE MODIFIERS (TARGETED TUNING)</span><span id="leagueArrow">▼</span>
       </div>
-      <div id="leagueModPanel" style="display:none">
+      <div id="leagueModPanel" style="display:none; margin-top:15px;">
         <div style="font-size:0.75rem;color:var(--txt-muted);margin-bottom:15px">
-          Ορίζεις ξεχωριστό xG multiplier και ελάχιστο xG threshold για κάθε πρωτάθλημα.
-          <b style="color:var(--p)">Αν υπάρχει per-league τιμή, παρακάμπτει τα global defaults.</b>
-          Το Audit συμπληρώνει αυτόματα τα <span style="color:var(--neon-live)">HIT%</span> από ιστορικά δεδομένα.
+          Όταν το Advisor τρέχει για συγκεκριμένο πρωτάθλημα, <b>οι προτάσεις του αποθηκεύονται απευθείας εδώ</b>, παρακάμπτοντας τα Global Settings.
         </div>
         <div style="overflow-x:auto">
-          <table class="league-mod-table" id="leagueModTable">
+          <table class="league-mod-table">
             <thead><tr>
               <th>Πρωτάθλημα</th>
-              <th>xG Multiplier</th>
+              <th>xG Mult.</th>
               <th>Min xG (O2.5)</th>
               <th>xG Diff (1X2)</th>
-              <th>O2.5 Hit%</th>
-              <th>1X2 Hit%</th>
-              <th>BTTS Hit%</th>
             </tr></thead>
             <tbody id="leagueModBody"></tbody>
           </table>
@@ -217,38 +202,32 @@
       </div>
     </div>
 
-    <!-- ===== TOOLBAR ===== -->
     <div class="toolbar">
       <div class="toolbar-group"><div class="toolbar-label">Ημ/νία Έναρξης</div><input type="date" id="scanStart" class="field"></div>
       <div class="toolbar-group"><div class="toolbar-label">Ημ/νία Λήξης</div><input type="date" id="scanEnd" class="field"></div>
       <div class="toolbar-group" style="flex:2"><div class="toolbar-label">Διοργάνωση</div>
         <select id="leagueFilter" class="field">
           <option value="ALL">🌐 Βασικές Διοργανώσεις (Top 24)</option>
-          <option value="WORLD">🌍 ΟΛΟ ΤΟ ΚΟΥΠΟΝΙ</option>
+          <option value="WORLD">🌍 ΟΛΟ ΤΟ ΚΟΥΠΟΝΙ (Όλος ο Κόσμος)</option>
         </select>
       </div>
       <div class="toolbar-group" style="flex:0"><button class="btn" id="btnPre" onclick="runScan()">🚀 BATCH SCAN</button></div>
     </div>
 
-    <!-- ===== AUDIT ===== -->
     <div class="section-panel" style="background:rgba(0,242,255,0.03);border:1px dashed rgba(0,242,255,0.2)">
-      <div class="section-title" style="margin:0;margin-bottom:14px">🗄️ DATA VAULT & SMART AUDIT + ADVISOR</div>
+      <div class="section-title" style="margin:0;margin-bottom:14px">🗄️ DATA VAULT & TARGETED ADVISOR</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
         <input type="date" id="auditStart" class="field" style="flex:1;min-width:120px">
         <input type="date" id="auditEnd" class="field" style="flex:1;min-width:120px">
         <select id="auditLeague" class="field" style="flex:1;min-width:140px"><option value="ALL">🌐 Όλες οι Λίγκες</option></select>
         <button class="btn" style="background:linear-gradient(135deg,#7c3aed,#9f67ff)" onclick="runCustomAudit()">📊 RUN AUDIT + ADVISOR</button>
-        <button class="btn btn-danger" onclick="clearVault()">🗑️ CLEAR</button>
+        <button class="btn btn-danger" onclick="clearVault()">🗑️ CLEAR VAULT</button>
       </div>
     </div>
 
     <div id="errorBox"></div><div id="successBox"></div>
-    <div id="loader" style="display:none" class="progress-wrap">
-      <div class="progress-bar-bg"><div id="bar" class="progress-bar" style="width:0%"></div></div>
-      <div class="progress-status"><span id="status" style="font-family:'Space Mono',monospace"></span></div>
-    </div>
+    <div id="loader" style="display:none" class="progress-wrap"><div class="progress-bar-bg"><div id="bar" class="progress-bar" style="width:0%"></div></div><div class="progress-status"><span id="status" style="font-family:'Space Mono',monospace"></span></div></div>
 
-    <!-- ===== ADVISOR OUTPUT ===== -->
     <div id="advisorSection" style="margin-bottom:18px"></div>
 
     <div id="topSection"></div>
@@ -286,9 +265,9 @@
 // ================================================================
 const API_BASE   = "https://v3.football.api-sports.io";
 const API_KEY    = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LS_PREDS   = "omega_preds_v4724";
-const LS_SETTINGS= "omega_settings_v4724";
-const LS_LGMODS  = "omega_lgmods_v4724";
+const LS_PREDS   = "omega_preds_v4725";
+const LS_SETTINGS= "omega_settings_v4725";
+const LS_LGMODS  = "omega_lgmods_v4725";
 
 const TAB_COLORS = { combo2:'#f59e0b', combo1:'#ff00ff', outcomes:'#3b82f6', over25:'#00f2ff', over35:'#a78bfa', exact:'#34d399' };
 
@@ -305,8 +284,13 @@ const TRAP_LEAGUES  = new Set([40,41,136,141,79,62,6,10,66]);
 const TIGHT_LEAGUES = new Set([61,94,197,135,140,39,2,3,848]);
 const GOLD_LEAGUES  = new Set([78,262,88,253]);
 
+let teamStatsCache = new Map(), lastFixCache = new Map(), standCache = new Map(), h2hCache = new Map();
+let isRunning = false, currentCredits = null;
+let latestTopLists = { exact:[], combo1:[], combo2:[], outcomes:[], over25:[], over35:[] };
+window.scannedMatchesData = [];
+
 // ================================================================
-//  SETTINGS
+//  SETTINGS & LEAGUE MODS
 // ================================================================
 const DEFAULT_SETTINGS = {
   wShotsOn:0.14, wShotsOff:0.04, wCorners:0.02, wGoals:0.20,
@@ -314,14 +298,13 @@ const DEFAULT_SETTINGS = {
   modTrap:0.90, modTight:0.95, modGold:1.15
 };
 let engineConfig = { ...DEFAULT_SETTINGS };
-
-// Per-league mods: { [leagueId]: { mult, minXG, xgDiff } }
 let leagueMods = {};
 
 function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)); if(s) engineConfig = {...DEFAULT_SETTINGS,...s}; } catch {}
   try { const lm = JSON.parse(localStorage.getItem(LS_LGMODS)); if(lm) leagueMods = lm; } catch {}
   syncUIFromSettings();
+  buildLeagueModTable();
 }
 
 function syncUIFromSettings() {
@@ -333,46 +316,23 @@ function saveSettings() {
   const map = { cfg_wShotsOn:'wShotsOn', cfg_wShotsOff:'wShotsOff', cfg_wCorners:'wCorners', cfg_wGoals:'wGoals', cfg_tXG_O25:'tXG_O25', cfg_tXG_O35:'tXG_O35', cfg_xG_Diff:'xG_Diff', cfg_tBTTS:'tBTTS', cfg_modTrap:'modTrap', cfg_modTight:'modTight', cfg_modGold:'modGold' };
   for(const [id,key] of Object.entries(map)) { const v = parseFloat(document.getElementById(id)?.value); if(!isNaN(v)) engineConfig[key] = v; }
   try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch {}
-  showOk("✅ Ρυθμίσεις αποθηκεύτηκαν!");
-  togglePanel('globalCalibPanel','globalArrow');
+  showOk("✅ Global ρυθμίσεις αποθηκεύτηκαν!");
+  const p = document.getElementById('globalCalibPanel'); if(p.style.display==='block') togglePanel('globalCalibPanel','globalArrow');
+  buildLeagueModTable(); // Update placeholders
 }
 
-function resetSettings() { engineConfig = {...DEFAULT_SETTINGS}; syncUIFromSettings(); try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch {} showOk("🔄 Επαναφορά στις default τιμές."); }
+function resetSettings() { engineConfig = {...DEFAULT_SETTINGS}; syncUIFromSettings(); try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch {} showOk("🔄 Επαναφορά Global Settings."); buildLeagueModTable();}
 
-// ================================================================
-//  PER-LEAGUE MODS UI
-// ================================================================
-function buildLeagueModTable(auditStats) {
-  // auditStats: { [leagueId]: { o25Rate, outRate, bttsRate, games } } — optional
-  const tbody = document.getElementById('leagueModBody');
-  if(!tbody) return;
+function buildLeagueModTable() {
+  const tbody = document.getElementById('leagueModBody'); if(!tbody) return;
   tbody.innerHTML = '';
   LEAGUES_DATA.forEach(l => {
     const mod = leagueMods[l.id] || {};
-    const stats = auditStats?.[l.id];
-    const o25r  = stats?.o25Rate  ?? null;
-    const outr  = stats?.outRate  ?? null;
-    const bttsr = stats?.bttsRate ?? null;
-
-    const barHtml = (rate) => {
-      if(rate === null) return '<div style="color:#555;font-size:0.65rem">—</div>';
-      const pct = Math.min(100, Math.round(rate));
-      const col = rate >= 80 ? '#3fb950' : rate >= 60 ? '#f59e0b' : '#ff7b72';
-      const badge = `<span class="rate-badge ${rate>=80?'rate-ok':'rate-warn'}">${rate.toFixed(1)}%</span>`;
-      return `${badge}<div class="mod-hit-bar"><div class="mod-hit-fill" style="width:${pct}%;background:${col}"></div></div>`;
-    };
-
     tbody.innerHTML += `<tr>
       <td style="font-weight:700;color:var(--txt)">${l.name}</td>
-      <td><input type="number" step="0.01" value="${mod.mult ?? ''}" placeholder="${defaultLeagueMult(l.id).toFixed(2)}"
-          class="league-mod-input" id="lm_mult_${l.id}" title="Multiplier xG"></td>
-      <td><input type="number" step="0.05" value="${mod.minXG ?? ''}" placeholder="${engineConfig.tXG_O25.toFixed(2)}"
-          class="league-mod-input" id="lm_minXG_${l.id}" title="Min Total xG για Over 2.5"></td>
-      <td><input type="number" step="0.05" value="${mod.xgDiff ?? ''}" placeholder="${engineConfig.xG_Diff.toFixed(2)}"
-          class="league-mod-input" id="lm_xgDiff_${l.id}" title="xG Diff για 1X2"></td>
-      <td>${barHtml(o25r)}</td>
-      <td>${barHtml(outr)}</td>
-      <td>${barHtml(bttsr)}</td>
+      <td><input type="number" step="0.01" value="${mod.mult ?? ''}" placeholder="${defaultLeagueMult(l.id).toFixed(2)}" class="league-mod-input" id="lm_mult_${l.id}"></td>
+      <td><input type="number" step="0.05" value="${mod.minXG ?? ''}" placeholder="${engineConfig.tXG_O25.toFixed(2)}" class="league-mod-input" id="lm_minXG_${l.id}"></td>
+      <td><input type="number" step="0.05" value="${mod.xgDiff ?? ''}" placeholder="${engineConfig.xG_Diff.toFixed(2)}" class="league-mod-input" id="lm_xgDiff_${l.id}"></td>
     </tr>`;
   });
 }
@@ -384,7 +344,7 @@ function defaultLeagueMult(id) {
   return 1.00;
 }
 
-function saveLeagueMods() {
+function saveLeagueMods(silent=false) {
   LEAGUES_DATA.forEach(l => {
     const mult   = parseFloat(document.getElementById(`lm_mult_${l.id}`)?.value);
     const minXG  = parseFloat(document.getElementById(`lm_minXG_${l.id}`)?.value);
@@ -397,201 +357,92 @@ function saveLeagueMods() {
     else delete leagueMods[l.id];
   });
   try { localStorage.setItem(LS_LGMODS, JSON.stringify(leagueMods)); } catch {}
-  showOk("✅ Per-league ρυθμίσεις αποθηκεύτηκαν!");
+  if(!silent) showOk("✅ Per-league ρυθμίσεις αποθηκεύτηκαν!");
 }
 
-function resetLeagueMods() { leagueMods = {}; try { localStorage.removeItem(LS_LGMODS); } catch {} buildLeagueModTable(); showOk("🔄 Επαναφορά per-league mods."); }
+function resetLeagueMods() { leagueMods = {}; try { localStorage.removeItem(LS_LGMODS); } catch {} buildLeagueModTable(); showOk("🔄 Επαναφορά Per-League Mods."); }
 
-// ================================================================
-//  SMART CALIBRATION ADVISOR
-// ================================================================
-/**
- * Calculates exact parameter adjustments needed to reach target hit rate.
- * Returns array of advisor items.
- *
- * Logic:
- *  - O2.5 low  → lower tXG_O25 threshold (easier to trigger pick) OR increase modGold for high-scoring leagues
- *  - O2.5 high but < 100 → threshold is good, maybe increase modGold slightly
- *  - 1X2 low   → increase xG_Diff (stricter, pick only very dominant teams)
- *  - BTTS low  → lower tBTTS minimum
- *  - O3.5 low  → lower tXG_O35
- *
- * Formula for threshold calibration:
- *  newThreshold = currentThreshold * (currentHitRate / targetRate)
- *  But we clamp changes to max ±0.30 per step to avoid overcorrection.
- */
-function computeAdvisorItems(stats, lgFilter) {
-  const TARGET = 80; // target hit %
-  const items  = [];
-
-  const c = engineConfig; // current config
-
-  // Helper: direction label
-  const dir = (delta) => delta > 0 ? { arrow:'⬆️', txt:'ΑΥΞΗΣΗ', col:'#3fb950' } : { arrow:'⬇️', txt:'ΜΕΙΩΣΗ', col:'#ff7b72' };
-  const fmt = (v) => v.toFixed(2);
-  const fmtPct = (v) => v !== null ? v.toFixed(1) + '%' : 'N/A';
-
-  // --- Over 2.5 ---
-  if(stats.o25Tot > 0) {
-    const rate = stats.o25Rate;
-    if(rate < TARGET) {
-      // Too strict → lower the threshold so more picks trigger
-      const factor = rate > 0 ? rate / TARGET : 0.85;
-      const rawNew = c.tXG_O25 * factor;
-      const newVal = Math.max(1.80, Math.min(c.tXG_O25 - 0.05, Math.round(rawNew * 20) / 20));
-      const delta  = newVal - c.tXG_O25;
-      const d = dir(delta);
-      items.push({ key:'tXG_O25', label:'Min Total xG (OVER 2.5)', currentRate: rate, currentVal: c.tXG_O25, newVal, delta, d, reason:`Hit Rate ${fmtPct(rate)} < ${TARGET}%. Χαμήλωμα threshold → περισσότερες επιλογές O2.5.`, settingsKey:'cfg_tXG_O25' });
-    } else {
-      items.push({ key:'tXG_O25', label:'Min Total xG (OVER 2.5)', currentRate: rate, currentVal: c.tXG_O25, newVal: null, delta:0, d:{arrow:'✅',txt:'ΟΚ',col:'#3fb950'}, reason:`Hit Rate ${fmtPct(rate)} ≥ ${TARGET}%. Δεν χρειάζεται αλλαγή.`, settingsKey:'cfg_tXG_O25' });
-    }
-  }
-
-  // --- Over 3.5 ---
-  if(stats.o35Tot > 0) {
-    const rate = stats.o35Rate;
-    if(rate < TARGET) {
-      const factor = rate > 0 ? rate / TARGET : 0.85;
-      const rawNew = c.tXG_O35 * factor;
-      const newVal = Math.max(2.50, Math.min(c.tXG_O35 - 0.05, Math.round(rawNew * 20) / 20));
-      const delta  = newVal - c.tXG_O35;
-      const d = dir(delta);
-      items.push({ key:'tXG_O35', label:'Min Total xG (OVER 3.5)', currentRate: rate, currentVal: c.tXG_O35, newVal, delta, d, reason:`Hit Rate ${fmtPct(rate)} < ${TARGET}%. Χαμήλωμα threshold.`, settingsKey:'cfg_tXG_O35' });
-    } else {
-      items.push({ key:'tXG_O35', label:'Min Total xG (OVER 3.5)', currentRate: rate, currentVal: c.tXG_O35, newVal: null, delta:0, d:{arrow:'✅',txt:'ΟΚ',col:'#3fb950'}, reason:`Hit Rate ${fmtPct(rate)} ≥ ${TARGET}%.`, settingsKey:'cfg_tXG_O35' });
-    }
-  }
-
-  // --- 1X2 Outcomes ---
-  const validOut = stats.validOutGames;
-  if(validOut > 0) {
-    const rate = stats.outRate;
-    if(rate < TARGET) {
-      // Too many wrong picks → increase xG_Diff (only pick when dominance is very clear)
-      const factor = TARGET > 0 ? TARGET / Math.max(rate, 10) : 1.15;
-      const rawNew = c.xG_Diff * Math.min(factor, 1.40);
-      const newVal = Math.max(c.xG_Diff + 0.05, Math.min(1.50, Math.round(rawNew * 20) / 20));
-      const delta  = newVal - c.xG_Diff;
-      const d = dir(delta);
-      items.push({ key:'xG_Diff', label:'xG Diff (1X2 Threshold)', currentRate: rate, currentVal: c.xG_Diff, newVal, delta, d, reason:`Hit Rate ${fmtPct(rate)} < ${TARGET}%. Αύξηση xG Diff → αυστηρότερο φίλτρο σημείου.`, settingsKey:'cfg_xG_Diff' });
-    } else {
-      items.push({ key:'xG_Diff', label:'xG Diff (1X2 Threshold)', currentRate: rate, currentVal: c.xG_Diff, newVal: null, delta:0, d:{arrow:'✅',txt:'ΟΚ',col:'#3fb950'}, reason:`Hit Rate ${fmtPct(rate)} ≥ ${TARGET}%.`, settingsKey:'cfg_xG_Diff' });
-    }
-  }
-
-  // --- BTTS ---
-  if(stats.bttsTot > 0) {
-    const rate = stats.bttsRate;
-    if(rate < TARGET) {
-      // Lower the BTTS minimum xG threshold
-      const factor = rate > 0 ? rate / TARGET : 0.90;
-      const rawNew = c.tBTTS * factor;
-      const newVal = Math.max(0.70, Math.min(c.tBTTS - 0.05, Math.round(rawNew * 20) / 20));
-      const delta  = newVal - c.tBTTS;
-      const d = dir(delta);
-      items.push({ key:'tBTTS', label:'Min BTTS xG', currentRate: rate, currentVal: c.tBTTS, newVal, delta, d, reason:`Hit Rate ${fmtPct(rate)} < ${TARGET}%. Μείωση tBTTS → πιο προσεκτική επιλογή BTTS.`, settingsKey:'cfg_tBTTS' });
-    } else {
-      items.push({ key:'tBTTS', label:'Min BTTS xG', currentRate: rate, currentVal: c.tBTTS, newVal: null, delta:0, d:{arrow:'✅',txt:'ΟΚ',col:'#3fb950'}, reason:`Hit Rate ${fmtPct(rate)} ≥ ${TARGET}%.`, settingsKey:'cfg_tBTTS' });
-    }
-  }
-
-  return items;
+function getLeagueParams(leagueId) {
+  const lm = leagueMods[leagueId] || {};
+  return {
+    mult:   lm.mult   !== undefined ? lm.mult   : defaultLeagueMult(leagueId),
+    minXG:  lm.minXG  !== undefined ? lm.minXG  : engineConfig.tXG_O25,
+    xgDiff: lm.xgDiff !== undefined ? lm.xgDiff : engineConfig.xG_Diff
+  };
 }
 
-function renderAdvisor(items, lgLabel) {
-  if(!items.length) { document.getElementById('advisorSection').innerHTML = ''; return; }
-
-  const allOk = items.every(i => i.delta === 0);
-  let html = `<div class="section-panel" style="border-color:${allOk ? '#238636' : 'var(--magenta)'}">
-    <div class="section-title" style="color:${allOk ? '#3fb950' : 'var(--magenta)'}">
-      🤖 SMART CALIBRATION ADVISOR — ${esc(lgLabel)}
-      ${allOk ? '<span style="font-size:0.7rem;color:#3fb950">ΟΛΑ ΟΚ</span>' : '<span style="font-size:0.7rem;color:var(--magenta)">ΒΡΕΘΗΚΑΝ ΠΡΟΤΑΣΕΙΣ</span>'}
-    </div>
-    <div style="font-size:0.75rem;color:var(--txt-muted);margin-bottom:15px">
-      Ο αλγόριθμος ανέλυσε τα ιστορικά αποτελέσματα και υπολόγισε τις ακριβείς τιμές που χρειάζονται
-      για να επιτευχθεί <b style="color:var(--p)">80%+ Hit Rate</b> σε κάθε κατηγορία.
-    </div>`;
-
-  items.forEach(item => {
-    const isOk   = item.delta === 0;
-    const hasNew = item.newVal !== null && !isOk;
-    html += `
-    <div class="advisor-card ${isOk ? 'advisor-ok' : 'advisor-warn'}">
-      <div class="advisor-arrow">${item.d.arrow}</div>
-      <div class="advisor-detail">
-        <div class="advisor-label" style="color:${item.d.col}">${item.label}</div>
-        <div class="advisor-desc">${item.reason}</div>
-        ${!isOk && hasNew ? `
-        <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap">
-          <div style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--txt-muted)">
-            Τρέχουσα: <span style="color:#fff;font-weight:700">${item.currentVal.toFixed(2)}</span>
-            &nbsp;→&nbsp;
-            Προτεινόμενη: <span style="color:${item.d.col};font-weight:900">${item.newVal.toFixed(2)}</span>
-            <span style="color:${item.d.col}">(${item.delta > 0 ? '+' : ''}${item.delta.toFixed(2)})</span>
-          </div>
-        </div>` : ''}
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-        <div class="advisor-value" style="color:${item.currentRate >= 80 ? '#3fb950' : 'var(--alert)'}">
-          ${item.currentRate !== undefined ? item.currentRate.toFixed(1) + '%' : '—'}
-        </div>
-        ${hasNew ? `<button class="advisor-apply-btn" onclick="applyAdvisorItem('${item.settingsKey}','${item.newVal.toFixed(2)}')">⚡ ΕΦΑΡΜΟΓΗ</button>` : ''}
-      </div>
-    </div>`;
-  });
-
-  // "Apply all" button
-  const hasChanges = items.some(i => i.newVal !== null && i.delta !== 0);
-  if(hasChanges) {
-    const pairs = items.filter(i => i.newVal !== null && i.delta !== 0).map(i => `'${i.settingsKey}','${i.newVal.toFixed(2)}'`).join('|');
-    html += `<button class="btn" style="background:linear-gradient(135deg,#10b981,#059669);margin-top:10px" onclick="applyAllAdvisor('${pairs}')">
-      ✅ ΕΦΑΡΜΟΓΗ ΟΛΩΝ ΤΩΝ ΠΡΟΤΑΣΕΩΝ
-    </button>`;
-  }
-
-  html += `</div>`;
-  document.getElementById('advisorSection').innerHTML = html;
-  document.getElementById('advisorSection').scrollIntoView({ behavior:'smooth', block:'start' });
+function flashElement(el) {
+  if(!el) return;
+  const original = el.style.background;
+  el.style.background = 'rgba(16,185,129,0.2)';
+  setTimeout(() => el.style.background = original, 1000);
 }
 
-window.applyAdvisorItem = function(inputId, val) {
-  const el = document.getElementById(inputId);
-  if(el) {
-    const oldVal = el.value;
-    el.value = val;
-    el.style.background = 'rgba(16,185,129,0.15)';
-    setTimeout(() => el.style.background = 'transparent', 1500);
-    // also update engineConfig immediately
-    const keyMap = { cfg_wShotsOn:'wShotsOn', cfg_wShotsOff:'wShotsOff', cfg_wCorners:'wCorners', cfg_wGoals:'wGoals', cfg_tXG_O25:'tXG_O25', cfg_tXG_O35:'tXG_O35', cfg_xG_Diff:'xG_Diff', cfg_tBTTS:'tBTTS', cfg_modTrap:'modTrap', cfg_modTight:'modTight', cfg_modGold:'modGold' };
-    if(keyMap[inputId]) engineConfig[keyMap[inputId]] = parseFloat(val);
-    showOk(`✅ ${inputId.replace('cfg_','')} → ${val} (αποθηκεύεται αυτόματα)`);
-    saveSettings();
-    // open calibration panel so user sees the change
-    const panel = document.getElementById('globalCalibPanel');
-    if(panel && panel.style.display === 'none') togglePanel('globalCalibPanel','globalArrow');
+// TARGETED ADVISOR APPLICATION
+window.applyAdvisorItem = function(settingKey, val, leagueId) {
+  val = parseFloat(val);
+  
+  if (leagueId && leagueId !== 'ALL') {
+    // Apply to Per-League Mode
+    if (!leagueMods[leagueId]) leagueMods[leagueId] = {};
+    
+    let fieldId = "";
+    if (settingKey === 'tXG_O25') {
+        leagueMods[leagueId].minXG = val;
+        fieldId = `lm_minXG_${leagueId}`;
+    } else if (settingKey === 'xG_Diff') {
+        leagueMods[leagueId].xgDiff = val;
+        fieldId = `lm_xgDiff_${leagueId}`;
+    }
+    
+    const el = document.getElementById(fieldId);
+    if(el) { el.value = val; flashElement(el); }
+    
+    saveLeagueMods(true);
+    showOk(`✅ Εφαρμόστηκε η τιμή ${val} ειδικά για αυτή τη Λίγκα!`);
+    
+    // Auto open league panel
+    const p = document.getElementById('leagueModPanel');
+    if(p && p.style.display === 'none') togglePanel('leagueModPanel','leagueArrow');
+    
+  } else {
+    // Apply to Global Mode
+    const keyMap = { tXG_O25: 'cfg_tXG_O25', xG_Diff: 'cfg_xG_Diff', tXG_O35: 'cfg_tXG_O35', tBTTS: 'cfg_tBTTS' };
+    const inputId = keyMap[settingKey];
+    
+    engineConfig[settingKey] = val;
+    if(inputId) {
+        const el = document.getElementById(inputId);
+        if(el) { el.value = val; flashElement(el); }
+    }
+    
+    try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch{}
+    buildLeagueModTable(); // Update placeholders
+    showOk(`✅ Εφαρμόστηκε η τιμή ${val} στις Global Ρυθμίσεις!`);
+    
+    // Auto open global panel
+    const p = document.getElementById('globalCalibPanel');
+    if(p && p.style.display === 'none') togglePanel('globalCalibPanel','globalArrow');
   }
 };
 
-window.applyAllAdvisor = function(encoded) {
+window.applyAllAdvisor = function(encoded, leagueId) {
   const pairs = encoded.split('|');
-  pairs.forEach(p => { const [id, val] = p.replace(/'/g,'').split(','); window.applyAdvisorItem(id.trim(), val.trim()); });
-  showOk('✅ Όλες οι προτάσεις εφαρμόστηκαν & αποθηκεύτηκαν!');
+  pairs.forEach(p => { const [key, val] = p.split(','); window.applyAdvisorItem(key, val, leagueId); });
+  showOk('✅ Όλες οι προτάσεις εφαρμόστηκαν!');
 };
 
 // ================================================================
-//  AUTH
+//  AUTH & UTILS
 // ================================================================
 document.getElementById('pin').addEventListener('input', function() {
   if(this.value === "106014") {
     document.getElementById('auth').style.display = 'none';
     document.getElementById('app').style.display  = 'block';
-    initCredits(); updateAuditLeagueFilter(); loadSettings(); buildLeagueModTable();
+    initCredits(); updateAuditLeagueFilter(); loadSettings();
   }
 });
 
-// ================================================================
-//  UTILS
-// ================================================================
 const safeNum = (x, d=0)  => Number.isFinite(Number(x)) ? Number(x) : d;
 const clamp   = (n,mn,mx) => Math.max(mn, Math.min(mx, n));
 const isLive  = s => ["1H","2H","HT","LIVE","ET","BT","P"].includes(s);
@@ -601,9 +452,6 @@ const todayISO = () => new Date().toISOString().split('T')[0];
 function getDatesInRange(s,e) { const d=[]; let c=new Date(s), end=new Date(e); while(c<=end){d.push(c.toISOString().split('T')[0]);c.setDate(c.getDate()+1);} return d; }
 window.togglePanel = function(panelId, arrowId) { const p=document.getElementById(panelId), a=document.getElementById(arrowId); if(p.style.display==='none'){p.style.display='block';if(a)a.innerText='▲';}else{p.style.display='none';if(a)a.innerText='▼';} };
 
-// ================================================================
-//  UI HELPERS
-// ================================================================
 function setLoader(show, text='') { document.getElementById('loader').style.display=show?'block':'none'; document.getElementById('status').textContent=text; if(!show) document.getElementById('bar').style.width='0%'; }
 function setProgress(pct, text='') { document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%'; document.getElementById('status').textContent=text; }
 function setBtnsDisabled(d) { ["btnPre","leagueFilter","auditLeague"].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=d;}); }
@@ -612,26 +460,18 @@ function showOk(msg)  { document.getElementById('successBox').innerHTML=`<div st
 function clearAlerts() { document.getElementById('errorBox').innerHTML=''; document.getElementById('successBox').innerHTML=''; }
 function abortScan(msg) { if(msg) showErr(msg); isRunning=false; setBtnsDisabled(false); setLoader(false); }
 
-// ================================================================
-//  DATA VAULT
-// ================================================================
 function getPredStore() { try{return JSON.parse(localStorage.getItem(LS_PREDS)||"[]");}catch{return [];} }
-function savePredStore(d) { try{localStorage.setItem(LS_PREDS,JSON.stringify(d));}catch(e){if(e.name==='QuotaExceededError') showErr('Η μνήμη είναι γεμάτη. Κάνε Clear.');} }
+function savePredStore(d) { try{localStorage.setItem(LS_PREDS,JSON.stringify(d));}catch(e){if(e.name==='QuotaExceededError') showErr('Η μνήμη είναι γεμάτη.');} }
 function upsertPrediction(rec) { const s=getPredStore(); const i=s.findIndex(x=>String(x.fixtureId)===String(rec.fixtureId)); if(i>=0)s[i]=rec;else s.push(rec); savePredStore(s); updateAuditLeagueFilter(); }
 function clearVault() { if(confirm("Διαγραφή ΟΛΩΝ;")){ localStorage.removeItem(LS_PREDS); showOk("Η μνήμη καθάρισε!"); updateAuditLeagueFilter(); } }
 function updateAuditLeagueFilter() { const store=getPredStore(); const leagues=new Set(store.map(x=>x.leagueId)); const sel=document.getElementById('auditLeague'); sel.innerHTML='<option value="ALL">🌐 Όλες οι Λίγκες</option>'; LEAGUES_DATA.forEach(l=>{if(leagues.has(l.id)) sel.innerHTML+=`<option value="${l.id}">${l.name}</option>`;}); const known=new Set(LEAGUE_IDS); store.forEach(x=>{if(!known.has(x.leagueId)&&x.leagueId) sel.innerHTML+=`<option value="${x.leagueId}">${x.league}</option>`;known.add(x.leagueId);}); }
 
 // ================================================================
-//  API
+//  API & MATH
 // ================================================================
-let isRunning=false, currentCredits=null;
 function updateCredits(v) { const el=document.getElementById('creditDisplay'); if(v!==null) el.textContent=v; el.className='credit-value'+(v<50?' low':''); }
 async function initCredits() { try{const r=await fetch(`${API_BASE}/status`,{headers:{'x-apisports-key':API_KEY}});const d=await r.json();currentCredits=(d.response?.requests?.limit_day||500)-(d.response?.requests?.current||0);updateCredits(currentCredits);}catch{} }
 async function apiReq(path) { await new Promise(r=>setTimeout(r,280)); try{const r=await fetch(`${API_BASE}/${path}`,{headers:{'x-apisports-key':API_KEY}});if(typeof currentCredits==='number'){currentCredits--;updateCredits(currentCredits);}if(!r.ok)return{response:[]};return await r.json();}catch{return{response:[]};} }
-
-let teamStatsCache=new Map(), lastFixCache=new Map(), standCache=new Map(), h2hCache=new Map();
-let latestTopLists={exact:[],combo1:[],combo2:[],outcomes:[],over25:[],over35:[]};
-window.scannedMatchesData=[];
 
 async function getTStats(t,lg,s){const k=`${t}_${lg}_${s}`;if(teamStatsCache.has(k))return teamStatsCache.get(k);const d=await apiReq(`teams/statistics?team=${t}&league=${lg}&season=${s}`);teamStatsCache.set(k,d?.response||{});return d?.response||{};}
 async function getLFix(t,lg,s){const k=`${t}_${lg}_${s}`;if(lastFixCache.has(k))return lastFixCache.get(k);const d=await apiReq(`fixtures?team=${t}&league=${lg}&season=${s}&last=20&status=FT`);lastFixCache.set(k,d?.response||[]);return d?.response||[];}
@@ -647,6 +487,7 @@ function getFormHistory(fixtures,teamId){return fixtures.map(f=>{const my=getTea
 
 function estXG(arr,g=0){return(statVal(arr,'Shots on Goal')*engineConfig.wShotsOn)+(statVal(arr,'Shots off Goal')*engineConfig.wShotsOff)+(statVal(arr,'Corner Kicks')*engineConfig.wCorners)+(g*engineConfig.wGoals)||0.60+g*0.25;}
 
+// ANTI-BAN Sequential Execution
 async function batchCalc(list,tId){
   if(!list.length) return{xg:'0.00',xga:'0.00',cor:'0.0',crd:'0.0'};
   let x=0,xa=0,c=0,cr=0,n=0;
@@ -670,27 +511,38 @@ async function buildIntel(tId,lg,s,isHome){
   return{fXG:safeNum(fData.xg),fXGA:safeNum(fData.xga),sXG:safeNum(sData.xg),sXGA:safeNum(sData.xga),cor:safeNum(fData.cor),crd:safeNum(fData.crd),scrd:safeNum(sData.crd),uiXG:fData.xg,uiXGA:fData.xga,uiDevXG:devBadge(fData.xg,baseXG),uiDevXGA:devBadge(fData.xga,baseXGA),uiSXG:sData.xg,uiSXGA:sData.xga,history:getFormHistory(gen,tId)};
 }
 
+function summarizeH2H(fixtures,homeId,awayId){
+  let hw=0,aw=0,dr=0,gh=0,ga=0;
+  for(const f of (fixtures||[]).slice(0,8)){
+    const hg=f?.goals?.home??0,ag=f?.goals?.away??0,myG=f?.teams?.home?.id===homeId?hg:ag,opG=f?.teams?.home?.id===awayId?hg:ag;
+    if(myG>opG)hw++;else if(opG>myG)aw++;else dr++;
+  }
+  return{homeWins:hw,awayWins:aw,draws:dr};
+}
+
 // ================================================================
-//  ANALYSIS
+//  SCAN ANALYSIS
 // ================================================================
-function getLeagueParams(leagueId) {
-  // Returns effective params: per-league override > global
-  const lm = leagueMods[leagueId] || {};
-  return {
-    mult:   lm.mult   ?? defaultLeagueMult(leagueId),
-    minXG:  lm.minXG  ?? engineConfig.tXG_O25,
-    xgDiff: lm.xgDiff ?? engineConfig.xG_Diff
-  };
+async function fetchFixturesForDates(dates,selLg) {
+  let all=[];
+  for(let i=0;i<dates.length;i++){
+    setProgress((i/dates.length)*10,`Λήψη ${dates[i]}`);
+    const res=await apiReq(`fixtures?date=${dates[i]}`);
+    const dm=(res.response||[]).filter(m=>{if(selLg==='WORLD')return true;if(selLg==='ALL')return LEAGUE_IDS.includes(m.league.id);return m.league.id===parseInt(selLg);});
+    all.push(...dm); if(all.length>350) break;
+  }
+  return all;
 }
 
 async function analyzeMatch(m, index, total) {
   setProgress(10 + ((index+1)/total)*90, `(${index+1}/${total}) ${m.teams.home.name}`);
   const lp = getLeagueParams(m.league.id);
 
-  const [hS,aS,stand] = await Promise.all([
+  const [hS,aS,stand,h2hFix] = await Promise.all([
     buildIntel(m.teams.home.id,m.league.id,m.league.season,true),
     buildIntel(m.teams.away.id,m.league.id,m.league.season,false),
-    getStand(m.league.id,m.league.season)
+    getStand(m.league.id,m.league.season),
+    getHeadToHead(m.teams.home.id,m.teams.away.id,m.league.id,m.league.season)
   ]);
 
   let hXG = hS.fXG * lp.mult, aXG = aS.fXG * lp.mult;
@@ -718,30 +570,16 @@ async function analyzeMatch(m, index, total) {
 
   let omegaPick="⚖️ NO BET", reason="Ανεπαρκές μαθηματικό πλεονέκτημα.", pickScore=0;
   if(tXG>=engineConfig.tXG_O35&&bttsScore>=1.20)       { omegaPick="🚀 OVER 3.5 GOALS"; pickScore=tXG*30; reason="Ακραίος ρυθμός."; }
-  else if(tXG>=lp.minXG&&bttsScore>=0.85)               { omegaPick="🔥 OVER 2.5 GOALS"; pickScore=tXG*25; reason="Ασφαλές Over."; }
+  else if(tXG>=lp.minXG&&bttsScore>=0.85)                { omegaPick="🔥 OVER 2.5 GOALS"; pickScore=tXG*25; reason="Ασφαλές Over."; }
   else if(bttsScore>=engineConfig.tBTTS)                 { omegaPick="🎯 GOAL/GOAL (BTTS)"; pickScore=bttsScore*80; reason="Και οι 2 σκοράρουν συχνά."; }
   else if(outPick!=="X"&&Math.abs(xgDiff)>=lp.xgDiff+0.10){ omegaPick=outPick==="1"?"🏠 ΑΣΟΣ":"✈️ ΔΙΠΛΟ"; pickScore=Math.abs(xgDiff)*80; reason="Νίκη βάσει xG."; }
   else if(totCards>=5.5&&Math.abs(xgDiff)<0.40)          { omegaPick="🟨 OVER 5.5 ΚΑΡΤΕΣ"; pickScore=totCards*15; reason="Σκληρό ντέρμπι βάσει xCards."; }
-  else if(cor>=10.3)                                      { omegaPick="🚩 OVER 8.5 ΚΟΡΝΕΡ"; pickScore=cor*8.5; reason=`Παραγωγή κόρνερ: ${cor.toFixed(1)}`; }
+  else if(cor>=10.3)                                     { omegaPick="🚩 OVER 8.5 ΚΟΡΝΕΡ"; pickScore=cor*8.5; reason=`Παραγωγή κόρνερ: ${cor.toFixed(1)}`; }
 
-  const rec = { m, fixId:m.fixture.id, ht:m.teams.home.name, at:m.teams.away.name, lg:m.league.name, leagueId:m.league.id, tXG, btts:bttsScore, cor, outPick, xgDiff, exact:`${hG}-${aG}`, exactConf, omegaPick, strength:pickScore, reason, hExp, aExp, hr:getTeamRank(stand,m.teams.home.id)??99, ar:getTeamRank(stand,m.teams.away.id)??99, hCors, aCors, totCors:hCors+aCors, totCards, hS, aS, isBomb:false, isLockO25:tXG>=(lp.minXG+0.15)&&bttsScore>=1.00, isLockBTTS:bttsScore>=1.15&&tXG>=2.50 };
+  const rec = { m, fixId:m.fixture.id, ht:m.teams.home.name, at:m.teams.away.name, lg:m.league.name, leagueId:m.league.id, tXG, btts:bttsScore, cor, outPick, xgDiff, exact:`${hG}-${aG}`, exactConf, omegaPick, strength:pickScore, reason, hExp, aExp, hr:getTeamRank(stand,m.teams.home.id)??99, ar:getTeamRank(stand,m.teams.away.id)??99, hCors, aCors, totCors:hCors+aCors, totCards, hS, aS, h2h:summarizeH2H(h2hFix,m.teams.home.id,m.teams.away.id), isBomb:false, isLockO25:tXG>=(lp.minXG+0.15)&&bttsScore>=1.00, isLockBTTS:bttsScore>=1.15&&tXG>=2.50 };
   window.scannedMatchesData.push(rec);
 
   upsertPrediction({ fixtureId:m.fixture.id, date:m.fixture.date, scanDate:todayISO(), league:m.league.name, leagueId:m.league.id, homeTeam:m.teams.home.name, awayTeam:m.teams.away.name, outPick, predOver25:omegaPick.includes('OVER 2')||omegaPick.includes('OVER 3'), predOver35:omegaPick.includes('OVER 3'), predBTTS:omegaPick.includes('GOAL'), exactScorePred:`${hG}-${aG}`, omegaPick, savedAt:new Date().toISOString() });
-}
-
-// ================================================================
-//  SCAN
-// ================================================================
-async function fetchFixturesForDates(dates,selLg) {
-  let all=[];
-  for(let i=0;i<dates.length;i++){
-    setProgress((i/dates.length)*10,`Λήψη Κουπονιού ${dates[i]}`);
-    const res=await apiReq(`fixtures?date=${dates[i]}`);
-    const dm=(res.response||[]).filter(m=>{if(selLg==='WORLD')return true;if(selLg==='ALL')return LEAGUE_IDS.includes(m.league.id);return m.league.id===parseInt(selLg);});
-    all.push(...dm); if(all.length>350) break;
-  }
-  return all;
 }
 
 async function runScan() {
@@ -766,9 +604,6 @@ async function runScan() {
   } catch(e){showErr(e.message);} finally{isRunning=false;setLoader(false);setBtnsDisabled(false);}
 }
 
-// ================================================================
-//  LIVE SYNC
-// ================================================================
 window.syncLiveScores = async function() {
   if(isRunning)return; const btn=document.getElementById('btnSyncLive'); if(btn){btn.innerText='🔄 SYNCING...';btn.disabled=true;}
   try {
@@ -780,13 +615,16 @@ window.syncLiveScores = async function() {
 };
 
 // ================================================================
-//  RENDER: MATCH CARD
+//  RENDERERS (CARDS, TABS, SUMMARY)
 // ================================================================
 function getMatchCardHTML(d) {
   let pickClass = d.isBomb?'bomb':d.omegaPick.includes('NO BET')?'nobet':'hit';
   if(d.omegaPick.includes('ΚΑΡΤΕΣ')) pickClass='cards';
   const pickColor = d.isBomb?'var(--magenta)':d.omegaPick.includes('NO BET')?'var(--alert)':d.omegaPick.includes('ΚΑΡΤΕΣ')?'#f59e0b':'var(--neon-live)';
   const pickValueColor = d.omegaPick.includes('NO BET')?'#ffb3b3':'#fff';
+  let lockHtml='';
+  if(d.isLockO25) lockHtml+=`<div style="display:inline-block;padding:6px 12px;border-radius:6px;font-family:'Orbitron',monospace;font-weight:900;font-size:0.75rem;margin-bottom:8px;background:linear-gradient(135deg,#ff4b2b,#ff416c);color:#fff;border:1px solid #ff416c">💎 ΚΑΡΑΜΠΙΝΑΤΟ OVER 2.5</div><br>`;
+  if(d.isLockBTTS) lockHtml+=`<div style="display:inline-block;padding:6px 12px;border-radius:6px;font-family:'Orbitron',monospace;font-weight:900;font-size:0.75rem;margin-bottom:8px;background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;border:1px solid #38ef7d">🎯 ΚΑΡΑΜΠΙΝΑΤΟ BTTS</div>`;
   let scoreHtml='';
   if(d.m?.goals?.home!=null){const live=isLive(d.m.fixture.status.short);const col=live?'var(--neon-live)':'var(--gold)';const el=live?` <span style="font-size:0.8rem">(${d.m.fixture.status.elapsed}')</span>`:'';scoreHtml=`<div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:${col}">${d.m.goals.home} — ${d.m.goals.away}${el}</div>`;}
   const rankBadge=r=>r&&r!==99?`<span style="background:var(--gold-dim);color:#ffd27a;padding:2px 8px;border-radius:99px;font-size:0.65rem;margin-left:6px">#${r}</span>`:'';
@@ -800,6 +638,7 @@ function getMatchCardHTML(d) {
       </div>
       <div style="text-align:right">${scoreHtml}<div style="font-family:'Space Mono',monospace;font-size:0.65rem;margin-top:6px">Total xG: <span style="color:var(--p);font-weight:bold">${d.tXG.toFixed(2)}</span></div></div>
     </div>
+    ${lockHtml?`<div style="text-align:center;margin-bottom:8px">${lockHtml}</div>`:''}
     <div class="omega-pick ${pickClass}">
       <div class="pick-header" style="color:${pickColor}">💡 STRICT EDGE PICK</div>
       <div class="pick-value" style="color:${pickValueColor}">${esc(d.omegaPick)}</div>
@@ -818,12 +657,8 @@ function getMatchCardHTML(d) {
   </div>`;
 }
 
-// ================================================================
-//  RENDER: SUMMARY TABLE
-// ================================================================
 function renderSummaryTable() {
-  const grouped={};
-  window.scannedMatchesData.forEach((d,i)=>{if(!grouped[d.lg])grouped[d.lg]=[];grouped[d.lg].push({...d,originalIndex:i});});
+  const grouped={}; window.scannedMatchesData.forEach((d,i)=>{if(!grouped[d.lg])grouped[d.lg]=[];grouped[d.lg].push({...d,originalIndex:i});});
   let html=`<div class="section-panel" style="border-color:var(--p);padding:0;overflow:hidden"><div style="color:var(--p);padding:18px;font-family:'Orbitron',monospace;font-weight:900;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span>📊 ΣΥΝΟΠΤΙΚΟΣ ΠΙΝΑΚΑΣ</span><button id="btnSyncLive" onclick="syncLiveScores()" class="btn" style="background:var(--card2);border:1px solid var(--neon-live);color:var(--neon-live);padding:6px 12px;font-size:0.7rem;box-shadow:none">🔄 SYNC LIVE (1 Credit)</button></div>`;
   for(const [lg,matches] of Object.entries(grouped)){
     html+=`<div style="background:linear-gradient(90deg,var(--gold-dim),transparent);border-left:4px solid var(--gold);padding:10px 15px;font-family:'Orbitron',monospace;font-weight:900;font-size:0.85rem;color:var(--gold);margin-top:10px;margin-bottom:5px">${esc(lg)}</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:0.75rem;text-align:center"><thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid var(--border);color:var(--txt-muted)">Αγώνας</th><th style="padding:8px;border-bottom:1px solid var(--border);color:var(--txt-muted)">Σκορ</th><th style="padding:8px;border-bottom:1px solid var(--border);color:var(--txt-muted)">1X2</th><th style="padding:8px;border-bottom:1px solid var(--border);color:var(--txt-muted)">O2.5</th><th style="padding:8px;border-bottom:1px solid var(--border);color:var(--txt-muted)">BTTS</th><th style="padding:8px;border-bottom:1px solid var(--border);color:var(--txt-muted)">Exact</th><th style="padding:8px;border-bottom:1px solid var(--border);color:var(--txt-muted)">Omega Pick</th></tr></thead><tbody>`;
@@ -844,18 +679,8 @@ function renderSummaryTable() {
   html+=`</div>`;document.getElementById('summarySection').innerHTML=html;
 }
 
-// ================================================================
-//  RENDER: TOP SECTIONS & TABS
-// ================================================================
 function renderTopSections() {
-  const tabs=[
-    {id:'combo2',lbl:'1X2&O1.5&COR',e:'👑',d:latestTopLists.combo2,sk:'strength',sl:'VAL',c:TAB_COLORS.combo2},
-    {id:'combo1',lbl:'1X2&O1.5',e:'⚡',d:latestTopLists.combo1,sk:'strength',sl:'VAL',c:TAB_COLORS.combo1},
-    {id:'outcomes',lbl:'ΣΗΜΕΙΑ',e:'⚖️',d:latestTopLists.outcomes,sk:'strength',sl:'VAL',c:TAB_COLORS.outcomes},
-    {id:'over25',lbl:'OVER 2.5',e:'🔥',d:latestTopLists.over25,sk:'tXG',sl:'xG',c:TAB_COLORS.over25},
-    {id:'over35',lbl:'OVER 3.5',e:'🚀',d:latestTopLists.over35,sk:'tXG',sl:'xG',c:TAB_COLORS.over35},
-    {id:'exact',lbl:'ΑΚΡΙΒΕΣ',e:'🎯',d:latestTopLists.exact,sk:'exactConf',sl:'CONF',c:TAB_COLORS.exact}
-  ];
+  const tabs=[{id:'combo2',lbl:'1X2&O1.5&COR',e:'👑',d:latestTopLists.combo2,sk:'strength',sl:'VAL',c:TAB_COLORS.combo2},{id:'combo1',lbl:'1X2&O1.5',e:'⚡',d:latestTopLists.combo1,sk:'strength',sl:'VAL',c:TAB_COLORS.combo1},{id:'outcomes',lbl:'ΣΗΜΕΙΑ',e:'⚖️',d:latestTopLists.outcomes,sk:'strength',sl:'VAL',c:TAB_COLORS.outcomes},{id:'over25',lbl:'OVER 2.5',e:'🔥',d:latestTopLists.over25,sk:'tXG',sl:'xG',c:TAB_COLORS.over25},{id:'over35',lbl:'OVER 3.5',e:'🚀',d:latestTopLists.over35,sk:'tXG',sl:'xG',c:TAB_COLORS.over35},{id:'exact',lbl:'ΑΚΡΙΒΕΣ',e:'🎯',d:latestTopLists.exact,sk:'exactConf',sl:'CONF',c:TAB_COLORS.exact}];
   let html=`<div class="section-panel" style="padding:0"><div class="pred-tabs">`;
   tabs.forEach((t,i)=>{html+=`<button class="pred-tab${i===0?' active':''}" onclick="switchTab('${t.id}')" id="tab-btn-${t.id}" style="${i===0?`color:${t.c};border-bottom-color:${t.c};`:''}" data-color="${t.c}">${t.e} ${t.lbl} <span style="background:${t.d.length?t.c:'#444'};color:#000;padding:0 6px;border-radius:10px;font-size:0.65rem;margin-left:6px">${t.d.length}</span></button>`;});
   html+=`</div>`;
@@ -871,42 +696,19 @@ function renderTopSections() {
   html+=`</div>`;document.getElementById('topSection').innerHTML=html;
 }
 
-window.switchTab = function(id){
-  document.querySelectorAll('.pred-tab').forEach(b=>{b.classList.remove('active');b.style.color='var(--txt-muted)';b.style.borderBottomColor='transparent';});
-  document.querySelectorAll('.pred-tab-panel').forEach(p=>p.style.display='none');
-  const btn=document.getElementById('tab-btn-'+id); const color=btn.dataset.color||TAB_COLORS[id]||'var(--p)';
-  btn.classList.add('active'); btn.style.color=color; btn.style.borderBottomColor=color;
-  document.getElementById('tabpanel-'+id).style.display='block';
-};
-
-window.scrollToMatch = function(id){
-  const card=document.getElementById(id); if(!card)return;
-  document.getElementById('marketFilter').value='ALL'; filterFeed();
-  setTimeout(()=>{const c=document.getElementById(id);if(c){c.scrollIntoView({behavior:'smooth',block:'center'});c.style.boxShadow='0 0 30px var(--p)';setTimeout(()=>c.style.boxShadow='var(--shadow)',1500);}},100);
-};
+window.switchTab = function(id){ document.querySelectorAll('.pred-tab').forEach(b=>{b.classList.remove('active');b.style.color='var(--txt-muted)';b.style.borderBottomColor='transparent';}); document.querySelectorAll('.pred-tab-panel').forEach(p=>p.style.display='none'); const btn=document.getElementById('tab-btn-'+id); const color=btn.dataset.color||TAB_COLORS[id]||'var(--p)'; btn.classList.add('active'); btn.style.color=color; btn.style.borderBottomColor=color; document.getElementById('tabpanel-'+id).style.display='block'; };
+window.scrollToMatch = function(id){ document.getElementById('marketFilter').value='ALL'; window.filterFeed(); setTimeout(()=>{const c=document.getElementById(id);if(c){c.scrollIntoView({behavior:'smooth',block:'center'});c.style.boxShadow='0 0 30px var(--p)';setTimeout(()=>c.style.boxShadow='var(--shadow)',1500);}},100); };
 
 window.filterFeed = function(){
   const filter=document.getElementById('marketFilter').value; let html=''; let n=0;
   window.scannedMatchesData.forEach(d=>{
     const p=d.omegaPick; let show=false;
-    if(filter==='ALL')show=true;
-    else if(filter==='COMBO'&&(p.includes('👑')||p.includes('⚡')))show=true;
-    else if(filter==='1X2'&&(p.includes('ΑΣΟΣ')||p.includes('ΔΙΠΛΟ')))show=true;
-    else if(filter==='O25'&&p.includes('OVER 2.5'))show=true;
-    else if(filter==='O35'&&p.includes('OVER 3.5'))show=true;
-    else if(filter==='BTTS'&&p.includes('GOAL/GOAL'))show=true;
-    else if(filter==='CARDS'&&p.includes('ΚΑΡΤΕΣ'))show=true;
-    else if(filter==='COR'&&p.includes('ΚΟΡΝΕΡ'))show=true;
-    else if(filter==='BOMB'&&p.includes('ΒΟΜΒΑ'))show=true;
+    if(filter==='ALL')show=true; else if(filter==='COMBO'&&(p.includes('👑')||p.includes('⚡')))show=true; else if(filter==='1X2'&&(p.includes('ΑΣΟΣ')||p.includes('ΔΙΠΛΟ')))show=true; else if(filter==='O25'&&p.includes('OVER 2.5'))show=true; else if(filter==='O35'&&p.includes('OVER 3.5'))show=true; else if(filter==='BTTS'&&p.includes('GOAL/GOAL'))show=true; else if(filter==='CARDS'&&p.includes('ΚΑΡΤΕΣ'))show=true; else if(filter==='COR'&&p.includes('ΚΟΡΝΕΡ'))show=true; else if(filter==='BOMB'&&p.includes('ΒΟΜΒΑ'))show=true;
     if(show){html+=getMatchCardHTML(d);n++;}
   });
-  document.getElementById('matchesFeed').innerHTML=html;
-  document.getElementById('feedCount').innerText=n;
+  document.getElementById('matchesFeed').innerHTML=html; document.getElementById('feedCount').innerText=n;
 };
 
-// ================================================================
-//  RENDER: WALL BETS
-// ================================================================
 function renderWallBets(){
   const wallDiv=document.getElementById('wallbetSection'); if(!window.scannedMatchesData.length){wallDiv.innerHTML='';return;}
   const safe=window.scannedMatchesData.filter(m=>(m.omegaPick.includes('OVER 2.5')||m.omegaPick.includes('GOAL/GOAL'))&&!m.isBomb).sort((a,b)=>b.strength-a.strength);
@@ -919,7 +721,7 @@ function renderWallBets(){
 }
 
 // ================================================================
-//  AUDIT — now also feeds Advisor + per-league stats
+//  SMART AUDIT & TARGETED ADVISOR
 // ================================================================
 async function runCustomAudit() {
   if(isRunning)return;
@@ -936,9 +738,6 @@ async function runCustomAudit() {
     if(lgFilter!=='ALL') cands=cands.filter(x=>String(x.leagueId)===lgFilter);
     if(!cands.length){document.getElementById('auditSection').innerHTML=`<div class="section-panel">Δεν υπάρχουν αποθηκευμένες προβλέψεις.</div>`;return;}
 
-    // Per-league accumulators
-    const leagueStats = {}; // { [lgId]: { o25Tot,o25Hit,o35Tot,o35Hit,outTot,outHit,bttsTot,bttsHit } }
-
     let rows=[], stats={games:0,outHit:0,validOut:0,o25Tot:0,o25Hit:0,o35Tot:0,o35Hit:0,exHit:0,bttsTot:0,bttsHit:0};
     for(let i=0;i<cands.length;i++){
       const p=cands[i]; setProgress(Math.round(((i+1)/cands.length)*100),`AUDIT: ${p.homeTeam}`);
@@ -949,7 +748,6 @@ async function runCustomAudit() {
       const pOut=p.outPick||'-', pEx=p.exactScorePred||'-', pOmega=p.omegaPick||'-';
       const hitOut=pOut===aOut, hitEx=pEx===aExact;
 
-      // global
       stats.games++;
       if(pOut==='1'||pOut==='2'){stats.validOut++;if(hitOut)stats.outHit++;}
       if(hitEx)stats.exHit++;
@@ -957,17 +755,7 @@ async function runCustomAudit() {
       if(p.predOver35){stats.o35Tot++;if(atot>3.5)stats.o35Hit++;}
       if(p.predBTTS){stats.bttsTot++;if(aBtts)stats.bttsHit++;}
 
-      // per-league
-      const lid=p.leagueId;
-      if(lid){
-        if(!leagueStats[lid]) leagueStats[lid]={o25Tot:0,o25Hit:0,o35Tot:0,o35Hit:0,outTot:0,outHit:0,bttsTot:0,bttsHit:0};
-        const ls=leagueStats[lid];
-        if(p.predOver25){ls.o25Tot++;if(atot>2.5)ls.o25Hit++;}
-        if(pOut==='1'||pOut==='2'){ls.outTot++;if(hitOut)ls.outHit++;}
-        if(p.predBTTS){ls.bttsTot++;if(aBtts)ls.bttsHit++;}
-      }
-
-      rows.push({date:p.date.slice(0,10),lg:p.league,lgId:p.leagueId,match:`${p.homeTeam} vs ${p.awayTeam}`,pOut,aOut,hitOut,pO25:p.predOver25,aO25:atot>2.5,pO35:p.predOver35,aO35:atot>3.5,pBtts:p.predBTTS,aBtts,pEx,aEx:aExact,hitEx,omega:pOmega});
+      rows.push({date:p.date.slice(0,10),lg:p.league,match:`${p.homeTeam} vs ${p.awayTeam}`,pOut,aOut,hitOut,pO25:p.predOver25,aO25:atot>2.5,pO35:p.predOver35,aO35:atot>3.5,pBtts:p.predBTTS,aBtts,pEx,aEx:aExact,hitEx,omega:pOmega});
     }
 
     if(!stats.games){document.getElementById('auditSection').innerHTML=`<div class="section-panel">Δεν βρέθηκαν ολοκληρωμένοι αγώνες.</div>`;return;}
@@ -978,34 +766,47 @@ async function runCustomAudit() {
     const exRate   = (stats.exHit/stats.games)*100;
     const bttsRate = stats.bttsTot>0  ? (stats.bttsHit/stats.bttsTot)*100 : 0;
 
-    // Build per-league rate map for the table and advisor
-    const leagueRates = {};
-    for(const [lid,ls] of Object.entries(leagueStats)){
-      leagueRates[lid] = {
-        o25Rate  : ls.o25Tot>0  ? (ls.o25Hit/ls.o25Tot)*100  : null,
-        outRate  : ls.outTot>0  ? (ls.outHit/ls.outTot)*100  : null,
-        bttsRate : ls.bttsTot>0 ? (ls.bttsHit/ls.bttsTot)*100: null,
-        games    : ls.o25Tot + ls.outTot + ls.bttsTot
-      };
+    // ADVISOR LOGIC
+    const TARGET = 80;
+    let suggestions = [];
+    const currentO25 = lgFilter!=='ALL' && leagueMods[lgFilter]?.minXG ? leagueMods[lgFilter].minXG : engineConfig.tXG_O25;
+    const currentDiff = lgFilter!=='ALL' && leagueMods[lgFilter]?.xgDiff ? leagueMods[lgFilter].xgDiff : engineConfig.xG_Diff;
+
+    if (stats.validOut > 0 && outRate < TARGET) {
+      const newVal = (currentDiff + 0.10).toFixed(2);
+      suggestions.push({ key:'xG_Diff', label:'xG Diff (1X2)', rate:outRate, oldV:currentDiff, newV:newVal });
+    }
+    if (stats.o25Tot > 0 && o25Rate < TARGET) {
+      const newVal = (currentO25 + 0.15).toFixed(2);
+      suggestions.push({ key:'tXG_O25', label:'Min xG (O2.5)', rate:o25Rate, oldV:currentO25, newV:newVal });
     }
 
-    // Advisor
-    const advisorStats = { o25Tot:stats.o25Tot, o25Rate, o35Tot:stats.o35Tot, o35Rate, validOutGames:stats.validOut, outRate, bttsTot:stats.bttsTot, bttsRate };
-    const advisorItems = computeAdvisorItems(advisorStats, lgFilter);
-    const lgLabel = lgFilter==='ALL' ? 'Όλες οι Λίγκες' : (rows[0]?.lg || lgFilter);
-    renderAdvisor(advisorItems, lgLabel);
-
-    // Rebuild per-league table with real stats
-    buildLeagueModTable(leagueRates);
-    // Auto-open per-league panel if we have data
-    const lmp=document.getElementById('leagueModPanel');
-    if(lmp&&lmp.style.display==='none') togglePanel('leagueModPanel','leagueArrow');
+    let advisorHtml = '';
+    if(suggestions.length > 0) {
+      advisorHtml = `<div class="section-panel" style="border-color:var(--magenta)"><div class="section-title" style="color:var(--magenta)">🤖 SMART CALIBRATION ADVISOR: ${lgFilter==='ALL'?'GLOBAL':esc(rows[0]?.lg||'')}</div><div style="font-size:0.75rem;color:var(--txt-muted);margin-bottom:15px">Βρέθηκαν ρυθμίσεις που υστερούν του στόχου (80%). Εφάρμοσε τις προτάσεις:</div>`;
+      suggestions.forEach(s => {
+        advisorHtml += `<div class="advisor-card">
+          <div class="advisor-arrow">⬇️</div>
+          <div class="advisor-detail">
+            <div class="advisor-label" style="color:var(--alert)">${s.label}</div>
+            <div class="advisor-desc">Hit Rate: <span style="font-weight:bold;color:#fff">${s.rate.toFixed(1)}%</span>. Απαιτείται αυστηρότερο φίλτρο.</div>
+            <div style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--txt-muted);margin-top:4px">Current: <span style="color:#fff;font-weight:700">${s.oldV.toFixed(2)}</span> → Target: <span style="color:var(--alert);font-weight:900">${s.newV}</span></div>
+          </div>
+          <div><button class="advisor-apply-btn" onclick="applyAdvisorItem('${s.key}','${s.newV}','${lgFilter}')">⚡ ΕΦΑΡΜΟΓΗ</button></div>
+        </div>`;
+      });
+      const pairs = suggestions.map(s => `${s.key},${s.newV}`).join('|');
+      advisorHtml += `<button class="btn" style="background:linear-gradient(135deg,#10b981,#059669);margin-top:10px" onclick="applyAllAdvisor('${pairs}','${lgFilter}')">✅ ΕΦΑΡΜΟΓΗ ΟΛΩΝ</button></div>`;
+    } else {
+      advisorHtml = `<div class="section-panel" style="border-color:#238636"><div class="section-title" style="color:#3fb950">🤖 SMART CALIBRATION ADVISOR: ${lgFilter==='ALL'?'GLOBAL':esc(rows[0]?.lg||'')}</div><div style="font-size:0.8rem;color:#b7f7c4;margin-top:10px">Ο αλγόριθμος είναι ρυθμισμένος τέλεια (>80% Hit Rate). Δεν απαιτείται αλλαγή!</div></div>`;
+    }
+    document.getElementById('advisorSection').innerHTML = advisorHtml;
 
     const fmtR = r => { const col=r>=80?'var(--neon-live)':r>=60?'var(--gold)':'var(--alert)'; return `<span style="color:${col};font-weight:900">${r.toFixed(1)}%</span>`; };
 
     document.getElementById('auditSection').innerHTML = `
       <div class="section-panel">
-        <div class="section-title">📊 SMART AUDIT (${s} → ${e}) | ${stats.games} αγώνες</div>
+        <div class="section-title">📊 AUDIT LOG (${s} → ${e}) | ${stats.games} αγώνες</div>
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:15px;text-align:center">
           <div style="background:rgba(0,0,0,0.4);padding:12px;border-radius:8px"><div style="font-size:1.3rem;font-weight:900">${fmtR(outRate)}</div><div style="font-size:0.6rem;color:#888;margin-top:4px">1X2 RATE<br>${stats.validOut} picks</div></div>
           <div style="background:rgba(0,0,0,0.4);padding:12px;border-radius:8px"><div style="font-size:1.3rem;font-weight:900">${fmtR(o25Rate)}</div><div style="font-size:0.6rem;color:#888;margin-top:4px">O2.5 RATE<br>${stats.o25Tot} picks</div></div>
@@ -1043,19 +844,51 @@ async function runCustomAudit() {
   } catch(e){showErr(e.message);} finally{isRunning=false;setLoader(false);setBtnsDisabled(false);}
 }
 
-// ================================================================
-//  INIT
-// ================================================================
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('scanStart').value = todayISO();
-  document.getElementById('scanEnd').value   = todayISO();
-  const d30=new Date(); d30.setDate(d30.getDate()-15);
-  document.getElementById('auditStart').value = d30.toISOString().split('T')[0];
-  document.getElementById('auditEnd').value   = todayISO();
-  updateAuditLeagueFilter();
-  const sel=document.getElementById('leagueFilter');
-  LEAGUES_DATA.forEach(l=>sel.innerHTML+=`<option value="${l.id}">${l.name}</option>`);
-});
+// TARGETED APPLY: Advisor points here!
+window.applyAdvisorItem = function(settingKey, val, leagueId) {
+  val = parseFloat(val);
+  
+  if (leagueId && leagueId !== 'ALL') {
+    // Apply to Per-League Mode
+    if (!leagueMods[leagueId]) leagueMods[leagueId] = {};
+    let fieldId = "";
+    if (settingKey === 'tXG_O25') { leagueMods[leagueId].minXG = val; fieldId = `lm_minXG_${leagueId}`; } 
+    else if (settingKey === 'xG_Diff') { leagueMods[leagueId].xgDiff = val; fieldId = `lm_xgDiff_${leagueId}`; }
+    
+    const el = document.getElementById(fieldId);
+    if(el) { el.value = val; el.style.background = 'rgba(16,185,129,0.2)'; setTimeout(()=>el.style.background='transparent',1000); }
+    
+    saveLeagueMods(true);
+    showOk(`✅ Εφαρμόστηκε η τιμή ${val} ειδικά για αυτή τη Λίγκα!`);
+    
+    const p = document.getElementById('leagueModPanel');
+    if(p && p.style.display === 'none') togglePanel('leagueModPanel','leagueArrow');
+  } else {
+    // Apply to Global Mode
+    const keyMap = { tXG_O25: 'cfg_tXG_O25', xG_Diff: 'cfg_xG_Diff', tXG_O35: 'cfg_tXG_O35', tBTTS: 'cfg_tBTTS' };
+    const inputId = keyMap[settingKey];
+    
+    engineConfig[settingKey] = val;
+    if(inputId) {
+        const el = document.getElementById(inputId);
+        if(el) { el.value = val; el.style.background = 'rgba(16,185,129,0.2)'; setTimeout(()=>el.style.background='transparent',1000); }
+    }
+    
+    try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch{}
+    buildLeagueModTable(); // Update placeholders
+    showOk(`✅ Εφαρμόστηκε η τιμή ${val} στις Global Ρυθμίσεις!`);
+    
+    const p = document.getElementById('globalCalibPanel');
+    if(p && p.style.display === 'none') togglePanel('globalCalibPanel','globalArrow');
+  }
+};
+
+window.applyAllAdvisor = function(encoded, leagueId) {
+  const pairs = encoded.split('|');
+  pairs.forEach(p => { const [key, val] = p.split(','); window.applyAdvisorItem(key, val, leagueId); });
+  showOk('✅ Όλες οι προτάσεις εφαρμόστηκαν!');
+};
+
 </script>
 </body>
 </html>
