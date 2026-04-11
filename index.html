@@ -445,7 +445,11 @@ const LEAGUES_DATA = [
   {id:88, name:"Eredivisie (NL)"},      {id:144,name:"Jupiler Pro (BE)"},
   {id:203,name:"Süper Lig (TR)"},       {id:253,name:"MLS (US)"},
   {id:262,name:"Liga MX (MX)"},         {id:197,name:"Super League (GR)"},
-  {id:357,name:"Premier Division (IE)"}
+  {id:357,name:"Premier Division (IE)"},
+  {id:265,name:"Primera División (CL)"},
+  {id:233,name:"Canadian Premier (CA)"},
+  {id:321,name:"División Profesional (BO)"},
+  {id:128,name:"Liga Profesional (AR)"}
 ];
 
 window.scrollToMatch = function(id){
@@ -473,8 +477,8 @@ function summarizeH2H(fixtures,homeId,awayId) {
 const LEAGUE_IDS     = LEAGUES_DATA.map(l => l.id);
 const TRAP_LEAGUES   = new Set([40,41,136,141,79,62,6,10,66,357]);
 const TIGHT_LEAGUES  = new Set([61,94,197,135,140,39,2,3,848]);
-const GOLD_LEAGUES   = new Set([78,262,88,253]);
-const MY_LEAGUES_IDS = [39,78,88,144,140,135,197,253];
+const GOLD_LEAGUES   = new Set([78,262,88,253,128,265]);
+const MY_LEAGUES_IDS = [39,78,88,144,140,135,197,253,265,233,321,128];
 
 let teamStatsCache = new Map(), lastFixCache = new Map(),
     standCache     = new Map(), h2hCache     = new Map();
