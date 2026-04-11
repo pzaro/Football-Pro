@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4745 - The Perfect Quant</title>
+  <title>APEX OMEGA v4744 - The Perfect Quant</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -242,7 +242,7 @@
 <body>
 
 <div class="terminal-header">
-  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4745</span></div>
+  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4744</span></div>
   <div class="header-right">
     <div class="widget-pill gold" onclick="openBankroll()" title="Bankroll Manager">
       <span class="pill-lbl gold">💰 Bankroll</span>
@@ -258,7 +258,7 @@
 <div id="apiKeyModal" class="modal-overlay" style="display:flex">
   <div class="auth-card">
     <div class="brand-logo" style="justify-content:center; font-size:1.8rem; margin-bottom:8px;">APEX<span class="accent">OMEGA</span></div>
-    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4745 · THE PERFECT QUANT</div>
+    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4744 · THE PERFECT QUANT</div>
     <div style="font-size:0.72rem; color:var(--text-muted); margin-top:18px; line-height:1.6;">
       Το API Key αποθηκεύεται τοπικά στον browser σου.
     </div>
@@ -411,12 +411,28 @@
 // ================================================================
 // CONFIG & CORE
 // ================================================================
+// Safe storage shim - fallback to in-memory if localStorage blocked
+const safeStorage = (() => {
+  const mem = {};
+  try {
+    safeStorage.setItem('__test__','1');
+    safeStorage.removeItem('__test__');
+    return localStorage;
+  } catch(e) {
+    return {
+      getItem: k => mem[k] ?? null,
+      setItem: (k,v) => { mem[k]=String(v); },
+      removeItem: k => { delete mem[k]; }
+    };
+  }
+})();
+
 const API_BASE    = "https://v3.football.api-sports.io";
-let   API_KEY     = localStorage.getItem('omega_api_key') || "";
-const LS_PREDS    = "omega_preds_v4745";
-const LS_SETTINGS = "omega_settings_v4745";
-const LS_LGMODS   = "omega_lgmods_v4745";
-const LS_BANKROLL = "omega_bankroll_v4745";
+let   API_KEY     = safeStorage.getItem('omega_api_key') || "";
+const LS_PREDS    = "omega_preds_v4744";
+const LS_SETTINGS = "omega_settings_v4744";
+const LS_LGMODS   = "omega_lgmods_v4744";
+const LS_BANKROLL = "omega_bankroll_v4744";
 
 const LEAGUES_DATA = [
   {id:2,  name:"Champions League"},     {id:3,  name:"Europa League"},
@@ -472,7 +488,7 @@ window.scannedMatchesData = [];
 let bankrollData = { current: 0, history: [] };
 
 function loadBankroll() {
-  try { const b = JSON.parse(localStorage.getItem(LS_BANKROLL)); if(b) bankrollData = b; } catch {}
+  try { const b = JSON.parse(safeStorage.getItem(LS_BANKROLL)); if(b) bankrollData = b; } catch {}
   updateBankrollDisplay();
 }
 function updateBankrollDisplay() {
@@ -489,7 +505,7 @@ function saveBankroll() {
     if(bankrollData.history.length > 20) bankrollData.history = bankrollData.history.slice(0,20);
   }
   bankrollData.current = val;
-  try { localStorage.setItem(LS_BANKROLL, JSON.stringify(bankrollData)); } catch {}
+  try { safeStorage.setItem(LS_BANKROLL, JSON.stringify(bankrollData)); } catch {}
   updateBankrollDisplay(); renderBankrollHistory(); showOk(`Bankroll: €${val.toFixed(2)}`);
 }
 function renderBankrollHistory() {
@@ -567,8 +583,8 @@ let engineConfig = {...DEFAULT_SETTINGS};
 let leagueMods   = {};
 
 function loadSettings() {
-  try { const s=JSON.parse(localStorage.getItem(LS_SETTINGS)); if(s) engineConfig={...DEFAULT_SETTINGS,...s}; } catch {}
-  try { const lm=JSON.parse(localStorage.getItem(LS_LGMODS)); if(lm) leagueMods=lm; } catch {}
+  try { const s=JSON.parse(safeStorage.getItem(LS_SETTINGS)); if(s) engineConfig={...DEFAULT_SETTINGS,...s}; } catch {}
+  try { const lm=JSON.parse(safeStorage.getItem(LS_LGMODS)); if(lm) leagueMods=lm; } catch {}
   syncUIFromSettings(); buildLeagueModTable();
 }
 const SETTINGS_MAP = {
@@ -581,10 +597,10 @@ function syncUIFromSettings() {
 }
 function saveSettings() {
   for(const [id,key] of Object.entries(SETTINGS_MAP)) { const v=parseFloat(document.getElementById(id)?.value); if(!isNaN(v)) engineConfig[key]=v; }
-  try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch {}
+  try { safeStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch {}
   showOk("Global Parameters Saved!"); buildLeagueModTable();
 }
-function resetSettings() { engineConfig={...DEFAULT_SETTINGS}; syncUIFromSettings(); try{localStorage.setItem(LS_SETTINGS,JSON.stringify(engineConfig));}catch{} showOk("Restored Defaults."); buildLeagueModTable(); }
+function resetSettings() { engineConfig={...DEFAULT_SETTINGS}; syncUIFromSettings(); try{safeStorage.setItem(LS_SETTINGS,JSON.stringify(engineConfig));}catch{} showOk("Restored Defaults."); buildLeagueModTable(); }
 
 function buildLeagueModTable(auditStats={}) {
   const tbody = document.getElementById('leagueModBody'); if(!tbody) return; tbody.innerHTML='';
@@ -617,10 +633,10 @@ function saveLeagueMods(silent=false) {
     if(!isNaN(maxU25)) entry.maxU25=maxU25; if(!isNaN(minBTTS)) entry.minBTTS=minBTTS; if(!isNaN(xgDiff)) entry.xgDiff=xgDiff;
     if(Object.keys(entry).length) leagueMods[l.id]=entry; else delete leagueMods[l.id];
   });
-  try { localStorage.setItem(LS_LGMODS, JSON.stringify(leagueMods)); } catch {}
+  try { safeStorage.setItem(LS_LGMODS, JSON.stringify(leagueMods)); } catch {}
   if(!silent) showOk("League Modifiers Saved!");
 }
-function resetLeagueMods() { leagueMods={}; try{localStorage.removeItem(LS_LGMODS);}catch{} buildLeagueModTable(); showOk("League Modifiers Reset."); }
+function resetLeagueMods() { leagueMods={}; try{safeStorage.removeItem(LS_LGMODS);}catch{} buildLeagueModTable(); showOk("League Modifiers Reset."); }
 function getLeagueParams(leagueId) {
   const lm=leagueMods[leagueId]||{};
   return {
@@ -645,7 +661,7 @@ window.applyAdvisorItem = function(settingKey, val, leagueId) {
   } else {
     const keyMap={tXG_O25:'cfg_tXG_O25',tXG_O35:'cfg_tXG_O35',tBTTS:'cfg_tBTTS',xG_Diff:'cfg_xG_Diff'};
     engineConfig[settingKey]=val; const el=document.getElementById(keyMap[settingKey]); if(el) el.value=val;
-    try{localStorage.setItem(LS_SETTINGS,JSON.stringify(engineConfig));}catch{}
+    try{safeStorage.setItem(LS_SETTINGS,JSON.stringify(engineConfig));}catch{}
     buildLeagueModTable(); showOk(`Εφαρμόστηκε ${val} στο Global Config.`);
   }
 };
@@ -698,21 +714,21 @@ function stripForStorage(rec) {
   const stripTeam = t => t ? { fXG:t.fXG, fXGA:t.fXGA, sXG:t.sXG, sXGA:t.sXGA, wXG:t.wXG, formRating:t.formRating, cor:t.cor, crd:t.crd, uiXG:t.uiXG, uiXGA:t.uiXGA, uiDevXG:t.uiDevXG, uiDevXGA:t.uiDevXGA, uiSXG:t.uiSXG } : undefined;
   return { ...rest, hS: stripTeam(hS), aS: stripTeam(aS) };
 }
-function getPredStore()  { try{return JSON.parse(localStorage.getItem(LS_PREDS)||"[]");}catch{return [];} }
+function getPredStore()  { try{return JSON.parse(safeStorage.getItem(LS_PREDS)||"[]");}catch{return [];} }
 
 function bulkSavePredictions(newRecords) {
   try {
     const store=getPredStore();
     const map=new Map(store.map(x=>[String(x.fixtureId),x]));
     newRecords.forEach(rec=>map.set(String(rec.fixtureId), stripForStorage(rec)));
-    localStorage.setItem(LS_PREDS, JSON.stringify(Array.from(map.values())));
+    safeStorage.setItem(LS_PREDS, JSON.stringify(Array.from(map.values())));
     updateAuditLeagueFilter();
   } catch(e) {
     if(e.name==='QuotaExceededError') showErr('Storage full. Κάνε Purge Data.');
     else showErr(e.message);
   }
 }
-function clearVault() { if(confirm("Διαγραφή όλου του ιστορικού;")){localStorage.removeItem(LS_PREDS);showOk("Vault Cleared.");updateAuditLeagueFilter();} }
+function clearVault() { if(confirm("Διαγραφή όλου του ιστορικού;")){safeStorage.removeItem(LS_PREDS);showOk("Vault Cleared.");updateAuditLeagueFilter();} }
 function updateAuditLeagueFilter() {
   const store=getPredStore(), leagues=new Set(store.map(x=>x.leagueId));
   const sel=document.getElementById('auditLeague'); if(!sel) return;
@@ -729,7 +745,7 @@ function authenticate() {
   const pin=document.getElementById('pin').value;
   const apiInput=document.getElementById('apiInput').value.trim();
   if(pin==="106014") {
-    if(apiInput){API_KEY=apiInput;localStorage.setItem('omega_api_key',API_KEY);}
+    if(apiInput){API_KEY=apiInput;safeStorage.setItem('omega_api_key',API_KEY);}
     if(!API_KEY){document.getElementById('authError').innerText="Παρακαλώ εισάγετε το API-Sports Key.";return;}
     document.getElementById('apiKeyModal').style.display='none';
     document.getElementById('app').style.display='block';
@@ -820,9 +836,8 @@ function getFormRating(hist) {
   return totalWeight>0?Math.round(score/totalWeight):50;
 }
 
-// ── BATCH CALC: Returns null instead of '0.00' if no data found ──
 async function batchCalc(list,tId) {
-  if(!list.length) return{xg:null,xga:null,cor:null,crd:null};
+  if(!list.length) return{xg:'0.00',xga:'0.00',cor:'0.0',crd:'0.0'};
   let x=0,xa=0,c=0,cr=0,n=0;
   for(const f of list) {
     try {
@@ -837,12 +852,7 @@ async function batchCalc(list,tId) {
       n++;
     } catch { continue; }
   }
-  return{
-    xg: n>0 ? (x/n).toFixed(2) : null,
-    xga: n>0 ? (xa/n).toFixed(2) : null,
-    cor: n>0 ? (c/n).toFixed(1) : null,
-    crd: n>0 ? (cr/n).toFixed(1) : null
-  };
+  return{xg:n>0?(x/n).toFixed(2):'0.00',xga:n>0?(xa/n).toFixed(2):'0.00',cor:n>0?(c/n).toFixed(1):'0.0',crd:n>0?(cr/n).toFixed(1):'0.0'};
 }
 
 async function buildIntel(tId,lg,s,isHome) {
@@ -851,37 +861,27 @@ async function buildIntel(tId,lg,s,isHome) {
     const gen=allFix.slice(0,6);
     const split=allFix.filter(f=>(isHome?f.teams.home.id:f.teams.away.id)===tId).slice(0,6);
     const[fData,sData]=await Promise.all([batchCalc(gen,tId),batchCalc(split,tId)]);
+    const baseXG=parseFloat(ss?.goals?.for?.average?.total)||1.10;
+    const baseXGA=parseFloat(ss?.goals?.against?.average?.total)||1.10;
+    const wXG=weightedRecentXG(gen,tId);
+    const history=getFormHistory(gen,tId);
+    const formRating=getFormRating(history);
     
-    // Dynamic Fallbacks from Season Averages (or 1.35 if completely missing)
-    const seasonXG = parseFloat(ss?.goals?.for?.average?.total) || 1.35;
-    const seasonXGA = parseFloat(ss?.goals?.against?.average?.total) || 1.35;
-    
-    const wXG = weightedRecentXG(gen,tId);
-    const history = getFormHistory(gen,tId);
-    const formRating = getFormRating(history);
-    
-    const final_fXG = fData.xg !== null ? safeNum(fData.xg) : seasonXG;
-    const final_fXGA = fData.xga !== null ? safeNum(fData.xga) : seasonXGA;
-    const final_sXG = sData.xg !== null ? safeNum(sData.xg) : seasonXG;
-    const final_sXGA = sData.xga !== null ? safeNum(sData.xga) : seasonXGA;
-    const final_wXG = wXG > 0 ? wXG : seasonXG;
-
-    return {
-      fXG: final_fXG, fXGA: final_fXGA,
-      sXG: final_sXG, sXGA: final_sXGA,
-      wXG: final_wXG, formRating,
-      cor: fData.cor !== null ? safeNum(fData.cor) : 4.5,
-      crd: fData.crd !== null ? safeNum(fData.crd) : 2.0,
-      uiXG: fData.xg !== null ? fData.xg : seasonXG.toFixed(2),
-      uiXGA: fData.xga !== null ? fData.xga : seasonXGA.toFixed(2),
-      uiDevXG: devBadge(final_fXG, seasonXG),
-      uiDevXGA: devBadge(final_fXGA, seasonXGA),
-      uiSXG: sData.xg !== null ? sData.xg : seasonXG.toFixed(2),
-      uiSXGA: sData.xga !== null ? sData.xga : seasonXGA.toFixed(2),
-      history
+    // FIX: Fallback to 0.85 minimum for xG and xGA to prevent 0.00 math collapse
+    return{
+      fXG:Math.max(safeNum(fData.xg), 0.85),
+      fXGA:Math.max(safeNum(fData.xga), 0.85),
+      sXG:Math.max(safeNum(sData.xg), 0.85),
+      sXGA:Math.max(safeNum(sData.xga), 0.85),
+      wXG:Math.max(wXG, 0.85),
+      formRating,
+      cor:safeNum(fData.cor), crd:safeNum(fData.crd),
+      uiXG:fData.xg, uiXGA:fData.xga,
+      uiDevXG:devBadge(fData.xg,baseXG), uiDevXGA:devBadge(fData.xga,baseXGA),
+      uiSXG:sData.xg, uiSXGA:sData.xga, history
     };
   } catch {
-    return {fXG:1.35,fXGA:1.35,sXG:1.35,sXGA:1.35,wXG:1.35,formRating:50,cor:4.5,crd:2.0,uiXG:'1.35',uiXGA:'1.35',uiDevXG:'',uiDevXGA:'',uiSXG:'1.35',uiSXGA:'1.35',history:[]};
+    return{fXG:1.20,fXGA:1.20,sXG:1.20,sXGA:1.20,wXG:1.20,formRating:50,cor:5.0,crd:3.0,uiXG:'1.20',uiXGA:'1.20',uiDevXG:'',uiDevXGA:'',uiSXG:'1.20',uiSXGA:'1.20',history:[]};
   }
 }
 
@@ -896,8 +896,13 @@ function computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj=0,aInj
   }
   const hInjPen=Math.min(hInj*0.03,0.15), aInjPen=Math.min(aInj*0.03,0.15);
 
-  const hLambda=clamp(((hXG*0.45)+(safeNum(hS?.wXG)*0.30)+(safeNum(aS?.fXGA)*0.25))*lp.mult*(1+h2hBiasHome-hInjPen),0.50,4.0);
-  const aLambda=clamp(((aXG*0.45)+(safeNum(aS?.wXG)*0.30)+(safeNum(hS?.fXGA)*0.25))*lp.mult*(1+h2hBiasAway-aInjPen),0.50,4.0);
+  // FIX: Force safe values again just in case inputs were dirty
+  const safeHXG = Math.max(hXG, 0.80); const safeAXG = Math.max(aXG, 0.80);
+  const safeHWXG = Math.max(safeNum(hS?.wXG), 0.80); const safeAWXG = Math.max(safeNum(aS?.wXG), 0.80);
+  const safeHFxGA = Math.max(safeNum(hS?.fXGA), 0.80); const safeAFxGA = Math.max(safeNum(aS?.fXGA), 0.80);
+
+  const hLambda=clamp(((safeHXG*0.45)+(safeHWXG*0.30)+(safeAFxGA*0.25))*lp.mult*(1+h2hBiasHome-hInjPen),0.50,4.0);
+  const aLambda=clamp(((safeAXG*0.45)+(safeAWXG*0.30)+(safeHFxGA*0.25))*lp.mult*(1+h2hBiasAway-aInjPen),0.50,4.0);
 
   const pp=getPoissonProbabilities(hLambda,aLambda);
   const xgDiff=hXG-aXG;
@@ -908,13 +913,17 @@ function computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj=0,aInj
 
   let omegaPick="NO BET",reason="Insufficient statistical edge.",pickScore=0;
 
-  if(pp.pO35>=0.42&&tXG>=lp.minXGO35&&bttsScore>=1.20) {
+  // Use safe tXG and bttsScore for signal checks so they don't fail on 0.00
+  const safe_tXG = safeHXG + safeAXG;
+  const safe_bttsScore = Math.min(safeHXG, safeAXG);
+
+  if(pp.pO35>=0.42&&safe_tXG>=lp.minXGO35&&safe_bttsScore>=1.20) {
     omegaPick="🚀 OVER 3.5 GOALS"; pickScore=pp.pO35*100; reason=`Poisson O3.5: ${(pp.pO35*100).toFixed(1)}%`;
-  } else if(pp.pO25>=0.52&&tXG>=lp.minXGO25&&bttsScore>=0.85) {
+  } else if(pp.pO25>=0.52&&safe_tXG>=lp.minXGO25&&safe_bttsScore>=0.85) {
     omegaPick="🔥 OVER 2.5 GOALS"; pickScore=pp.pO25*100; reason=`Poisson O2.5: ${(pp.pO25*100).toFixed(1)}%`;
-  } else if(pp.pU25>=0.55&&tXG<=lp.maxU25&&bttsScore<=engineConfig.tBTTS_U25) {
+  } else if(pp.pU25>=0.55&&safe_tXG<=lp.maxU25&&safe_bttsScore<=engineConfig.tBTTS_U25) {
     omegaPick="🔒 UNDER 2.5 GOALS"; pickScore=pp.pU25*100; reason=`Poisson U2.5: ${(pp.pU25*100).toFixed(1)}%`;
-  } else if(bttsScore>=lp.minBTTS&&pp.pBTTS>=0.45) {
+  } else if(safe_bttsScore>=lp.minBTTS&&pp.pBTTS>=0.45) {
     omegaPick="🎯 GOAL/GOAL (BTTS)"; pickScore=pp.pBTTS*100; reason=`Poisson BTTS: ${(pp.pBTTS*100).toFixed(1)}%`;
   } else if(outPick!=="X"&&Math.abs(xgDiff)>=lp.xgDiff+0.10) {
     const outcome=outPick==="1"?"🏠 ΑΣΟΣ":"✈️ ΔΙΠΛΟ";
@@ -976,18 +985,17 @@ window.resimulateMatches = function() {
     window.scannedMatchesData.forEach(d=>{
       if(!d.leagueId) return;
       const lp=getLeagueParams(d.leagueId);
+      const fallback=d.tXG?d.tXG/2:1.2;
       
-      // Fallback for old saves that had 0.00
-      const fallback = d.tXG && d.tXG > 0 ? d.tXG/2 : 1.35;
-      const hXG = Number(d.hS?.fXG || fallback) * lp.mult;
-      const aXG = Number(d.aS?.fXG || fallback) * lp.mult;
-      
-      const hS_safe = {...d.hS, wXG: Number(d.hS?.wXG || fallback), fXGA: Number(d.hS?.fXGA || fallback)};
-      const aS_safe = {...d.aS, wXG: Number(d.aS?.wXG || fallback), fXGA: Number(d.aS?.fXGA || fallback)};
+      // Ensure existing old scans with 0.00 get pumped up to safe levels
+      const hXG=Math.max(Number(d.hS?.fXG||fallback), 0.85)*lp.mult;
+      const aXG=Math.max(Number(d.aS?.fXG||fallback), 0.85)*lp.mult;
+      const hS_safe={...d.hS, wXG:Math.max(Number(d.hS?.wXG||0),0.85), fXGA:Math.max(Number(d.hS?.fXGA||0),0.85)};
+      const aS_safe={...d.aS, wXG:Math.max(Number(d.aS?.wXG||0),0.85), fXGA:Math.max(Number(d.aS?.fXGA||0),0.85)};
       
       const tXG=hXG+aXG, bttsScore=Math.min(hXG,aXG);
-      const cor=Number(d.hS?.cor||(d.cor?d.cor/2:4.5))+Number(d.aS?.cor||(d.cor?d.cor/2:4.5));
-      const totCards=Number(d.hS?.crd||(d.totCards?d.totCards/2:2.5))+Number(d.aS?.crd||(d.totCards?d.totCards/2:2.5));
+      const cor=Number(d.hS?.cor||d.cor/2||4.5)+Number(d.aS?.cor||d.cor/2||4.5);
+      const totCards=Number(d.hS?.crd||d.totCards/2||2.5)+Number(d.aS?.crd||d.totCards/2||2.5);
       
       const result=computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS_safe,aS_safe,d.h2h,d.hInj||0,d.aInj||0);
 
