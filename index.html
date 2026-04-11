@@ -263,7 +263,7 @@
       Το API Key αποθηκεύεται τοπικά στον browser σου.
     </div>
     <input type="password" id="pin" class="auth-input" placeholder="PIN" maxlength="6" autocomplete="off" inputmode="numeric" style="letter-spacing:14px; font-size:1.1rem;" onkeydown="if(event.key==='Enter')authenticate()">
-    <input type="text" id="apiInput" class="auth-input" placeholder="API-Sports Key" autocomplete="off" style="letter-spacing:1px; font-size:0.85rem; padding:11px;" onkeydown="if(event.key==='Enter')authenticate()">
+    <input type="text" id="apiInput" class="auth-input" placeholder="API-Sports Key" value="956cbd05f9e9bf934df78d9b72d9a3a0" autocomplete="off" style="letter-spacing:1px; font-size:0.85rem; padding:11px;" onkeydown="if(event.key==='Enter')authenticate()">
     <button class="btn btn-primary" style="width:100%; margin-top:18px; padding:13px; font-size:0.85rem;" onclick="authenticate()">ΕΙΣΟΔΟΣ &amp; ΑΠΟΘΗΚΕΥΣΗ</button>
     <div id="authError" style="margin-top:11px; font-size:0.72rem; color:var(--accent-red); min-height:18px; font-weight:700;"></div>
   </div>
@@ -428,7 +428,7 @@ const safeStorage = (() => {
 })();
 
 const API_BASE    = "https://v3.football.api-sports.io";
-let   API_KEY     = safeStorage.getItem('omega_api_key') || "";
+let   API_KEY     = safeStorage.getItem('omega_api_key') || "956cbd05f9e9bf934df78d9b72d9a3a0";
 const LS_PREDS    = "omega_preds_v4744";
 const LS_SETTINGS = "omega_settings_v4744";
 const LS_LGMODS   = "omega_lgmods_v4744";
