@@ -41,7 +41,6 @@
     .credit-value { font-family: 'Fira Code', monospace; font-size: 0.95rem; color: var(--accent-green); transition: color 0.3s;}
     .credit-value.low { color: var(--accent-red); }
 
-    /* BANKROLL WIDGET */
     .bankroll-widget { display: flex; align-items: center; gap: 10px; background: var(--bg-base); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(245, 158, 11, 0.3); cursor: pointer; }
     .bankroll-label { font-size: 0.65rem; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; }
     .bankroll-value { font-family: 'Fira Code', monospace; font-size: 0.95rem; color: var(--accent-gold); }
@@ -69,7 +68,6 @@
     .btn-teal { background: var(--accent-teal); color: #000; } .btn-teal:hover { opacity: 0.85; }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* MATCH CARDS */
     .match-card { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 20px; margin-bottom: 16px; transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s; }
     .match-card:hover { border-color: var(--border-focus); transform: translateY(-2px); box-shadow: var(--shadow-subtle); }
     .match-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; }
@@ -80,6 +78,7 @@
     .score-box { text-align: right; }
     .score-display { font-family: 'Fira Code', monospace; font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
     .total-xg-badge { display: inline-block; font-size: 0.7rem; background: rgba(14, 165, 233, 0.1); color: var(--accent-blue); padding: 4px 8px; border-radius: 4px; font-weight: 600; border: 1px solid rgba(14, 165, 233, 0.2); }
+    .live-stat-badge { display: inline-block; font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; font-weight: 600; border: 1px solid; }
     .form-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.45rem; font-weight: 800; color: #fff; font-family: 'Fira Code', monospace; }
     .form-W { background: var(--accent-green); } .form-D { background: var(--text-muted); } .form-L { background: var(--accent-red); }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
@@ -104,22 +103,18 @@
     .lock-btts { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); }
     .lock-under { background: rgba(20, 184, 166, 0.15); color: var(--accent-teal); border: 1px solid rgba(20, 184, 166, 0.3); }
 
-    /* CONFIDENCE BAR */
     .conf-bar-wrap { margin-top: 8px; }
     .conf-bar-label { font-size: 0.6rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: flex; justify-content: space-between; }
     .conf-bar-track { height: 6px; background: var(--bg-panel); border-radius: 3px; overflow: hidden; }
     .conf-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
 
-    /* KELLY SECTION */
     .kelly-box { background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .kelly-label { font-size: 0.65rem; color: var(--accent-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
     .kelly-val { font-family: 'Fira Code', monospace; font-size: 1rem; color: var(--accent-gold); font-weight: 700; }
 
-    /* POISSON GRID */
     .poisson-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; margin-top: 10px; }
     .poisson-cell { padding: 4px; text-align: center; font-size: 0.55rem; font-family: 'Fira Code', monospace; border-radius: 3px; font-weight: 700; }
 
-    /* TABLES */
     .data-table-wrapper { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: var(--bg-surface); }
     .summary-table, .data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: center; table-layout: fixed; }
     .summary-table th, .data-table th { background: var(--bg-panel); color: var(--text-muted); font-weight: 600; padding: 10px 8px; border-bottom: 1px solid var(--border-light); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; }
@@ -132,7 +127,6 @@
     
     .col-match { width: 30%; text-align: left; } .col-score { width: 8%; } .col-1x2 { width: 7%; } .col-o25 { width: 7%; } .col-u25 { width: 7%; } .col-btts { width: 7%; } .col-exact { width: 10%; } .col-conf { width: 8%; } .col-signal { width: 16%; text-align: right; padding-right: 16px !important; }
 
-    /* TABS */
     .tabs-wrapper { display: flex; overflow-x: auto; border-bottom: 1px solid var(--border-light); scrollbar-width: none; margin-bottom: 16px; }
     .tabs-wrapper::-webkit-scrollbar { display: none; }
     .tab-btn { background: transparent; border: none; padding: 12px 20px; font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
@@ -140,43 +134,41 @@
     .tab-count { display: inline-block; background: var(--bg-panel); padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; margin-left: 6px; }
     .tab-btn.active .tab-count { background: var(--accent-blue); color: #fff; }
 
-    /* PROGRESS */
     .progress-container { margin-bottom: 20px; }
     .progress-track { height: 4px; background: var(--bg-panel); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
     .progress-bar { height: 100%; background: var(--accent-blue); width: 0%; transition: width 0.3s ease; }
     .progress-text { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--accent-blue); }
     
-    /* CONFIG GRID */
     .calib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
     .calib-item { background: var(--bg-base); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); }
     .calib-lbl { font-size: 0.65rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; text-transform: uppercase; }
     .calib-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-focus); color: var(--text-main); font-family: 'Fira Code', monospace; font-size: 1.1rem; font-weight: 700; padding: 4px; outline: none; text-align: center; transition: border-color 0.3s; }
     .calib-input:focus { border-color: var(--accent-blue); }
 
-    /* LEAGUE MOD TABLE */
     .league-mod-table{width:100%;border-collapse:collapse;font-size:0.8rem}
     .league-mod-table th{padding:10px 8px;background:rgba(0,0,0,0.4);color:var(--accent-gold);font-family:'Inter',sans-serif;font-weight:800;font-size:0.7rem;text-transform:uppercase;text-align:left;border-bottom:1px solid var(--border-light)}
     .league-mod-table td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:middle}
     .league-mod-input{background:transparent;border:none;border-bottom:1px solid rgba(14,165,233,0.3);color:var(--text-main);font-family:'Fira Code',monospace;font-size:0.9rem;font-weight:700;width:55px;text-align:center;outline:none;transition:background 0.3s}
 
-    /* ADVISOR */
     .adv-card { background: rgba(14, 165, 233, 0.05); border: 1px solid var(--border-focus); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; }
     .adv-icon { font-size: 1.5rem; }
     .adv-content { flex: 1; }
     .adv-title { font-weight: 700; font-size: 0.85rem; color: var(--text-main); margin-bottom: 4px; }
     .adv-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
 
-    /* BANKROLL MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 2000; display: flex; align-items: center; justify-content: center; }
     .modal-card { background: var(--bg-surface); border: 1px solid var(--border-focus); border-radius: var(--radius-lg); padding: 32px; max-width: 420px; width: 90%; box-shadow: 0 0 40px var(--accent-blue-glow); }
     .modal-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--accent-gold); margin-bottom: 20px; }
     .modal-input { width: 100%; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-focus); padding: 12px 16px; font-size: 1.2rem; border-radius: var(--radius-sm); font-family: 'Fira Code', monospace; outline: none; text-align: center; margin-bottom: 12px; }
     .modal-close { background: none; border: 1px solid var(--border-light); color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.8rem; }
 
-    /* BANKROLL HISTORY TABLE */
     .bk-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 16px; }
     .bk-table th { background: var(--bg-panel); color: var(--text-muted); padding: 8px; font-size: 0.65rem; text-transform: uppercase; font-weight: 700; border-bottom: 1px solid var(--border-light); }
     .bk-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); text-align: center; font-family: 'Fira Code', monospace; }
+
+    /* Live pulse animation */
+    @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .live-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent-green); animation:livePulse 1.4s ease-in-out infinite; margin-right:4px; vertical-align:middle; }
   </style>
 </head>
 <body>
@@ -378,12 +370,12 @@
 // ================================================================
 //  CONFIG & CORE
 // ================================================================
-const API_BASE   = "https://v3.football.api-sports.io";
-const API_KEY    = "956cbd05f9e9bf934df78d9b72d9a3a0";
-const LS_PREDS   = "omega_preds_v4736"; 
-const LS_SETTINGS= "omega_settings_v4736";
-const LS_LGMODS  = "omega_lgmods_v4736";
-const LS_BANKROLL= "omega_bankroll_v4736";
+const API_BASE    = "https://v3.football.api-sports.io";
+const API_KEY     = "956cbd05f9e9bf934df78d9b72d9a3a0";
+const LS_PREDS    = "omega_preds_v4736";
+const LS_SETTINGS = "omega_settings_v4736";
+const LS_LGMODS   = "omega_lgmods_v4736";
+const LS_BANKROLL = "omega_bankroll_v4736";
 
 const LEAGUES_DATA = [
   {id:2,name:"Champions League"},{id:3,name:"Europa League"},{id:848,name:"Conference League"},
@@ -394,11 +386,11 @@ const LEAGUES_DATA = [
   {id:253,name:"MLS (US)"},{id:262,name:"Liga MX (MX)"},{id:197,name:"Super League (GR)"},
   {id:357,name:"Premier Division (IE)"}
 ];
-const LEAGUE_IDS  = LEAGUES_DATA.map(l => l.id);
+const LEAGUE_IDS    = LEAGUES_DATA.map(l => l.id);
 const TRAP_LEAGUES  = new Set([40,41,136,141,79,62,6,10,66,357]);
 const TIGHT_LEAGUES = new Set([61,94,197,135,140,39,2,3,848]);
 const GOLD_LEAGUES  = new Set([78,262,88,253]);
-const MY_LEAGUES_IDS = [39, 78, 88, 144, 140, 135, 197, 253]; 
+const MY_LEAGUES_IDS = [39, 78, 88, 144, 140, 135, 197, 253];
 
 let teamStatsCache = new Map(), lastFixCache = new Map(), standCache = new Map(), h2hCache = new Map();
 let isRunning = false, currentCredits = null;
@@ -414,22 +406,16 @@ function loadBankroll() {
   try { const b = JSON.parse(localStorage.getItem(LS_BANKROLL)); if(b) bankrollData = b; } catch {}
   updateBankrollDisplay();
 }
-
 function updateBankrollDisplay() {
   const el = document.getElementById('bankrollDisplay');
   if(el) el.textContent = bankrollData.current > 0 ? `€${bankrollData.current.toFixed(2)}` : 'Set';
 }
-
 function openBankroll() {
   document.getElementById('bankrollModal').style.display = 'flex';
   document.getElementById('bankrollInput').value = bankrollData.current || '';
   renderBankrollHistory();
 }
-
-function closeBankroll() {
-  document.getElementById('bankrollModal').style.display = 'none';
-}
-
+function closeBankroll() { document.getElementById('bankrollModal').style.display = 'none'; }
 function saveBankroll() {
   const val = parseFloat(document.getElementById('bankrollInput').value);
   if(isNaN(val) || val <= 0) { showErr('Εισάγετε έγκυρο ποσό.'); return; }
@@ -443,7 +429,6 @@ function saveBankroll() {
   renderBankrollHistory();
   showOk(`Bankroll ενημερώθηκε: €${val.toFixed(2)}`);
 }
-
 function renderBankrollHistory() {
   const div = document.getElementById('bankrollHistory');
   if(!bankrollData.history.length) { div.innerHTML = ''; return; }
@@ -451,18 +436,11 @@ function renderBankrollHistory() {
   bankrollData.history.slice(0, 8).forEach(h => {
     const diff = h.amount - h.prev;
     const col = diff >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
-    html += `<tr>
-      <td>${h.date}</td>
-      <td>€${Number(h.prev).toFixed(2)}</td>
-      <td>€${Number(h.amount).toFixed(2)}</td>
-      <td style="color:${col}">${diff >= 0 ? '+' : ''}€${diff.toFixed(2)}</td>
-    </tr>`;
+    html += `<tr><td>${h.date}</td><td>€${Number(h.prev).toFixed(2)}</td><td>€${Number(h.amount).toFixed(2)}</td><td style="color:${col}">${diff >= 0 ? '+' : ''}€${diff.toFixed(2)}</td></tr>`;
   });
   html += `</tbody></table>`;
   div.innerHTML = html;
 }
-
-// Kelly Criterion: f* = (bp - q) / b  where b=odds-1, p=win prob, q=1-p
 function kellyStake(winProb, odds, fraction=0.25) {
   if(!bankrollData.current || bankrollData.current <= 0 || !winProb || !odds || odds <= 1) return null;
   const b = odds - 1;
@@ -470,8 +448,49 @@ function kellyStake(winProb, odds, fraction=0.25) {
   const q = 1 - p;
   const kelly = (b * p - q) / b;
   if(kelly <= 0) return null;
-  const stake = bankrollData.current * kelly * fraction; // fractional Kelly
-  return Math.max(0.5, Math.min(stake, bankrollData.current * 0.20)); // cap at 20% bankroll
+  const stake = bankrollData.current * kelly * fraction;
+  return Math.max(0.5, Math.min(stake, bankrollData.current * 0.20));
+}
+
+// ================================================================
+//  PARALLEL API QUEUE — concurrency 8, staggered start
+// ================================================================
+const _apiQueue = [];
+let _activeRequests = 0;
+const MAX_CONCURRENT = 8;
+const REQUEST_GAP_MS = 260; // ms to wait after each request completes before reusing that slot
+
+async function apiReq(path) {
+  return new Promise((resolve) => {
+    _apiQueue.push({ path, resolve });
+    _drainQueue();
+  });
+}
+
+async function _drainQueue() {
+  // Kick off as many parallel slots as available
+  while (_activeRequests < MAX_CONCURRENT && _apiQueue.length > 0) {
+    const { path, resolve } = _apiQueue.shift();
+    _activeRequests++;
+    _executeRequest(path, resolve);
+  }
+}
+
+async function _executeRequest(path, resolve) {
+  // Small random stagger (0–100ms) to avoid burst collisions
+  await new Promise(r => setTimeout(r, Math.random() * 100));
+  try {
+    const r = await fetch(`${API_BASE}/${path}`, { headers: { 'x-apisports-key': API_KEY } });
+    if (typeof currentCredits === 'number') { currentCredits--; updateCredits(currentCredits); }
+    resolve(r.ok ? await r.json() : { response: [] });
+  } catch {
+    resolve({ response: [] });
+  } finally {
+    // Hold slot briefly, then release and drain again
+    await new Promise(r => setTimeout(r, REQUEST_GAP_MS));
+    _activeRequests--;
+    _drainQueue();
+  }
 }
 
 // ================================================================
@@ -483,7 +502,6 @@ function poissonProb(lambda, k) {
   for(let i = 1; i <= k; i++) logP -= Math.log(i);
   return Math.exp(logP);
 }
-
 function getPoissonMatrix(hLambda, aLambda, maxGoals=5) {
   const matrix = [];
   for(let h = 0; h <= maxGoals; h++) {
@@ -494,18 +512,14 @@ function getPoissonMatrix(hLambda, aLambda, maxGoals=5) {
   }
   return matrix;
 }
-
 function getPoissonProbabilities(hLambda, aLambda) {
   const m = getPoissonMatrix(hLambda, aLambda, 6);
   let pHome=0, pDraw=0, pAway=0, pO25=0, pO35=0, pU25=0, pBTTS=0;
   let bestScore = { h:1, a:1, prob: 0 };
-  
   for(let h = 0; h <= 6; h++) {
     for(let a = 0; a <= 6; a++) {
       const p = m[h]?.[a] ?? 0;
-      if(h > a) pHome += p;
-      else if(h < a) pAway += p;
-      else pDraw += p;
+      if(h > a) pHome += p; else if(h < a) pAway += p; else pDraw += p;
       if(h + a > 2.5) pO25 += p;
       if(h + a > 3.5) pO35 += p;
       if(h + a < 2.5) pU25 += p;
@@ -515,7 +529,6 @@ function getPoissonProbabilities(hLambda, aLambda) {
   }
   return { pHome, pDraw, pAway, pO25, pO35, pU25, pBTTS, bestScore, matrix: m };
 }
-
 function getPoissonMatrixHTML(hLambda, aLambda, maxG=4) {
   const m = getPoissonMatrix(hLambda, aLambda, maxG);
   let html = `<div class="poisson-grid" style="grid-template-columns: 20px repeat(${maxG+1}, 1fr);">`;
@@ -526,11 +539,11 @@ function getPoissonMatrixHTML(hLambda, aLambda, maxG=4) {
     for(let a = 0; a <= maxG; a++) {
       const prob = (m[h][a] * 100);
       const intensity = Math.min(prob / 12, 1);
-      const r = Math.round(14 * (1-intensity) + 16 * intensity);
-      const g = Math.round(165 * (1-intensity) + 185 * intensity);
-      const b = Math.round(233 * (1-intensity) + 129 * intensity);
+      const r2 = Math.round(14 * (1-intensity) + 16 * intensity);
+      const g2 = Math.round(165 * (1-intensity) + 185 * intensity);
+      const b2 = Math.round(233 * (1-intensity) + 129 * intensity);
       const textCol = prob > 6 ? '#000' : 'var(--text-main)';
-      html += `<div class="poisson-cell" style="background:rgba(${r},${g},${b},${intensity*0.8+0.05});color:${textCol}">${prob.toFixed(1)}%</div>`;
+      html += `<div class="poisson-cell" style="background:rgba(${r2},${g2},${b2},${intensity*0.8+0.05});color:${textCol}">${prob.toFixed(1)}%</div>`;
     }
   }
   html += `</div>`;
@@ -538,7 +551,7 @@ function getPoissonMatrixHTML(hLambda, aLambda, maxG=4) {
 }
 
 // ================================================================
-//  WEIGHTED FORM (πιο πρόσφατα ματς = μεγαλύτερο βάρος)
+//  WEIGHTED FORM
 // ================================================================
 function weightedRecentXG(fixtures, teamId) {
   const weights = [0.30, 0.25, 0.20, 0.12, 0.08, 0.05];
@@ -569,7 +582,6 @@ function loadSettings() {
   syncUIFromSettings();
   buildLeagueModTable();
 }
-
 function syncUIFromSettings() {
   const map = {
     cfg_wShotsOn:'wShotsOn', cfg_wShotsOff:'wShotsOff', cfg_wCorners:'wCorners', cfg_wGoals:'wGoals',
@@ -578,7 +590,6 @@ function syncUIFromSettings() {
   };
   for(const [id,key] of Object.entries(map)) { const el = document.getElementById(id); if(el) el.value = engineConfig[key]; }
 }
-
 function saveSettings() {
   const map = {
     cfg_wShotsOn:'wShotsOn', cfg_wShotsOff:'wShotsOff', cfg_wCorners:'wCorners', cfg_wGoals:'wGoals',
@@ -588,15 +599,13 @@ function saveSettings() {
   for(const [id,key] of Object.entries(map)) { const v = parseFloat(document.getElementById(id)?.value); if(!isNaN(v)) engineConfig[key] = v; }
   try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch {}
   showOk("Global Parameters Saved!");
-  buildLeagueModTable(); 
+  buildLeagueModTable();
 }
-
 function resetSettings() {
   engineConfig = {...DEFAULT_SETTINGS}; syncUIFromSettings();
   try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch {}
   showOk("Restored Defaults."); buildLeagueModTable();
 }
-
 function buildLeagueModTable(auditStats={}) {
   const tbody = document.getElementById('leagueModBody'); if(!tbody) return;
   tbody.innerHTML = '';
@@ -623,14 +632,12 @@ function buildLeagueModTable(auditStats={}) {
     </tr>`;
   });
 }
-
 function defaultLeagueMult(id) {
   if(GOLD_LEAGUES.has(id))  return engineConfig.modGold;
   if(TRAP_LEAGUES.has(id))  return engineConfig.modTrap;
   if(TIGHT_LEAGUES.has(id)) return engineConfig.modTight;
   return 1.00;
 }
-
 function saveLeagueMods(silent=false) {
   LEAGUES_DATA.forEach(l => {
     const mult    = parseFloat(document.getElementById(`lm_mult_${l.id}`)?.value);
@@ -652,9 +659,7 @@ function saveLeagueMods(silent=false) {
   try { localStorage.setItem(LS_LGMODS, JSON.stringify(leagueMods)); } catch {}
   if(!silent) showOk("League Modifiers Saved!");
 }
-
 function resetLeagueMods() { leagueMods = {}; try { localStorage.removeItem(LS_LGMODS); } catch {} buildLeagueModTable(); showOk("League Modifiers Reset."); }
-
 function getLeagueParams(leagueId) {
   const lm = leagueMods[leagueId] || {};
   return {
@@ -666,7 +671,6 @@ function getLeagueParams(leagueId) {
     xgDiff:   lm.xgDiff   !== undefined ? lm.xgDiff   : engineConfig.xG_Diff
   };
 }
-
 function flashElement(el) {
   if(!el) return;
   const original = el.style.background;
@@ -679,10 +683,10 @@ window.applyAdvisorItem = function(settingKey, val, leagueId) {
   if (leagueId && leagueId !== 'ALL') {
     if (!leagueMods[leagueId]) leagueMods[leagueId] = {};
     let fieldId = "";
-    if (settingKey === 'tXG_O25')    { leagueMods[leagueId].minXGO25 = val; fieldId = `lm_minO25_${leagueId}`; }
+    if (settingKey === 'tXG_O25')      { leagueMods[leagueId].minXGO25 = val; fieldId = `lm_minO25_${leagueId}`; }
     else if (settingKey === 'tXG_O35') { leagueMods[leagueId].minXGO35 = val; fieldId = `lm_minO35_${leagueId}`; }
-    else if (settingKey === 'tBTTS')   { leagueMods[leagueId].minBTTS = val; fieldId = `lm_minBTTS_${leagueId}`; }
-    else if (settingKey === 'xG_Diff') { leagueMods[leagueId].xgDiff = val; fieldId = `lm_xgDiff_${leagueId}`; }
+    else if (settingKey === 'tBTTS')   { leagueMods[leagueId].minBTTS  = val; fieldId = `lm_minBTTS_${leagueId}`; }
+    else if (settingKey === 'xG_Diff') { leagueMods[leagueId].xgDiff   = val; fieldId = `lm_xgDiff_${leagueId}`; }
     const el = document.getElementById(fieldId);
     if(el) { el.value = val; flashElement(el); }
     saveLeagueMods(true);
@@ -692,12 +696,11 @@ window.applyAdvisorItem = function(settingKey, val, leagueId) {
     const inputId = keyMap[settingKey];
     engineConfig[settingKey] = val;
     if(inputId) { const el = document.getElementById(inputId); if(el) { el.value = val; flashElement(el); } }
-    try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch{}
+    try { localStorage.setItem(LS_SETTINGS, JSON.stringify(engineConfig)); } catch {}
     buildLeagueModTable();
     showOk(`Applied ${val} to Global Config.`);
   }
 };
-
 window.applyAllAdvisor = function(encoded, leagueId) {
   const pairs = encoded.split('|');
   pairs.forEach(p => { const [key, val] = p.split(','); window.applyAdvisorItem(key, val, leagueId); });
@@ -705,34 +708,7 @@ window.applyAllAdvisor = function(encoded, leagueId) {
 };
 
 // ================================================================
-//  API QUEUE (proper rate limiting)
-// ================================================================
-const _apiQueue = [];
-let _apiRunning = false;
-
-async function apiReq(path) {
-  return new Promise((resolve) => {
-    _apiQueue.push({ path, resolve });
-    if(!_apiRunning) _processApiQueue();
-  });
-}
-
-async function _processApiQueue() {
-  _apiRunning = true;
-  while(_apiQueue.length > 0) {
-    const { path, resolve } = _apiQueue.shift();
-    try {
-      const r = await fetch(`${API_BASE}/${path}`, { headers: { 'x-apisports-key': API_KEY } });
-      if(typeof currentCredits === 'number') { currentCredits--; updateCredits(currentCredits); }
-      if(!r.ok) { resolve({ response: [] }); } else { resolve(await r.json()); }
-    } catch { resolve({ response: [] }); }
-    await new Promise(r => setTimeout(r, 310));
-  }
-  _apiRunning = false;
-}
-
-// ================================================================
-//  EXPORT / IMPORT / LIVE SYNC
+//  EXPORT / IMPORT
 // ================================================================
 window.exportData = function() {
   if (!window.scannedMatchesData || !window.scannedMatchesData.length) { showErr("No data to export."); return; }
@@ -742,7 +718,6 @@ window.exportData = function() {
   URL.revokeObjectURL(url);
   showOk("Data exported!");
 };
-
 window.importData = function(event) {
   const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
@@ -761,18 +736,85 @@ window.importData = function(event) {
   reader.readAsText(file);
 };
 
+// ================================================================
+//  LIVE EVENTS PARSER
+//  Parses fixtures/events response to extract corners, cards, goals
+// ================================================================
+function parseEventsForStats(events) {
+  let corners = 0, yellowCards = 0, redCards = 0, goals = { home: 0, away: 0 };
+  (events || []).forEach(ev => {
+    const type   = (ev.type   || '').toLowerCase();
+    const detail = (ev.detail || '').toLowerCase();
+    const teamId = ev.team?.id;
+
+    if (type === 'corner') {
+      corners++;
+    } else if (type === 'card') {
+      if (detail.includes('yellow')) yellowCards++;
+      else if (detail.includes('red') && !detail.includes('yellow')) redCards++;
+    } else if (type === 'goal' && !detail.includes('missed') && !detail.includes('cancelled')) {
+      // goals counted via fixture.goals, but parse here as fallback
+    }
+  });
+  return {
+    corners,
+    yellowCards,
+    redCards,
+    totalCards: yellowCards + redCards
+  };
+}
+
+// ================================================================
+//  LIVE SYNC — score + corners + cards (one events call per live match)
+// ================================================================
 window.syncLiveScores = async function() {
-  if(isRunning) return;
-  const btn = document.getElementById('btnSyncLive'); if(btn) { btn.innerText='Syncing...'; btn.disabled=true; }
+  if (isRunning) return;
+  const btn = document.getElementById('btnSyncLive');
+  if (btn) { btn.innerText = 'Syncing...'; btn.disabled = true; }
   try {
+    // Step 1: get all live fixtures (1 credit)
     const res = await apiReq('fixtures?live=all');
-    const map = new Map((res.response||[]).map(f=>[f.fixture.id, f]));
-    let upd = 0;
-    window.scannedMatchesData.forEach(d => { if(map.has(d.fixId)) { const ld=map.get(d.fixId); d.m.goals=ld.goals; d.m.fixture.status=ld.fixture.status; upd++; } });
-    if(upd > 0) { renderSummaryTable(); filterFeed(); showOk(`Synced ${upd} live matches.`); }
-    else showOk('No live matches in current set.');
-  } catch(e) { showErr("Sync error: "+e.message); }
-  finally { if(btn) { btn.innerText='Live Sync'; btn.disabled=false; } }
+    const liveFixtures = res.response || [];
+    if (!liveFixtures.length) { showOk('No live matches right now.'); return; }
+
+    const liveMap = new Map(liveFixtures.map(f => [f.fixture.id, f]));
+
+    // Step 2: find which of our scanned matches are live
+    const liveScanned = window.scannedMatchesData.filter(d => liveMap.has(d.fixId));
+    if (!liveScanned.length) { showOk('No live matches in current scan set.'); return; }
+
+    // Step 3: fetch events for ALL live matches in parallel (1 credit each, all fire at once)
+    const eventPromises = liveScanned.map(d => apiReq(`fixtures/events?fixture=${d.fixId}`));
+    const eventResults  = await Promise.all(eventPromises);
+
+    // Step 4: update each match record
+    let updCount = 0;
+    liveScanned.forEach((d, i) => {
+      const liveData = liveMap.get(d.fixId);
+
+      // Update score & status from live feed
+      d.m.goals           = liveData.goals;
+      d.m.fixture.status  = liveData.fixture.status;
+
+      // Parse events for corners + cards
+      const evStats = parseEventsForStats(eventResults[i]?.response || []);
+      d.liveCorners = evStats.corners;
+      d.liveCards   = evStats.totalCards;
+      d.liveYellows = evStats.yellowCards;
+      d.liveReds    = evStats.redCards;
+
+      updCount++;
+    });
+
+    // Re-render
+    renderSummaryTable();
+    filterFeed();
+    showOk(`Synced ${updCount} live match${updCount !== 1 ? 'es' : ''} · Score + Corners + Cards`);
+  } catch (e) {
+    showErr('Sync error: ' + e.message);
+  } finally {
+    if (btn) { btn.innerText = 'Live Sync'; btn.disabled = false; }
+  }
 };
 
 // ================================================================
@@ -786,9 +828,9 @@ document.getElementById('pin').addEventListener('input', function() {
   }
 });
 
-const safeNum = (x, d=0)  => Number.isFinite(Number(x)) ? Number(x) : d;
-const clamp   = (n,mn,mx) => Math.max(mn, Math.min(mx, n));
-const isLive  = s => ["1H","2H","HT","LIVE","ET","BT","P"].includes(s);
+const safeNum  = (x, d=0) => Number.isFinite(Number(x)) ? Number(x) : d;
+const clamp    = (n,mn,mx) => Math.max(mn, Math.min(mx, n));
+const isLive   = s => ["1H","2H","HT","LIVE","ET","BT","P"].includes(s);
 const isFinished = s => ["FT","AET","PEN"].includes(s);
 const esc = str => String(str ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const todayISO = () => new Date().toISOString().split('T')[0];
@@ -799,7 +841,6 @@ window.togglePanel = function(panelId, arrowId) {
   if(p.style.display==='none'){p.style.display='block';if(a)a.innerText='▲';}
   else{p.style.display='none';if(a)a.innerText='▼';}
 };
-
 function setLoader(show, text='') {
   document.getElementById('loader').style.display=show?'block':'none';
   document.getElementById('status').textContent=text;
@@ -807,7 +848,7 @@ function setLoader(show, text='') {
 }
 function setProgress(pct, text='') {
   document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%';
-  document.getElementById('status').textContent=text;
+  document.getElementById('status').textContent=text + (_activeRequests > 0 ? ` [${_activeRequests} active]` : '');
 }
 function setBtnsDisabled(d) { ["btnPre","leagueFilter","auditLeague"].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=d;}); }
 
@@ -861,7 +902,6 @@ const statVal      = (arr,type) => parseFloat(String((arr.find(x=>x.type===type)
 
 function getFormHistory(fixtures,teamId){return fixtures.map(f=>{const my=getTeamGoals(f,teamId),op=getOppGoals(f,teamId);return my>op?{res:'W',cls:'W'}:(my<op?{res:'L',cls:'L'}:{res:'D',cls:'D'});}).reverse();}
 function devBadge(curr,base){if(!base||base<=0)return`<span class="dev-badge"></span>`;const d=(((parseFloat(curr)-base)/base)*100).toFixed(1);return`<span class="dev-badge ${d>=0?'dev-pos':'dev-neg'}">${d>0?'+':''}${d}%</span>`;}
-
 function estXG(arr,g=0){return(statVal(arr,'Shots on Goal')*engineConfig.wShotsOn)+(statVal(arr,'Shots off Goal')*engineConfig.wShotsOff)+(statVal(arr,'Corner Kicks')*engineConfig.wCorners)+(g*engineConfig.wGoals)||0.60+g*0.25;}
 
 async function batchCalc(list,tId){
@@ -884,11 +924,10 @@ async function buildIntel(tId,lg,s,isHome){
   const gen=allFix.slice(0,6);const split=allFix.filter(f=>(isHome?f.teams.home.id:f.teams.away.id)===tId).slice(0,6);
   const[fData,sData]=await Promise.all([batchCalc(gen,tId),batchCalc(split,tId)]);
   const baseXG=parseFloat(ss?.goals?.for?.average?.total)||1.10;const baseXGA=parseFloat(ss?.goals?.against?.average?.total)||1.10;
-  // Weighted form
   const wXG = weightedRecentXG(gen, tId);
   return{
     fXG:safeNum(fData.xg), fXGA:safeNum(fData.xga), sXG:safeNum(sData.xg), sXGA:safeNum(sData.xga),
-    wXG: wXG,
+    wXG,
     cor:safeNum(fData.cor), crd:safeNum(fData.crd), scrd:safeNum(sData.crd||fData.crd),
     uiXG:fData.xg, uiXGA:fData.xga, uiDevXG:devBadge(fData.xg,baseXG), uiDevXGA:devBadge(fData.xga,baseXGA),
     uiSXG:sData.xg, uiSXGA:sData.xga, history:getFormHistory(gen,tId)
@@ -905,10 +944,9 @@ function summarizeH2H(fixtures,homeId,awayId){
 }
 
 // ================================================================
-//  PICK ENGINE (shared by analyzeMatch & resimulate)
+//  PICK ENGINE
 // ================================================================
 function computePick(hXG, aXG, tXG, bttsScore, cor, totCards, lp, hS, aS) {
-  // Poisson probabilities
   const hLambda = clamp((hXG * 0.5) + (safeNum(hS?.wXG) * 0.3) + (safeNum(aS?.fXGA) * 0.2) * lp.mult, 0.15, 4.0);
   const aLambda = clamp((aXG * 0.5) + (safeNum(aS?.wXG) * 0.3) + (safeNum(hS?.fXGA) * 0.2) * lp.mult, 0.15, 4.0);
   const pp = getPoissonProbabilities(hLambda, aLambda);
@@ -922,25 +960,21 @@ function computePick(hXG, aXG, tXG, bttsScore, cor, totCards, lp, hS, aS) {
   if(pp.pHome - pp.pAway > 0.15 && xgDiff > lp.xgDiff) outPick = "1";
   else if(pp.pAway - pp.pHome > 0.15 && xgDiff < -lp.xgDiff) outPick = "2";
 
-  // Adjust exact score to match 1X2 pick
   if(outPick === "1" && hG <= aG) { hG = aG + 1; }
   if(outPick === "2" && aG <= hG) { aG = hG + 1; }
   
-  const exactConf = Math.round(pp.bestScore.prob * 100 * 8); // scale to 0-100 approx
+  const exactConf = Math.round(pp.bestScore.prob * 100 * 8);
 
   let omegaPick = "NO BET", reason = "Insufficient statistical edge.", pickScore = 0;
   
-  // Use Poisson probabilities for decisions
   if(pp.pO35 >= 0.42 && tXG >= lp.minXGO35 && bttsScore >= 1.20)  { omegaPick = "🚀 OVER 3.5 GOALS"; pickScore = pp.pO35 * 100; reason = `Poisson O3.5: ${(pp.pO35*100).toFixed(1)}%`; }
   else if(pp.pO25 >= 0.52 && tXG >= lp.minXGO25 && bttsScore >= 0.85) { omegaPick = "🔥 OVER 2.5 GOALS"; pickScore = pp.pO25 * 100; reason = `Poisson O2.5: ${(pp.pO25*100).toFixed(1)}%`; }
-  // FIX: UNDER 2.5 - low tXG + low btts + poisson support
   else if(pp.pU25 >= 0.55 && tXG <= lp.maxU25 && bttsScore <= engineConfig.tBTTS_U25) { omegaPick = "🔒 UNDER 2.5 GOALS"; pickScore = pp.pU25 * 100; reason = `Poisson U2.5: ${(pp.pU25*100).toFixed(1)}%`; }
   else if(bttsScore >= lp.minBTTS && pp.pBTTS >= 0.45)              { omegaPick = "🎯 GOAL/GOAL (BTTS)"; pickScore = pp.pBTTS * 100; reason = `Poisson BTTS: ${(pp.pBTTS*100).toFixed(1)}%`; }
-  else if(outPick !== "X" && Math.abs(xgDiff) >= lp.xgDiff + 0.10) { 
-    // FIX: correct emoji for combos
+  else if(outPick !== "X" && Math.abs(xgDiff) >= lp.xgDiff + 0.10) {
     const outcome = outPick === "1" ? "🏠 ΑΣΟΣ" : "✈️ ΔΙΠΛΟ";
     const outProb = outPick === "1" ? pp.pHome : pp.pAway;
-    omegaPick = outProb >= 0.55 ? `⚡ ${outcome}` : outcome; 
+    omegaPick = outProb >= 0.55 ? `⚡ ${outcome}` : outcome;
     pickScore = outProb * 100;
     reason = `Poisson ${outPick==='1'?'Home':'Away'}: ${(outProb*100).toFixed(1)}%`;
   }
@@ -951,7 +985,7 @@ function computePick(hXG, aXG, tXG, bttsScore, cor, totCards, lp, hS, aS) {
 }
 
 // ================================================================
-//  RENDER FUNCTIONS
+//  RENDER: MATCH CARD
 // ================================================================
 function getMatchCardHTML(d) {
   const isUnder = d.omegaPick.includes('UNDER');
@@ -964,27 +998,40 @@ function getMatchCardHTML(d) {
   if(isBomb) { signalClass = 'signal-hit'; pickColor = 'var(--accent-purple)'; }
 
   let lockHtml='';
-  if(d.isLockO25)   lockHtml+=`<div class="lock-badge lock-o25">💎 HIGH CONFIDENCE O2.5</div>`;
-  if(d.isLockBTTS)  lockHtml+=`<div class="lock-badge lock-btts">🎯 HIGH CONFIDENCE BTTS</div>`;
-  if(d.isLockU25)   lockHtml+=`<div class="lock-badge lock-under">🔒 HIGH CONFIDENCE U2.5</div>`;
+  if(d.isLockO25)  lockHtml+=`<div class="lock-badge lock-o25">💎 HIGH CONFIDENCE O2.5</div>`;
+  if(d.isLockBTTS) lockHtml+=`<div class="lock-badge lock-btts">🎯 HIGH CONFIDENCE BTTS</div>`;
+  if(d.isLockU25)  lockHtml+=`<div class="lock-badge lock-under">🔒 HIGH CONFIDENCE U2.5</div>`;
 
+  // Score display
   let scoreHtml='';
-  if(d.m?.goals?.home!=null){
-    const live=isLive(d.m.fixture.status.short);
-    const col=live?'var(--accent-green)':'var(--text-main)';
-    const el=live?`<span style="font-size:0.8rem;color:var(--accent-green);margin-left:4px;">${d.m.fixture.status.elapsed}'</span>`:'';
-    scoreHtml=`<div class="score-display" style="color:${col}">${d.m.goals.home} - ${d.m.goals.away}${el}</div>`;
+  if(d.m?.goals?.home != null){
+    const live = isLive(d.m.fixture.status.short);
+    const col  = live ? 'var(--accent-green)' : 'var(--text-main)';
+    const el   = live ? `<span style="font-size:0.8rem;color:var(--accent-green);margin-left:4px;">${d.m.fixture.status.elapsed}'</span>` : '';
+    scoreHtml  = `<div class="score-display" style="color:${col}">${d.m.goals.home} - ${d.m.goals.away}${el}</div>`;
   }
 
-  const rankBadge=r=>r&&r!==99?`<span class="team-rank">#${r}</span>`:'';
-  const formHtml = (hist) => `<div style="display:flex;gap:3px;margin-top:4px;">${(hist||[]).slice(0,5).map(h=>`<div class="form-dot form-${h.cls}">${h.res}</div>`).join('')}</div>`;
-  const h2hStr = d.h2h ? `H2H (Last 8): ${d.h2h.homeWins}W - ${d.h2h.draws}D - ${d.h2h.awayWins}W` : 'H2H: N/A';
+  // Live stats badges (corners + cards from live sync)
+  let liveStatsBadges = '';
+  if (d.liveCorners !== undefined) {
+    liveStatsBadges = `
+    <div style="margin-top:6px; display:flex; gap:5px; justify-content:flex-end; flex-wrap:wrap;">
+      <span class="live-stat-badge" style="background:rgba(20,184,166,0.1); border-color:rgba(20,184,166,0.3); color:var(--accent-teal);">
+        🚩 COR: ${d.liveCorners}
+      </span>
+      <span class="live-stat-badge" style="background:rgba(245,158,11,0.1); border-color:rgba(245,158,11,0.3); color:var(--accent-gold);">
+        🟨 ${d.liveYellows}${d.liveReds > 0 ? ` 🟥${d.liveReds}` : ''}
+      </span>
+    </div>`;
+  }
 
-  // Confidence bar
+  const rankBadge = r => r && r !== 99 ? `<span class="team-rank">#${r}</span>` : '';
+  const formHtml  = (hist) => `<div style="display:flex;gap:3px;margin-top:4px;">${(hist||[]).slice(0,5).map(h=>`<div class="form-dot form-${h.cls}">${h.res}</div>`).join('')}</div>`;
+  const h2hStr    = d.h2h ? `H2H (Last 8): ${d.h2h.homeWins}W - ${d.h2h.draws}D - ${d.h2h.awayWins}W` : 'H2H: N/A';
+
   const conf = Math.min(Math.max(safeNum(d.strength), 0), 100);
   const confColor = conf >= 70 ? 'var(--accent-green)' : conf >= 50 ? 'var(--accent-gold)' : 'var(--accent-red)';
 
-  // Kelly stake
   let kellyHtml = '';
   if(bankrollData.current > 0 && !isNoBet) {
     const prob = safeNum(d.strength) / 100;
@@ -999,14 +1046,17 @@ function getMatchCardHTML(d) {
     }
   }
 
-  // Poisson matrix
   const poissonHtml = d.hExp && d.aExp ? getPoissonMatrixHTML(safeNum(d.hExp), safeNum(d.aExp), 4) : '';
+
+  // Live indicator in match header
+  const isMatchLive = isLive(d.m?.fixture?.status?.short);
+  const liveIndicator = isMatchLive ? `<span class="live-dot"></span>` : '';
 
   return `
   <div class="match-card" id="card-${d.fixId}">
     <div class="match-header">
       <div>
-        <div class="match-league"><span class="league-badge">${esc(d.m?.fixture?.status?.short || 'FT')}</span> ${esc(d.lg)}</div>
+        <div class="match-league">${liveIndicator}<span class="league-badge">${esc(d.m?.fixture?.status?.short || 'FT')}</span> ${esc(d.lg)}</div>
         <div style="display:flex; flex-direction:column; gap:8px;">
           <div><div class="team-name">${esc(d.ht)}${rankBadge(d.hr)}</div>${formHtml(d.hS?.history)}</div>
           <div><div class="team-name" style="color:var(--text-muted)">${esc(d.at)}${rankBadge(d.ar)}</div>${formHtml(d.aS?.history)}</div>
@@ -1015,6 +1065,7 @@ function getMatchCardHTML(d) {
       <div class="score-box">
         ${scoreHtml}
         <div class="total-xg-badge">Total xG: ${Number(d.tXG).toFixed(2)}</div>
+        ${liveStatsBadges}
       </div>
     </div>
     ${lockHtml?`<div style="margin-bottom:12px">${lockHtml}</div>`:''}
@@ -1048,6 +1099,15 @@ function getMatchCardHTML(d) {
         <div class="stat-row"><span class="stat-lbl">Split xG</span><span class="stat-val">${d.hS?.uiSXG||'0.00'} <span style="color:var(--text-muted)">vs</span> ${d.aS?.uiSXG||'0.00'}</span></div>
         <div class="stat-row"><span class="stat-lbl">Proj Corners</span><span class="stat-val">${Number(d.hCors||0).toFixed(1)} <span style="color:var(--text-muted)">vs</span> ${Number(d.aCors||0).toFixed(1)}</span></div>
         <div class="stat-row"><span class="stat-lbl">Exp. Cards</span><span class="stat-val">${Number(d.hS?.crd||0).toFixed(1)} <span style="color:var(--text-muted)">vs</span> ${Number(d.aS?.crd||0).toFixed(1)}</span></div>
+        ${d.liveCorners !== undefined ? `
+        <div class="stat-row" style="border-top:1px solid var(--border-light);margin-top:6px;padding-top:6px;">
+          <span class="stat-lbl" style="color:var(--accent-teal)">Live Corners</span>
+          <span class="stat-val" style="color:var(--accent-teal)">${d.liveCorners}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-lbl" style="color:var(--accent-gold)">Live Cards (Y/R)</span>
+          <span class="stat-val" style="color:var(--accent-gold)">${d.liveYellows} / ${d.liveReds}</span>
+        </div>` : ''}
       </div>
     </div>
 
@@ -1060,9 +1120,11 @@ function getMatchCardHTML(d) {
   </div>`;
 }
 
+// ================================================================
+//  TOP LISTS & SUMMARY
+// ================================================================
 function rebuildTopLists() {
   latestTopLists.combo2   = window.scannedMatchesData.filter(x=>x.omegaPick.includes('👑')).sort((a,b)=>b.strength-a.strength).slice(0,5);
-  // FIX: ⚡ combos = matches with ΑΣΟΣ/ΔΙΠΛΟ that have high confidence
   latestTopLists.combo1   = window.scannedMatchesData.filter(x=>x.omegaPick.includes('⚡')).sort((a,b)=>b.strength-a.strength).slice(0,5);
   latestTopLists.outcomes = window.scannedMatchesData.filter(x=>x.omegaPick.includes('ΑΣΟΣ')||x.omegaPick.includes('ΔΙΠΛΟ')).sort((a,b)=>b.strength-a.strength).slice(0,5);
   latestTopLists.exact    = [...window.scannedMatchesData].sort((a,b)=>b.exactConf-a.exactConf).slice(0,5);
@@ -1079,7 +1141,7 @@ function renderSummaryTable() {
   let html=`<div class="quant-panel" style="padding:0; overflow:hidden;">
     <div class="toolbar" style="padding:16px 20px; border-bottom:1px solid var(--border-light); margin:0;">
       <div class="panel-title" style="margin:0; color:var(--accent-blue);">📊 Summary Dashboard</div>
-      <div style="margin-left:auto;"><button id="btnSyncLive" onclick="syncLiveScores()" class="btn btn-outline" style="padding:6px 12px; font-size:0.7rem;">Live Sync</button></div>
+      <div style="margin-left:auto;"><button id="btnSyncLive" onclick="syncLiveScores()" class="btn btn-outline" style="padding:6px 12px; font-size:0.7rem;"><span class="live-dot"></span>Live Sync</button></div>
     </div>`;
 
   for(const [lg,matches] of Object.entries(grouped)){
@@ -1102,8 +1164,8 @@ function renderSummaryTable() {
       let isU25=x.omegaPick?.includes('UNDER 2.5')?'🔒':'-';
       let colO25=isO25==='🔥'?'var(--accent-gold)':'var(--text-muted)';
       let colU25=isU25==='🔒'?'var(--accent-teal)':'var(--text-muted)';
-      if((isFin||isLiveNow)&&isO25!=='- ')colO25=aTot>=3?'var(--accent-green)':(isFin?'var(--accent-red)':colO25);
-      if((isFin||isLiveNow)&&isU25!=='-') colU25=aTot<3?'var(--accent-green)':(isFin?'var(--accent-red)':colU25);
+      if((isFin||isLiveNow)&&isO25!=='-')colO25=aTot>=3?'var(--accent-green)':(isFin?'var(--accent-red)':colO25);
+      if((isFin||isLiveNow)&&isU25!=='-')colU25=aTot<3?'var(--accent-green)':(isFin?'var(--accent-red)':colU25);
 
       let isBttsF=x.omegaPick?.includes('GOAL')?'🎯':'-';
       let colBtts=isBttsF==='🎯'?'var(--accent-purple)':'var(--text-muted)';
@@ -1128,12 +1190,15 @@ function renderSummaryTable() {
       }
 
       const conf = Math.min(Math.max(safeNum(x.strength), 0), 100);
+      // Show live corners/cards indicator in score cell
+      const liveExtra = isLiveNow && x.liveCorners !== undefined
+        ? `<div style="font-size:0.6rem;color:var(--accent-teal);margin-top:2px;">🚩${x.liveCorners} 🟨${x.liveYellows}</div>` : '';
 
       html+=`<tr onclick="scrollToMatch('card-${x.fixId}')" style="cursor:pointer; ${isLiveNow?'background:rgba(16,185,129,0.05)':''}">
         <td class="col-match" style="font-weight:600;color:var(--text-main);font-family:'Inter',sans-serif;" title="${esc(x.ht)} - ${esc(x.at)}">
-          <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(x.ht)} <span style="color:var(--text-muted)">-</span> ${esc(x.at)}</div>
+          <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isLiveNow?'<span class="live-dot"></span>':''}${esc(x.ht)} <span style="color:var(--text-muted)">-</span> ${esc(x.at)}</div>
         </td>
-        <td class="col-score data-num" style="color:${scoreCol};">${scoreStr}</td>
+        <td class="col-score data-num" style="color:${scoreCol};">${scoreStr}${liveExtra}</td>
         <td class="col-1x2 data-num" style="color:${colOut};">${x.outPick}</td>
         <td class="col-o25 data-num" style="color:${colO25};">${isO25}</td>
         <td class="col-u25 data-num" style="color:${colU25};">${isU25}</td>
@@ -1158,13 +1223,11 @@ function renderTopSections() {
     {id:'under25', lbl:'Under 2.5',          d:latestTopLists.under25,  sk:'strength', sl:'CONF'},
     {id:'exact',   lbl:'Exact Score',        d:latestTopLists.exact,    sk:'exactConf',sl:'CONF'}
   ];
-
   let html=`<div class="quant-panel" style="padding:0; overflow:hidden;"><div class="tabs-wrapper">`;
   tabs.forEach((t,i)=>{
     html+=`<button class="tab-btn ${i===0?'active':''}" onclick="switchTab('${t.id}')" id="tab-btn-${t.id}">${t.lbl} <span class="tab-count">${t.d.length}</span></button>`;
   });
   html+=`</div>`;
-
   tabs.forEach((t,i)=>{
     html+=`<div class="pred-tab-panel" style="display:${i===0?'block':'none'}" id="tabpanel-${t.id}">
       <div style="padding:0 20px 20px 20px; display:flex; flex-direction:column; gap:8px;">`;
@@ -1237,13 +1300,11 @@ window.filterFeed = function(){
 function renderWallBets(){
   const wallDiv=document.getElementById('wallbetSection'); if(!window.scannedMatchesData.length){if(wallDiv)wallDiv.innerHTML='';return;}
   const safe=window.scannedMatchesData.filter(m=>(m.omegaPick?.includes('OVER 2.5')||m.omegaPick?.includes('GOAL'))&&!m.isBomb).sort((a,b)=>b.strength-a.strength);
-
   const leg=(x)=>`<div onclick="scrollToMatch('card-${x.fixId}')" style="background:var(--bg-surface); padding:12px; border-radius:var(--radius-sm); border-left:3px solid var(--accent-blue); margin-bottom:10px; cursor:pointer;">
     <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600; margin-bottom:4px;">${esc(x.ht)} vs ${esc(x.at)}</div>
     <div style="font-weight:800; font-size:0.85rem; color:var(--text-main);">🎲 ${esc(x.omegaPick)}</div>
     <div style="font-size:0.65rem; color:var(--accent-gold); margin-top:4px;">Conf: ${safeNum(x.strength).toFixed(1)}%</div>
   </div>`;
-
   let html=`<div class="quant-panel" style="border-color:var(--accent-green);">
     <div class="panel-title" style="color:var(--accent-green);">🛡️ Premium Double Bets</div>
     <div style="display:flex; flex-wrap:wrap; gap:20px;">`;
@@ -1257,7 +1318,7 @@ function renderWallBets(){
 }
 
 // ================================================================
-//  SCAN ANALYSIS ENGINE
+//  SCAN ENGINE
 // ================================================================
 async function fetchFixturesForDates(dates, selLg) {
   let all=[];
@@ -1287,16 +1348,12 @@ window.resimulateMatches = function() {
       const tXG = hXG + aXG;
       const bttsScore = Math.min(hXG, aXG);
       const cor = Number(d.hS?.cor || 0) + Number(d.aS?.cor || 0);
-      // FIX: use stored crd values, fall back to 0
       const totCards = Number(d.hS?.crd || 0) + Number(d.aS?.crd || 0);
-      
       const result = computePick(hXG, aXG, tXG, bttsScore, cor, totCards, lp, d.hS, d.aS);
-
       const totCorExp = clamp((cor*0.78)+((Number(d.hS?.sXG||0)+Number(d.aS?.sXG||0))*0.72), 5, 15);
       const hShare = clamp((result.hExp+Number(d.hS?.sXG||0)+0.25)/Math.max(result.hExp+result.aExp+Number(d.hS?.sXG||0)+Number(d.aS?.sXG||0)+0.5, 0.1), 0.38, 0.62);
       const hCors = Math.max(2,Math.round(totCorExp*hShare));
       const aCors = Math.max(2,Math.round(totCorExp-hCors));
-
       d.tXG = tXG; d.btts = bttsScore; d.outPick = result.outPick; d.xgDiff = result.xgDiff;
       d.exact = `${result.hG}-${result.aG}`; d.exactConf = result.exactConf;
       d.omegaPick = result.omegaPick; d.strength = result.pickScore; d.reason = result.reason;
@@ -1305,8 +1362,8 @@ window.resimulateMatches = function() {
       d.isLockO25  = tXG >= (lp.minXGO25+0.15) && bttsScore >= 1.00;
       d.isLockBTTS = bttsScore >= (lp.minBTTS+0.05) && tXG >= 2.50;
       d.isLockU25  = tXG <= (lp.maxU25 - 0.20) && bttsScore <= (engineConfig.tBTTS_U25 - 0.10);
-
-      toSave.push({ fixtureId:d.fixId, date:d.m.fixture.date, scanDate:todayISO(), league:d.lg, leagueId:d.leagueId,
+      toSave.push({
+        fixtureId:d.fixId, date:d.m.fixture.date, scanDate:todayISO(), league:d.lg, leagueId:d.leagueId,
         homeTeam:d.ht, awayTeam:d.at, outPick:result.outPick,
         predOver25: result.omegaPick.includes('OVER 2')||result.omegaPick.includes('OVER 3'),
         predOver35: result.omegaPick.includes('OVER 3'),
@@ -1325,28 +1382,23 @@ window.resimulateMatches = function() {
 async function analyzeMatch(m, index, total) {
   setProgress(10 + ((index+1)/total)*90, `Processing: ${m.teams.home.name}`);
   const lp = getLeagueParams(m.league.id);
-
   const [hS, aS, stand, h2hFix] = await Promise.all([
     buildIntel(m.teams.home.id, m.league.id, m.league.season, true),
     buildIntel(m.teams.away.id, m.league.id, m.league.season, false),
     getStand(m.league.id, m.league.season),
     getHeadToHead(m.teams.home.id, m.teams.away.id, m.league.id, m.league.season)
   ]);
-
   const hXG = Number(hS.fXG) * lp.mult;
   const aXG = Number(aS.fXG) * lp.mult;
   const tXG = hXG + aXG;
   const bttsScore = Math.min(hXG, aXG);
   const cor = Number(hS.cor) + Number(aS.cor);
   const totCards = Number(hS.crd) + Number(aS.crd);
-
   const result = computePick(hXG, aXG, tXG, bttsScore, cor, totCards, lp, hS, aS);
-
   const totCorExp = clamp((cor*0.78)+((Number(hS.sXG)+Number(aS.sXG))*0.72), 5, 15);
   const hShare = clamp((result.hExp+Number(hS.sXG)+0.25)/Math.max(result.hExp+result.aExp+Number(hS.sXG)+Number(aS.sXG)+0.5, 0.1), 0.38, 0.62);
   const hCors = Math.max(2,Math.round(totCorExp*hShare));
   const aCors = Math.max(2,Math.round(totCorExp-hCors));
-
   const rec = {
     m, fixId: m.fixture.id, ht: m.teams.home.name, at: m.teams.away.name,
     lg: m.league.name, leagueId: m.league.id, tXG, btts: bttsScore, cor,
@@ -1369,7 +1421,6 @@ async function runScan() {
   if(isRunning) return; isRunning=true; clearAlerts(); setBtnsDisabled(true); setLoader(true,'Initializing Engine...');
   ['topSection','summarySection','wallbetSection','matchesFeed','advisorSection'].forEach(id=>document.getElementById(id).innerHTML='');
   window.scannedMatchesData = [];
-  // FIX: clear ALL caches at start of each scan
   teamStatsCache.clear(); lastFixCache.clear(); standCache.clear(); h2hCache.clear();
   try {
     const start=document.getElementById('scanStart').value||todayISO();
@@ -1408,10 +1459,8 @@ async function runCustomAudit() {
   const s=document.getElementById('auditStart').value, e=document.getElementById('auditEnd').value;
   const lgFilter=document.getElementById('auditLeague').value;
   if(!s||!e){ showErr('Select date range.'); return; }
-
   isRunning=true; clearAlerts(); setBtnsDisabled(true); setLoader(true,'Running AI Audit...');
   ['topSection','summarySection','wallbetSection','matchesFeed','advisorSection'].forEach(id=>document.getElementById(id).innerHTML='');
-
   try {
     const endD=new Date(e); endD.setDate(endD.getDate()+1);
     const store=getPredStore();
@@ -1472,14 +1521,12 @@ async function runCustomAudit() {
     const bttsRate = stats.bttsTot>0  ?(stats.bttsHit/stats.bttsTot)*100:0;
     const exRate   = (stats.exHit/stats.games)*100;
 
-    // AI ADVISOR
     const TARGET_1X2=80, TARGET_O25=80, TARGET_O35=70, TARGET_BTTS=70, TARGET_U25=70;
     let suggestions=[];
     const currentO25  = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO25!==undefined?Number(leagueMods[lgFilter].minXGO25):Number(engineConfig.tXG_O25);
     const currentO35  = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO35!==undefined?Number(leagueMods[lgFilter].minXGO35):Number(engineConfig.tXG_O35);
     const currentBTTS = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minBTTS !==undefined?Number(leagueMods[lgFilter].minBTTS):Number(engineConfig.tBTTS);
     const currentDiff = lgFilter!=='ALL'&&leagueMods[lgFilter]?.xgDiff  !==undefined?Number(leagueMods[lgFilter].xgDiff):Number(engineConfig.xG_Diff);
-    const currentU25  = lgFilter!=='ALL'&&leagueMods[lgFilter]?.maxU25  !==undefined?Number(leagueMods[lgFilter].maxU25):Number(engineConfig.tXG_U25);
 
     if(stats.validOut>0 && outRate<TARGET_1X2) suggestions.push({key:'xG_Diff',label:'xG Diff (1X2)',rate:outRate,tgt:TARGET_1X2,oldV:currentDiff,newV:(currentDiff+0.10).toFixed(2)});
     if(stats.o25Tot>0   && o25Rate<TARGET_O25) suggestions.push({key:'tXG_O25',label:'Min xG (O2.5)',rate:o25Rate,tgt:TARGET_O25,oldV:currentO25,newV:(currentO25+0.15).toFixed(2)});
