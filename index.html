@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4742 - The Deep Quant</title>
+  <title>APEX OMEGA v4743 - The Deep Quant</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -144,6 +144,7 @@
     .score-box { text-align: right; flex-shrink: 0; }
     .score-display { font-family: var(--font-mono); font-size: 2.1rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
     .total-xg-badge { display: inline-block; font-size: 0.68rem; background: rgba(56,189,248,0.08); color: var(--accent-blue); padding: 3px 8px; border-radius: 4px; font-weight: 700; border: 1px solid rgba(56,189,248,0.18); font-family: var(--font-mono); }
+    .live-stat-badge { display: inline-block; font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; font-weight: 600; border: 1px solid; }
     .form-dot { width: 13px; height: 13px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.42rem; font-weight: 800; color: #fff; font-family: var(--font-mono); }
     .form-W { background: var(--accent-green); } .form-D { background: var(--text-muted); } .form-L { background: var(--accent-red); }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
@@ -241,7 +242,7 @@
 <body>
 
 <div class="terminal-header">
-  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4742</span></div>
+  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4743</span></div>
   <div class="header-right">
     <div class="widget-pill gold" onclick="openBankroll()" title="Bankroll Manager">
       <span class="pill-lbl gold">💰 Bankroll</span>
@@ -257,7 +258,7 @@
 <div id="apiKeyModal" class="modal-overlay" style="display:flex">
   <div class="auth-card">
     <div class="brand-logo" style="justify-content:center; font-size:1.8rem; margin-bottom:8px;">APEX<span class="accent">OMEGA</span></div>
-    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4742 · THE DEEP QUANT</div>
+    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4743 · THE DEEP QUANT</div>
     <div style="font-size:0.72rem; color:var(--text-muted); margin-top:18px; line-height:1.6;">
       Το API Key αποθηκεύεται τοπικά στον browser σου.
     </div>
@@ -296,7 +297,7 @@
           <div class="calib-item"><span class="calib-lbl">Recent Goals</span><input type="number" step="0.01" id="cfg_wGoals" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Min Total xG (O2.5)</span><input type="number" step="0.05" id="cfg_tXG_O25" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Min Total xG (O3.5)</span><input type="number" step="0.05" id="cfg_tXG_O35" class="calib-input"></div>
-          <div class="calib-item"><span class="calib-lbl" style="color:var(--accent-ice)">Max Total xG (U2.5)</span><input type="number" step="0.05" id="cfg_tXG_U25" class="calib-input"></div>
+          <div class="calib-item"><span class="calib-lbl" style="color:var(--accent-teal)">Max Total xG (U2.5)</span><input type="number" step="0.05" id="cfg_tXG_U25" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Min xG (BTTS)</span><input type="number" step="0.05" id="cfg_tBTTS" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">xG Diff (1X2)</span><input type="number" step="0.05" id="cfg_xG_Diff" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Max BTTS (U2.5)</span><input type="number" step="0.05" id="cfg_tBTTS_U25" class="calib-input"></div>
@@ -318,7 +319,7 @@
           <table class="league-mod-table">
             <thead><tr>
               <th class="left-align">League</th><th>xG Mult.</th><th>Min O2.5</th><th>Min O3.5</th>
-              <th>Max U2.5</th><th>Min BTTS</th><th>xG Diff</th><th>Rates (1X2|O25|O35|BTTS)</th>
+              <th style="color:var(--accent-teal)">Max U2.5</th><th>Min BTTS</th><th>xG Diff</th><th>Rates (1X2|O25|O35|BTTS)</th>
             </tr></thead>
             <tbody id="leagueModBody"></tbody>
           </table>
@@ -412,10 +413,10 @@
 // ================================================================
 const API_BASE    = "https://v3.football.api-sports.io";
 let   API_KEY     = localStorage.getItem('omega_api_key') || "";
-const LS_PREDS    = "omega_preds_v4741";
-const LS_SETTINGS = "omega_settings_v4741";
-const LS_LGMODS   = "omega_lgmods_v4741";
-const LS_BANKROLL = "omega_bankroll_v4741";
+const LS_PREDS    = "omega_preds_v4743";
+const LS_SETTINGS = "omega_settings_v4743";
+const LS_LGMODS   = "omega_lgmods_v4743";
+const LS_BANKROLL = "omega_bankroll_v4743";
 
 const LEAGUES_DATA = [
   {id:2,  name:"Champions League"},     {id:3,  name:"Europa League"},
@@ -428,10 +429,22 @@ const LEAGUES_DATA = [
   {id:88, name:"Eredivisie (NL)"},      {id:144,name:"Jupiler Pro (BE)"},
   {id:203,name:"Süper Lig (TR)"},       {id:253,name:"MLS (US)"},
   {id:262,name:"Liga MX (MX)"},         {id:197,name:"Super League (GR)"},
-  {id:357,name:"Premier Division (IE)"} // <-- NEW: Ireland Premier Division added properly here!
+  {id:357,name:"Premier Division (IE)"}
 ];
 
-// MUST BE DEFINED FIRST BEFORE USING IT IN RUNSCAN / OTHER FUNCTIONS
+// Define globally before use
+window.scrollToMatch = function(id){
+  const filterSelect=document.getElementById('marketFilter');
+  if(filterSelect){filterSelect.value='ALL';window.filterFeed();}
+  setTimeout(()=>{
+    const c=document.getElementById(id); if(!c) return;
+    c.scrollIntoView({behavior:'smooth',block:'center'});
+    c.style.transition='box-shadow 0.3s,border-color 0.3s';
+    c.style.borderColor='var(--accent-blue)'; c.style.boxShadow='0 0 24px var(--accent-blue-glow)';
+    setTimeout(()=>{c.style.borderColor='var(--border-light)';c.style.boxShadow='var(--shadow)';},2000);
+  },80);
+};
+
 function summarizeH2H(fixtures,homeId,awayId) {
   let hw=0,aw=0,dr=0;
   for(const f of (fixtures||[]).slice(0,8)) {
@@ -685,16 +698,16 @@ function abortScan(msg) { if(msg)showErr(msg); isRunning=false; setBtnsDisabled(
 // ── PRED STORE: strip heavy `pp` matrix before saving to save quota ──
 function stripForStorage(rec) {
   const { pp, hS, aS, ...rest } = rec;
-  // Keep only essential hS/aS fields
   const stripTeam = t => t ? { fXG:t.fXG, fXGA:t.fXGA, sXG:t.sXG, sXGA:t.sXGA, wXG:t.wXG, formRating:t.formRating, cor:t.cor, crd:t.crd, uiXG:t.uiXG, uiXGA:t.uiXGA, uiDevXG:t.uiDevXG, uiDevXGA:t.uiDevXGA, uiSXG:t.uiSXG } : undefined;
   return { ...rest, hS: stripTeam(hS), aS: stripTeam(aS) };
 }
 function getPredStore()  { try{return JSON.parse(localStorage.getItem(LS_PREDS)||"[]");}catch{return [];} }
+
 function bulkSavePredictions(newRecords) {
   try {
     const store=getPredStore();
     const map=new Map(store.map(x=>[String(x.fixtureId),x]));
-    newRecords.forEach(rec=>map.set(String(rec.fixtureId),rec));
+    newRecords.forEach(rec=>map.set(String(rec.fixtureId), stripForStorage(rec)));
     localStorage.setItem(LS_PREDS, JSON.stringify(Array.from(map.values())));
     updateAuditLeagueFilter();
   } catch(e) {
@@ -1047,12 +1060,10 @@ async function runScan() {
   const startD=document.getElementById('scanStart').value||todayISO();
   const endD=document.getElementById('scanEnd').value||startD;
 
-  // Date validation
   if(new Date(endD)<new Date(startD)){ showErr("Η ημ/νία 'To' πρέπει να είναι >= 'From'."); return; }
 
   const daysCount=getDatesInRange(startD,endD).length;
-  // ~4 reqs per match (stats H, stats A, h2h, injuries) + 1 for fixtures fetch per day
-  const estCost=daysCount*30*4;
+  const estCost=daysCount*30*5;
   if(currentCredits!==null&&estCost>currentCredits){
     if(!confirm(`⚠️ Χρειάζονται ~${estCost} credits, έχεις ${currentCredits}. Συνέχεια;`)) return;
   }
@@ -1062,7 +1073,6 @@ async function runScan() {
   ['topSection','summarySection','wallbetSection','matchesFeed','advisorSection'].forEach(id=>document.getElementById(id).innerHTML='');
   window.scannedMatchesData=[];
 
-  // Clear caches on new scan
   teamStatsCache.clear(); lastFixCache.clear(); standCache.clear(); h2hCache.clear();
 
   try {
@@ -1385,17 +1395,6 @@ window.switchTab=function(id){
   const btn=document.getElementById('tab-btn-'+id); if(btn) btn.classList.add('active');
   const panel=document.getElementById('tabpanel-'+id); if(panel) panel.style.display='block';
 };
-window.scrollToMatch=function(id){
-  const filterSelect=document.getElementById('marketFilter');
-  if(filterSelect){filterSelect.value='ALL';window.filterFeed();}
-  setTimeout(()=>{
-    const c=document.getElementById(id); if(!c) return;
-    c.scrollIntoView({behavior:'smooth',block:'center'});
-    c.style.transition='box-shadow 0.3s,border-color 0.3s';
-    c.style.borderColor='var(--accent-blue)'; c.style.boxShadow='0 0 24px var(--accent-blue-glow)';
-    setTimeout(()=>{c.style.borderColor='var(--border-light)';c.style.boxShadow='var(--shadow)';},2000);
-  },80);
-};
 
 // Debounced filter to handle large datasets
 let _filterTimer=null;
@@ -1481,7 +1480,7 @@ async function runCustomAudit() {
       (fr?.response||[]).forEach(fix=>fixtureResultMap.set(fix.fixture.id,fix));
     }
 
-    let rows=[], stats={games:0,outHit:0,validOut:0,o25Tot:0,o25Hit:0,o35Tot:0,o35Hit:0,u25Tot:0,u25Hit:0,exHit:0,bttsTot:0,bttsHit:0};
+    let rows=[], stats={games:0,outHit:0,validOut:0,o25Tot:0,o25Hit:0,o35Tot:0,o35Hit:0,u25Tot:0,u25Hit:0,exHit:0,bttsTot:0,bttsHit:0, corTot:0, corHit:0, cardTot:0, cardHit:0};
     const perLgStats={};
 
     for(const p of cands){
@@ -1491,6 +1490,25 @@ async function runCustomAudit() {
       const atot=ah+aa, aExact=`${ah}-${aa}`, aOut=ah>aa?'1':(ah<aa?'2':'X'), aBtts=ah>0&&aa>0;
       const pOut=p.outPick||'-', pEx=p.exactScorePred||'-', pOmega=p.omegaPick||'-';
       const hitOut=pOut===aOut, hitEx=pEx===aExact;
+      
+      let aCor = '-', aCards = '-';
+      if (pOmega.includes('ΚΟΡΝΕΡ') || pOmega.includes('ΚΑΡΤΕΣ')) {
+          const st = await apiReq(`fixtures/statistics?fixture=${p.fixtureId}`);
+          if(st?.response?.length >= 2) {
+              const hSt = st.response[0].statistics;
+              const aSt = st.response[1].statistics;
+              aCor = statVal(hSt, 'Corner Kicks') + statVal(aSt, 'Corner Kicks');
+              aCards = statVal(hSt, 'Yellow Cards') + statVal(hSt, 'Red Cards') + statVal(aSt, 'Yellow Cards') + statVal(aSt, 'Red Cards');
+          }
+          if (pOmega.includes('ΚΟΡΝΕΡ')) {
+              stats.corTot++;
+              if (aCor !== '-' && aCor > 8.5) stats.corHit++;
+          }
+          if (pOmega.includes('ΚΑΡΤΕΣ')) {
+              stats.cardTot++;
+              if (aCards !== '-' && aCards > 5.5) stats.cardHit++;
+          }
+      }
 
       stats.games++;
       if(pOut==='1'||pOut==='2'){stats.validOut++;if(hitOut)stats.outHit++;}
@@ -1528,17 +1546,19 @@ async function runCustomAudit() {
     const outRate=rate(stats.outHit,stats.validOut), o25Rate=rate(stats.o25Hit,stats.o25Tot);
     const o35Rate=rate(stats.o35Hit,stats.o35Tot), u25Rate=rate(stats.u25Hit,stats.u25Tot);
     const bttsRate=rate(stats.bttsHit,stats.bttsTot), exRate=rate(stats.exHit,stats.games);
+    const corRate=rate(stats.corHit,stats.corTot), cardRate=rate(stats.cardHit,stats.cardTot);
 
-    const currentO25=lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO25!==undefined?Number(leagueMods[lgFilter].minXGO25):Number(engineConfig.tXG_O25);
-    const currentO35=lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO35!==undefined?Number(leagueMods[lgFilter].minXGO35):Number(engineConfig.tXG_O35);
-    const currentBTTS=lgFilter!=='ALL'&&leagueMods[lgFilter]?.minBTTS!==undefined?Number(leagueMods[lgFilter].minBTTS):Number(engineConfig.tBTTS);
-    const currentDiff=lgFilter!=='ALL'&&leagueMods[lgFilter]?.xgDiff!==undefined?Number(leagueMods[lgFilter].xgDiff):Number(engineConfig.xG_Diff);
+    const TARGET_1X2=80, TARGET_O25=80, TARGET_O35=70, TARGET_BTTS=70, TARGET_U25=70;
+    let suggestions=[];
+    const currentO25  = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO25!==undefined?Number(leagueMods[lgFilter].minXGO25):Number(engineConfig.tXG_O25);
+    const currentO35  = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO35!==undefined?Number(leagueMods[lgFilter].minXGO35):Number(engineConfig.tXG_O35);
+    const currentBTTS = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minBTTS!==undefined?Number(leagueMods[lgFilter].minBTTS):Number(engineConfig.tBTTS);
+    const currentDiff = lgFilter!=='ALL'&&leagueMods[lgFilter]?.xgDiff!==undefined?Number(leagueMods[lgFilter].xgDiff):Number(engineConfig.xG_Diff);
 
-    const suggestions=[];
-    if(stats.validOut>0&&outRate<80)  suggestions.push({key:'xG_Diff',label:'xG Diff (1X2)',rate:outRate,tgt:80,oldV:currentDiff,newV:(currentDiff+0.10).toFixed(2)});
-    if(stats.o25Tot>0&&o25Rate<80)    suggestions.push({key:'tXG_O25',label:'Min xG (O2.5)',rate:o25Rate,tgt:80,oldV:currentO25,newV:(currentO25+0.15).toFixed(2)});
-    if(stats.o35Tot>0&&o35Rate<70)    suggestions.push({key:'tXG_O35',label:'Min xG (O3.5)',rate:o35Rate,tgt:70,oldV:currentO35,newV:(currentO35+0.15).toFixed(2)});
-    if(stats.bttsTot>0&&bttsRate<70)  suggestions.push({key:'tBTTS',  label:'Min xG (BTTS)',rate:bttsRate,tgt:70,oldV:currentBTTS,newV:(currentBTTS+0.10).toFixed(2)});
+    if(stats.validOut>0&&outRate<TARGET_1X2)  suggestions.push({key:'xG_Diff',label:'xG Diff (1X2)',rate:outRate,tgt:TARGET_1X2,oldV:currentDiff,newV:(currentDiff+0.10).toFixed(2)});
+    if(stats.o25Tot>0&&o25Rate<TARGET_O25)    suggestions.push({key:'tXG_O25',label:'Min xG (O2.5)',rate:o25Rate,tgt:TARGET_O25,oldV:currentO25,newV:(currentO25+0.15).toFixed(2)});
+    if(stats.o35Tot>0&&o35Rate<TARGET_O35)    suggestions.push({key:'tXG_O35',label:'Min xG (O3.5)',rate:o35Rate,tgt:TARGET_O35,oldV:currentO35,newV:(currentO35+0.15).toFixed(2)});
+    if(stats.bttsTot>0&&bttsRate<TARGET_BTTS) suggestions.push({key:'tBTTS',  label:'Min xG (BTTS)',rate:bttsRate,tgt:TARGET_BTTS,oldV:currentBTTS,newV:(currentBTTS+0.10).toFixed(2)});
 
     const lgLabel=lgFilter==='ALL'?'GLOBAL':esc(rows[0]?.lg||'');
     let advisorHtml='';
@@ -1556,25 +1576,31 @@ async function runCustomAudit() {
     document.getElementById('auditSection').innerHTML=`
       <div class="quant-panel">
         <div class="panel-title">📊 Audit Telemetry (${s} → ${e})</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:18px;text-align:center;">
-          <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(outRate,80)}</div><div class="stat-lbl">1X2<br>${stats.validOut} σήματα</div></div>
-          <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(o25Rate,80)}</div><div class="stat-lbl">O2.5<br>${stats.o25Tot} σήματα</div></div>
-          <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(o35Rate,70)}</div><div class="stat-lbl">O3.5<br>${stats.o35Tot} σήματα</div></div>
-          <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(u25Rate,70)}</div><div class="stat-lbl">U2.5<br>${stats.u25Tot} σήματα</div></div>
-          <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(bttsRate,70)}</div><div class="stat-lbl">BTTS<br>${stats.bttsTot} σήματα</div></div>
-          <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;color:var(--accent-blue)">${Number(exRate).toFixed(1)}%</div><div class="stat-lbl">EXACT<br>${stats.games} αγώνες</div></div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;text-align:center">
+          <div class="stat-box"><div class="stat-val" style="font-size:1.3rem;">${fmtR(outRate,80)}</div><div class="stat-lbl">1X2<br>${stats.validOut} sig.</div></div>
+          <div class="stat-box"><div class="stat-val" style="font-size:1.3rem;">${fmtR(o25Rate,80)}</div><div class="stat-lbl">O2.5<br>${stats.o25Tot} sig.</div></div>
+          <div class="stat-box"><div class="stat-val" style="font-size:1.3rem;">${fmtR(o35Rate,70)}</div><div class="stat-lbl">O3.5<br>${stats.o35Tot} sig.</div></div>
+          <div class="stat-box"><div class="stat-val" style="font-size:1.3rem;">${fmtR(u25Rate,70)}</div><div class="stat-lbl">U2.5<br>${stats.u25Tot} sig.</div></div>
+          <div class="stat-box"><div class="stat-val" style="font-size:1.3rem;">${fmtR(bttsRate,70)}</div><div class="stat-lbl">BTTS<br>${stats.bttsTot} sig.</div></div>
+          <div class="stat-box"><div class="stat-val" style="font-size:1.3rem;color:var(--accent-blue)">${Number(exRate).toFixed(1)}%</div><div class="stat-lbl">EXACT<br>${stats.games} m.</div></div>
+          <div class="stat-box" style="border-color:var(--accent-gold)"><div class="stat-val" style="font-size:1.3rem;">${fmtR(corRate,70)}</div><div class="stat-lbl">CORNERS<br>${stats.corTot} sig.</div></div>
+          <div class="stat-box" style="border-color:var(--accent-gold)"><div class="stat-val" style="font-size:1.3rem;">${fmtR(cardRate,70)}</div><div class="stat-lbl">CARDS<br>${stats.cardTot} sig.</div></div>
         </div>
         <div class="data-table-wrapper">
           <table class="data-table">
             <thead><tr>
               <th class="left-align" style="width:9%">Ημ/νία</th>
               <th class="left-align" style="width:26%">Αγώνας</th>
-              <th style="width:8%">1X2</th><th style="width:7%">O2.5</th>
-              <th style="width:7%">O3.5</th><th style="width:7%">U2.5</th>
-              <th style="width:7%">BTTS</th><th style="width:9%">Exact</th>
+              <th style="width:8%">1X2</th>
+              <th style="width:7%">O2.5</th>
+              <th style="width:7%">O3.5</th>
+              <th style="width:7%">U2.5</th>
+              <th style="width:7%">BTTS</th>
+              <th style="width:9%">Exact</th>
               <th style="width:16%">Signal</th>
             </tr></thead>
-            <tbody>${rows.map(r=>`<tr>
+            <tbody>
+            ${rows.map(r=>`<tr>
               <td class="mono left-align" style="font-size:0.72rem">${r.date||''}</td>
               <td class="left-align" style="font-weight:600;font-size:0.8rem">${esc(r.match)}</td>
               <td class="mono ${r.pOut==='-'||r.pOut==='X'?'':r.hitOut?'color-hit':'color-miss'}">${r.pOut}|${r.aOut}</td>
@@ -1584,7 +1610,8 @@ async function runCustomAudit() {
               <td class="mono ${r.pBtts===r.aBtts&&r.pBtts?'color-hit':r.pBtts?'color-miss':''}">${r.pBtts?'Y':'N'}|${r.aBtts?'Y':'N'}</td>
               <td class="mono ${r.pEx==='-'?'':r.hitEx?'color-hit':'color-miss'}">${r.pEx}|${r.aEx}</td>
               <td style="font-size:0.68rem;font-weight:700">${esc(r.omega)}</td>
-            </tr>`).join('')}</tbody>
+            </tr>`).join('')}
+            </tbody>
           </table>
         </div>
       </div>`;
