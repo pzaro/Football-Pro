@@ -457,7 +457,7 @@ function kellyStake(winProb, odds, fraction=0.25) {
 // ================================================================
 const _apiQueue = [];
 let _activeRequests = 0;
-const MAX_CONCURRENT = 5;
+const MAX_CONCURRENT = 8;
 const REQUEST_GAP_MS = 260; // ms to wait after each request completes before reusing that slot
 
 async function apiReq(path) {
