@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4749 - The Perfect Quant</title>
+  <title>APEX OMEGA v4750 - The Perfect Quant</title>
   
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
@@ -265,7 +265,7 @@
 <body>
 
 <div class="terminal-header">
-  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4749</span></div>
+  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4750</span></div>
   <div class="header-right">
     <div class="widget-pill gold" onclick="openBankroll()" title="Bankroll Manager">
       <span class="pill-lbl gold">💰 Bankroll</span>
@@ -281,7 +281,7 @@
 <div id="apiKeyModal" class="modal-overlay" style="display:flex">
   <div class="auth-card">
     <div class="brand-logo" style="justify-content:center; font-size:1.8rem; margin-bottom:8px;">APEX<span class="accent">OMEGA</span></div>
-    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4749 · THE PERFECT QUANT</div>
+    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4750 · THE PERFECT QUANT</div>
     <div style="font-size:0.72rem; color:var(--text-muted); margin-top:18px; line-height:1.6;">
       Το API Key αποθηκεύεται τοπικά στον browser σου.
     </div>
@@ -436,10 +436,10 @@
 // ================================================================
 const API_BASE    = "https://v3.football.api-sports.io";
 let   API_KEY     = localStorage.getItem('omega_api_key') || "";
-const LS_PREDS    = "omega_preds_v4749";
-const LS_SETTINGS = "omega_settings_v4749";
-const LS_LGMODS   = "omega_lgmods_v4749";
-const LS_BANKROLL = "omega_bankroll_v4749";
+const LS_PREDS    = "omega_preds_v4750";
+const LS_SETTINGS = "omega_settings_v4750";
+const LS_LGMODS   = "omega_lgmods_v4750";
+const LS_BANKROLL = "omega_bankroll_v4750";
 
 const LEAGUES_DATA = [
   {id:2,  name:"Champions League"},     {id:3,  name:"Europa League"},
@@ -712,10 +712,13 @@ window.togglePanel = function(panelId,arrowId) {
   else{p.style.display='none';if(a)a.innerText='▼';}
 };
 function setLoader(show,text='') { document.getElementById('loader').style.display=show?'block':'none'; document.getElementById('status').textContent=text; if(!show) document.getElementById('bar').style.width='0%'; }
+
+// FIX: _apiActiveCount is used correctly here
 function setProgress(pct,text='') { 
   document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%'; 
-  document.getElementById('status').textContent=text + (_activeRequests > 0 ? ` [${_activeRequests} active]` : ''); 
+  document.getElementById('status').textContent=text + (_apiActiveCount > 0 ? ` [${_apiActiveCount} active]` : ''); 
 }
+
 function setBtnsDisabled(d) { ["btnPre","leagueFilter","auditLeague"].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=d;}); }
 
 let _errTimer=null, _okTimer=null;
@@ -1163,6 +1166,7 @@ async function runScan() {
   if(isRunning) return;
   const startD=document.getElementById('scanStart').value||todayISO();
   const endD=document.getElementById('scanEnd').value||startD;
+
   if(new Date(endD)<new Date(startD)){ showErr("Η ημ/νία 'To' πρέπει να είναι >= 'From'."); return; }
 
   const daysCount=getDatesInRange(startD,endD).length;
