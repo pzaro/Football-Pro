@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4750 - The Perfect Quant</title>
+  <title>APEX OMEGA v4751 - The Perfect Quant</title>
   
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
@@ -65,8 +65,6 @@
     .pill-val { font-family: var(--font-mono); font-size: 0.88rem; font-weight: 700; color: var(--accent-green); }
     .pill-val.gold { color: var(--accent-gold); }
     .pill-val.low { color: var(--accent-red); }
-    .live-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent-red); animation: pulse 1.2s infinite; margin-right:4px; }
-    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
     /* ── MODALS ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.82); backdrop-filter: blur(6px); z-index: 2000; display: flex; align-items: center; justify-content: center; }
@@ -191,24 +189,15 @@
     .poisson-grid { display: grid; gap: 2px; margin-top: 8px; }
     .poisson-cell { padding: 4px 2px; text-align: center; font-size: 0.52rem; font-family: var(--font-mono); border-radius: 3px; font-weight: 700; }
 
-    /* ── TOP PICKS SECTION ── */
-    .top-picks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px; }
-    .top-pick-card { background: var(--bg-base); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; cursor: pointer; transition: all 0.2s; }
-    .top-pick-card:hover { border-color: var(--border-focus); transform: translateY(-1px); }
-    .top-pick-card .rank { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-muted); margin-bottom: 4px; }
-    .top-pick-card .match { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
-    .top-pick-card .signal { font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; }
-    .top-pick-card .score { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
-
-    /* ── SUMMARY TABLE ── */
-    .summary-table { width:100%; border-collapse:collapse; font-size:0.8rem; min-width:600px; }
-    .summary-table th { padding:9px 10px; background:rgba(0,0,0,0.4); color:var(--text-muted); font-weight:700; font-size:0.65rem; text-transform:uppercase; border-bottom:1px solid var(--border-light); text-align:left; }
-    .summary-table td { padding:9px 10px; border-bottom:1px solid rgba(255,255,255,0.025); vertical-align:middle; }
-    .summary-table tr:hover td { background:rgba(255,255,255,0.02); }
-
     /* ── DATA TABLES ── */
     .data-table-wrapper { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: var(--bg-surface); margin-bottom: 20px;}
     
+    .summary-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; text-align: center; table-layout: fixed; min-width: 860px; }
+    .summary-table th { background: var(--bg-panel); color: var(--text-muted); font-weight: 700; padding: 9px 7px; border-bottom: 1px solid var(--border-light); text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.6px; }
+    .summary-table td { padding: 11px 7px; border-bottom: 1px solid rgba(255,255,255,0.025); vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .summary-table tr:hover td { background: rgba(255,255,255,0.018); }
+    .col-match { width: 28%; text-align: left; } .col-score { width: 7%; } .col-1x2 { width: 6%; } .col-o25 { width: 6%; } .col-u25 { width: 6%; } .col-btts { width: 6%; } .col-exact { width: 9%; } .col-conf { width: 7%; } .col-signal { width: 17%; text-align: right; padding-right: 14px !important; }
+
     /* Clean Audit Table Styles */
     .audit-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.8rem; text-align: center; min-width: 900px; }
     .audit-table th { background: rgba(0,0,0,0.4); color: var(--text-muted); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border-light); text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.8px; white-space: nowrap;}
@@ -222,11 +211,13 @@
     
     .audit-signal-col { text-align: left; font-weight: 800; }
     
+    /* Prediction vs Result flex box */
     .pred-res-box { display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-mono); }
     .pr-val { padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; min-width: 32px; text-align: center;}
     .pr-pred { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px dashed var(--border-light); }
     .pr-res { background: rgba(255,255,255,0.1); color: var(--text-main); }
     
+    /* Icons for Hit/Miss */
     .icon-hit { color: var(--accent-green); font-size: 0.9rem; }
     .icon-miss { color: var(--accent-red); font-size: 0.9rem; }
     .icon-neutral { color: var(--text-muted); font-size: 0.9rem; opacity: 0.5;}
@@ -280,7 +271,7 @@
 <body>
 
 <div class="terminal-header">
-  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4750</span></div>
+  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4751</span></div>
   <div class="header-right">
     <div class="widget-pill gold" onclick="openBankroll()" title="Bankroll Manager">
       <span class="pill-lbl gold">💰 Bankroll</span>
@@ -290,16 +281,13 @@
       <span class="pill-lbl">API Credits</span>
       <span id="creditDisplay" class="pill-val">—</span>
     </div>
-    <button class="btn btn-outline" id="btnSyncLive" onclick="syncLiveScores()" style="font-size:0.7rem;padding:6px 14px;">
-      <span class="live-dot"></span>Live Sync
-    </button>
   </div>
 </div>
 
 <div id="apiKeyModal" class="modal-overlay" style="display:flex">
   <div class="auth-card">
     <div class="brand-logo" style="justify-content:center; font-size:1.8rem; margin-bottom:8px;">APEX<span class="accent">OMEGA</span></div>
-    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4750 · THE PERFECT QUANT</div>
+    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4751 · THE PERFECT QUANT</div>
     <div style="font-size:0.72rem; color:var(--text-muted); margin-top:18px; line-height:1.6;">
       Το API Key αποθηκεύεται τοπικά στον browser σου.
     </div>
@@ -342,8 +330,6 @@
           <div class="calib-item"><span class="calib-lbl">Min xG (BTTS)</span><input type="number" step="0.05" id="cfg_tBTTS" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">xG Diff (1X2)</span><input type="number" step="0.05" id="cfg_xG_Diff" class="calib-input"></div>
           <div class="calib-item"><span class="calib-lbl">Max BTTS (U2.5)</span><input type="number" step="0.05" id="cfg_tBTTS_U25" class="calib-input"></div>
-          <div class="calib-item"><span class="calib-lbl">Min Corners (O8.5)</span><input type="number" step="0.1" id="cfg_minCorners" class="calib-input"></div>
-          <div class="calib-item"><span class="calib-lbl">Min Cards (O5.5)</span><input type="number" step="0.1" id="cfg_minCards" class="calib-input"></div>
         </div>
         <div class="toolbar" style="margin-top:16px;">
           <button class="btn btn-primary" onclick="saveSettings()">Save Config</button>
@@ -450,19 +436,16 @@
     <div id="matchesFeed"></div>
     <div id="auditSection"></div>
 
-  </div>
-</div>
-
-<script>
+  </div></div><script>
 // ================================================================
 // CONFIG & CORE
 // ================================================================
 const API_BASE    = "https://v3.football.api-sports.io";
 let   API_KEY     = localStorage.getItem('omega_api_key') || "";
-const LS_PREDS    = "omega_preds_v4750";
-const LS_SETTINGS = "omega_settings_v4750";
-const LS_LGMODS   = "omega_lgmods_v4750";
-const LS_BANKROLL = "omega_bankroll_v4750";
+const LS_PREDS    = "omega_preds_v4751";
+const LS_SETTINGS = "omega_settings_v4751";
+const LS_LGMODS   = "omega_lgmods_v4751";
+const LS_BANKROLL = "omega_bankroll_v4751";
 
 const LEAGUES_DATA = [
   {id:2,  name:"Champions League"},     {id:3,  name:"Europa League"},
@@ -491,21 +474,13 @@ window.scrollToMatch = function(id){
 };
 
 function summarizeH2H(fixtures,homeId,awayId) {
-  let hw=0,aw=0,dr=0,totGoals=0,bttsCount=0,n=0;
-  for(const f of (fixtures||[]).slice(0,10)) {
+  let hw=0,aw=0,dr=0;
+  for(const f of (fixtures||[]).slice(0,8)) {
     const hg=f?.goals?.home??0,ag=f?.goals?.away??0;
     const myG=f?.teams?.home?.id===homeId?hg:ag,opG=f?.teams?.home?.id===awayId?hg:ag;
     if(myG>opG)hw++;else if(opG>myG)aw++;else dr++;
-    totGoals+=hg+ag;
-    if(hg>0&&ag>0)bttsCount++;
-    n++;
   }
-  return{
-    homeWins:hw,awayWins:aw,draws:dr,
-    avgGoals: n>0 ? totGoals/n : null,
-    bttsRate: n>0 ? bttsCount/n : null,
-    n
-  };
+  return{homeWins:hw,awayWins:aw,draws:dr};
 }
 
 const LEAGUE_IDS     = LEAGUES_DATA.map(l => l.id);
@@ -513,15 +488,6 @@ const TRAP_LEAGUES   = new Set([40,41,136,141,79,62,6,10,66,357]);
 const TIGHT_LEAGUES  = new Set([61,94,197,135,140,39,2,3,848]);
 const GOLD_LEAGUES   = new Set([78,262,88,253]);
 const MY_LEAGUES_IDS = [39,78,88,144,140,135,197,253];
-
-// League-level historical avg goals (for calibration)
-const LEAGUE_AVG_GOALS = {
-  78: 3.12, 88: 3.05, 253: 2.95, 262: 2.88,   // GOLD - high scoring
-  39: 2.72, 144: 2.70, 203: 2.65,               // MID
-  2:  2.55, 3:  2.60, 848: 2.50,               // European
-  135:2.48, 140:2.52, 61:2.45,                 // TIGHT
-  197:2.40, 94:2.35                             // LOW scoring
-};
 
 let teamStatsCache = new Map(), lastFixCache = new Map(),
     standCache     = new Map(), h2hCache     = new Map();
@@ -622,12 +588,9 @@ function getPoissonMatrixHTML(hL, aL, maxG=4) {
 // SETTINGS
 // ================================================================
 const DEFAULT_SETTINGS = {
-  wShotsOn:0.14, wShotsOff:0.04, wCorners:0.02, wGoals:0.20,
-  tXG_O25:2.70, tXG_O35:3.25, tXG_U25:1.80, tBTTS_U25:0.65,
-  xG_Diff:0.55, tBTTS:1.10, modTrap:0.90, modTight:0.95, modGold:1.15,
-  // ── ENHANCED: stricter corners & cards thresholds for >80% hit rate ──
-  minCorners: 10.5,   // avg corners combined must exceed this
-  minCards:    5.8    // avg cards combined must exceed this
+  wShotsOn:0.14,wShotsOff:0.04,wCorners:0.02,wGoals:0.20,
+  tXG_O25:2.70,tXG_O35:3.25,tXG_U25:1.80,tBTTS_U25:0.65,
+  xG_Diff:0.55,tBTTS:1.10,modTrap:0.90,modTight:0.95,modGold:1.15
 };
 let engineConfig = {...DEFAULT_SETTINGS};
 let leagueMods   = {};
@@ -640,7 +603,7 @@ function loadSettings() {
 const SETTINGS_MAP = {
   cfg_wShotsOn:'wShotsOn', cfg_wShotsOff:'wShotsOff', cfg_wCorners:'wCorners', cfg_wGoals:'wGoals',
   cfg_tXG_O25:'tXG_O25',   cfg_tXG_O35:'tXG_O35',     cfg_tXG_U25:'tXG_U25',  cfg_tBTTS_U25:'tBTTS_U25',
-  cfg_xG_Diff:'xG_Diff',   cfg_tBTTS:'tBTTS',          cfg_minCorners:'minCorners', cfg_minCards:'minCards'
+  cfg_xG_Diff:'xG_Diff',   cfg_tBTTS:'tBTTS'
 };
 function syncUIFromSettings() {
   for(const [id,key] of Object.entries(SETTINGS_MAP)) { const el=document.getElementById(id); if(el) el.value=engineConfig[key]; }
@@ -661,9 +624,11 @@ function buildLeagueModTable(auditStats={}) {
       const c=(v,t)=>v>=t?'var(--accent-green)':v>=(t-10)?'var(--accent-gold)':'var(--accent-red)';
       statsHtml=`<span style="color:${c(stats.out,80)}">${stats.out.toFixed(0)}%</span> | <span style="color:${c(stats.o25,80)}">${stats.o25.toFixed(0)}%</span> | <span style="color:${c(stats.o35,70)}">${stats.o35.toFixed(0)}%</span> | <span style="color:${c(stats.btts,70)}">${stats.btts.toFixed(0)}%</span>`;
     }
+    
     let placeholderDiff = engineConfig.xG_Diff.toFixed(2);
     if(TIGHT_LEAGUES.has(l.id)) placeholderDiff = "0.35";
     else if(GOLD_LEAGUES.has(l.id)) placeholderDiff = "0.65";
+
     tbody.innerHTML += `<tr>
       <td class="left-align" style="font-weight:700;color:var(--text-main);font-size:0.8rem">${l.name}</td>
       <td><input type="number" step="0.01" value="${mod.mult??''}" placeholder="${defaultLeagueMult(l.id).toFixed(2)}" class="league-mod-input" id="lm_mult_${l.id}"></td>
@@ -695,6 +660,7 @@ function getLeagueParams(leagueId) {
   let defaultXgDiff = engineConfig.xG_Diff;
   if (TIGHT_LEAGUES.has(leagueId)) defaultXgDiff = 0.35;
   else if (GOLD_LEAGUES.has(leagueId)) defaultXgDiff = 0.65;
+  
   return {
     mult:     lm.mult     !== undefined ? lm.mult     : defaultLeagueMult(leagueId),
     minXGO25: lm.minXGO25 !== undefined ? lm.minXGO25 : engineConfig.tXG_O25,
@@ -725,6 +691,12 @@ window.applyAllAdvisor = function(encoded, leagueId) {
   encoded.split('|').forEach(p=>{ const [key,val]=p.split(','); window.applyAdvisorItem(key,val,leagueId); });
   showOk('Όλες οι προτάσεις εφαρμόστηκαν.');
 };
+function flashElement(el) {
+  if(!el) return;
+  const original = el.style.background;
+  el.style.background = 'rgba(14, 165, 233, 0.2)';
+  setTimeout(() => el.style.background = original, 800);
+}
 
 // ================================================================
 // UTILS
@@ -746,11 +718,12 @@ window.togglePanel = function(panelId,arrowId) {
   else{p.style.display='none';if(a)a.innerText='▼';}
 };
 function setLoader(show,text='') { document.getElementById('loader').style.display=show?'block':'none'; document.getElementById('status').textContent=text; if(!show) document.getElementById('bar').style.width='0%'; }
-function setProgress(pct,text='') {
-  document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%';
-  document.getElementById('status').textContent=text + (_apiActiveCount > 0 ? ` [${_apiActiveCount} active]` : '');
+function setProgress(pct,text='') { 
+  document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%'; 
+  document.getElementById('status').textContent=text + (_apiActiveCount > 0 ? ` [${_apiActiveCount} active]` : ''); 
 }
 function setBtnsDisabled(d) { ["btnPre","leagueFilter","auditLeague"].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=d;}); }
+
 let _errTimer=null, _okTimer=null;
 function showErr(msg) {
   clearTimeout(_errTimer);
@@ -987,90 +960,9 @@ async function buildIntel(tId,lg,s,isHome) {
 }
 
 // ================================================================
-// ENHANCED OVER/CORNERS/CARDS SCORING  ← KEY IMPROVEMENT
+// PICK ENGINE
 // ================================================================
-
-/**
- * Compute a robust Over 2.5 confidence score using:
- *  1. Poisson probability (core)
- *  2. H2H historical avg goals adjustment
- *  3. League avg goals baseline
- *  4. Both teams form rating
- *  5. Minimum xG margin (only flag if well above threshold)
- */
-function computeOverConfidence(hXG, aXG, pp, h2h, leagueId, hFormRating, aFormRating) {
-  const tXG = hXG + aXG;
-  const leagueAvg = LEAGUE_AVG_GOALS[leagueId] || 2.60;
-  
-  // Base: Poisson probability
-  let score = pp.pO25 * 100;
-  
-  // Bonus: h2h avg goals significantly above league avg (strong historical signal)
-  if(h2h?.avgGoals != null && h2h.n >= 4) {
-    const h2hBonus = (h2h.avgGoals - leagueAvg) * 5;  // ±5% per 1 goal diff
-    score += clamp(h2hBonus, -10, 12);
-  }
-  
-  // Bonus: both teams in good attacking form
-  const combinedForm = (hFormRating + aFormRating) / 2;
-  if(combinedForm > 65) score += (combinedForm - 65) * 0.15;
-  
-  // Penalty: xG very close to threshold (risky marginal bets)
-  const margin = tXG - 2.70;
-  if(margin < 0.20) score -= (0.20 - margin) * 15;
-
-  // Penalty: tight/defensive league
-  if(TIGHT_LEAGUES.has(leagueId)) score -= 4;
-  if(GOLD_LEAGUES.has(leagueId))  score += 3;
-  
-  return clamp(score, 0, 99);
-}
-
-/**
- * Compute a robust Corner O8.5 confidence.
- * Uses per-team corner avg + xG proxy + form
- * Threshold raised to minCorners (default 10.5) combined avg
- */
-function computeCornerConfidence(hCorAvg, aCorAvg, hXG, aXG, h2h) {
-  const combinedCor = hCorAvg + aCorAvg;
-  // Baseline probability using normal distribution approximation
-  // Corners ~N(combinedCor, sqrt(combinedCor)*0.9)
-  const mean = combinedCor;
-  const stdv = Math.sqrt(combinedCor) * 0.90;
-  const z = (8.5 - mean) / stdv; // P(X > 8.5)
-  // Φ(-z) approximation
-  const pAbove = 1 - normalCDF(z);
-  
-  let score = pAbove * 100;
-  
-  // Bonus: high xG match (attacking play → more corners)
-  const tXG = hXG + aXG;
-  if(tXG > 2.80) score += (tXG - 2.80) * 8;
-  
-  // Penalty: combined average below stricter threshold  
-  if(combinedCor < engineConfig.minCorners) {
-    score -= (engineConfig.minCorners - combinedCor) * 8;
-  }
-  
-  return clamp(score, 0, 99);
-}
-
-/**
- * Standard normal CDF approximation (Abramowitz & Stegun)
- */
-function normalCDF(z) {
-  if(z < -6) return 0; if(z > 6) return 1;
-  const t = 1 / (1 + 0.2316419 * Math.abs(z));
-  const poly = t*(0.319381530 + t*(-0.356563782 + t*(1.781477937 + t*(-1.821255978 + t*1.330274429))));
-  const pdf  = Math.exp(-0.5*z*z)/Math.sqrt(2*Math.PI);
-  const p    = 1 - pdf * poly;
-  return z >= 0 ? p : 1 - p;
-}
-
-// ================================================================
-// PICK ENGINE  (ENHANCED)
-// ================================================================
-function computePick(hXG, aXG, tXG, bttsScore, cor, totCards, lp, hS, aS, h2h, hInj=0, aInj=0, leagueId=0) {
+function computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj=0,aInj=0) {
   let h2hBiasHome=0, h2hBiasAway=0;
   if(h2h) {
     if(h2h.homeWins-h2h.awayWins>=3){ h2hBiasHome=0.15; h2hBiasAway=-0.10; }
@@ -1078,12 +970,9 @@ function computePick(hXG, aXG, tXG, bttsScore, cor, totCards, lp, hS, aS, h2h, h
   }
   const hInjPen=Math.min(hInj*0.03,0.15), aInjPen=Math.min(aInj*0.03,0.15);
 
-  const safeHXG  = Math.max(hXG, 0.80);
-  const safeAXG  = Math.max(aXG, 0.80);
-  const safeHWXG = Math.max(safeNum(hS?.wXG), 0.80);
-  const safeAWXG = Math.max(safeNum(aS?.wXG), 0.80);
-  const safeHFxGA= Math.max(safeNum(hS?.fXGA), 0.80);
-  const safeAFxGA= Math.max(safeNum(aS?.fXGA), 0.80);
+  const safeHXG = Math.max(hXG, 0.80); const safeAXG = Math.max(aXG, 0.80);
+  const safeHWXG = Math.max(safeNum(hS?.wXG), 0.80); const safeAWXG = Math.max(safeNum(aS?.wXG), 0.80);
+  const safeHFxGA = Math.max(safeNum(hS?.fXGA), 0.80); const safeAFxGA = Math.max(safeNum(aS?.fXGA), 0.80);
 
   const hLambda=clamp(((safeHXG*0.45)+(safeHWXG*0.30)+(safeAFxGA*0.25))*lp.mult*(1+h2hBiasHome-hInjPen),0.50,4.0);
   const aLambda=clamp(((safeAXG*0.45)+(safeAWXG*0.30)+(safeHFxGA*0.25))*lp.mult*(1+h2hBiasAway-aInjPen),0.50,4.0);
@@ -1091,88 +980,65 @@ function computePick(hXG, aXG, tXG, bttsScore, cor, totCards, lp, hS, aS, h2h, h
   const pp=getPoissonProbabilities(hLambda,aLambda);
   const xgDiff=hXG-aXG;
   
-  // ── ENHANCED: compute form ratings for over confidence ──
-  const hFormRating = safeNum(hS?.formRating, 50);
-  const aFormRating = safeNum(aS?.formRating, 50);
-
-  // ── ENHANCED: advanced over/corner confidence ──
-  const overConf25 = computeOverConfidence(safeHXG, safeAXG, pp, h2h, leagueId, hFormRating, aFormRating);
-  const overConf35 = pp.pO35 * 100; // simpler for O3.5
-  const cornerConf = computeCornerConfidence(safeNum(hS?.cor,4.5), safeNum(aS?.cor,4.5), safeHXG, safeAXG, h2h);
-  const hCorAvg = safeNum(hS?.cor, 4.5), aCorAvg = safeNum(aS?.cor, 4.5);
-  const combinedCor = hCorAvg + aCorAvg;
-
   let outPick="X";
   if(pp.pHome-pp.pAway>0.15 && xgDiff>lp.xgDiff) outPick="1";
   else if(pp.pAway-pp.pHome>0.15 && xgDiff<-lp.xgDiff) outPick="2";
 
   let omegaPick="NO BET",reason="Insufficient statistical edge.",pickScore=0;
 
-  const safe_tXG    = safeHXG + safeAXG;
-  const safe_btts   = Math.min(safeHXG, safeAXG);
+  const safe_tXG = safeHXG + safeAXG;
+  const safe_bttsScore = Math.min(safeHXG, safeAXG);
 
-  // ── PRIORITY: use enhanced confidence scores for Over/Corner signals ──
-  if(overConf35>=62 && safe_tXG>=lp.minXGO35 && safe_btts>=1.20) {
-    // Over 3.5: require higher poisson AND enhanced confidence
-    omegaPick="🚀 OVER 3.5 GOALS";
-    pickScore=overConf35;
-    reason=`O3.5 Conf: ${overConf35.toFixed(1)}% | Poisson: ${(pp.pO35*100).toFixed(1)}%`;
-  } else if(overConf25>=62 && safe_tXG>=lp.minXGO25 && safe_btts>=0.85) {
-    // Over 2.5: use enhanced composite confidence
-    omegaPick="🔥 OVER 2.5 GOALS";
-    pickScore=overConf25;
-    reason=`O2.5 Conf: ${overConf25.toFixed(1)}% | xG: ${safe_tXG.toFixed(2)}`;
-  } else if(pp.pU25>=0.56 && safe_tXG<=lp.maxU25 && safe_btts<=engineConfig.tBTTS_U25) {
-    omegaPick="🔒 UNDER 2.5 GOALS";
-    pickScore=pp.pU25*100;
-    reason=`Poisson U2.5: ${(pp.pU25*100).toFixed(1)}%`;
-  } else if(safe_btts>=lp.minBTTS && pp.pBTTS>=0.47) {
-    omegaPick="🎯 GOAL/GOAL (BTTS)";
-    pickScore=pp.pBTTS*100;
-    reason=`BTTS Prob: ${(pp.pBTTS*100).toFixed(1)}%`;
-  } else if(outPick!=="X" && Math.abs(xgDiff)>=lp.xgDiff+0.10) {
+  if(pp.pO35>=0.42&&safe_tXG>=lp.minXGO35&&safe_bttsScore>=1.20) {
+    omegaPick="🚀 OVER 3.5 GOALS"; pickScore=pp.pO35*100; reason=`Poisson O3.5: ${(pp.pO35*100).toFixed(1)}%`;
+  } else if(pp.pO25>=0.52&&safe_tXG>=lp.minXGO25&&safe_bttsScore>=0.85) {
+    omegaPick="🔥 OVER 2.5 GOALS"; pickScore=pp.pO25*100; reason=`Poisson O2.5: ${(pp.pO25*100).toFixed(1)}%`;
+  } else if(pp.pU25>=0.55&&safe_tXG<=lp.maxU25&&safe_bttsScore<=engineConfig.tBTTS_U25) {
+    omegaPick="🔒 UNDER 2.5 GOALS"; pickScore=pp.pU25*100; reason=`Poisson U2.5: ${(pp.pU25*100).toFixed(1)}%`;
+  } else if(safe_bttsScore>=lp.minBTTS&&pp.pBTTS>=0.45) {
+    omegaPick="🎯 GOAL/GOAL (BTTS)"; pickScore=pp.pBTTS*100; reason=`Poisson BTTS: ${(pp.pBTTS*100).toFixed(1)}%`;
+  } else if(outPick!=="X"&&Math.abs(xgDiff)>=lp.xgDiff+0.10) {
     const outcome=outPick==="1"?"🏠 ΑΣΟΣ":"✈️ ΔΙΠΛΟ";
     const outProb=outPick==="1"?pp.pHome:pp.pAway;
     omegaPick=outProb>=0.55?`⚡ ${outcome}`:outcome;
     pickScore=outProb*100;
     reason=`Poisson ${outPick==='1'?'Home':'Away'}: ${(outProb*100).toFixed(1)}%`;
-  } else if(cornerConf>=65 && combinedCor>=engineConfig.minCorners) {
-    // ── ENHANCED Corners: stricter threshold with confidence score ──
-    omegaPick="🚩 OVER 8.5 ΚΟΡΝΕΡ";
-    pickScore=cornerConf;
-    reason=`Corner Conf: ${cornerConf.toFixed(1)}% | Avg: ${combinedCor.toFixed(1)}`;
-  } else if(totCards>=engineConfig.minCards && Math.abs(xgDiff)<0.45) {
-    // ── ENHANCED Cards: raised threshold, only high-tension matches ──
-    omegaPick="🟨 OVER 5.5 ΚΑΡΤΕΣ";
-    pickScore=clamp((totCards - 5.0) * 20, 0, 85);
-    reason=`Avg Cards: ${totCards.toFixed(1)} | Tension: ${Math.abs(xgDiff).toFixed(2)} xG`;
+  } else if(totCards>=5.5&&Math.abs(xgDiff)<0.40) {
+    omegaPick="🟨 OVER 5.5 ΚΑΡΤΕΣ"; pickScore=totCards*15; reason="High tension match.";
+  } else if(cor>=10.3) {
+    omegaPick="🚩 OVER 8.5 ΚΟΡΝΕΡ"; pickScore=cor*8.5; reason=`High corner yield: ${cor.toFixed(1)}`;
   }
 
-  // ── Aligned best score for the signal ──
-  let bestAlignedScore = { h: pp.bestScore.h, a: pp.bestScore.a, prob: 0 };
-  for(let h=0;h<=6;h++) {
-    for(let a=0;a<=6;a++) {
-      const p=pp.matrix[h]?.[a]??0;
-      let isValid=true;
-      if(omegaPick.includes("OVER 2.5")&&(h+a<3)) isValid=false;
-      if(omegaPick.includes("OVER 3.5")&&(h+a<4)) isValid=false;
-      if(omegaPick.includes("UNDER 2.5")&&(h+a>2)) isValid=false;
-      if(omegaPick.includes("GOAL")&&(h===0||a===0)) isValid=false;
-      if(outPick==="1"&&h<=a) isValid=false;
-      if(outPick==="2"&&a<=h) isValid=false;
-      if(outPick==="X"&&h!==a) isValid=false;
-      if(isValid&&p>bestAlignedScore.prob) bestAlignedScore={h,a,prob:p};
+  let {h: hG_raw, a: aG_raw} = pp.bestScore;
+  let hG = hG_raw, aG = aG_raw;
+  
+  let bestAlignedScore = { h: hG_raw, a: aG_raw, prob: 0 };
+  for(let h = 0; h <= 6; h++) {
+    for(let a = 0; a <= 6; a++) {
+      const p = pp.matrix[h]?.[a] ?? 0;
+      let isValid = true;
+      if (omegaPick.includes("OVER 2.5") && (h + a < 3)) isValid = false;
+      if (omegaPick.includes("OVER 3.5") && (h + a < 4)) isValid = false;
+      if (omegaPick.includes("UNDER 2.5") && (h + a > 2)) isValid = false;
+      if (omegaPick.includes("GOAL") && (h === 0 || a === 0)) isValid = false;
+      if (outPick === "1" && h <= a) isValid = false;
+      if (outPick === "2" && a <= h) isValid = false;
+      if (outPick === "X" && h !== a) isValid = false;
+
+      if (isValid && p > bestAlignedScore.prob) {
+        bestAlignedScore = { h, a, prob: p };
+      }
     }
   }
   
-  let hG=pp.bestScore.h, aG=pp.bestScore.a;
-  let exactConf=Math.round(clamp(pp.bestScore.prob*100*3,0,99));
-  if(bestAlignedScore.prob>0){
-    hG=bestAlignedScore.h; aG=bestAlignedScore.a;
-    exactConf=Math.round(clamp(bestAlignedScore.prob*100*8,0,99));
+  let exactConf = Math.round(clamp(pp.bestScore.prob * 100 * 3, 0, 99));
+  if (bestAlignedScore.prob > 0) {
+     hG = bestAlignedScore.h;
+     aG = bestAlignedScore.a;
+     exactConf = Math.round(clamp(bestAlignedScore.prob * 100 * 8, 0, 99));
   }
 
-  return{omegaPick,reason,pickScore,outPick,hG,aG,hExp:hLambda,aExp:aLambda,exactConf,xgDiff,pp,overConf25,cornerConf};
+  return{omegaPick,reason,pickScore,outPick,hG,aG,hExp:hLambda,aExp:aLambda,exactConf,xgDiff,pp};
 }
 
 // ================================================================
@@ -1186,18 +1052,23 @@ window.resimulateMatches = function() {
     window.scannedMatchesData.forEach(d=>{
       if(!d.leagueId) return;
       const lp=getLeagueParams(d.leagueId);
-      const fallback = d.tXG&&d.tXG>0?d.tXG/2:1.35;
-      const hXG=Math.max(Number(d.hS?.fXG||fallback),0.85)*lp.mult;
-      const aXG=Math.max(Number(d.aS?.fXG||fallback),0.85)*lp.mult;
+      
+      const fallback = d.tXG && d.tXG > 0 ? d.tXG/2 : 1.35;
+      const hXG=Math.max(Number(d.hS?.fXG||fallback), 0.85)*lp.mult;
+      const aXG=Math.max(Number(d.aS?.fXG||fallback), 0.85)*lp.mult;
       const hS_safe={...d.hS, wXG:Math.max(Number(d.hS?.wXG||0),0.85), fXGA:Math.max(Number(d.hS?.fXGA||0),0.85)};
       const aS_safe={...d.aS, wXG:Math.max(Number(d.aS?.wXG||0),0.85), fXGA:Math.max(Number(d.aS?.fXGA||0),0.85)};
+      
       const tXG=hXG+aXG, bttsScore=Math.min(hXG,aXG);
       const cor=Number(d.hS?.cor||d.cor/2||4.5)+Number(d.aS?.cor||d.cor/2||4.5);
       const totCards=Number(d.hS?.crd||d.totCards/2||2.5)+Number(d.aS?.crd||d.totCards/2||2.5);
-      const result=computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS_safe,aS_safe,d.h2h,d.hInj||0,d.aInj||0,d.leagueId);
+      
+      const result=computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS_safe,aS_safe,d.h2h,d.hInj||0,d.aInj||0);
+
       const totCorExp=clamp((cor*0.78)+((Number(hS_safe.sXG)+Number(aS_safe.sXG))*0.72),5,15);
       const hShare=clamp((result.hExp+Number(hS_safe.sXG)+0.25)/Math.max(result.hExp+result.aExp+Number(hS_safe.sXG)+Number(aS_safe.sXG)+0.5,0.1),0.38,0.62);
       const hCors=Math.max(2,Math.round(totCorExp*hShare)), aCors=Math.max(2,Math.round(totCorExp-hCors));
+      
       Object.assign(d,{tXG,btts:bttsScore,outPick:result.outPick,xgDiff:result.xgDiff,exact:`${result.hG}-${result.aG}`,exactConf:result.exactConf,omegaPick:result.omegaPick,strength:result.pickScore,reason:result.reason,hExp:result.hExp,aExp:result.aExp,pp:result.pp,hCors,aCors,totCards,
         isLockO25:tXG>=(lp.minXGO25+0.15)&&bttsScore>=1.00,
         isLockBTTS:bttsScore>=(lp.minBTTS+0.05)&&tXG>=2.50,
@@ -1227,6 +1098,7 @@ function buildSaveRecord(d,result) {
 async function analyzeMatchSafe(m, index, total) {
   try {
     setProgress(10+((index+1)/total)*88, `Processing ${index+1}/${total}: ${m.teams.home.name}`);
+
     const[hS,aS,stand,h2hFix,injRes]=await Promise.all([
       buildIntel(m.teams.home.id,m.league.id,m.league.season,true),
       buildIntel(m.teams.away.id,m.league.id,m.league.season,false),
@@ -1234,20 +1106,25 @@ async function analyzeMatchSafe(m, index, total) {
       getHeadToHead(m.teams.home.id,m.teams.away.id,m.league.id,m.league.season),
       apiReq(`injuries?fixture=${m.fixture.id}`)
     ]);
+
     let hInj=0,aInj=0;
     (injRes?.response||[]).forEach(inj=>{
       if(inj.team?.id===m.teams.home.id) hInj++;
       else if(inj.team?.id===m.teams.away.id) aInj++;
     });
+
     const lp=getLeagueParams(m.league.id);
     const h2h=summarizeH2H(h2hFix,m.teams.home.id,m.teams.away.id);
     const hXG=Number(hS.fXG)*lp.mult, aXG=Number(aS.fXG)*lp.mult;
     const tXG=hXG+aXG, bttsScore=Math.min(hXG,aXG);
     const cor=Number(hS.cor)+Number(aS.cor), totCards=Number(hS.crd)+Number(aS.crd);
-    const result=computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj,aInj,m.league.id);
+
+    const result=computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj,aInj);
+
     const totCorExp=clamp((cor*0.78)+((Number(hS.sXG)+Number(aS.sXG))*0.72),5,15);
     const hShare=clamp((result.hExp+Number(hS.sXG)+0.25)/Math.max(result.hExp+result.aExp+Number(hS.sXG)+Number(aS.sXG)+0.5,0.1),0.38,0.62);
     const hCors=Math.max(2,Math.round(totCorExp*hShare)), aCors=Math.max(2,Math.round(totCorExp-hCors));
+
     const rec={
       m, fixId:m.fixture.id, ht:m.teams.home.name, at:m.teams.away.name,
       lg:m.league.name, leagueId:m.league.id, scanDate:todayISO(),
@@ -1275,7 +1152,7 @@ async function analyzeMatchSafe(m, index, total) {
 async function fetchFixturesForDates(dates,selLg) {
   let all=[];
   for(let i=0;i<dates.length;i++){
-    setProgress((i/dates.length)*10,`Fetching fixtures: ${dates[i]}`);
+    setProgress((i/dates.length)*100,`Fetching fixtures: ${dates[i]}`);
     const res=await apiReq(`fixtures?date=${dates[i]}`);
     const dm=(res.response||[]).filter(m=>{
       if(selLg==='WORLD') return true;
@@ -1292,23 +1169,30 @@ async function runScan() {
   if(isRunning) return;
   const startD=document.getElementById('scanStart').value||todayISO();
   const endD=document.getElementById('scanEnd').value||startD;
+
   if(new Date(endD)<new Date(startD)){ showErr("Η ημ/νία 'To' πρέπει να είναι >= 'From'."); return; }
+
   const daysCount=getDatesInRange(startD,endD).length;
   const estCost=daysCount*30*5;
   if(currentCredits!==null&&estCost>currentCredits){
     if(!confirm(`⚠️ Χρειάζονται ~${estCost} credits, έχεις ${currentCredits}. Συνέχεια;`)) return;
   }
+
   isRunning=true; clearAlerts(); setBtnsDisabled(true);
   setLoader(true,'Initializing Deep Quant...');
   ['topSection','summarySection','wallbetSection','matchesFeed','advisorSection'].forEach(id=>document.getElementById(id).innerHTML='');
   window.scannedMatchesData=[];
+
   teamStatsCache.clear(); lastFixCache.clear(); standCache.clear(); h2hCache.clear();
+
   try {
     const selLg=document.getElementById('leagueFilter').value;
     let all=await fetchFixturesForDates(getDatesInRange(startD,endD),selLg);
     if(!all.length){showErr('Δεν βρέθηκαν αγώνες.');return;}
     if(all.length>350){showOk('Περιορίστηκε σε 350 αγώνες.');all=all.slice(0,350);}
+
     for(let i=0;i<all.length;i++) await analyzeMatchSafe(all[i],i,all.length);
+
     const toSave=window.scannedMatchesData.filter(d=>d.fixId).map(d=>buildSaveRecord(d,{outPick:d.outPick}));
     bulkSavePredictions(toSave);
     rebuildTopLists(); renderTopSections(); renderWallBets(); renderSummaryTable();
@@ -1329,118 +1213,130 @@ function rebuildTopLists() {
 }
 
 // ================================================================
-// RENDER TOP SECTIONS  ← WAS MISSING
+// UI RENDERING - RESTORED
 // ================================================================
-function renderTopSections() {
-  const sec = document.getElementById('topSection');
-  if(!sec) return;
-  const sd = window.scannedMatchesData;
-  if(!sd.length) { sec.innerHTML=''; return; }
+function getMatchCardHTML(d) {
+  const isUnder=d.omegaPick?.includes('UNDER'), isNoBet=d.omegaPick?.includes('NO BET');
+  let signalClass=isNoBet?'signal-warn':isUnder?'signal-under':'signal-hit';
+  let pickColor=isNoBet?'var(--accent-red)':isUnder?'var(--accent-teal)':d.omegaPick?.includes('ΚΑΡΤΕΣ')?'var(--accent-gold)':'var(--accent-green)';
+  if(d.isBomb){signalClass='signal-hit';pickColor='var(--accent-purple)';}
 
-  const totalMatches = sd.length;
-  const withSignal   = sd.filter(x=>x.omegaPick&&x.omegaPick!=='NO BET').length;
-  const overPicks    = sd.filter(x=>x.omegaPick?.includes('OVER')).length;
-  const underPicks   = sd.filter(x=>x.omegaPick?.includes('UNDER')).length;
-  const outcomePicks = sd.filter(x=>x.omegaPick?.includes('ΑΣΟΣ')||x.omegaPick?.includes('ΔΙΠΛΟ')||x.omegaPick?.includes('⚡')).length;
-  const cornerPicks  = sd.filter(x=>x.omegaPick?.includes('ΚΟΡΝΕΡ')).length;
+  let lockHtml='';
+  if(d.isLockO25)  lockHtml+=`<span class="lock-badge lock-o25">💎 HIGH CONF O2.5</span>`;
+  if(d.isLockBTTS) lockHtml+=`<span class="lock-badge lock-btts">🎯 HIGH CONF BTTS</span>`;
+  if(d.isLockU25)  lockHtml+=`<span class="lock-badge lock-under">🔒 HIGH CONF U2.5</span>`;
 
-  // Best picks across categories
-  const bestO25 = latestTopLists.over25[0];
-  const bestO35 = latestTopLists.over35[0];
-  const bestU25 = latestTopLists.under25[0];
-  const bestOut = latestTopLists.outcomes[0];
-  const bestExact = latestTopLists.exact[0];
-
-  function topPickCard(d, colorVar, emoji) {
-    if(!d) return `<div class="top-pick-card" style="opacity:0.3;border-color:rgba(255,255,255,0.05)"><div class="rank" style="color:${colorVar};">${emoji} —</div><div class="match" style="font-size:0.75rem;color:var(--text-muted)">No pick available</div></div>`;
-    const kelly = kellyStake(d.strength/100, 1.85);
-    return `<div class="top-pick-card" style="border-color:${colorVar}20;cursor:pointer;" onclick="scrollToMatch('m${d.fixId}')">
-      <div class="rank" style="color:${colorVar};">${emoji} ${d.strength?.toFixed(1)}% confidence</div>
-      <div class="match">${esc(d.ht)} vs ${esc(d.at)}</div>
-      <div class="signal" style="color:${colorVar};">${esc(d.omegaPick)}</div>
-      <div class="score">${esc(d.lg)} ${kelly?`· €${kelly.toFixed(2)} Kelly`:''}
-      </div>
-    </div>`;
+  let scoreHtml='';
+  if(d.m?.goals?.home!=null){
+    const live=isLive(d.m.fixture.status.short), col=live?'var(--accent-green)':'var(--text-main)';
+    const el=live?`<span style="font-size:0.72rem;color:var(--accent-green);margin-left:3px;">${d.m.fixture.status.elapsed}'</span>`:'';
+    scoreHtml=`<div class="score-display" style="color:${col}">${d.m.goals.home} - ${d.m.goals.away}${el}</div>`;
   }
 
-  sec.innerHTML = `
-    <div class="quant-panel" style="border-color:rgba(56,189,248,0.25);">
-      <div class="panel-title" style="color:var(--accent-blue);">
-        🎯 Scan Summary — ${totalMatches} matches · ${withSignal} signals
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <span style="font-size:0.65rem;background:rgba(52,211,153,0.1);color:var(--accent-green);padding:2px 8px;border-radius:4px;border:1px solid rgba(52,211,153,0.2);">📈 Over: ${overPicks}</span>
-          <span style="font-size:0.65rem;background:rgba(45,212,191,0.1);color:var(--accent-teal);padding:2px 8px;border-radius:4px;border:1px solid rgba(45,212,191,0.2);">📉 Under: ${underPicks}</span>
-          <span style="font-size:0.65rem;background:rgba(251,191,36,0.1);color:var(--accent-gold);padding:2px 8px;border-radius:4px;border:1px solid rgba(251,191,36,0.2);">⚖️ 1X2: ${outcomePicks}</span>
-          <span style="font-size:0.65rem;background:rgba(56,189,248,0.1);color:var(--accent-blue);padding:2px 8px;border-radius:4px;border:1px solid rgba(56,189,248,0.2);">🚩 COR: ${cornerPicks}</span>
+  const rankBadge=r=>r&&r!==99?`<span class="team-rank">#${r}</span>`:'';
+  const formHtml=hist=>`<div style="display:flex;gap:3px;margin-top:2px;">${(hist||[]).slice(0,5).map(h=>`<div class="form-dot form-${h.cls}">${h.res}</div>`).join('')}</div>`;
+
+  let h2hStr='H2H: N/A', biasHtml='';
+  if(d.h2h){
+    if(d.h2h.homeWins-d.h2h.awayWins>=3) biasHtml=`<span class="h2h-bias-badge" style="color:var(--accent-green)">🔥 HOME DOM.</span>`;
+    else if(d.h2h.awayWins-d.h2h.homeWins>=3) biasHtml=`<span class="h2h-bias-badge" style="color:var(--accent-blue)">🔥 AWAY DOM.</span>`;
+    h2hStr=`H2H (8): ${d.h2h.homeWins}W-${d.h2h.draws}D-${d.h2h.awayWins}W`;
+  }
+
+  const conf=Math.min(Math.max(safeNum(d.strength),0),100);
+  const confColor=conf>=70?'var(--accent-green)':conf>=50?'var(--accent-gold)':'var(--accent-red)';
+
+  let kellyHtml='';
+  if(bankrollData.current>0&&!isNoBet){
+    const prob=safeNum(d.strength)/100, impliedOdds=prob>0?1/prob:2.0;
+    const est_odds=Math.max(1.5,Math.min(impliedOdds*1.1,5.0));
+    const stake=kellyStake(prob,est_odds);
+    if(stake) kellyHtml=`<div class="kelly-box"><div><div class="kelly-label">Kelly Stake (25%)</div><div style="font-size:0.62rem;color:var(--text-muted);">Bankroll: €${bankrollData.current.toFixed(0)}</div></div><div class="kelly-val">€${stake.toFixed(2)}</div></div>`;
+  }
+
+  const poissonHtml=d.hExp&&d.aExp?getPoissonMatrixHTML(safeNum(d.hExp),safeNum(d.aExp),4):'';
+
+  const hFormC=d.hS?.formRating>=70?'var(--accent-green)':d.hS?.formRating<=30?'var(--accent-red)':'var(--accent-gold)';
+  const aFormC=d.aS?.formRating>=70?'var(--accent-green)':d.aS?.formRating<=30?'var(--accent-red)':'var(--accent-gold)';
+  const hInjHtml=d.hInj>0?`<span style="color:var(--accent-red);margin-left:5px;font-size:0.68rem;" title="${d.hInj} Missing">🏥${d.hInj}</span>`:'';
+  const aInjHtml=d.aInj>0?`<span style="color:var(--accent-red);margin-left:5px;font-size:0.68rem;" title="${d.aInj} Missing">🏥${d.aInj}</span>`:'';
+
+  return `
+  <div class="match-card" id="card-${d.fixId}">
+    <div class="match-header">
+      <div style="flex:1;min-width:0;">
+        <div class="match-league">
+          <span class="league-badge">${esc(d.m?.fixture?.status?.short||'FT')}</span> ${esc(d.lg)}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div class="team-name">${esc(d.ht)}${rankBadge(d.hr)}</div>
+            <div style="font-size:0.62rem;color:var(--text-muted);display:flex;align-items:center;gap:7px;">
+              Form: <span style="color:${hFormC};font-family:var(--font-mono);font-weight:700;">${d.hS?.formRating||50}%</span>${hInjHtml}
+            </div>
+            ${formHtml(d.hS?.history)}
+          </div>
+          <div>
+            <div class="team-name" style="color:var(--text-muted)">${esc(d.at)}${rankBadge(d.ar)}</div>
+            <div style="font-size:0.62rem;color:var(--text-muted);display:flex;align-items:center;gap:7px;">
+              Form: <span style="color:${aFormC};font-family:var(--font-mono);font-weight:700;">${d.aS?.formRating||50}%</span>${aInjHtml}
+            </div>
+            ${formHtml(d.aS?.history)}
+          </div>
         </div>
       </div>
-      <div class="top-picks-grid">
-        ${topPickCard(bestO25, 'var(--accent-green)', '🔥 BEST O2.5')}
-        ${topPickCard(bestO35, 'var(--accent-blue)', '🚀 BEST O3.5')}
-        ${topPickCard(bestU25, 'var(--accent-teal)', '🔒 BEST U2.5')}
-        ${topPickCard(bestOut, 'var(--accent-gold)', '⚡ BEST 1X2')}
-        ${topPickCard(bestExact, 'var(--accent-purple)', '🎯 BEST EXACT')}
+      <div class="score-box" style="margin-left:16px;">
+        ${scoreHtml}
+        <div class="total-xg-badge">xG: ${Number(d.tXG||0).toFixed(2)}</div>
       </div>
-    </div>`;
+    </div>
+
+    ${lockHtml?`<div style="margin-bottom:11px;display:flex;flex-wrap:wrap;gap:4px;">${lockHtml}</div>`:''}
+
+    <div class="signal-box ${signalClass}">
+      <div style="font-size:0.6rem;font-weight:700;color:${pickColor};text-transform:uppercase;letter-spacing:1.2px;margin-bottom:3px;">System Output Signal</div>
+      <div class="signal-value" style="color:${pickColor}">${esc(d.omegaPick)}</div>
+      <div class="signal-desc">${esc(d.reason)}</div>
+      <div class="conf-bar-wrap" style="margin-top:9px;">
+        <div class="conf-bar-label">
+          <span>Confidence</span>
+          <span style="color:${confColor};font-family:var(--font-mono)">${conf.toFixed(1)}%</span>
+        </div>
+        <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${conf}%;background:${confColor};"></div></div>
+      </div>
+    </div>
+    ${kellyHtml}
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-box-title">Game Projections</div>
+        <div class="stat-row"><span class="stat-lbl">Exact Score (Poisson)</span><span class="stat-val stat-highlight">${esc(d.exact||'?-?')}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Lambda xG</span><span class="stat-val" style="color:var(--accent-blue)">${Number(d.hExp||0).toFixed(2)} – ${Number(d.aExp||0).toFixed(2)}</span></div>
+        <div class="stat-row"><span class="stat-lbl">xG Diff</span><span class="stat-val" style="color:${(d.xgDiff||0)>0?'var(--accent-green)':'var(--accent-red)'}">${(d.xgDiff||0)>0?'+':''}${Number(d.xgDiff||0).toFixed(2)}</span></div>
+        <div class="stat-row"><span class="stat-lbl">BTTS Rating</span><span class="stat-val">${Number(d.btts||0).toFixed(2)}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Poisson O2.5</span><span class="stat-val" style="color:var(--accent-blue)">${d.pp?(d.pp.pO25*100).toFixed(1)+'%':'—'}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Poisson U2.5</span><span class="stat-val" style="color:var(--accent-teal)">${d.pp?(d.pp.pU25*100).toFixed(1)+'%':'—'}</span></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-title">Home vs Away Breakdown</div>
+        <div class="stat-row"><span class="stat-lbl">Form xG</span><span class="stat-val">${d.hS?.uiXG||'0.00'}${d.hS?.uiDevXG||''} <span style="color:var(--text-muted)">vs</span> ${d.aS?.uiXG||'0.00'}${d.aS?.uiDevXG||''}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Weighted xG</span><span class="stat-val">${Number(d.hS?.wXG||0).toFixed(2)} <span style="color:var(--text-muted)">vs</span> ${Number(d.aS?.wXG||0).toFixed(2)}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Split xG</span><span class="stat-val">${d.hS?.uiSXG||'0.00'} <span style="color:var(--text-muted)">vs</span> ${d.aS?.uiSXG||'0.00'}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Proj Corners</span><span class="stat-val">${Number(d.hCors||0).toFixed(0)} <span style="color:var(--text-muted)">vs</span> ${Number(d.aCors||0).toFixed(0)}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Exp. Cards</span><span class="stat-val">${Number(d.hS?.crd||0).toFixed(1)} <span style="color:var(--text-muted)">vs</span> ${Number(d.aS?.crd||0).toFixed(1)}</span></div>
+      </div>
+    </div>
+    ${poissonHtml?`<div class="stat-box" style="margin-top:10px;"><div class="stat-box-title">📊 Poisson Matrix (Home↓ Away→)</div>${poissonHtml}</div>`:''}
+    <div class="h2h-footer">${h2hStr} ${biasHtml}</div>
+  </div>`;
 }
 
-// ================================================================
-// RENDER WALL BETS  ← WAS MISSING
-// ================================================================
-function renderWallBets() {
-  const sec = document.getElementById('wallbetSection');
-  if(!sec) return;
-  const sd = window.scannedMatchesData;
-
-  // Wall bets = Lock Over 2.5 + strong confidence
-  const lockO25 = sd.filter(x=>x.isLockO25&&x.omegaPick?.includes('OVER 2.5')).sort((a,b)=>b.strength-a.strength).slice(0,6);
-  const lockBTTS = sd.filter(x=>x.isLockBTTS&&x.omegaPick?.includes('GOAL')).sort((a,b)=>b.strength-a.strength).slice(0,4);
-  const lockU25  = sd.filter(x=>x.isLockU25&&x.omegaPick?.includes('UNDER')).sort((a,b)=>b.strength-a.strength).slice(0,4);
-
-  if(!lockO25.length&&!lockBTTS.length&&!lockU25.length) { sec.innerHTML=''; return; }
-
-  function wallRow(d, color, label) {
-    const k = kellyStake(d.strength/100, 1.75);
-    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;" onclick="scrollToMatch('m${d.fixId}')">
-      <div>
-        <div style="font-weight:700;font-size:0.82rem;">${esc(d.ht)} <span style="color:var(--text-muted)">vs</span> ${esc(d.at)}</div>
-        <div style="font-size:0.63rem;color:var(--text-muted);">${esc(d.lg)}</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:0.7rem;font-weight:700;color:${color};">${label}</div>
-        <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--accent-gold);">${k?`€${k.toFixed(2)}`:'—'} ${d.strength?.toFixed(1)}%</div>
-      </div>
-    </div>`;
-  }
-
-  let html = `<div class="quant-panel" style="border-color:rgba(52,211,153,0.25);">
-    <div class="panel-title" style="color:var(--accent-green);">🔒 Wall Bets (High Confidence Locks)</div>`;
-  if(lockO25.length) {
-    html += `<div style="font-size:0.68rem;color:var(--accent-blue);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🔥 Over 2.5 Locks (${lockO25.length})</div>`;
-    lockO25.forEach(d=>html+=wallRow(d,'var(--accent-green)','O2.5 LOCK'));
-  }
-  if(lockBTTS.length) {
-    html += `<div style="font-size:0.68rem;color:var(--accent-purple);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:10px 0 8px;">🎯 BTTS Locks (${lockBTTS.length})</div>`;
-    lockBTTS.forEach(d=>html+=wallRow(d,'var(--accent-purple)','BTTS LOCK'));
-  }
-  if(lockU25.length) {
-    html += `<div style="font-size:0.68rem;color:var(--accent-teal);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:10px 0 8px;">🔒 Under 2.5 Locks (${lockU25.length})</div>`;
-    lockU25.forEach(d=>html+=wallRow(d,'var(--accent-teal)','U2.5 LOCK'));
-  }
-  html += `</div>`;
-  sec.innerHTML = html;
-}
-
-// ================================================================
-// RENDER SUMMARY TABLE  ← WAS MISSING
-// ================================================================
 function renderSummaryTable() {
   const sec = document.getElementById('summarySection');
   if(!sec) return;
   const sd = window.scannedMatchesData;
   if(!sd.length) { sec.innerHTML=''; return; }
 
-  // Group by league
   const lgMap = {};
   sd.forEach(d => {
     if(!d.lg) return;
@@ -1456,13 +1352,89 @@ function renderSummaryTable() {
 
   const rows = Object.values(lgMap).sort((a,b)=>b.count-a.count);
 
+  let matchRows = '';
+  const grouped={};
+  sd.forEach((d,i)=>{ if(!grouped[d.lg]) grouped[d.lg]=[]; grouped[d.lg].push({...d,originalIndex:i}); });
+  
+  for(const[lg,matches] of Object.entries(grouped)){
+    matchRows+=`<div style="background:rgba(56,189,248,0.04);padding:7px 16px;font-weight:700;font-size:0.72rem;color:var(--accent-blue);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);text-transform:uppercase;letter-spacing:1px;">${esc(lg)}</div>
+    <div class="data-table-wrapper" style="border:none;border-radius:0;">
+    <table class="summary-table">
+      <thead><tr>
+        <th class="col-match">Match</th><th class="col-score">Score</th>
+        <th class="col-1x2">1X2</th><th class="col-o25">O2.5</th>
+        <th class="col-u25">U2.5</th><th class="col-btts">BTTS</th>
+        <th class="col-exact">Exact</th><th class="col-conf">Conf%</th>
+        <th class="col-signal">Signal</th>
+      </tr></thead><tbody>`;
+
+    matches.forEach(x=>{
+      const isFin=isFinished(x.m?.fixture?.status?.short), isLiveNow=isLive(x.m?.fixture?.status?.short);
+      const ah=x.m?.goals?.home??0, aa=x.m?.goals?.away??0, aTot=ah+aa;
+      const aBtts=ah>0&&aa>0, aOut=ah>aa?'1':(ah<aa?'2':'X');
+      let scoreStr='-',scoreCol='var(--text-muted)';
+      if(isFin){scoreStr=`${ah}-${aa}`;scoreCol='var(--text-main)';}
+      else if(isLiveNow){scoreStr=`${ah}-${aa}`;scoreCol='var(--accent-green)';}
+
+      const isO25=x.omegaPick?.includes('OVER 2.5')||x.omegaPick?.includes('OVER 3.5')?'🔥':'-';
+      const isU25=x.omegaPick?.includes('UNDER 2.5')?'🔒':'-';
+      const isBtts=x.omegaPick?.includes('GOAL')?'🎯':'-';
+
+      let colO25=isO25==='🔥'?'var(--accent-gold)':'var(--text-muted)';
+      let colU25=isU25==='🔒'?'var(--accent-teal)':'var(--text-muted)';
+      let colBtts=isBtts==='🎯'?'var(--accent-purple)':'var(--text-muted)';
+
+      if(isFin){
+        if(isO25!=='-') colO25=aTot>=3?'var(--accent-green)':'var(--accent-red)';
+        if(isU25!=='-') colU25=aTot<3?'var(--accent-green)':'var(--accent-red)';
+        if(isBtts!=='-') colBtts=aBtts?'var(--accent-green)':'var(--accent-red)';
+      }
+
+      let colOut=x.outPick==='X'?'var(--text-muted)':'var(--text-main)';
+      if(isFin&&x.outPick!=='X') colOut=x.outPick===aOut?'var(--accent-green)':'var(--accent-red)';
+      let colEx='var(--text-main)';
+      if(isFin) colEx=x.exact===`${ah}-${aa}`?'var(--accent-green)':'var(--accent-red)';
+
+      let colOm=x.omegaPick?.includes('NO BET')?'var(--text-muted)':'var(--text-main)';
+      if((isFin||isLiveNow)&&!x.omegaPick?.includes('NO BET')){
+        let hit=null;
+        if(x.omegaPick?.includes('OVER 2.5')) hit=aTot>=3;
+        else if(x.omegaPick?.includes('OVER 3.5')) hit=aTot>=4;
+        else if(x.omegaPick?.includes('UNDER 2.5')) hit=aTot<3;
+        else if(x.omegaPick?.includes('GOAL')) hit=aBtts;
+        else if(x.omegaPick?.includes('ΑΣΟΣ')&&isFin) hit=aOut==='1';
+        else if(x.omegaPick?.includes('ΔΙΠΛΟ')&&isFin) hit=aOut==='2';
+        if(hit!==null) colOm=hit?'var(--accent-green)':(isFin?'var(--accent-red)':colOm);
+      }
+
+      const conf=Math.min(Math.max(safeNum(x.strength),0),100);
+      matchRows+=`<tr onclick="scrollToMatch('card-${x.fixId}')" style="cursor:pointer;${isLiveNow?'background:rgba(52,211,153,0.04);':''}" title="${esc(x.ht)} vs ${esc(x.at)}">
+        <td class="col-match" style="font-weight:600;color:var(--text-main);">
+          <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(x.ht)} <span style="color:var(--text-muted)">–</span> ${esc(x.at)}</div>
+        </td>
+        <td class="col-score mono" style="color:${scoreCol};">${scoreStr}</td>
+        <td class="col-1x2 mono" style="color:${colOut};">${x.outPick}</td>
+        <td class="col-o25 mono" style="color:${colO25};">${isO25}</td>
+        <td class="col-u25 mono" style="color:${colU25};">${isU25}</td>
+        <td class="col-btts mono" style="color:${colBtts};">${isBtts}</td>
+        <td class="col-exact mono" style="color:${colEx};">${x.exact||'?-?'}</td>
+        <td class="col-conf mono" style="color:${conf>=65?'var(--accent-green)':conf>=45?'var(--accent-gold)':'var(--text-muted)'};">${conf.toFixed(0)}%</td>
+        <td class="col-signal" style="font-size:0.68rem;color:${colOm};font-weight:800;font-family:var(--font-body);">${x.omegaPick?.split(' ').slice(0,3).join(' ')||'-'}</td>
+      </tr>`;
+    });
+    matchRows+=`</tbody></table></div>`;
+  }
+
   sec.innerHTML = `
-    <div class="quant-panel">
-      <div class="panel-title">📊 League Distribution</div>
-      <div class="data-table-wrapper">
+    <div class="quant-panel" style="padding:0;overflow:hidden;">
+      <div class="toolbar" style="padding:14px 18px;border-bottom:1px solid var(--border-light);margin:0;">
+        <div class="panel-title" style="margin:0;color:var(--accent-blue);">📊 Summary Dashboard</div>
+        <div style="margin-left:auto;"><button id="btnSyncLive" onclick="syncLiveScores()" class="btn btn-outline" style="padding:6px 12px;font-size:0.68rem;">Live Sync</button></div>
+      </div>
+      <div class="data-table-wrapper" style="border:none;border-radius:0;margin-bottom:0;">
         <table class="summary-table">
           <thead><tr>
-            <th>League</th><th>Matches</th>
+            <th>League Distribution</th><th>Matches</th>
             <th style="color:var(--accent-green)">O2.5</th>
             <th style="color:var(--accent-blue)">O3.5</th>
             <th style="color:var(--accent-teal)">U2.5</th>
@@ -1484,183 +1456,174 @@ function renderSummaryTable() {
           </tbody>
         </table>
       </div>
+      ${matchRows}
     </div>`;
 }
 
-// ================================================================
-// FILTER FEED + MATCH CARDS  ← WAS MISSING
-// ================================================================
-window.filterFeed = function() {
-  const feed = document.getElementById('matchesFeed');
-  const countEl = document.getElementById('feedCount');
-  if(!feed) return;
-  const filter = document.getElementById('marketFilter')?.value || 'ALL';
-  const sd = window.scannedMatchesData;
-  if(!sd.length) { feed.innerHTML=''; if(countEl) countEl.textContent='0'; return; }
+function renderTopSections() {
+  const tabs=[
+    {id:'combo1',  lbl:'High Conf 1X2',     d:latestTopLists.combo1,   sk:'strength', sl:'CONF'},
+    {id:'outcomes',lbl:'Match Odds',         d:latestTopLists.outcomes, sk:'strength', sl:'CONF'},
+    {id:'over25',  lbl:'Over 2.5',           d:latestTopLists.over25,   sk:'tXG',      sl:'xG'},
+    {id:'over35',  lbl:'Over 3.5',           d:latestTopLists.over35,   sk:'tXG',      sl:'xG'},
+    {id:'under25', lbl:'Under 2.5',          d:latestTopLists.under25,  sk:'strength', sl:'CONF'},
+    {id:'exact',   lbl:'Exact Score',        d:latestTopLists.exact,    sk:'exactConf',sl:'CONF'}
+  ];
+  let html=`<div class="quant-panel" style="padding:0; overflow:hidden;"><div class="tabs-wrapper">`;
+  tabs.forEach((t,i)=>{
+    html+=`<button class="tab-btn ${i===0?'active':''}" onclick="switchTab('${t.id}')" id="tab-btn-${t.id}">${t.lbl} <span class="tab-count">${t.d.length}</span></button>`;
+  });
+  html+=`</div>`;
+  tabs.forEach((t,i)=>{
+    html+=`<div class="pred-tab-panel" style="display:${i===0?'block':'none'}" id="tabpanel-${t.id}">
+      <div style="padding:0 20px 20px 20px; display:flex; flex-direction:column; gap:8px;">`;
+    if(!t.d.length) html+=`<div style="text-align:center;color:var(--text-muted);padding:20px 0;font-weight:600;">No high-confidence signals found.</div>`;
+    t.d.forEach((x,j)=>{
+      const rawVal = t.id === 'exact' ? x.exact : Number(x[t.sk] || 0);
+      const val = t.id === 'exact' ? rawVal : rawVal.toFixed(1);
+      html+=`
+      <div onclick="scrollToMatch('card-${x.fixId}')" style="display:flex; align-items:center; gap:16px; padding:12px; background:var(--bg-base); border:1px solid var(--border-light); border-radius:var(--radius-sm); cursor:pointer; transition:border-color 0.2s;" onmouseenter="this.style.borderColor='var(--border-focus)'" onmouseleave="this.style.borderColor='var(--border-light)'">
+        <div class="data-num" style="color:var(--text-muted); font-size:1.2rem;">#${j+1}</div>
+        <div style="flex:1;">
+          <div style="font-weight:700; font-size:0.9rem;">${esc(x.ht)} <span style="color:var(--text-muted)">vs</span> ${esc(x.at)}</div>
+          <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">${esc(x.lg)}</div>
+          <div style="font-size:0.7rem; color:var(--accent-green); font-weight:600; margin-top:2px;">${esc(x.omegaPick)}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="data-num" style="color:var(--accent-blue); font-size:1.1rem;">${val}</div>
+          <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; font-weight:600;">${t.sl}</div>
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  html+=`</div>`;
+  document.getElementById('topSection').innerHTML=html;
+}
 
-  let filtered = sd;
-  if(filter==='COMBO')  filtered = sd.filter(x=>x.omegaPick?.includes('⚡'));
-  else if(filter==='1X2') filtered = sd.filter(x=>x.omegaPick?.includes('ΑΣΟΣ')||x.omegaPick?.includes('ΔΙΠΛΟ')||x.omegaPick?.includes('⚡'));
-  else if(filter==='O25') filtered = sd.filter(x=>x.omegaPick?.includes('OVER 2.5'));
-  else if(filter==='O35') filtered = sd.filter(x=>x.omegaPick?.includes('OVER 3.5'));
-  else if(filter==='U25') filtered = sd.filter(x=>x.omegaPick?.includes('UNDER 2.5'));
-  else if(filter==='BTTS') filtered = sd.filter(x=>x.omegaPick?.includes('GOAL'));
-  else if(filter==='CARDS') filtered = sd.filter(x=>x.omegaPick?.includes('ΚΑΡΤΕΣ'));
-  else if(filter==='COR') filtered = sd.filter(x=>x.omegaPick?.includes('ΚΟΡΝΕΡ'));
-  else if(filter==='BOMB') filtered = sd.filter(x=>x.isBomb);
-
-  if(countEl) countEl.textContent = filtered.length;
-  feed.innerHTML = filtered.map(d => renderMatchCard(d)).join('');
+window.switchTab = function(id){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.pred-tab-panel').forEach(p=>p.style.display='none');
+  const btn=document.getElementById('tab-btn-'+id); if(btn) btn.classList.add('active');
+  const panel=document.getElementById('tabpanel-'+id); if(panel) panel.style.display='block';
 };
 
-function signalClass(pick) {
-  if(!pick||pick==='NO BET') return 'signal-warn';
-  if(pick.includes('UNDER')||pick.includes('ΚΟΡΝΕΡ')) return 'signal-under';
-  return 'signal-hit';
-}
+window.filterFeed = function(){
+  const filter=document.getElementById('marketFilter').value; let html=''; let n=0;
+  window.scannedMatchesData.forEach(d=>{
+    let show=false; const pick=d.omegaPick || "";
+    if(filter==='ALL')show=true;
+    else if(filter==='COMBO'&&(pick.includes('👑')||pick.includes('⚡')))show=true;
+    else if(filter==='1X2'&&(pick.includes('ΑΣΟΣ')||pick.includes('ΔΙΠΛΟ')))show=true;
+    else if(filter==='O25'&&pick.includes('OVER 2.5'))show=true;
+    else if(filter==='O35'&&pick.includes('OVER 3.5'))show=true;
+    else if(filter==='U25'&&pick.includes('UNDER 2.5'))show=true;
+    else if(filter==='BTTS'&&pick.includes('GOAL'))show=true;
+    else if(filter==='CARDS'&&pick.includes('ΚΑΡΤΕΣ'))show=true;
+    else if(filter==='COR'&&pick.includes('ΚΟΡΝΕΡ'))show=true;
+    else if(filter==='BOMB'&&pick.includes('ΒΟΜΒΑ'))show=true;
+    if(show){html+=getMatchCardHTML(d);n++;}
+  });
+  document.getElementById('matchesFeed').innerHTML=html;
+  document.getElementById('feedCount').innerText=n;
+};
 
-function formDotsHTML(history) {
-  if(!history||!history.length) return '';
-  return history.slice(0,6).map(h=>`<span class="form-dot form-${h.res}">${h.res}</span>`).join('');
-}
-
-function renderMatchCard(d) {
-  if(!d||!d.fixId) return '';
-  const status  = d.m?.fixture?.status?.short||'NS';
-  const isLiveMatch = isLive(status);
-  const isFinishedMatch = isFinished(status);
-  const homeGoals = d.m?.goals?.home ?? '—';
-  const awayGoals = d.m?.goals?.away ?? '—';
-  const scoreColor = isFinishedMatch?'var(--accent-gold)':(isLiveMatch?'var(--accent-green)':'var(--text-muted)');
-  const pickupClass = signalClass(d.omegaPick);
-  const hForm = d.hS?.history||[];
-  const aForm = d.aS?.history||[];
-  const kelly = d.omegaPick&&d.omegaPick!=='NO BET' ? kellyStake((d.strength||0)/100, 1.85) : null;
-
-  const liveCorLabel = typeof d.liveCorners==='number' ? `<span class="live-stat-badge" style="color:var(--accent-blue);border-color:rgba(56,189,248,0.3);">🚩 ${d.liveCorners} COR</span>` : '';
-  const liveCardLabel= typeof d.liveCards==='number'   ? `<span class="live-stat-badge" style="color:var(--accent-gold);border-color:rgba(251,191,36,0.3);margin-left:5px;">🟨 ${d.liveCards} CARDS</span>` : '';
-
-  const poissonHtml = d.pp ? getPoissonMatrixHTML(d.hExp||1.2, d.aExp||1.2) : '';
-
-  const confBarColor = (d.strength||0)>=75?'var(--accent-green)':(d.strength||0)>=55?'var(--accent-gold)':'var(--accent-red)';
-
-  return `<div class="match-card" id="m${d.fixId}">
-    <div class="match-header">
-      <div style="flex:1;">
-        <div class="match-league">
-          <span class="league-badge">${esc(d.lg)}</span>
-          ${isLiveMatch?`<span style="color:var(--accent-green);font-weight:800;font-size:0.62rem;animation:pulse 1.2s infinite;">● LIVE</span>`:''}
-          ${isFinishedMatch?`<span style="color:var(--text-muted);">FT</span>`:''}
-          ${d.hInj||d.aInj?`<span style="color:var(--accent-red);font-size:0.62rem;">🚑 ${(d.hInj||0)+(d.aInj||0)} INJ</span>`:''}
-        </div>
-        <div class="team-name">${esc(d.ht)} ${d.hr&&d.hr<99?`<span class="team-rank">#${d.hr}</span>`:''}</div>
-        <div style="font-size:0.68rem;color:var(--text-muted);margin:3px 0;display:flex;gap:4px;">${formDotsHTML(hForm)}</div>
-        <div class="team-name" style="margin-top:5px;">${esc(d.at)} ${d.ar&&d.ar<99?`<span class="team-rank">#${d.ar}</span>`:''}</div>
-        <div style="font-size:0.68rem;color:var(--text-muted);margin-top:3px;display:flex;gap:4px;">${formDotsHTML(aForm)}</div>
-      </div>
-      <div class="score-box">
-        <div class="score-display" style="color:${scoreColor}">${homeGoals} — ${awayGoals}</div>
-        <div><span class="total-xg-badge">xG ${(d.tXG||0).toFixed(2)}</span></div>
-        <div style="margin-top:6px;">${liveCorLabel}${liveCardLabel}</div>
-        ${d.isLockO25?`<div style="margin-top:6px;"><span class="lock-badge lock-o25">🔒 O2.5</span></div>`:''}
-        ${d.isLockBTTS?`<div style="margin-top:4px;"><span class="lock-badge lock-btts">🔒 BTTS</span></div>`:''}
-        ${d.isLockU25?`<div style="margin-top:4px;"><span class="lock-badge lock-under">🔒 U2.5</span></div>`:''}
-      </div>
-    </div>
-
-    <div class="stats-grid">
-      <div class="stat-box">
-        <div class="stat-box-title">Home — ${esc(d.ht)}</div>
-        <div class="stat-row"><span class="stat-lbl">fXG</span><span class="stat-val">${d.hS?.uiXG||'—'} ${d.hS?.uiDevXG||''}</span></div>
-        <div class="stat-row"><span class="stat-lbl">fXGA</span><span class="stat-val">${d.hS?.uiXGA||'—'} ${d.hS?.uiDevXGA||''}</span></div>
-        <div class="stat-row"><span class="stat-lbl">sXG</span><span class="stat-val">${d.hS?.uiSXG||'—'}</span></div>
-        <div class="stat-row"><span class="stat-lbl">Avg Cor</span><span class="stat-val stat-highlight">${d.hS?.cor?.toFixed(1)||'—'}</span></div>
-        <div class="stat-row"><span class="stat-lbl">Avg Cards</span><span class="stat-val">${d.hS?.crd?.toFixed(1)||'—'}</span></div>
-        <div class="stat-row"><span class="stat-lbl">Form</span><span class="stat-val stat-highlight">${d.hS?.formRating||50}</span></div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-box-title">Away — ${esc(d.at)}</div>
-        <div class="stat-row"><span class="stat-lbl">fXG</span><span class="stat-val">${d.aS?.uiXG||'—'} ${d.aS?.uiDevXG||''}</span></div>
-        <div class="stat-row"><span class="stat-lbl">fXGA</span><span class="stat-val">${d.aS?.uiXGA||'—'} ${d.aS?.uiDevXGA||''}</span></div>
-        <div class="stat-row"><span class="stat-lbl">sXG</span><span class="stat-val">${d.aS?.uiSXG||'—'}</span></div>
-        <div class="stat-row"><span class="stat-lbl">Avg Cor</span><span class="stat-val stat-highlight">${d.aS?.cor?.toFixed(1)||'—'}</span></div>
-        <div class="stat-row"><span class="stat-lbl">Avg Cards</span><span class="stat-val">${d.aS?.crd?.toFixed(1)||'—'}</span></div>
-        <div class="stat-row"><span class="stat-lbl">Form</span><span class="stat-val stat-highlight">${d.aS?.formRating||50}</span></div>
-      </div>
-    </div>
-
-    ${d.h2h?`<div class="h2h-footer">
-      H2H (${d.h2h.n||0}): <span style="color:var(--accent-green)">${d.h2h.homeWins||0}W</span> / <span style="color:var(--text-muted)">${d.h2h.draws||0}D</span> / <span style="color:var(--accent-red)">${d.h2h.awayWins||0}W</span>
-      ${d.h2h.avgGoals?`<span class="h2h-bias-badge">AVG ${d.h2h.avgGoals.toFixed(1)} gls</span>`:''}
-      ${d.h2h.bttsRate!=null?`<span class="h2h-bias-badge">BTTS ${(d.h2h.bttsRate*100).toFixed(0)}%</span>`:''}
-    </div>`:''}
-
-    <div class="${pickupClass} signal-box" style="margin-top:12px;">
-      <div class="signal-value">${esc(d.omegaPick||'NO BET')}</div>
-      <div class="signal-desc">${esc(d.reason||'')} · Exact: ${d.exact||'—'} (${d.exactConf||0}%)</div>
-      <div style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;">
-        xG Diff: ${(d.xgDiff||0).toFixed(2)} · hCor: ${d.hCors||0} / aCor: ${d.aCors||0} · Cards: ${(d.totCards||0).toFixed(1)}
-      </div>
-    </div>
-
-    ${d.omegaPick&&d.omegaPick!=='NO BET'?`
-    <div class="conf-bar-wrap">
-      <div class="conf-bar-label"><span>Confidence</span><span style="color:${confBarColor}">${(d.strength||0).toFixed(1)}%</span></div>
-      <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${Math.min(d.strength||0,100)}%;background:${confBarColor};"></div></div>
-    </div>
-    ${kelly?`<div class="kelly-box"><span class="kelly-label">Kelly Stake (25%)</span><span class="kelly-val">€${kelly.toFixed(2)}</span></div>`:''}
-    `:''}
-
-    ${poissonHtml?`
-    <details style="margin-top:10px;">
-      <summary style="font-size:0.65rem;color:var(--text-muted);cursor:pointer;font-weight:700;text-transform:uppercase;letter-spacing:1px;">📊 Poisson Matrix</summary>
-      ${poissonHtml}
-    </details>`:''}
+function renderWallBets(){
+  const wallDiv=document.getElementById('wallbetSection'); if(!window.scannedMatchesData.length){if(wallDiv)wallDiv.innerHTML='';return;}
+  const safe=window.scannedMatchesData.filter(m=>(m.omegaPick?.includes('OVER 2.5')||m.omegaPick?.includes('GOAL')||m.omegaPick?.includes('UNDER 2.5'))&&!m.isBomb).sort((a,b)=>b.strength-a.strength);
+  const leg=(x)=>`<div onclick="scrollToMatch('card-${x.fixId}')" style="background:var(--bg-surface); padding:12px; border-radius:var(--radius-sm); border-left:3px solid var(--accent-blue); margin-bottom:10px; cursor:pointer;" onmouseenter="this.style.opacity='0.85'" onmouseleave="this.style.opacity='1'">
+    <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600; margin-bottom:4px;">${esc(x.ht)} vs ${esc(x.at)}</div>
+    <div style="font-weight:800; font-size:0.85rem; color:var(--text-main);">${esc(x.omegaPick)}</div>
+    <div style="font-size:0.65rem; color:var(--accent-gold); margin-top:4px;">Conf: ${safeNum(x.strength).toFixed(1)}%</div>
   </div>`;
+  let html=`<div class="quant-panel" style="border-color:var(--accent-green);">
+    <div class="panel-title" style="color:var(--accent-green);">🛡️ Premium Double Bets</div>
+    <div style="display:flex; flex-wrap:wrap; gap:20px;">`;
+  if(safe.length>=2) html+=`<div style="flex:1; min-width:280px; background:var(--bg-base); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-light);">
+    <div style="font-family:'Syne',sans-serif; color:var(--accent-blue); font-size:0.8rem; margin-bottom:16px; font-weight:800;">💎 DOUBLE #1 (SAFE)</div>${leg(safe[0])}${leg(safe[1])}</div>`;
+  if(safe.length>=4) html+=`<div style="flex:1; min-width:280px; background:var(--bg-base); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border-light);">
+    <div style="font-family:'Syne',sans-serif; color:var(--accent-gold); font-size:0.8rem; margin-bottom:16px; font-weight:800;">🔥 DOUBLE #2 (VALUE)</div>${leg(safe[2])}${leg(safe[3])}</div>`;
+  if(safe.length<2) html+=`<div style="text-align:center; padding:20px; width:100%; color:var(--text-muted); font-weight:600;">⚠️ Insufficient secure signals.</div>`;
+  html+=`</div></div>`;
+  if(wallDiv) wallDiv.innerHTML=html;
 }
+
+// ================================================================
+// EXPORT / IMPORT
+// ================================================================
+window.exportData = function() {
+  if(!window.scannedMatchesData?.length){showErr("Δεν υπάρχουν δεδομένα.");return;}
+  const blob=new Blob([JSON.stringify(window.scannedMatchesData.map(stripForStorage))],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=`apex_omega_${todayISO()}.json`; a.click();
+  URL.revokeObjectURL(url); showOk("Export ολοκληρώθηκε!");
+};
+window.importData = function(event) {
+  const file=event.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e) {
+    try {
+      const imported=JSON.parse(e.target.result);
+      if(!Array.isArray(imported)) throw new Error("Invalid format");
+      window.scannedMatchesData=imported; rebuildTopLists(); renderTopSections(); renderWallBets(); renderSummaryTable();
+      document.getElementById('feedFilterSection').style.display='block'; filterFeed();
+      showOk(`Import: ${imported.length} αγώνες (Offline Mode).`);
+    } catch { showErr("Μη έγκυρο αρχείο JSON."); }
+    event.target.value='';
+  };
+  reader.readAsText(file);
+};
 
 // ================================================================
 // LIVE EVENTS & SYNC
 // ================================================================
 function parseEventsForStats(events) {
-  let corners=0,yellowCards=0,redCards=0;
-  (events||[]).forEach(ev=>{
-    const type=(ev.type||'').toLowerCase(), detail=(ev.detail||'').toLowerCase();
-    if(type==='corner'){corners++;}
-    else if(type==='card'){
-      if(detail.includes('yellow'))yellowCards++;
-      else if(detail.includes('red')&&!detail.includes('yellow'))redCards++;
+  let corners = 0, yellowCards = 0, redCards = 0;
+  (events || []).forEach(ev => {
+    const type   = (ev.type   || '').toLowerCase();
+    const detail = (ev.detail || '').toLowerCase();
+    if (type === 'corner') { corners++; } 
+    else if (type === 'card') {
+      if (detail.includes('yellow')) yellowCards++;
+      else if (detail.includes('red') && !detail.includes('yellow')) redCards++;
     }
   });
-  return{corners,yellowCards,redCards,totalCards:yellowCards+redCards};
+  return { corners, yellowCards, redCards, totalCards: yellowCards + redCards };
 }
 
 window.syncLiveScores = async function() {
-  if(isRunning) return;
-  const btn=document.getElementById('btnSyncLive');
-  if(btn){btn.innerText='Syncing...';btn.disabled=true;}
+  if (isRunning) return;
+  const btn = document.getElementById('btnSyncLive');
+  if (btn) { btn.innerText = 'Syncing...'; btn.disabled = true; }
   try {
-    const res=await apiReq('fixtures?live=all');
-    const liveFixtures=res.response||[];
-    if(!liveFixtures.length){showOk('No live matches right now.');return;}
-    const liveMap=new Map(liveFixtures.map(f=>[f.fixture.id,f]));
-    const liveScanned=window.scannedMatchesData.filter(d=>liveMap.has(d.fixId));
-    if(!liveScanned.length){showOk('No live matches in current scan set.');return;}
-    const eventPromises=liveScanned.map(d=>apiReq(`fixtures/events?fixture=${d.fixId}`));
-    const eventResults=await Promise.all(eventPromises);
-    let updCount=0;
-    liveScanned.forEach((d,i)=>{
-      const liveData=liveMap.get(d.fixId);
-      d.m.goals=liveData.goals; d.m.fixture.status=liveData.fixture.status;
-      const evStats=parseEventsForStats(eventResults[i]?.response||[]);
-      d.liveCorners=evStats.corners; d.liveCards=evStats.totalCards;
-      d.liveYellows=evStats.yellowCards; d.liveReds=evStats.redCards;
+    const res = await apiReq('fixtures?live=all');
+    const liveFixtures = res.response || [];
+    if (!liveFixtures.length) { showOk('No live matches right now.'); return; }
+
+    const liveMap = new Map(liveFixtures.map(f => [f.fixture.id, f]));
+    const liveScanned = window.scannedMatchesData.filter(d => liveMap.has(d.fixId));
+    if (!liveScanned.length) { showOk('No live matches in current scan set.'); return; }
+
+    const eventPromises = liveScanned.map(d => apiReq(`fixtures/events?fixture=${d.fixId}`));
+    const eventResults  = await Promise.all(eventPromises);
+
+    let updCount = 0;
+    liveScanned.forEach((d, i) => {
+      const liveData = liveMap.get(d.fixId);
+      d.m.goals = liveData.goals;
+      d.m.fixture.status = liveData.fixture.status;
+      const evStats = parseEventsForStats(eventResults[i]?.response || []);
+      d.liveCorners = evStats.corners;
+      d.liveCards   = evStats.totalCards;
+      d.liveYellows = evStats.yellowCards;
+      d.liveReds    = evStats.redCards;
       updCount++;
     });
+
     renderSummaryTable(); filterFeed();
-    showOk(`Synced ${updCount} live match${updCount!==1?'es':''} · Score + Corners + Cards`);
-  } catch(e){showErr('Sync error: '+e.message);}
-  finally{if(btn){btn.innerHTML='<span class="live-dot"></span>Live Sync';btn.disabled=false;}}
+    showOk(`Synced ${updCount} live match${updCount !== 1 ? 'es' : ''} · Score + Corners + Cards`);
+  } catch (e) { showErr('Sync error: ' + e.message); } 
+  finally { if (btn) { btn.innerHTML = 'Live Sync'; btn.disabled = false; } }
 };
 
 // ================================================================
@@ -1672,13 +1635,16 @@ async function runCustomAudit() {
   const lgFilter=document.getElementById('auditLeague').value;
   if(!s||!e){showErr('Επίλεξε εύρος ημερομηνιών.');return;}
   if(new Date(e)<new Date(s)){showErr("Η ημ/νία 'To' πρέπει να είναι >= 'From'.");return;}
+
   isRunning=true; clearAlerts(); setBtnsDisabled(true); setLoader(true,'Running AI Audit...');
   ['topSection','summarySection','wallbetSection','matchesFeed','advisorSection'].forEach(id=>document.getElementById(id).innerHTML='');
+
   try {
     const endD=new Date(e); endD.setDate(endD.getDate()+1);
     let cands=getPredStore().filter(x=>{const d=new Date(x.date);return d>=new Date(s)&&d<endD;});
     if(lgFilter!=='ALL') cands=cands.filter(x=>String(x.leagueId)===lgFilter);
     if(!cands.length){document.getElementById('auditSection').innerHTML=`<div class="quant-panel">Δεν υπάρχουν ιστορικά δεδομένα.</div>`;return;}
+
     const BATCH=20;
     const fixtureResultMap=new Map();
     for(let i=0;i<cands.length;i+=BATCH){
@@ -1688,35 +1654,47 @@ async function runCustomAudit() {
       const fr=await apiReq(`fixtures?ids=${ids}`);
       (fr?.response||[]).forEach(fix=>fixtureResultMap.set(fix.fixture.id,fix));
     }
-    let rows=[],stats={games:0,outHit:0,validOut:0,o25Tot:0,o25Hit:0,o35Tot:0,o35Hit:0,u25Tot:0,u25Hit:0,exHit:0,bttsTot:0,bttsHit:0,corTot:0,corHit:0,cardTot:0,cardHit:0};
+
+    let rows=[], stats={games:0,outHit:0,validOut:0,o25Tot:0,o25Hit:0,o35Tot:0,o35Hit:0,u25Tot:0,u25Hit:0,exHit:0,bttsTot:0,bttsHit:0, corTot:0, corHit:0, cardTot:0, cardHit:0};
     const perLgStats={};
+
     for(const p of cands){
       const fix=fixtureResultMap.get(p.fixtureId);
       if(!fix||!isFinished(fix?.fixture?.status?.short)) continue;
-      const ah=safeNum(fix.goals.home),aa=safeNum(fix.goals.away);
-      const atot=ah+aa,aExact=`${ah}-${aa}`,aOut=ah>aa?'1':(ah<aa?'2':'X'),aBtts=ah>0&&aa>0;
-      const pOut=p.outPick||'-',pEx=p.exactScorePred||'-',pOmega=p.omegaPick||'-';
-      const hitOut=pOut===aOut,hitEx=pEx===aExact;
-      let aCor='-',aCards='-';
-      if(pOmega.includes('ΚΟΡΝΕΡ')||pOmega.includes('ΚΑΡΤΕΣ')){
-        const st=await apiReq(`fixtures/statistics?fixture=${p.fixtureId}`);
-        if(st?.response?.length>=2){
-          const hSt=st.response[0].statistics,aSt=st.response[1].statistics;
-          aCor=statVal(hSt,'Corner Kicks')+statVal(aSt,'Corner Kicks');
-          aCards=statVal(hSt,'Yellow Cards')+statVal(hSt,'Red Cards')+statVal(aSt,'Yellow Cards')+statVal(aSt,'Red Cards');
-        }
-        if(pOmega.includes('ΚΟΡΝΕΡ')){stats.corTot++;if(aCor!=='-'&&aCor>8.5)stats.corHit++;}
-        if(pOmega.includes('ΚΑΡΤΕΣ')){stats.cardTot++;if(aCards!=='-'&&aCards>5.5)stats.cardHit++;}
+      const ah=safeNum(fix.goals.home), aa=safeNum(fix.goals.away);
+      const atot=ah+aa, aExact=`${ah}-${aa}`, aOut=ah>aa?'1':(ah<aa?'2':'X'), aBtts=ah>0&&aa>0;
+      const pOut=p.outPick||'-', pEx=p.exactScorePred||'-', pOmega=p.omegaPick||'-';
+      const hitOut=pOut===aOut, hitEx=pEx===aExact;
+      
+      let aCor = '-', aCards = '-';
+      if (pOmega.includes('ΚΟΡΝΕΡ') || pOmega.includes('ΚΑΡΤΕΣ')) {
+          const st = await apiReq(`fixtures/statistics?fixture=${p.fixtureId}`);
+          if(st?.response?.length >= 2) {
+              const hSt = st.response[0].statistics;
+              const aSt = st.response[1].statistics;
+              aCor = statVal(hSt, 'Corner Kicks') + statVal(aSt, 'Corner Kicks');
+              aCards = statVal(hSt, 'Yellow Cards') + statVal(hSt, 'Red Cards') + statVal(aSt, 'Yellow Cards') + statVal(aSt, 'Red Cards');
+          }
+          if (pOmega.includes('ΚΟΡΝΕΡ')) {
+              stats.corTot++;
+              if (aCor !== '-' && aCor > 8.5) stats.corHit++;
+          }
+          if (pOmega.includes('ΚΑΡΤΕΣ')) {
+              stats.cardTot++;
+              if (aCards !== '-' && aCards > 5.5) stats.cardHit++;
+          }
       }
+
       stats.games++;
       if(pOut==='1'||pOut==='2'){stats.validOut++;if(hitOut)stats.outHit++;}
-      if(hitEx)stats.exHit++;
+      if(hitEx) stats.exHit++;
       if(p.predOver25){stats.o25Tot++;if(atot>2.5)stats.o25Hit++;}
       if(p.predOver35){stats.o35Tot++;if(atot>3.5)stats.o35Hit++;}
       if(p.predUnder25){stats.u25Tot++;if(atot<2.5)stats.u25Hit++;}
       if(p.predBTTS){stats.bttsTot++;if(aBtts)stats.bttsHit++;}
+
       if(p.leagueId){
-        if(!perLgStats[p.leagueId])perLgStats[p.leagueId]={o25T:0,o25H:0,o35T:0,o35H:0,u25T:0,u25H:0,bttsT:0,bttsH:0,outT:0,outH:0};
+        if(!perLgStats[p.leagueId]) perLgStats[p.leagueId]={o25T:0,o25H:0,o35T:0,o35H:0,u25T:0,u25H:0,bttsT:0,bttsH:0,outT:0,outH:0};
         const ls=perLgStats[p.leagueId];
         if(p.predOver25){ls.o25T++;if(atot>2.5)ls.o25H++;}
         if(p.predOver35){ls.o35T++;if(atot>3.5)ls.o35H++;}
@@ -1724,34 +1702,48 @@ async function runCustomAudit() {
         if(p.predBTTS){ls.bttsT++;if(aBtts)ls.bttsH++;}
         if(pOut==='1'||pOut==='2'){ls.outT++;if(hitOut)ls.outH++;}
       }
-      rows.push({date:p.date?.slice(0,10),lg:p.league,match:`${p.homeTeam} vs ${p.awayTeam}`,pOut,aOut,hitOut,pO25:p.predOver25,aO25:atot>2.5,pO35:p.predOver35,aO35:atot>3.5,pU25:p.predUnder25,aU25:atot<2.5,pBtts:p.predBTTS,aBtts,pEx,aEx:aExact,hitEx,omega:pOmega,aTot:atot,aCor,aCards});
+      rows.push({date:p.date?.slice(0,10),lg:p.league,match:`${p.homeTeam} vs ${p.awayTeam}`,pOut,aOut,hitOut,pO25:p.predOver25,aO25:atot>2.5,pO35:p.predOver35,aO35:atot>3.5,pU25:p.predUnder25,aU25:atot<2.5,pBtts:p.predBTTS,aBtts,pEx,aEx:aExact,hitEx,omega:pOmega, aTot, aCor, aCards});
     }
+
     if(!stats.games){document.getElementById('auditSection').innerHTML=`<div class="quant-panel">Δεν βρέθηκαν ολοκληρωμένοι αγώνες.</div>`;return;}
+
     const finalLgRates={};
     for(const lid in perLgStats){
       const ls=perLgStats[lid];
-      finalLgRates[lid]={o25:ls.o25T>0?(ls.o25H/ls.o25T)*100:0,o35:ls.o35T>0?(ls.o35H/ls.o35T)*100:0,btts:ls.bttsT>0?(ls.bttsH/ls.bttsT)*100:0,out:ls.outT>0?(ls.outH/ls.outT)*100:0};
+      finalLgRates[lid]={
+        o25:ls.o25T>0?(ls.o25H/ls.o25T)*100:0, o35:ls.o35T>0?(ls.o35H/ls.o35T)*100:0,
+        btts:ls.bttsT>0?(ls.bttsH/ls.bttsT)*100:0, out:ls.outT>0?(ls.outH/ls.outT)*100:0
+      };
     }
     buildLeagueModTable(finalLgRates);
+
     const rate=(h,t)=>t>0?(h/t)*100:0;
-    const outRate=rate(stats.outHit,stats.validOut),o25Rate=rate(stats.o25Hit,stats.o25Tot);
-    const o35Rate=rate(stats.o35Hit,stats.o35Tot),u25Rate=rate(stats.u25Hit,stats.u25Tot);
-    const bttsRate=rate(stats.bttsHit,stats.bttsTot),exRate=rate(stats.exHit,stats.games);
-    const corRate=rate(stats.corHit,stats.corTot),cardRate=rate(stats.cardHit,stats.cardTot);
-    const TARGET_1X2=80,TARGET_O25=80,TARGET_O35=70,TARGET_BTTS=70,TARGET_U25=70;
+    const outRate=rate(stats.outHit,stats.validOut), o25Rate=rate(stats.o25Hit,stats.o25Tot);
+    const o35Rate=rate(stats.o35Hit,stats.o35Tot), u25Rate=rate(stats.u25Hit,stats.u25Tot);
+    const bttsRate=rate(stats.bttsHit,stats.bttsTot), exRate=rate(stats.exHit,stats.games);
+    const corRate=rate(stats.corHit,stats.corTot), cardRate=rate(stats.cardHit,stats.cardTot);
+
+    const TARGET_1X2=80, TARGET_O25=80, TARGET_O35=70, TARGET_BTTS=70, TARGET_U25=70;
     let suggestions=[];
-    const currentO25=lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO25!==undefined?Number(leagueMods[lgFilter].minXGO25):Number(engineConfig.tXG_O25);
-    const currentO35=lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO35!==undefined?Number(leagueMods[lgFilter].minXGO35):Number(engineConfig.tXG_O35);
-    const currentBTTS=lgFilter!=='ALL'&&leagueMods[lgFilter]?.minBTTS!==undefined?Number(leagueMods[lgFilter].minBTTS):Number(engineConfig.tBTTS);
-    const currentDiff=lgFilter!=='ALL'&&leagueMods[lgFilter]?.xgDiff!==undefined?Number(leagueMods[lgFilter].xgDiff):Number(engineConfig.xG_Diff);
-    const nextDiff=Math.min(currentDiff+0.05,0.70);
-    const nextO25=Math.min(currentO25+0.10,3.00);
-    const nextO35=Math.min(currentO35+0.10,3.80);
-    const nextBTTS=Math.min(currentBTTS+0.05,1.35);
-    if(stats.validOut>0&&outRate<TARGET_1X2&&currentDiff<0.70) suggestions.push({key:'xG_Diff',label:'xG Diff (1X2)',rate:outRate,tgt:TARGET_1X2,oldV:currentDiff,newV:nextDiff.toFixed(2)});
-    if(stats.o25Tot>0&&o25Rate<TARGET_O25&&currentO25<3.00) suggestions.push({key:'tXG_O25',label:'Min xG (O2.5)',rate:o25Rate,tgt:TARGET_O25,oldV:currentO25,newV:nextO25.toFixed(2)});
-    if(stats.o35Tot>0&&o35Rate<TARGET_O35&&currentO35<3.80) suggestions.push({key:'tXG_O35',label:'Min xG (O3.5)',rate:o35Rate,tgt:TARGET_O35,oldV:currentO35,newV:nextO35.toFixed(2)});
-    if(stats.bttsTot>0&&bttsRate<TARGET_BTTS&&currentBTTS<1.35) suggestions.push({key:'tBTTS',label:'Min xG (BTTS)',rate:bttsRate,tgt:TARGET_BTTS,oldV:currentBTTS,newV:nextBTTS.toFixed(2)});
+    const currentO25  = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO25!==undefined?Number(leagueMods[lgFilter].minXGO25):Number(engineConfig.tXG_O25);
+    const currentO35  = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minXGO35!==undefined?Number(leagueMods[lgFilter].minXGO35):Number(engineConfig.tXG_O35);
+    const currentBTTS = lgFilter!=='ALL'&&leagueMods[lgFilter]?.minBTTS!==undefined?Number(leagueMods[lgFilter].minBTTS):Number(engineConfig.tBTTS);
+    const currentDiff = lgFilter!=='ALL'&&leagueMods[lgFilter]?.xgDiff!==undefined?Number(leagueMods[lgFilter].xgDiff):Number(engineConfig.xG_Diff);
+
+    // --- SMART ADVISOR LOGIC WITH SAFETY CAPS ---
+    const nextDiff = Math.min(currentDiff + 0.05, 0.70); 
+    const nextO25 = Math.min(currentO25 + 0.10, 3.00);   
+    const nextO35 = Math.min(currentO35 + 0.10, 3.80);   
+    const nextBTTS = Math.min(currentBTTS + 0.05, 1.35); 
+
+    if(stats.validOut > 0 && outRate < TARGET_1X2 && currentDiff < 0.70)  
+      suggestions.push({key:'xG_Diff', label:'xG Diff (1X2)', rate:outRate, tgt:TARGET_1X2, oldV:currentDiff, newV:nextDiff.toFixed(2)});
+    if(stats.o25Tot > 0 && o25Rate < TARGET_O25 && currentO25 < 3.00)    
+      suggestions.push({key:'tXG_O25', label:'Min xG (O2.5)', rate:o25Rate, tgt:TARGET_O25, oldV:currentO25, newV:nextO25.toFixed(2)});
+    if(stats.o35Tot > 0 && o35Rate < TARGET_O35 && currentO35 < 3.80)    
+      suggestions.push({key:'tXG_O35', label:'Min xG (O3.5)', rate:o35Rate, tgt:TARGET_O35, oldV:currentO35, newV:nextO35.toFixed(2)});
+    if(stats.bttsTot > 0 && bttsRate < TARGET_BTTS && currentBTTS < 1.35) 
+      suggestions.push({key:'tBTTS',   label:'Min xG (BTTS)', rate:bttsRate, tgt:TARGET_BTTS, oldV:currentBTTS, newV:nextBTTS.toFixed(2)});
 
     let advisorHtml='';
     if(suggestions.length>0){
@@ -1765,14 +1757,18 @@ async function runCustomAudit() {
     document.getElementById('advisorSection').innerHTML=advisorHtml;
 
     const fmtR=(r,tgt)=>{const c=r>=tgt?'var(--accent-green)':r>=(tgt-10)?'var(--accent-gold)':'var(--accent-red)';return`<span style="color:${c};">${Number(r).toFixed(1)}%</span>`;};
-    const prBox=(pred,isTrue,resVal)=>{
-      if(!pred||pred==='-') return '<span class="icon-neutral">—</span>';
-      return `<div class="pred-res-box">
-        <div class="pr-val pr-pred">${esc(String(pred))}</div>
-        <div class="${isTrue?'icon-hit':'icon-miss'}">${isTrue?'✓':'✗'}</div>
-        <div class="pr-val pr-res">${esc(String(resVal))}</div>
-      </div>`;
+    
+    const prBox = (pred, isTrue, resVal, hitCondition) => {
+        if (!pred || pred === '-' || pred === 'X' && hitCondition === undefined) return '<span class="icon-neutral">—</span>';
+        let hitClass = isTrue ? 'icon-hit' : 'icon-miss';
+        let hitIcon = isTrue ? '✓' : '✗';
+        return `<div class="pred-res-box" title="Pred: ${pred} | Actual: ${resVal}">
+            <div class="pr-val pr-pred">${pred}</div>
+            <div class="${hitClass}">${hitIcon}</div>
+            <div class="pr-val pr-res">${resVal}</div>
+        </div>`;
     };
+
     document.getElementById('auditSection').innerHTML=`
       <div class="quant-panel">
         <div class="panel-title">📊 Audit Telemetry (${s} → ${e})</div>
@@ -1783,8 +1779,6 @@ async function runCustomAudit() {
           <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(u25Rate,70)}</div><div class="stat-lbl">U2.5<br>${stats.u25Tot} σήματα</div></div>
           <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(bttsRate,70)}</div><div class="stat-lbl">BTTS<br>${stats.bttsTot} σήματα</div></div>
           <div class="stat-box"><div class="stat-val" style="font-size:1.2rem;color:var(--accent-blue)">${Number(exRate).toFixed(1)}%</div><div class="stat-lbl">EXACT<br>${stats.games} αγώνες</div></div>
-          ${stats.corTot>0?`<div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(corRate,80)}</div><div class="stat-lbl">CORNERS<br>${stats.corTot} σήματα</div></div>`:''}
-          ${stats.cardTot>0?`<div class="stat-box"><div class="stat-val" style="font-size:1.2rem;">${fmtR(cardRate,75)}</div><div class="stat-lbl">CARDS<br>${stats.cardTot} σήματα</div></div>`:''}
         </div>
         <div class="data-table-wrapper">
           <table class="audit-table">
@@ -1804,11 +1798,11 @@ async function runCustomAudit() {
                 <span class="audit-date">${r.date} · ${esc(r.lg)}</span>
               </td>
               <td class="audit-signal-col" style="color:${r.omega.includes('NO BET')?'var(--text-muted)':r.omega.includes('UNDER')?'var(--accent-teal)':'var(--accent-green)'};">${esc(r.omega)}</td>
-              <td>${prBox(r.pOut,r.hitOut,r.aOut)}</td>
-              <td>${r.pO25?prBox('O2.5',r.aO25,r.aTot):'<span class="icon-neutral">—</span>'}</td>
-              <td>${r.pU25?prBox('U2.5',r.aU25,r.aTot):'<span class="icon-neutral">—</span>'}</td>
-              <td>${r.pBtts?prBox('BTTS',r.aBtts,r.aBtts?'Y':'N'):'<span class="icon-neutral">—</span>'}</td>
-              <td>${prBox(r.pEx,r.hitEx,r.aEx)}</td>
+              <td>${prBox(r.pOut, r.hitOut, r.aOut, r.hitOut)}</td>
+              <td>${r.pO25 ? prBox('O2.5', r.aO25, r.aTot) : '<span class="icon-neutral">—</span>'}</td>
+              <td>${r.pU25 ? prBox('U2.5', r.aU25, r.aTot) : '<span class="icon-neutral">—</span>'}</td>
+              <td>${r.pBtts ? prBox('BTTS', r.aBtts, r.aBtts ? 'Y' : 'N') : '<span class="icon-neutral">—</span>'}</td>
+              <td>${prBox(r.pEx, r.hitEx, r.aEx, true)}</td>
             </tr>`).join('')}
             </tbody>
           </table>
