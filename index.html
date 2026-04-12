@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4747 - The Perfect Quant</title>
+  <title>APEX OMEGA v4748 - The Perfect Quant</title>
   
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
@@ -265,7 +265,7 @@
 <body>
 
 <div class="terminal-header">
-  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4747</span></div>
+  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4748</span></div>
   <div class="header-right">
     <div class="widget-pill gold" onclick="openBankroll()" title="Bankroll Manager">
       <span class="pill-lbl gold">💰 Bankroll</span>
@@ -281,7 +281,7 @@
 <div id="apiKeyModal" class="modal-overlay" style="display:flex">
   <div class="auth-card">
     <div class="brand-logo" style="justify-content:center; font-size:1.8rem; margin-bottom:8px;">APEX<span class="accent">OMEGA</span></div>
-    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4747 · THE CLEAN AUDIT</div>
+    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4748 · THE PERFECT QUANT</div>
     <div style="font-size:0.72rem; color:var(--text-muted); margin-top:18px; line-height:1.6;">
       Το API Key αποθηκεύεται τοπικά στον browser σου.
     </div>
@@ -436,10 +436,10 @@
 // ================================================================
 const API_BASE    = "https://v3.football.api-sports.io";
 let   API_KEY     = localStorage.getItem('omega_api_key') || "";
-const LS_PREDS    = "omega_preds_v4747";
-const LS_SETTINGS = "omega_settings_v4747";
-const LS_LGMODS   = "omega_lgmods_v4747";
-const LS_BANKROLL = "omega_bankroll_v4747";
+const LS_PREDS    = "omega_preds_v4748";
+const LS_SETTINGS = "omega_settings_v4748";
+const LS_LGMODS   = "omega_lgmods_v4748";
+const LS_BANKROLL = "omega_bankroll_v4748";
 
 const LEAGUES_DATA = [
   {id:2,  name:"Champions League"},     {id:3,  name:"Europa League"},
@@ -712,7 +712,10 @@ window.togglePanel = function(panelId,arrowId) {
   else{p.style.display='none';if(a)a.innerText='▼';}
 };
 function setLoader(show,text='') { document.getElementById('loader').style.display=show?'block':'none'; document.getElementById('status').textContent=text; if(!show) document.getElementById('bar').style.width='0%'; }
-function setProgress(pct,text='') { document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%'; document.getElementById('status').textContent=text + (_activeRequests > 0 ? ` [${_activeRequests} active]` : ''); }
+function setProgress(pct,text='') { 
+  document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%'; 
+  document.getElementById('status').textContent=text + (_activeRequests > 0 ? ` [${_activeRequests} active]` : ''); 
+}
 function setBtnsDisabled(d) { ["btnPre","leagueFilter","auditLeague"].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=d;}); }
 
 let _errTimer=null, _okTimer=null;
@@ -904,7 +907,12 @@ async function batchCalc(list,tId) {
       n++;
     } catch { continue; }
   }
-  return{xg:n>0?(x/n).toFixed(2):null,xga:n>0?(xa/n).toFixed(2):null,cor:n>0?(c/n).toFixed(1):null,crd:n>0?(cr/n).toFixed(1):null};
+  return{
+    xg: n>0 ? (x/n).toFixed(2) : null,
+    xga: n>0 ? (xa/n).toFixed(2) : null,
+    cor: n>0 ? (c/n).toFixed(1) : null,
+    crd: n>0 ? (cr/n).toFixed(1) : null
+  };
 }
 
 async function buildIntel(tId,lg,s,isHome) {
@@ -920,11 +928,11 @@ async function buildIntel(tId,lg,s,isHome) {
     const history = getFormHistory(gen,tId);
     const formRating = getFormRating(history);
     
-    const final_fXG = Math.max(fData.xg !== null ? safeNum(fData.xg) : seasonXG, 0.85);
-    const final_fXGA = Math.max(fData.xga !== null ? safeNum(fData.xga) : seasonXGA, 0.85);
-    const final_sXG = Math.max(sData.xg !== null ? safeNum(sData.xg) : seasonXG, 0.85);
-    const final_sXGA = Math.max(sData.xga !== null ? safeNum(sData.xga) : seasonXGA, 0.85);
-    const final_wXG = Math.max(wXG > 0 ? wXG : seasonXG, 0.85);
+    const final_fXG = fData.xg !== null ? safeNum(fData.xg) : seasonXG;
+    const final_fXGA = fData.xga !== null ? safeNum(fData.xga) : seasonXGA;
+    const final_sXG = sData.xg !== null ? safeNum(sData.xg) : seasonXG;
+    const final_sXGA = sData.xga !== null ? safeNum(sData.xga) : seasonXGA;
+    const final_wXG = wXG > 0 ? wXG : seasonXG;
 
     return {
       fXG: final_fXG, fXGA: final_fXGA,
@@ -946,7 +954,7 @@ async function buildIntel(tId,lg,s,isHome) {
 }
 
 // ================================================================
-// PICK ENGINE 
+// PICK ENGINE
 // ================================================================
 function computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj=0,aInj=0) {
   let h2hBiasHome=0, h2hBiasAway=0;
@@ -1028,7 +1036,7 @@ function computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj=0,aInj
 }
 
 // ================================================================
-// RE-SIMULATE 
+// RE-SIMULATE
 // ================================================================
 window.resimulateMatches = function() {
   if(!window.scannedMatchesData.length){showErr("Δεν υπάρχουν δεδομένα. Κάνε Scan πρώτα.");return;}
@@ -1040,15 +1048,14 @@ window.resimulateMatches = function() {
       const lp=getLeagueParams(d.leagueId);
       
       const fallback = d.tXG && d.tXG > 0 ? d.tXG/2 : 1.35;
-      const hXG = Math.max(Number(d.hS?.fXG || fallback), 0.85) * lp.mult;
-      const aXG = Math.max(Number(d.aS?.fXG || fallback), 0.85) * lp.mult;
-      
-      const hS_safe = {...d.hS, wXG: Math.max(Number(d.hS?.wXG || fallback), 0.85), fXGA: Math.max(Number(d.hS?.fXGA || fallback), 0.85)};
-      const aS_safe = {...d.aS, wXG: Math.max(Number(d.aS?.wXG || fallback), 0.85), fXGA: Math.max(Number(d.aS?.fXGA || fallback), 0.85)};
+      const hXG=Math.max(Number(d.hS?.fXG||fallback), 0.85)*lp.mult;
+      const aXG=Math.max(Number(d.aS?.fXG||fallback), 0.85)*lp.mult;
+      const hS_safe={...d.hS, wXG:Math.max(Number(d.hS?.wXG||0),0.85), fXGA:Math.max(Number(d.hS?.fXGA||0),0.85)};
+      const aS_safe={...d.aS, wXG:Math.max(Number(d.aS?.wXG||0),0.85), fXGA:Math.max(Number(d.aS?.fXGA||0),0.85)};
       
       const tXG=hXG+aXG, bttsScore=Math.min(hXG,aXG);
-      const cor=Number(d.hS?.cor||(d.cor?d.cor/2:4.5))+Number(d.aS?.cor||(d.cor?d.cor/2:4.5));
-      const totCards=Number(d.hS?.crd||(d.totCards?d.totCards/2:2.5))+Number(d.aS?.crd||(d.totCards?d.totCards/2:2.5));
+      const cor=Number(d.hS?.cor||d.cor/2||4.5)+Number(d.aS?.cor||d.cor/2||4.5);
+      const totCards=Number(d.hS?.crd||d.totCards/2||2.5)+Number(d.aS?.crd||d.totCards/2||2.5);
       
       const result=computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS_safe,aS_safe,d.h2h,d.hInj||0,d.aInj||0);
 
@@ -1082,9 +1089,6 @@ function buildSaveRecord(d,result) {
   });
 }
 
-// ================================================================
-// ANALYZE A SINGLE MATCH
-// ================================================================
 async function analyzeMatchSafe(m, index, total) {
   try {
     setProgress(10+((index+1)/total)*88, `Processing ${index+1}/${total}: ${m.teams.home.name}`);
@@ -1139,9 +1143,6 @@ async function analyzeMatchSafe(m, index, total) {
   }
 }
 
-// ================================================================
-// RUN SCAN 
-// ================================================================
 async function fetchFixturesForDates(dates,selLg) {
   let all=[];
   for(let i=0;i<dates.length;i++){
@@ -1195,8 +1196,44 @@ async function runScan() {
   finally { isRunning=false; setLoader(false); setBtnsDisabled(false); }
 }
 
+function rebuildTopLists() {
+  const sd=window.scannedMatchesData;
+  latestTopLists.combo1   =sd.filter(x=>x.omegaPick?.includes('⚡')).sort((a,b)=>b.strength-a.strength).slice(0,5);
+  latestTopLists.outcomes =sd.filter(x=>x.omegaPick?.includes('ΑΣΟΣ')||x.omegaPick?.includes('ΔΙΠΛΟ')).sort((a,b)=>b.strength-a.strength).slice(0,5);
+  latestTopLists.exact    =[...sd].filter(x=>x.exactConf).sort((a,b)=>b.exactConf-a.exactConf).slice(0,5);
+  latestTopLists.over25   =sd.filter(x=>x.omegaPick?.includes('OVER 2.5')).sort((a,b)=>b.strength-a.strength).slice(0,5);
+  latestTopLists.over35   =sd.filter(x=>x.omegaPick?.includes('OVER 3.5')).sort((a,b)=>b.strength-a.strength).slice(0,5);
+  latestTopLists.under25  =sd.filter(x=>x.omegaPick?.includes('UNDER 2.5')).sort((a,b)=>b.strength-a.strength).slice(0,5);
+}
+
 // ================================================================
-// LIVE EVENTS & SYNC 
+// EXPORT / IMPORT
+// ================================================================
+window.exportData = function() {
+  if(!window.scannedMatchesData?.length){showErr("Δεν υπάρχουν δεδομένα.");return;}
+  const blob=new Blob([JSON.stringify(window.scannedMatchesData.map(stripForStorage))],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=`apex_omega_${todayISO()}.json`; a.click();
+  URL.revokeObjectURL(url); showOk("Export ολοκληρώθηκε!");
+};
+window.importData = function(event) {
+  const file=event.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e) {
+    try {
+      const imported=JSON.parse(e.target.result);
+      if(!Array.isArray(imported)) throw new Error("Invalid format");
+      window.scannedMatchesData=imported; rebuildTopLists(); renderTopSections(); renderWallBets(); renderSummaryTable();
+      document.getElementById('feedFilterSection').style.display='block'; filterFeed();
+      showOk(`Import: ${imported.length} αγώνες (Offline Mode).`);
+    } catch { showErr("Μη έγκυρο αρχείο JSON."); }
+    event.target.value='';
+  };
+  reader.readAsText(file);
+};
+
+// ================================================================
+// LIVE EVENTS & SYNC
 // ================================================================
 function parseEventsForStats(events) {
   let corners = 0, yellowCards = 0, redCards = 0;
@@ -1248,7 +1285,7 @@ window.syncLiveScores = async function() {
 };
 
 // ================================================================
-// SMART AUDIT (NEW CLEAN UI)
+// SMART AUDIT (CLEAN UI)
 // ================================================================
 async function runCustomAudit() {
   if(isRunning) return;
@@ -1373,19 +1410,16 @@ async function runCustomAudit() {
       const pairs=suggestions.map(sg=>`${sg.key},${sg.newV}`).join('|');
       advisorHtml+=`<button class="btn btn-gold" style="margin-top:8px;width:100%;" onclick="applyAllAdvisor('${pairs}','${lgFilter}')">Apply All</button></div>`;
     } else {
-      advisorHtml=`<div class="quant-panel" style="border-color:rgba(52,211,153,0.3)"><div class="panel-title" style="color:var(--accent-green)">🤖 AI STATUS: ${lgFilter==='ALL'?'GLOBAL':esc(rows[0]?.lg||'')}</div><div style="font-size:0.8rem;color:var(--accent-green);margin-top:8px;">✓ Όλα τα metrics πληρούν τους στόχους. Δεν απαιτείται επανακαθορισμός.</div></div>`;
+      advisorHtml=`<div class="quant-panel" style="border-color:rgba(52,211,153,0.3)"><div class="panel-title" style="color:var(--accent-green)">🤖 AI STATUS: ${lgLabel}</div><div style="font-size:0.8rem;color:var(--accent-green);margin-top:8px;">✓ Όλα τα metrics πληρούν τους στόχους. Δεν απαιτείται επανακαθορισμός.</div></div>`;
     }
     document.getElementById('advisorSection').innerHTML=advisorHtml;
 
     const fmtR=(r,tgt)=>{const c=r>=tgt?'var(--accent-green)':r>=(tgt-10)?'var(--accent-gold)':'var(--accent-red)';return`<span style="color:${c};">${Number(r).toFixed(1)}%</span>`;};
     
-    // Helper function for building the new Prediction vs Result UI
     const prBox = (pred, isTrue, resVal, hitCondition) => {
         if (!pred || pred === '-' || pred === 'X' && hitCondition === undefined) return '<span class="icon-neutral">—</span>';
-        
         let hitClass = isTrue ? 'icon-hit' : 'icon-miss';
         let hitIcon = isTrue ? '✓' : '✗';
-        
         return `<div class="pred-res-box" title="Pred: ${pred} | Actual: ${resVal}">
             <div class="pr-val pr-pred">${pred}</div>
             <div class="${hitClass}">${hitIcon}</div>
@@ -1438,7 +1472,7 @@ async function runCustomAudit() {
 }
 
 // ================================================================
-//  INIT
+// INIT
 // ================================================================
 window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('scanStart').value=todayISO();
