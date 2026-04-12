@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>APEX OMEGA v4748 - The Clean Audit</title>
+  <title>APEX OMEGA v4747 - The Perfect Quant</title>
   
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
@@ -265,7 +265,7 @@
 <body>
 
 <div class="terminal-header">
-  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4748</span></div>
+  <div class="brand-logo">APEX<span class="accent">OMEGA</span><span class="brand-ver">v4747</span></div>
   <div class="header-right">
     <div class="widget-pill gold" onclick="openBankroll()" title="Bankroll Manager">
       <span class="pill-lbl gold">💰 Bankroll</span>
@@ -281,7 +281,7 @@
 <div id="apiKeyModal" class="modal-overlay" style="display:flex">
   <div class="auth-card">
     <div class="brand-logo" style="justify-content:center; font-size:1.8rem; margin-bottom:8px;">APEX<span class="accent">OMEGA</span></div>
-    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4748 · THE CLEAN AUDIT</div>
+    <div style="font-weight:700; color:var(--accent-blue); font-size:0.8rem; letter-spacing:2px;">v4747 · THE CLEAN AUDIT</div>
     <div style="font-size:0.72rem; color:var(--text-muted); margin-top:18px; line-height:1.6;">
       Το API Key αποθηκεύεται τοπικά στον browser σου.
     </div>
@@ -712,7 +712,7 @@ window.togglePanel = function(panelId,arrowId) {
   else{p.style.display='none';if(a)a.innerText='▼';}
 };
 function setLoader(show,text='') { document.getElementById('loader').style.display=show?'block':'none'; document.getElementById('status').textContent=text; if(!show) document.getElementById('bar').style.width='0%'; }
-function setProgress(pct,text='') { document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%'; document.getElementById('status').textContent=text + (_apiActiveCount > 0 ? ` [${_apiActiveCount} active]` : ''); }
+function setProgress(pct,text='') { document.getElementById('bar').style.width=Math.round(clamp(pct,0,100))+'%'; document.getElementById('status').textContent=text + (_activeRequests > 0 ? ` [${_activeRequests} active]` : ''); }
 function setBtnsDisabled(d) { ["btnPre","leagueFilter","auditLeague"].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=d;}); }
 
 let _errTimer=null, _okTimer=null;
@@ -946,7 +946,7 @@ async function buildIntel(tId,lg,s,isHome) {
 }
 
 // ================================================================
-// PICK ENGINE
+// PICK ENGINE 
 // ================================================================
 function computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj=0,aInj=0) {
   let h2hBiasHome=0, h2hBiasAway=0;
@@ -1028,7 +1028,7 @@ function computePick(hXG,aXG,tXG,bttsScore,cor,totCards,lp,hS,aS,h2h,hInj=0,aInj
 }
 
 // ================================================================
-// RE-SIMULATE
+// RE-SIMULATE 
 // ================================================================
 window.resimulateMatches = function() {
   if(!window.scannedMatchesData.length){showErr("Δεν υπάρχουν δεδομένα. Κάνε Scan πρώτα.");return;}
@@ -1082,6 +1082,9 @@ function buildSaveRecord(d,result) {
   });
 }
 
+// ================================================================
+// ANALYZE A SINGLE MATCH
+// ================================================================
 async function analyzeMatchSafe(m, index, total) {
   try {
     setProgress(10+((index+1)/total)*88, `Processing ${index+1}/${total}: ${m.teams.home.name}`);
@@ -1136,6 +1139,9 @@ async function analyzeMatchSafe(m, index, total) {
   }
 }
 
+// ================================================================
+// RUN SCAN 
+// ================================================================
 async function fetchFixturesForDates(dates,selLg) {
   let all=[];
   for(let i=0;i<dates.length;i++){
@@ -1190,7 +1196,7 @@ async function runScan() {
 }
 
 // ================================================================
-// LIVE EVENTS & SYNC
+// LIVE EVENTS & SYNC 
 // ================================================================
 function parseEventsForStats(events) {
   let corners = 0, yellowCards = 0, redCards = 0;
@@ -1242,7 +1248,7 @@ window.syncLiveScores = async function() {
 };
 
 // ================================================================
-// SMART AUDIT
+// SMART AUDIT (NEW CLEAN UI)
 // ================================================================
 async function runCustomAudit() {
   if(isRunning) return;
@@ -1367,16 +1373,19 @@ async function runCustomAudit() {
       const pairs=suggestions.map(sg=>`${sg.key},${sg.newV}`).join('|');
       advisorHtml+=`<button class="btn btn-gold" style="margin-top:8px;width:100%;" onclick="applyAllAdvisor('${pairs}','${lgFilter}')">Apply All</button></div>`;
     } else {
-      advisorHtml=`<div class="quant-panel" style="border-color:rgba(52,211,153,0.3)"><div class="panel-title" style="color:var(--accent-green)">🤖 AI STATUS: ${lgLabel}</div><div style="font-size:0.8rem;color:var(--accent-green);margin-top:8px;">✓ Όλα τα metrics πληρούν τους στόχους. Δεν απαιτείται επανακαθορισμός.</div></div>`;
+      advisorHtml=`<div class="quant-panel" style="border-color:rgba(52,211,153,0.3)"><div class="panel-title" style="color:var(--accent-green)">🤖 AI STATUS: ${lgFilter==='ALL'?'GLOBAL':esc(rows[0]?.lg||'')}</div><div style="font-size:0.8rem;color:var(--accent-green);margin-top:8px;">✓ Όλα τα metrics πληρούν τους στόχους. Δεν απαιτείται επανακαθορισμός.</div></div>`;
     }
     document.getElementById('advisorSection').innerHTML=advisorHtml;
 
     const fmtR=(r,tgt)=>{const c=r>=tgt?'var(--accent-green)':r>=(tgt-10)?'var(--accent-gold)':'var(--accent-red)';return`<span style="color:${c};">${Number(r).toFixed(1)}%</span>`;};
     
+    // Helper function for building the new Prediction vs Result UI
     const prBox = (pred, isTrue, resVal, hitCondition) => {
         if (!pred || pred === '-' || pred === 'X' && hitCondition === undefined) return '<span class="icon-neutral">—</span>';
+        
         let hitClass = isTrue ? 'icon-hit' : 'icon-miss';
         let hitIcon = isTrue ? '✓' : '✗';
+        
         return `<div class="pred-res-box" title="Pred: ${pred} | Actual: ${resVal}">
             <div class="pr-val pr-pred">${pred}</div>
             <div class="${hitClass}">${hitIcon}</div>
@@ -1429,7 +1438,7 @@ async function runCustomAudit() {
 }
 
 // ================================================================
-// INIT
+//  INIT
 // ================================================================
 window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('scanStart').value=todayISO();
